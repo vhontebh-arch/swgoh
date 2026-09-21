@@ -135,6 +135,11 @@ jobs:
           head -c 500 gamedata.json
 
           echo      
+
+      - name: Inspect game data collections
+        run: |
+          python -c 'import json; d=json.load(open("gamedata.json")); [(print(k, type(v).__name__, len(v) if hasattr(v,"__len__") else "")) for k,v in d.items()]'
+          
       - name: Inspect unit IDs
         run: |
           python -c 'import json; d=json.load(open("swgoh_972824625.json")); [(print(u["definitionId"], [s["id"] for s in u.get("skill",[]) if s["id"].startswith("basicskill_")])) for u in d["rosterUnit"][:20]]'     
