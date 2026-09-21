@@ -67,3 +67,7 @@ jobs:
       - name: Show JSON structure
         run: |
           python -c "import json; d=json.load(open('swgoh_972824625.json')); print(list(d.keys()))"
+
+      - name: Inspect roster unit
+        run: |
+          python -c "import json; d=json.load(open('swgoh_972824625.json')); u=d['rosterUnit'][0]; print(list(u.keys()))"
