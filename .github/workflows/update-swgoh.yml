@@ -54,20 +54,12 @@ jobs:
             git push
           fi
 
-      - name: Show downloaded data summary
+      - name: Test downloaded JSON
         run: |
-          python - <<'PY'
-          import json
+          echo "Rozmiar pliku:"
+          wc -c swgoh_972824625.json
 
-          with open("swgoh_972824625.json", encoding="utf-8") as f:
-              data = json.load(f)
+          echo "Początek JSON:"
+          head -c 500 swgoh_972824625.json
 
-          print("Top-level keys:")
-          print(list(data.keys()))
-
-          for key, value in data.items():
-              if isinstance(value, list):
-                  print(f"{key}: {len(value)}")
-              else:
-                  print(f"{key}: {type(value).__name__}")
-          PY    
+          echo   
