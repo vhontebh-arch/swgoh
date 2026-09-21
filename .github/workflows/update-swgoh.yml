@@ -24,7 +24,7 @@ jobs:
             -p 3000:3000 \
             ghcr.io/swgoh-utils/swgoh-comlink:latest
 
-      - name: Test Comlink player endpoint
+      - name: Download player data
         run: |
           sleep 10
 
@@ -32,4 +32,10 @@ jobs:
             -X POST \
             -H "Content-Type: application/json" \
             -d '{"payload":{"allyCode":"972824625"}}' \
-            http://localhost:3000/player
+            http://localhost:3000/player \
+            -o swgoh_972824625.json
+
+          python -m json.tool swgoh_972824625.json > /dev/null
+
+          echo "Pobrano dane:"
+          wc -c swgoh_972824625.json
