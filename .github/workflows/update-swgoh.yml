@@ -166,6 +166,10 @@ jobs:
         run: |
           python -c 'import json,base64,zipfile,io; d=json.load(open("localization.json")); z=zipfile.ZipFile(io.BytesIO(base64.b64decode(d["localizationBundle"]))); print("PLIKI W BUNDLE:"); [print(x) for x in z.namelist()]'
       
+      - name: Find Echo localization
+        run: |
+          python -c 'import json,base64,zipfile,io; d=json.load(open("localization.json")); z=zipfile.ZipFile(io.BytesIO(base64.b64decode(d["localizationBundle"]))); print("=== Loc_Key_Mapping.txt ==="); m=z.read("Loc_Key_Mapping.txt").decode("utf-8","replace"); [print(x) for x in m.splitlines() if "UNIT_BADBATCHECHO_NAME" in x]; print("=== Loc_ENG_US.txt ==="); t=z.read("Loc_ENG_US.txt").decode("utf-8","replace"); [print(x) for x in t.splitlines() if "UNIT_BADBATCHECHO_NAME" in x]'
+      
       - name: Test Comlink game data
         run: |
           VERSION=$(python -c 'import json; d=json.load(open("metadata.json")); print(d["latestGamedataVersion"])')
