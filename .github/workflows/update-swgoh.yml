@@ -143,14 +143,14 @@ jobs:
         run: |
           python -c 'import json; d=json.load(open("metadata.json")); print("latestLocalizationBundleVersion:",d.get("latestLocalizationBundleVersion")); print("latestLocalizationRevision:",d.get("latestLocalizationRevision")); print("assetPath:",d.get("assetPath")); print("assetSubpath:",d.get("assetSubpath"))'
       
-      - name: Find localization endpoints
+      - name: Inspect localization schema
         run: |
           curl -sS \
             http://localhost:3000/openapi.json \
             -o openapi.json
 
-          python -c 'import json; d=json.load(open("openapi.json")); [print(k) for k in d["paths"] if any(x in k.lower() for x in ["local", "asset", "bundle", "resource"])]'      
- 
+          python -c 'import json; d=json.load(open("openapi.json")); print(json.dumps(d["paths"]["/localization"],indent=2))'
+          
       - name: Test Comlink game data
         run: |
           VERSION=$(python -c 'import json; d=json.load(open("metadata.json")); print(d["latestGamedataVersion"])')
