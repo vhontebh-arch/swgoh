@@ -1,3 +1,4 @@
+```yaml
 name: Update SWGOH data
 
 on:
@@ -62,7 +63,7 @@ jobs:
           echo "Początek JSON:"
           head -c 500 swgoh_972824625.json
 
-          echo  
+          echo
 
       - name: Show JSON structure
         run: |
@@ -79,6 +80,7 @@ jobs:
       - name: Inspect roster definitions
         run: |
           python -c "import json; d=json.load(open('swgoh_972824625.json')); s='\n'.join(f'{u[\"definitionId\"]} | {u[\"id\"]} | {u[\"currentRarity\"]}★ | L{u[\"currentLevel\"]} | T{u[\"currentTier\"]}' for u in d['rosterUnit'][:10]); print(s); open('roster_definitions.txt','w').write(s+'\n')"
+
       - name: Upload roster inspection
         uses: actions/upload-artifact@v4
         with:
@@ -88,11 +90,20 @@ jobs:
       - name: Extract all relic units
         run: |
           python -c "import json; d=json.load(open('swgoh_972824625.json')); units=[u for u in d['rosterUnit'] if u.get('relic')]; s='\n'.join(f'{u[\"definitionId\"]} | R{u[\"relic\"][\"currentTier\"]}' for u in units); print(s); open('relic_units.txt','w').write(s+'\n')"
-          - name: Verify relic file
+
+      - name: Verify relic file
         run: |
           echo "Sprawdzam plik:"
           pwd
           ls -lah
+
           echo
           echo "Zawartość relic_units.txt:"
           cat relic_units.txt
+
+      - name: Upload relic inspection
+        uses: actions/upload-artifact@v4
+        with:
+          name: relic-inspection
+          path: relic_units.txt
+```
