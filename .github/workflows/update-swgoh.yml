@@ -19,22 +19,29 @@ jobs:
         with:
           python-version: "3.13"
 
-      - name: Test Python
-        run: |
-          python --version
-          python -c "print('Python działa poprawnie')"
+      - name: Install requests
+        run: python -m pip install requests
 
-      - name: Test repository
+      - name: Test SWGOH.GG API
         run: |
-          echo "Repozytorium:"
-          pwd
-          echo "Pliki:"
-          find . -maxdepth 2 -type f | sort
+          python - <<'PY'
+          import requests
 
-      - name: Validate existing JSON
-        run: |
-          python -m json.tool swgoh_972824625.json > /dev/null
-          echo "JSON jest poprawny"
+          ally_code = "972824625"
+          url = f"https://swgoh.gg/api/player/{ally_code}/"
 
-      - name: Check for changes
-        run: git status --short
+          print(f"Pobieram dane z: {url}")
+
+          response = requests.get(url, timeout=30)
+
+          print(f"HTTP status: {response.status_code}")
+          print(f"Content-Type: {response.headers.get('content-type')}")
+
+          response.raise_for_status()
+
+          data = response.json()
+
+          print("API zwróciło poprawny JSON.")
+          print("Klucze główne:")
+          print(list(data.keys())[:20])
+          PY
