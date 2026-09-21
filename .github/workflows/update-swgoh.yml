@@ -1,4 +1,3 @@
-```yaml
 name: Update SWGOH data
 
 on:
@@ -67,19 +66,19 @@ jobs:
 
       - name: Show JSON structure
         run: |
-          python -c "import json; d=json.load(open('swgoh_972824625.json')); print(list(d.keys()))"
+          python -c 'import json; d=json.load(open("swgoh_972824625.json")); print(list(d.keys()))'
 
       - name: Inspect roster unit
         run: |
-          python -c "import json; d=json.load(open('swgoh_972824625.json')); u=d['rosterUnit'][0]; print(list(u.keys()))"
+          python -c 'import json; d=json.load(open("swgoh_972824625.json")); u=d["rosterUnit"][0]; print(list(u.keys()))'
 
       - name: Count roster units
         run: |
-          python -c "import json; d=json.load(open('swgoh_972824625.json')); print('rosterUnit:', len(d['rosterUnit']))"
+          python -c 'import json; d=json.load(open("swgoh_972824625.json")); print("rosterUnit:", len(d["rosterUnit"]))'
 
       - name: Inspect roster definitions
         run: |
-          python -c "import json; d=json.load(open('swgoh_972824625.json')); s='\n'.join(f'{u["definitionId"]} | {u["id"]} | {u["currentRarity"]}★ | L{u["currentLevel"]} | T{u["currentTier"]}' for u in d['rosterUnit'][:10]); print(s); open('roster_definitions.txt','w').write(s+'\n')"
+          python -c 'import json; d=json.load(open("swgoh_972824625.json")); s="\n".join(f"{u["definitionId"]} | {u["id"]} | {u["currentRarity"]}★ | L{u["currentLevel"]} | T{u["currentTier"]}" for u in d["rosterUnit"][:10]); print(s); open("roster_definitions.txt","w").write(s+"\n")'
 
       - name: Upload roster inspection
         uses: actions/upload-artifact@v4
@@ -89,7 +88,7 @@ jobs:
 
       - name: Extract all relic units
         run: |
-          python -c "import json; d=json.load(open('swgoh_972824625.json')); units=[u for u in d['rosterUnit'] if u.get('relic')]; s='\n'.join(f'{u["definitionId"]} | R{u["relic"]["currentTier"]}' for u in units); print(s); open('relic_units.txt','w').write(s+'\n')"
+          python -c 'import json; d=json.load(open("swgoh_972824625.json")); units=[u for u in d["rosterUnit"] if u.get("relic")]; s="\n".join(f"{u["definitionId"]} | R{u["relic"]["currentTier"]}" for u in units); print(s); open("relic_units.txt","w").write(s+"\n")'
 
       - name: Verify relic file
         run: |
@@ -105,4 +104,3 @@ jobs:
         with:
           name: relic-inspection
           path: relic_units.txt
-```
