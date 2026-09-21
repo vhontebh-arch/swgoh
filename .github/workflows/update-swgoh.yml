@@ -108,8 +108,22 @@ jobs:
       - name: Generate roster CSV
         run: |
           python -c 'import csv,json; d=json.load(open("swgoh_972824625.json")); f=open("roster.csv","w",newline="",encoding="utf-8"); w=csv.writer(f); w.writerow(["definitionId","id","rarity","level","gearTier","relicTier"]); [w.writerow([u.get("definitionId",""),u.get("id",""),u.get("currentRarity",""),u.get("currentLevel",""),u.get("currentTier",""),(u.get("relic") or {}).get("currentTier","")]) for u in d["rosterUnit"]]; f.close(); print("Wygenerowano roster.csv")'
+    
       - name: Upload roster CSV
         uses: actions/upload-artifact@v4
         with:
           name: roster-csv
           path: roster.csv
+
+      - name: Verify roster CSV
+        run: |
+          echo "Liczba jednostek:"
+          tail -n +2 roster.csv | wc -l
+
+          echo
+          echo "Pierwsze 10 jednostek:"
+          head -n 11 roster.csv
+
+          echo
+          echo "Admiral Piett:"
+          grep "ADMIRALPIETT" roster.csv || true
