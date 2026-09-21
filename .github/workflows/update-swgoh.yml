@@ -139,8 +139,7 @@ jobs:
 
       - name: Generate roster CSV
         run: |
-          python -c 'import csv,json; d=json.load(open("swgoh_972824625.json")); f=open("roster.csv","w",newline="",encoding="utf-8"); w=csv.writer(f); w.writerow(["definitionId","id","rarity","level","gearTier","relicTier"]); [w.writerow([u.get("definitionId",""),u.get("id",""),u.get("currentRarity",""),u.get("currentLevel",""),u.get("currentTier",""),(u.get("relic") or {}).get("currentTier","")]) for u in d["rosterUnit"]]; f.close(); print("Wygenerowano roster.csv")'
-    
+          python -c 'import csv,json; d=json.load(open("swgoh_972824625.json")); f=open("roster.csv","w",newline="",encoding="utf-8"); w=csv.writer(f); w.writerow(["definitionId","baseId","id","rarity","level","gearTier","relicTier"]); [w.writerow([u.get("definitionId",""),next((s["id"].replace("basicskill_","") for s in u.get("skill",[]) if s["id"].startswith("basicskill_")),""),u.get("id",""),u.get("currentRarity",""),u.get("currentLevel",""),u.get("currentTier",""),(u.get("relic") or {}).get("currentTier","")]) for u in d["rosterUnit"]]; f.close(); print("Wygenerowano roster.csv")'    
       - name: Commit roster CSV
         run: |
           git config user.name "github-actions[bot]"
