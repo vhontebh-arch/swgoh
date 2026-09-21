@@ -140,6 +140,17 @@ jobs:
         run: |
           python -c 'import json; d=json.load(open("gamedata.json")); [(print(k, type(v).__name__, len(v) if hasattr(v,"__len__") else "")) for k,v in d.items()]'
           
+      - name: Inspect Comlink API
+        run: |
+          for endpoint in "/docs" "/openapi.json" "/api-docs" "/swagger.json"; do
+            echo "=== $endpoint ==="
+            curl -sS -o /tmp/api -w "HTTP %{http_code}, bytes %{size_download}\n" \
+              "http://localhost:3000$endpoint"
+            head -c 500 /tmp/api
+            echo
+            echo
+          done   
+      
       - name: Inspect unit IDs
         run: |
           python -c 'import json; d=json.load(open("swgoh_972824625.json")); [(print(u["definitionId"], [s["id"] for s in u.get("skill",[]) if s["id"].startswith("basicskill_")])) for u in d["rosterUnit"][:20]]'     
