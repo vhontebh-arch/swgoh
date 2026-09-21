@@ -143,7 +143,7 @@ jobs:
         run: |
           python -c 'import json; d=json.load(open("metadata.json")); print("latestLocalizationBundleVersion:",d.get("latestLocalizationBundleVersion")); print("latestLocalizationRevision:",d.get("latestLocalizationRevision")); print("assetPath:",d.get("assetPath")); print("assetSubpath:",d.get("assetSubpath"))'
       
-       - name: Find localization endpoints
+      - name: Find localization endpoints
         run: |
           python -c 'import json; d=json.load(open("openapi.json")); [print(k) for k in d["paths"] if any(x in k.lower() for x in ["local", "asset", "bundle", "resource"])]'
       
