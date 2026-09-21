@@ -1,3 +1,4 @@
+```yaml
 name: Update SWGOH data
 
 on:
@@ -40,7 +41,7 @@ jobs:
           echo "Pobrano dane:"
           wc -c swgoh_972824625.json
 
-      - name: Test Comlink metadata
+      - name: Download current metadata
         run: |
           curl -sS \
             -X POST \
@@ -49,9 +50,9 @@ jobs:
             http://localhost:3000/metadata \
             -o metadata.json
 
-          python -m json.tool metadata.json | head -n 40
+          python -m json.tool metadata.json > /dev/null
 
-      - name: Test Comlink data
+      - name: Download current game data
         run: |
           VERSION=$(python -c 'import json; print(json.load(open("metadata.json"))["latestGamedataVersion"])')
 
@@ -62,7 +63,10 @@ jobs:
             http://localhost:3000/data \
             -o data.json
 
-          python -m json.tool data.json | head -n 40
+          python -m json.tool data.json > /dev/null
+
+          echo "Game data:"
+          wc -c data.json
 
       - name: Download English localization
         run: |
@@ -77,33 +81,71 @@ jobs:
 
           python -c 'import json; d=json.load(open("localization.json")); print("Klucze odpowiedzi:",list(d.keys())); print("Rozmiar odpowiedzi:",len(open("localization.json","rb").read()),"bytes")'
 
-      - name: Generate roster CSV
+      - name: Generate account CSV files
         run: |
-          python -c 'import csv,json,base64,zipfile,io; d=json.load(open("swgoh_972824625.json")); loc=json.load(open("localization.json")); z=zipfile.ZipFile(io.BytesIO(base64.b64decode(loc["localizationBundle"]))); lines=z.read("Loc_ENG_US.txt").decode("utf-8","replace").splitlines(); names={x.split("|",1)[0]:x.split("|",1)[1] for x in lines if "|" in x}; f=open("roster.csv","w",newline="",encoding="utf-8"); w=csv.writer(f); w.writerow(["name","definitionId","baseId","id","rarity","level","gearTier","relicTier"]); [w.writerow([names.get("UNIT_"+next((s["id"].replace("basicskill_","") for s in u.get("skill",[]) if s["id"].startswith("basicskill_")),"")+"_NAME",""),u.get("definitionId",""),next((s["id"].replace("basicskill_","") for s in u.get("skill",[]) if s["id"].startswith("basicskill_")),""),u.get("id",""),u.get("currentRarity",""),u.get("currentLevel",""),u.get("currentTier",""),(u.get("relic") or {}).get("currentTier","")]) for u in d["rosterUnit"]]; f.close(); print("Wygenerowano roster.csv")'
+          cat > generate_csv.py <<'PY'
+          import csv
+          import json
+          import base64
+          import zipfile
+          import io
 
-      - name: Verify roster CSV
-        run: |
-          echo "Liczba jednostek:"
-          tail -n +2 roster.csv | wc -l
+          PLAYER_FILE = "swgoh_972824625.json"
+          DATA_FILE = "data.json"
+          LOCALIZATION_FILE = "localization.json"
 
-          echo
-          echo "Pierwsze 10 jednostek:"
-          head -n 11 roster.csv
+          player = json.load(open(PLAYER_FILE, encoding="utf-8"))
+          game_data = json.load(open(DATA_FILE, encoding="utf-8"))
+          localization = json.load(open(LOCALIZATION_FILE, encoding="utf-8"))
 
-          echo
-          echo "Admiral Piett:"
-          grep "ADMIRALPIETT" roster.csv || true
+          # ------------------------------------------------------------
+          # Localization
+          # ------------------------------------------------------------
 
-      - name: Commit roster CSV
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          bundle = base64.b64decode(localization["localizationBundle"])
+          z = zipfile.ZipFile(io.BytesIO(bundle))
 
-          git add roster.csv
+          loc_file = z.read("Loc_ENG_US.txt").decode(
+              "utf-8",
+              "replace"
+          )
 
-          if git diff --cached --quiet; then
-            echo "Brak zmian roster CSV"
-          else
-            git commit -m "Update roster CSV"
-            git push
-          fi
+          names = {}
+
+          for line in loc_file.splitlines():
+              if "|" in line:
+                  key, value = line.split("|", 1)
+                  names[key] = value
+
+          # ------------------------------------------------------------
+          # Game-data unit lookup
+          # ------------------------------------------------------------
+
+          units = {}
+
+          for unit in game_data.get("units", []):
+              base_id = unit.get("baseId")
+
+              if base_id:
+                  units[base_id] = unit
+
+          def unit_name(base_id):
+              unit = units.get(base_id, {})
+              name_key = unit.get("nameKey", "")
+
+              return names.get(
+                  name_key,
+                  names.get("UNIT_" + base_id + "_NAME", base_id)
+              )
+
+          def get_base_id(roster_unit):
+              for skill in roster_unit.get("skill", []):
+                  skill_id = skill.get("id", "")
+
+                  if skill_id.startswith("basicskill_"):
+                      return skill_id.replace("basicskill_", "")
+
+              return ""
+
+          # -------------
+```
