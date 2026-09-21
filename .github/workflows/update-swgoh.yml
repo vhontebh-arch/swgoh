@@ -68,6 +68,10 @@ jobs:
         run: |
           python -c 'import json; d=json.load(open("swgoh_972824625.json")); print(list(d.keys()))'
 
+      - name: Inspect player data sections
+        run: |
+          python -c 'import json; d=json.load(open("swgoh_972824625.json")); [(print(k, type(v).__name__, len(v) if hasattr(v,"__len__") else "")) for k,v in d.items()]'   
+
       - name: Inspect roster unit
         run: |
           python -c 'import json; d=json.load(open("swgoh_972824625.json")); u=d["rosterUnit"][0]; print(list(u.keys()))'
