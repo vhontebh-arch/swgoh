@@ -24,7 +24,12 @@ jobs:
             -p 3000:3000 \
             ghcr.io/swgoh-utils/swgoh-comlink:latest
 
-      - name: Test Comlink
+      - name: Test Comlink player endpoint
         run: |
           sleep 10
-          curl -i http://localhost:3000/
+
+          curl -sS \
+            -X POST \
+            -H "Content-Type: application/json" \
+            -d '{"payload":{"allyCode":972824625}}' \
+            http://localhost:3000/player
