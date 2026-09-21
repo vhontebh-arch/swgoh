@@ -151,6 +151,17 @@ jobs:
 
           python -c 'import json; d=json.load(open("openapi.json")); print(json.dumps(d["paths"]["/localization"],indent=2))'
           
+      - name: Download English localization
+        run: |
+          curl -sS \
+            -X POST \
+            -H "Content-Type: application/json" \
+            -d '{"payload":{"id":"JbmqKUkxRfyIvw2u3iiA5A:ENG_US"}}' \
+            http://localhost:3000/localization \
+            -o localization.json
+
+          python -c 'import json; d=json.load(open("localization.json")); print("Klucze odpowiedzi:",list(d.keys())); print("Rozmiar odpowiedzi:",len(open("localization.json","rb").read()),"bytes")'
+      
       - name: Test Comlink game data
         run: |
           VERSION=$(python -c 'import json; d=json.load(open("metadata.json")); print(d["latestGamedataVersion"])')
