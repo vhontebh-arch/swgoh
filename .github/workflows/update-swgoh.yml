@@ -112,6 +112,17 @@ jobs:
 
           python -m json.tool metadata.json | head -n 40            
 
+      - name: Test Comlink data
+        run: |
+          curl -sS \
+            -X POST \
+            -H "Content-Type: application/json" \
+            -d '{"payload":{"version":"0.40.5:CHG_XUnFR5uPPz6DgmcU6w","items":"-1"}}' \
+            http://localhost:3000/data \
+            -o data.json
+
+          python -m json.tool data.json | head -n 40   
+      
       - name: Test Comlink game data
         run: |
           VERSION=$(python -c 'import json; d=json.load(open("metadata.json")); print(d["latestGamedataVersion"])')
