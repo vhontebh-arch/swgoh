@@ -96,6 +96,10 @@ jobs:
         run: |
           python -c 'import json; d=json.load(open("swgoh_972824625.json")); [(print(u["definitionId"], [s["id"] for s in u.get("skill",[]) if s["id"].startswith("basicskill_")])) for u in d["rosterUnit"][:20]]'     
       
+      - name: Check game data source
+        run: |
+          python -c 'import urllib.request; u="https://swgoh.gg"; r=urllib.request.urlopen(u,timeout=10); print("HTTP",r.status); print("OK")'     
+      
       - name: Test unit name lookup
         run: |
           python -c 'import json; d=json.load(open("swgoh_972824625.json")); [(print(s["id"].replace("basicskill_",""))) for s in d["rosterUnit"][0]["skill"] if s["id"].startswith("basicskill_")]'
