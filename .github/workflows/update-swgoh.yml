@@ -1,4 +1,3 @@
-```yaml
 name: Update SWGOH data
 
 on:
@@ -41,7 +40,7 @@ jobs:
           echo "Pobrano dane:"
           wc -c swgoh_972824625.json
 
-      - name: Download current metadata
+      - name: Test Comlink metadata
         run: |
           curl -sS \
             -X POST \
@@ -50,9 +49,9 @@ jobs:
             http://localhost:3000/metadata \
             -o metadata.json
 
-          python -m json.tool metadata.json > /dev/null
+          python -m json.tool metadata.json | head -n 40
 
-      - name: Download current game data
+      - name: Test Comlink data
         run: |
           VERSION=$(python -c 'import json; print(json.load(open("metadata.json"))["latestGamedataVersion"])')
 
@@ -63,10 +62,7 @@ jobs:
             http://localhost:3000/data \
             -o data.json
 
-          python -m json.tool data.json > /dev/null
-
-          echo "Game data:"
-          wc -c data.json
+          python -m json.tool data.json | head -n 40
 
       - name: Download English localization
         run: |
@@ -83,9 +79,31 @@ jobs:
 
       - name: Generate roster CSV
         run: |
-          python -c 'import csv,json,base64,zipfile,io; d=json.load(open("swgoh_972824625.json")); loc=json.load(open("localization.json")); z=zipfile.ZipFile(io.BytesIO(base64.b64decode(loc["localizationBundle"]))); lines=z.read("Loc_ENG_US.txt").decode("utf-8","replace").splitlines(); names={x.split("|",1)[0]:x.split("|",1)[1] for x in lines if "|" in x}; units={u.get("baseId"):u for u in json.load(open("data.json")).get("units",[]) if u.get("baseId")}; f=open("roster.csv","w",newline="",encoding="utf-8"); w=csv.writer(f); w.writerow(["name","definitionId","baseId","id","rarity","level","gearTier","relicTier"]); [w.writerow([names.get(units.get(next((s["id"].replace("basicskill_","") for s in u.get("skill",[]) if s["id"].startswith("basicskill_")),""),{}).get("nameKey",""),names.get("UNIT_"+next((s["id"].replace("basicskill_","") for s in u.get("skill",[]) if s["id"].startswith("basicskill_")),"")+"_NAME",""),u.get("definitionId",""),next((s["id"].replace("basicskill_","") for s in u.get("skill",[]) if s["id"].startswith("basicskill_")),""),u.get("id",""),u.get("currentRarity",""),u.get("currentLevel",""),u.get("currentTier",""),(u.get("relic") or {}).get("currentTier","")]) for u in d["rosterUnit"]]; f.close(); print("Wygenerowano roster.csv")'
+          python -c 'import csv,json,base64,zipfile,io; d=json.load(open("swgoh_972824625.json")); loc=json.load(open("localization.json")); z=zipfile.ZipFile(io.BytesIO(base64.b64decode(loc["localizationBundle"]))); lines=z.read("Loc_ENG_US.txt").decode("utf-8","replace").splitlines(); names={x.split("|",1)[0]:x.split("|",1)[1] for x in lines if "|" in x}; f=open("roster.csv","w",newline="",encoding="utf-8"); w=csv.writer(f); w.writerow(["name","definitionId","baseId","id","rarity","level","gearTier","relicTier"]); [w.writerow([names.get("UNIT_"+next((s["id"].replace("basicskill_","") for s in u.get("skill",[]) if s["id"].startswith("basicskill_")),"")+"_NAME",""),u.get("definitionId",""),next((s["id"].replace("basicskill_","") for s in u.get("skill",[]) if s["id"].startswith("basicskill_")),""),u.get("id",""),u.get("currentRarity",""),u.get("currentLevel",""),u.get("currentTier",""),(u.get("relic") or {}).get("currentTier","")]) for u in d["rosterUnit"]]; f.close(); print("Wygenerowano roster.csv")'
 
-      - name: Generate ships CSV
+      - name: Verify roster CSV
         run: |
-          python -c 'import csv,json; d=json.load(open("swgoh_972824625.json")); game=json.load(open("data.json")); units={u.get("baseId"):u for u in game.get("units",[]) if u.get("baseId")}; f=open("ships_
-```
+          echo "Liczba jednostek:"
+          tail -n +2 roster.csv | wc -l
+
+          echo
+          echo "Pierwsze 10 jednostek:"
+          head -n 11 roster.csv
+
+          echo
+          echo "Admiral Piett:"
+          grep "ADMIRALPIETT" roster.csv || true
+
+      - name: Commit roster CSV
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add roster.csv
+
+          if git diff --cached --quiet; then
+            echo "Brak zmian roster CSV"
+          else
+            git commit -m "Update roster CSV"
+            git push
+          fi
