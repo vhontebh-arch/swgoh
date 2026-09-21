@@ -72,6 +72,22 @@ jobs:
         run: |
           python -c 'import json; d=json.load(open("swgoh_972824625.json")); [(print(k, type(v).__name__, len(v) if hasattr(v,"__len__") else "")) for k,v in d.items()]'   
 
+      - name: Inspect Comlink endpoints
+        run: |
+          for endpoint in \
+            "/metadata" \
+            "/data" \
+            "/units" \
+            "/gameData" \
+            "/definitions"; do
+            echo "=== $endpoint ==="
+            curl -sS -o /tmp/response -w "HTTP %{http_code}, bytes %{size_download}\n" \
+              "http://localhost:3000$endpoint"
+            head -c 300 /tmp/response
+            echo
+            echo
+          done
+
       - name: Inspect roster unit
         run: |
           python -c 'import json; d=json.load(open("swgoh_972824625.json")); u=d["rosterUnit"][0]; print(list(u.keys()))'
