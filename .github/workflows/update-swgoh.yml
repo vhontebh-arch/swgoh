@@ -39,3 +39,17 @@ jobs:
 
           echo "Pobrano dane:"
           wc -c swgoh_972824625.json
+
+      - name: Commit updated data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add swgoh_972824625.json
+
+          if git diff --cached --quiet; then
+            echo "Brak zmian danych"
+          else
+            git commit -m "Update SWGOH player data"
+            git push
+          fi
