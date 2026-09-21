@@ -123,7 +123,7 @@ jobs:
 
           python -m json.tool data.json | head -n 40   
       
-       - name: Inspect unit data
+      - name: Inspect unit data
         run: |
           python -c 'import json; d=json.load(open("data.json")); u=next(x for x in d["units"] if x.get("baseId")=="BADBATCHECHO" or x.get("id")=="BADBATCHECHO"); print(json.dumps(u,indent=2)[:12000])'
       
