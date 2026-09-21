@@ -96,21 +96,36 @@ jobs:
 
       - name: Generate ships CSV
         run: |
-          python - <<'PY'
+          cat > generate_ships.py <<'PY'
           import csv
           import json
           import base64
           import zipfile
           import io
 
-          player = json.load(open("swgoh_972824625", encoding="utf-8"))
-          game = json.load(open("data.json", encoding="utf-8"))
-          localization = json.load(open("localization.json", encoding="utf-8"))
+          player = json.load(
+              open("swgoh_972824625.json", encoding="utf-8")
+          )
 
-          bundle = base64.b64decode(localization["localizationBundle"])
-          z = zipfile.ZipFile(io.BytesIO(bundle))
+          game = json.load(
+              open("data.json", encoding="utf-8")
+          )
 
-          lines = z.read("Loc_ENG_US.txt").decode(
+          localization = json.load(
+              open("localization.json", encoding="utf-8")
+          )
+
+          bundle = base64.b64decode(
+              localization["localizationBundle"]
+          )
+
+          z = zipfile.ZipFile(
+              io.BytesIO(bundle)
+          )
+
+          lines = z.read(
+              "Loc_ENG_US.txt"
+          ).decode(
               "utf-8",
               "replace"
           ).splitlines()
@@ -162,13 +177,27 @@ jobs:
 
               ships.append({
                   "name": name,
-                  "definitionId": unit.get("definitionId", ""),
+                  "definitionId": unit.get(
+                      "definitionId",
+                      ""
+                  ),
                   "baseId": base_id,
                   "id": unit.get("id", ""),
-                  "rarity": unit.get("currentRarity", ""),
-                  "level": unit.get("currentLevel", ""),
-                  "gearTier": unit.get("currentTier", ""),
-                  "relicTier": (unit.get("relic") or {}).get(
+                  "rarity": unit.get(
+                      "currentRarity",
+                      ""
+                  ),
+                  "level": unit.get(
+                      "currentLevel",
+                      ""
+                  ),
+                  "gearTier": unit.get(
+                      "currentTier",
+                      ""
+                  ),
+                  "relicTier": (
+                      unit.get("relic") or {}
+                  ).get(
                       "currentTier",
                       ""
                   )
@@ -202,9 +231,6 @@ jobs:
           print("Wygenerowano ships.csv")
           print("Liczba statków:", len(ships))
 
-          print()
-          print("Pierwsze statki:")
-
           for ship in ships[:10]:
               print(
                   ship["name"],
@@ -214,7 +240,10 @@ jobs:
                   ship["rarity"],
                   "★"
               )
-          PY    
+          PY
+
+          python generate_ships.py
+          
       - name: Commit roster CSV
         run: |
           git config user.name "github-actions[bot]"
