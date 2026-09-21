@@ -75,3 +75,7 @@ jobs:
       - name: Count roster units
         run: |
           python -c "import json; d=json.load(open('swgoh_972824625.json')); print('rosterUnit:', len(d['rosterUnit']))"
+
+      - name: Inspect roster definitions
+        run: |
+          python -c "import json; d=json.load(open('swgoh_972824625.json')); print('\n'.join(f'{u[\"definitionId\"]} | {u[\"id\"]} | {u[\"currentRarity\"]}★ | L{u[\"currentLevel\"]} | T{u[\"currentTier\"]}' for u in d['rosterUnit'][:10]))"
