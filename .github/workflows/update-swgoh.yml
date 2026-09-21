@@ -162,6 +162,10 @@ jobs:
 
           python -c 'import json; d=json.load(open("localization.json")); print("Klucze odpowiedzi:",list(d.keys())); print("Rozmiar odpowiedzi:",len(open("localization.json","rb").read()),"bytes")'
       
+      - name: Inspect localization bundle
+        run: |
+          python -c 'import json,base64,zipfile,io; d=json.load(open("localization.json")); z=zipfile.ZipFile(io.BytesIO(base64.b64decode(d["localizationBundle"]))); print("PLIKI W BUNDLE:"); [print(x) for x in z.namelist()]'
+      
       - name: Test Comlink game data
         run: |
           VERSION=$(python -c 'import json; d=json.load(open("metadata.json")); print(d["latestGamedataVersion"])')
