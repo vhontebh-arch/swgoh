@@ -99,8 +99,47 @@ jobs:
           echo "Zawartość relic_units.txt:"
           cat relic_units.txt
 
-      - name: Upload relic inspection
+      - name: Generate roster CSV
+        run: |
+          python - <<'PY'
+          import csv
+          import json
+
+          with open("swgoh_972824625.json", encoding="utf-8") as f:
+              data = json.load(f)
+
+          with open("roster.csv", "w", newline="", encoding="utf-8") as f:
+              writer = csv.writer(f)
+              writer.writerow([
+                  "definitionId",
+                  "id",
+                  "rarity",
+                  "level",
+                  "gear",
+                  "relic"
+              ])
+
+              for u in data["rosterUnit"]:
+                  relic = u.get("relic")
+                  relic_tier = relic.get("currentTier", "") if relic else ""
+
+                  writer.writerow([
+                      u.get("definitionId", ""),
+                      u.get("id", ""),
+                      u.get("currentRarity", ""),
+                      u.get("currentLevel", ""),
+                      u.get("currentTier", ""),
+                      relic_tier
+                  ])
+
+          print("Wygenerowano roster.csv")
+          ```
+
+### 2. Zaraz po nim dodaj upload
+
+```yaml
+      - name: Upload roster CSV
         uses: actions/upload-artifact@v4
         with:
-          name: relic-inspection
-          path: relic_units.txt
+          name: roster-csv
+          path: roster.csv
