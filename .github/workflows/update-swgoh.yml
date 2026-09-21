@@ -111,6 +111,24 @@ jobs:
             -o metadata.json
 
           python -m json.tool metadata.json | head -n 40            
+
+      - name: Test Comlink game data
+        run: |
+          curl -sS \
+            -X POST \
+            -H "Content-Type: application/json" \
+            -d '{}' \
+            http://localhost:3000/data \
+            -o gamedata.json
+
+          echo "Rozmiar game data:"
+          wc -c gamedata.json
+
+          echo
+          echo "Początek:"
+          head -c 500 gamedata.json
+
+          echo
       
       - name: Inspect unit IDs
         run: |
