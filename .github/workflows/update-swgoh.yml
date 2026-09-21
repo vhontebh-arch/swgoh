@@ -151,6 +151,14 @@ jobs:
             echo
           done   
       
+      - name: Inspect game data request schema
+        run: |
+          curl -sS \
+            http://localhost:3000/openapi.json \
+            -o openapi.json
+
+          python -c 'import json; d=json.load(open("openapi.json")); s=d["paths"]["/data"]["post"]["requestBody"]["content"]["application/json"]["schema"]; print(json.dumps(s,indent=2))'
+      
       - name: Inspect unit IDs
         run: |
           python -c 'import json; d=json.load(open("swgoh_972824625.json")); [(print(u["definitionId"], [s["id"] for s in u.get("skill",[]) if s["id"].startswith("basicskill_")])) for u in d["rosterUnit"][:20]]'     
