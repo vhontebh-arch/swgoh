@@ -135,6 +135,10 @@ jobs:
         run: |
           python -c 'import json; d=json.load(open("data.json")); u=next(x for x in d["units"] if x.get("baseId")=="BADBATCHECHO"); print("baseId:",u.get("baseId")); print("id:",u.get("id")); print("nameKey:",u.get("nameKey")); print("descKey:",u.get("descKey")); print("thumbnailName:",u.get("thumbnailName"))'
       
+      - name: Search localization data
+        run: |
+          python -c 'import json; d=json.load(open("data.json")); print("KOLEKCJE Z KLUCZEM localization/localizationBundle:"); [print(k,type(v).__name__,len(v) if isinstance(v,(list,dict)) else "") for k,v in d.items() if "loc" in k.lower() or "text" in k.lower() or "string" in k.lower() or "translation" in k.lower() or "bundle" in k.lower()]' 
+      
       - name: Test Comlink game data
         run: |
           VERSION=$(python -c 'import json; d=json.load(open("metadata.json")); print(d["latestGamedataVersion"])')
