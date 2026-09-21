@@ -147,5 +147,278 @@ jobs:
 
               return ""
 
-          # -------------
+          # ------------------------------------------------------------
+          # Separate characters and ships
+          # ------------------------------------------------------------
+
+          roster = []
+          ships = []
+
+          for unit in player.get("rosterUnit", []):
+              base_id = get_base_id(unit)
+
+              game_unit = units.get(base_id, {})
+
+              combat_type = game_unit.get("combatType", "")
+
+              row = {
+                  "name": unit_name(base_id),
+                  "definitionId": unit.get("definitionId", ""),
+                  "baseId": base_id,
+                  "id": unit.get("id", ""),
+                  "rarity": unit.get("currentRarity", ""),
+                  "level": unit.get("currentLevel", ""),
+                  "gearTier": unit.get("currentTier", ""),
+                  "relicTier": (unit.get("relic") or {}).get(
+                      "currentTier",
+                      ""
+                  ),
+              }
+
+              # SWGOH combatType:
+              # 1 = character
+              # 2 = ship
+              if combat_type == 2:
+                  ships.append(row)
+              else:
+                  roster.append(row)
+
+          # ------------------------------------------------------------
+          # Characters CSV
+          # ------------------------------------------------------------
+
+          roster_fields = [
+              "name",
+              "definitionId",
+              "baseId",
+              "id",
+              "rarity",
+              "level",
+              "gearTier",
+              "relicTier",
+          ]
+
+          with open(
+              "roster.csv",
+              "w",
+              newline="",
+              encoding="utf-8"
+          ) as f:
+              writer = csv.DictWriter(
+                  f,
+                  fieldnames=roster_fields
+              )
+
+              writer.writeheader()
+              writer.writerows(roster)
+
+          # ------------------------------------------------------------
+          # Ships CSV
+          # ------------------------------------------------------------
+
+          with open(
+              "ships.csv",
+              "w",
+              newline="",
+              encoding="utf-8"
+          ) as f:
+              writer = csv.DictWriter(
+                  f,
+                  fieldnames=roster_fields
+              )
+
+              writer.writeheader()
+              writer.writerows(ships)
+
+          # ------------------------------------------------------------
+          # Mods
+          #
+          # We intentionally preserve the complete raw mod object.
+          # This lets Step 2 analyse the exact current Comlink structure
+          # without guessing field names.
+          # ------------------------------------------------------------
+
+          mod_rows = []
+
+          for unit in player.get("rosterUnit", []):
+              base_id = get_base_id(unit)
+              owner_name = unit_name(base_id)
+
+              for key, value in unit.items():
+
+                  key_lower = key.lower()
+
+                  if "mod" not in key_lower:
+                      continue
+
+                  if not isinstance(value, list):
+                      continue
+
+                  for mod in value:
+                      if isinstance(mod, dict):
+                          mod_rows.append({
+                              "unitName": owner_name,
+                              "baseId": base_id,
+                              "unitId": unit.get("id", ""),
+                              "sourceField": key,
+                              "modId": mod.get("id", ""),
+                              "raw_json": json.dumps(
+                                  mod,
+                                  ensure_ascii=False,
+                                  separators=(",", ":")
+                              ),
+                          })
+
+          with open(
+              "mods.csv",
+              "w",
+              newline="",
+              encoding="utf-8"
+          ) as f:
+              fields = [
+                  "unitName",
+                  "baseId",
+                  "unitId",
+                  "sourceField",
+                  "modId",
+                  "raw_json",
+              ]
+
+              writer = csv.DictWriter(
+                  f,
+                  fieldnames=fields
+              )
+
+              writer.writeheader()
+              writer.writerows(mod_rows)
+
+          # ------------------------------------------------------------
+          # Datacrons
+          #
+          # Again we keep the complete raw object so Step 2 can inspect
+          # every currently available field.
+          # ------------------------------------------------------------
+
+          datacron_rows = []
+
+          for datacron in player.get("datacron", []):
+              if isinstance(datacron, dict):
+                  datacron_rows.append({
+                      "id": datacron.get("id", ""),
+                      "raw_json": json.dumps(
+                          datacron,
+                          ensure_ascii=False,
+                          separators=(",", ":")
+                      ),
+                  })
+
+          with open(
+              "datacrons.csv",
+              "w",
+              newline="",
+              encoding="utf-8"
+          ) as f:
+              fields = [
+                  "id",
+                  "raw_json",
+              ]
+
+              writer = csv.DictWriter(
+                  f,
+                  fieldnames=fields
+              )
+
+              writer.writeheader()
+              writer.writerows(datacron_rows)
+
+          # ------------------------------------------------------------
+          # Summary
+          # ------------------------------------------------------------
+
+          print("========================================")
+          print("SWGOH ACCOUNT EXPORT")
+          print("========================================")
+          print(f"Postacie:   {len(roster)}")
+          print(f"Statki:     {len(ships)}")
+          print(f"Mody:       {len(mod_rows)}")
+          print(f"Datacrony:  {len(datacron_rows)}")
+          print("========================================")
+
+          print()
+          print("Przykładowe statki:")
+
+          for ship in ships[:10]:
+              print(
+                  ship["name"],
+                  "|",
+                  ship["baseId"],
+                  "|",
+                  ship["rarity"],
+                  "★"
+              )
+
+          print()
+          print("Pierwsze rekordy modów:")
+
+          for mod in mod_rows[:5]:
+              print(
+                  mod["unitName"],
+                  "|",
+                  mod["sourceField"],
+                  "|",
+                  mod["modId"]
+              )
+
+          print()
+          print("Pliki wygenerowane:")
+          print(" - roster.csv")
+          print(" - ships.csv")
+          print(" - mods.csv")
+          print(" - datacrons.csv")
+          PY
+
+          python generate_csv.py
+
+      - name: Verify generated files
+        run: |
+          echo "=== ROSTER ==="
+          echo "Jednostki:"
+          tail -n +2 roster.csv | wc -l
+          head -n 6 roster.csv
+
+          echo
+          echo "=== SHIPS ==="
+          echo "Statki:"
+          tail -n +2 ships.csv | wc -l
+          head -n 6 ships.csv
+
+          echo
+          echo "=== MODS ==="
+          echo "Mody:"
+          tail -n +2 mods.csv | wc -l
+          head -n 6 mods.csv
+
+          echo
+          echo "=== DATACRONS ==="
+          echo "Datacrony:"
+          tail -n +2 datacrons.csv | wc -l
+          head -n 4 datacrons.csv
+
+          echo
+          echo "=== PIETT ==="
+          grep "ADMIRALPIETT" roster.csv || true
+
+      - name: Commit account data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add roster.csv ships.csv mods.csv datacrons.csv
+
+          if git diff --cached --quiet; then
+            echo "Brak zmian danych konta"
+          else
+            git commit -m "Update SWGOH account data"
+            git push
+          fi
 ```
