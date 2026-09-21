@@ -150,6 +150,7 @@ jobs:
             -o openapi.json
 
           python -c 'import json; d=json.load(open("openapi.json")); [print(k) for k in d["paths"] if any(x in k.lower() for x in ["local", "asset", "bundle", "resource"])]'      
+ 
       - name: Test Comlink game data
         run: |
           VERSION=$(python -c 'import json; d=json.load(open("metadata.json")); print(d["latestGamedataVersion"])')
