@@ -117,7 +117,7 @@ jobs:
           curl -sS \
             -X POST \
             -H "Content-Type: application/json" \
-            -d '{}' \
+            -d '{"payload":{"collectionId":"unit"}}' \
             http://localhost:3000/data \
             -o gamedata.json
 
