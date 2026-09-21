@@ -88,6 +88,10 @@ jobs:
             echo
           done
 
+      - name: Inspect roster unit fields
+        run: |
+          python -c 'import json; d=json.load(open("swgoh_972824625.json")); u=d["rosterUnit"][0]; [(print(k, type(v).__name__, str(v)[:200])) for k,v in u.items()]'
+      
       - name: Inspect roster unit
         run: |
           python -c 'import json; d=json.load(open("swgoh_972824625.json")); u=d["rosterUnit"][0]; print(list(u.keys()))'
