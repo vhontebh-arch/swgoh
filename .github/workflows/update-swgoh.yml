@@ -14,34 +14,17 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
 
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: "3.13"
-
-      - name: Install requests
-        run: python -m pip install requests
-
-      - name: Test SWGOH.GG API
+      - name: Start Comlink
         run: |
-          python - <<'PY'
-          import requests
+          docker pull ghcr.io/swgoh-utils/swgoh-comlink:latest
 
-          ally_code = "972824625"
-          url = f"https://swgoh.gg/api/player/{ally_code}/"
+          docker run -d \
+            --name swgoh-comlink \
+            --env APP_NAME="Vhonte SWGOH updater" \
+            -p 3000:3000 \
+            ghcr.io/swgoh-utils/swgoh-comlink:latest
 
-          print(f"Pobieram dane z: {url}")
-
-          response = requests.get(url, timeout=30)
-
-          print(f"HTTP status: {response.status_code}")
-          print(f"Content-Type: {response.headers.get('content-type')}")
-
-          response.raise_for_status()
-
-          data = response.json()
-
-          print("API zwróciło poprawny JSON.")
-          print("Klucze główne:")
-          print(list(data.keys())[:20])
-          PY
+      - name: Test Comlink
+        run: |
+          sleep 10
+          curl -i http://localhost:3000/
