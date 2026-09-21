@@ -40,67 +40,6 @@ jobs:
           echo "Pobrano dane:"
           wc -c swgoh_972824625.json
 
-      - name: Commit updated data
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          git add swgoh_972824625.json
-
-          if git diff --cached --quiet; then
-            echo "Brak zmian danych"
-          else
-            git commit -m "Update SWGOH player data"
-            git push
-          fi
-
-      - name: Test downloaded JSON
-        run: |
-          echo "Rozmiar pliku:"
-          wc -c swgoh_972824625.json
-
-          echo "Początek JSON:"
-          head -c 500 swgoh_972824625.json
-
-          echo
-
-      - name: Show JSON structure
-        run: |
-          python -c 'import json; d=json.load(open("swgoh_972824625.json")); print(list(d.keys()))'
-
-      - name: Inspect player data sections
-        run: |
-          python -c 'import json; d=json.load(open("swgoh_972824625.json")); [(print(k, type(v).__name__, len(v) if hasattr(v,"__len__") else "")) for k,v in d.items()]'   
-
-      - name: Inspect Comlink endpoints
-        run: |
-          for endpoint in \
-            "/metadata" \
-            "/data" \
-            "/units" \
-            "/gameData" \
-            "/definitions"; do
-            echo "=== $endpoint ==="
-            curl -sS -o /tmp/response -w "HTTP %{http_code}, bytes %{size_download}\n" \
-              "http://localhost:3000$endpoint"
-            head -c 300 /tmp/response
-            echo
-            echo
-          done
-
-      - name: Inspect roster unit fields
-        run: |
-          python -c 'import json; d=json.load(open("swgoh_972824625.json")); u=d["rosterUnit"][0]; [(print(k, type(v).__name__, str(v)[:200])) for k,v in u.items()]'
-      
-      - name: Search JSON for Admiral Piett
-        run: |
-          grep -oi '.\{0,100\}ADMIRALPIETT.\{0,200\}' swgoh_972824625.json | head -n 10
-
-      - name: Inspect Comlink image
-        run: |
-          docker inspect swgoh-comlink \
-            --format 'Image={{.Config.Image}} Entrypoint={{json .Config.Entrypoint}} Cmd={{json .Config.Cmd}}' 
-
       - name: Test Comlink metadata
         run: |
           curl -sS \
@@ -110,175 +49,37 @@ jobs:
             http://localhost:3000/metadata \
             -o metadata.json
 
-          python -m json.tool metadata.json | head -n 40            
+          python -m json.tool metadata.json | head -n 40
 
       - name: Test Comlink data
         run: |
+          VERSION=$(python -c 'import json; print(json.load(open("metadata.json"))["latestGamedataVersion"])')
+
           curl -sS \
             -X POST \
             -H "Content-Type: application/json" \
-            -d '{"payload":{"version":"0.40.5:CHG_XUnFR5uPPz6DgmcU6w","items":"-1"}}' \
+            -d "{\"payload\":{\"version\":\"$VERSION\",\"items\":\"-1\"}}" \
             http://localhost:3000/data \
             -o data.json
 
-          python -m json.tool data.json | head -n 40   
-      
-      - name: Inspect unit data
-        run: |
-          python -c 'import json; d=json.load(open("data.json")); u=next(x for x in d["units"] if x.get("baseId")=="BADBATCHECHO" or x.get("id")=="BADBATCHECHO"); print(json.dumps(u,indent=2)[:12000])'
-    
-      - name: Inspect unit keys
-        run: |
-          python -c 'import json; d=json.load(open("data.json")); u=next(x for x in d["units"] if x.get("baseId")=="BADBATCHECHO" or x.get("id")=="BADBATCHECHO"); print("KLUCZE REKORDU:"); print("\n".join(sorted(u.keys())))'
-      
-      - name: Inspect unit name key
-        run: |
-          python -c 'import json; d=json.load(open("data.json")); u=next(x for x in d["units"] if x.get("baseId")=="BADBATCHECHO"); print("baseId:",u.get("baseId")); print("id:",u.get("id")); print("nameKey:",u.get("nameKey")); print("descKey:",u.get("descKey")); print("thumbnailName:",u.get("thumbnailName"))'
-      
-      - name: Search localization data
-        run: |
-          python -c 'import json; d=json.load(open("data.json")); print("KOLEKCJE Z KLUCZEM localization/localizationBundle:"); [print(k,type(v).__name__,len(v) if isinstance(v,(list,dict)) else "") for k,v in d.items() if "loc" in k.lower() or "text" in k.lower() or "string" in k.lower() or "translation" in k.lower() or "bundle" in k.lower()]' 
-      
-      - name: Inspect localization metadata
-        run: |
-          python -c 'import json; d=json.load(open("metadata.json")); print("latestLocalizationBundleVersion:",d.get("latestLocalizationBundleVersion")); print("latestLocalizationRevision:",d.get("latestLocalizationRevision")); print("assetPath:",d.get("assetPath")); print("assetSubpath:",d.get("assetSubpath"))'
-      
-      - name: Inspect localization schema
-        run: |
-          curl -sS \
-            http://localhost:3000/openapi.json \
-            -o openapi.json
+          python -m json.tool data.json | head -n 40
 
-          python -c 'import json; d=json.load(open("openapi.json")); print(json.dumps(d["paths"]["/localization"],indent=2))'
-          
       - name: Download English localization
         run: |
+          VERSION=$(python -c 'import json; print(json.load(open("metadata.json"))["latestLocalizationBundleVersion"])')
+
           curl -sS \
             -X POST \
             -H "Content-Type: application/json" \
-            -d '{"payload":{"id":"JbmqKUkxRfyIvw2u3iiA5A:ENG_US"}}' \
+            -d "{\"payload\":{\"id\":\"${VERSION}:ENG_US\"}}" \
             http://localhost:3000/localization \
             -o localization.json
 
           python -c 'import json; d=json.load(open("localization.json")); print("Klucze odpowiedzi:",list(d.keys())); print("Rozmiar odpowiedzi:",len(open("localization.json","rb").read()),"bytes")'
-      
-      - name: Inspect localization bundle
-        run: |
-          python -c 'import json,base64,zipfile,io; d=json.load(open("localization.json")); z=zipfile.ZipFile(io.BytesIO(base64.b64decode(d["localizationBundle"]))); print("PLIKI W BUNDLE:"); [print(x) for x in z.namelist()]'
-      
-      - name: Find Echo localization
-        run: |
-          python -c 'import json,base64,zipfile,io; d=json.load(open("localization.json")); z=zipfile.ZipFile(io.BytesIO(base64.b64decode(d["localizationBundle"]))); print("=== Loc_Key_Mapping.txt ==="); m=z.read("Loc_Key_Mapping.txt").decode("utf-8","replace"); [print(x) for x in m.splitlines() if "UNIT_BADBATCHECHO_NAME" in x]; print("=== Loc_ENG_US.txt ==="); t=z.read("Loc_ENG_US.txt").decode("utf-8","replace"); [print(x) for x in t.splitlines() if "UNIT_BADBATCHECHO_NAME" in x]'
-      
-      - name: Test Comlink game data
-        run: |
-          VERSION=$(python -c 'import json; d=json.load(open("metadata.json")); print(d["latestGamedataVersion"])')
-
-          echo "Wersja game data:"
-          echo "$VERSION"
-
-          curl -sS \
-            -X POST \
-            -H "Content-Type: application/json" \
-            -d "{\"payload\":{\"version\":\"$VERSION\"}}" \
-            http://localhost:3000/data \
-            -o gamedata.json
-
-          echo
-          echo "Rozmiar game data:"
-          wc -c gamedata.json
-
-          echo
-          echo "Początek:"
-          head -c 500 gamedata.json
-
-          echo      
-
-      - name: Inspect game data collections
-        run: |
-          python -c 'import json; d=json.load(open("gamedata.json")); [(print(k, type(v).__name__, len(v) if hasattr(v,"__len__") else "")) for k,v in d.items()]'
-          
-      - name: Inspect Comlink API
-        run: |
-          for endpoint in "/docs" "/openapi.json" "/api-docs" "/swagger.json"; do
-            echo "=== $endpoint ==="
-            curl -sS -o /tmp/api -w "HTTP %{http_code}, bytes %{size_download}\n" \
-              "http://localhost:3000$endpoint"
-            head -c 500 /tmp/api
-            echo
-            echo
-          done   
-      
-      - name: Inspect game data request schema
-        run: |
-          curl -sS \
-            http://localhost:3000/openapi.json \
-            -o openapi.json
-
-          python -c 'import json; d=json.load(open("openapi.json")); s=d["paths"]["/data"]["post"]["requestBody"]["content"]["application/json"]["schema"]; print(json.dumps(s,indent=2))'
-      
-      - name: Inspect unit IDs
-        run: |
-          python -c 'import json; d=json.load(open("swgoh_972824625.json")); [(print(u["definitionId"], [s["id"] for s in u.get("skill",[]) if s["id"].startswith("basicskill_")])) for u in d["rosterUnit"][:20]]'     
-      
-      - name: Test unit name lookup
-        run: |
-          python -c 'import json; d=json.load(open("swgoh_972824625.json")); [(print(s["id"].replace("basicskill_",""))) for s in d["rosterUnit"][0]["skill"] if s["id"].startswith("basicskill_")]'
-    
-      - name: Inspect roster unit
-        run: |
-          python -c 'import json; d=json.load(open("swgoh_972824625.json")); u=d["rosterUnit"][0]; print(list(u.keys()))'
-
-      - name: Count roster units
-        run: |
-          python -c 'import json; d=json.load(open("swgoh_972824625.json")); print("rosterUnit:", len(d["rosterUnit"]))'
-
-      - name: Inspect roster definitions
-        run: |
-          python -c 'import json; d=json.load(open("swgoh_972824625.json")); s="\n".join(f"{u["definitionId"]} | {u["id"]} | {u["currentRarity"]}★ | L{u["currentLevel"]} | T{u["currentTier"]}" for u in d["rosterUnit"][:10]); print(s); open("roster_definitions.txt","w").write(s+"\n")'
-
-      - name: Upload roster inspection
-        uses: actions/upload-artifact@v4
-        with:
-          name: roster-inspection
-          path: roster_definitions.txt
-
-      - name: Extract all relic units
-        run: |
-          python -c 'import json; d=json.load(open("swgoh_972824625.json")); units=[u for u in d["rosterUnit"] if u.get("relic")]; s="\n".join(f"{u["definitionId"]} | R{u["relic"]["currentTier"]}" for u in units); print(s); open("relic_units.txt","w").write(s+"\n")'
-
-      - name: Verify relic file
-        run: |
-          echo "Sprawdzam plik:"
-          pwd
-          ls -lah
-          echo
-          echo "Zawartość relic_units.txt:"
-          cat relic_units.txt
-
-      - name: Upload relic inspection
-        uses: actions/upload-artifact@v4
-        with:
-          name: relic-inspection
-          path: relic_units.txt
 
       - name: Generate roster CSV
         run: |
           python -c 'import csv,json,base64,zipfile,io; d=json.load(open("swgoh_972824625.json")); loc=json.load(open("localization.json")); z=zipfile.ZipFile(io.BytesIO(base64.b64decode(loc["localizationBundle"]))); lines=z.read("Loc_ENG_US.txt").decode("utf-8","replace").splitlines(); names={x.split("|",1)[0]:x.split("|",1)[1] for x in lines if "|" in x}; f=open("roster.csv","w",newline="",encoding="utf-8"); w=csv.writer(f); w.writerow(["name","definitionId","baseId","id","rarity","level","gearTier","relicTier"]); [w.writerow([names.get("UNIT_"+next((s["id"].replace("basicskill_","") for s in u.get("skill",[]) if s["id"].startswith("basicskill_")),"")+"_NAME",""),u.get("definitionId",""),next((s["id"].replace("basicskill_","") for s in u.get("skill",[]) if s["id"].startswith("basicskill_")),""),u.get("id",""),u.get("currentRarity",""),u.get("currentLevel",""),u.get("currentTier",""),(u.get("relic") or {}).get("currentTier","")]) for u in d["rosterUnit"]]; f.close(); print("Wygenerowano roster.csv")'
- 
-      - name: Commit roster CSV
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          git add roster.csv
-
-          if git diff --cached --quiet; then
-            echo "Brak zmian roster CSV"
-          else
-            git commit -m "Update roster CSV"
-            git push
-          fi
 
       - name: Verify roster CSV
         run: |
@@ -292,3 +93,17 @@ jobs:
           echo
           echo "Admiral Piett:"
           grep "ADMIRALPIETT" roster.csv || true
+
+      - name: Commit roster CSV
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add roster.csv
+
+          if git diff --cached --quiet; then
+            echo "Brak zmian roster CSV"
+          else
+            git commit -m "Update roster CSV"
+            git push
+          fi
