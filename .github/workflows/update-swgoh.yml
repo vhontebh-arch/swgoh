@@ -114,13 +114,19 @@ jobs:
 
       - name: Test Comlink game data
         run: |
+          VERSION=$(python -c 'import json; d=json.load(open("metadata.json")); print(d["version"])')
+
+          echo "Wersja game data:"
+          echo "$VERSION"
+
           curl -sS \
             -X POST \
             -H "Content-Type: application/json" \
-            -d '{"payload":{"collectionId":"unit"}}' \
+            -d "{\"payload\":{\"version\":\"$VERSION\"}}" \
             http://localhost:3000/data \
             -o gamedata.json
 
+          echo
           echo "Rozmiar game data:"
           wc -c gamedata.json
 
