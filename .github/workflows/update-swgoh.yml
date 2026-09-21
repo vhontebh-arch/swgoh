@@ -112,10 +112,29 @@ jobs:
 
           python -m json.tool metadata.json | head -n 40            
 
-      - name: Inspect Comlink metadata structure
+      - name: Test Comlink game data
         run: |
-          python -c 'import json; d=json.load(open("metadata.json")); print("Top-level keys:", list(d.keys())); [(print(k, type(v).__name__, len(v) if hasattr(v,"__len__") else "")) for k,v in d.items()]'
-      
+          VERSION=$(python -c 'import json; d=json.load(open("metadata.json")); print(d["latestGamedataVersion"])')
+
+          echo "Wersja game data:"
+          echo "$VERSION"
+
+          curl -sS \
+            -X POST \
+            -H "Content-Type: application/json" \
+            -d "{\"payload\":{\"version\":\"$VERSION\"}}" \
+            http://localhost:3000/data \
+            -o gamedata.json
+
+          echo
+          echo "Rozmiar game data:"
+          wc -c gamedata.json
+
+          echo
+          echo "Początek:"
+          head -c 500 gamedata.json
+
+          echo      
       - name: Inspect unit IDs
         run: |
           python -c 'import json; d=json.load(open("swgoh_972824625.json")); [(print(u["definitionId"], [s["id"] for s in u.get("skill",[]) if s["id"].startswith("basicskill_")])) for u in d["rosterUnit"][:20]]'     
