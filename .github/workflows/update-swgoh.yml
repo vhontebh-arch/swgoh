@@ -53,3 +53,21 @@ jobs:
             git commit -m "Update SWGOH player data"
             git push
           fi
+
+      - name: Show downloaded data summary
+        run: |
+          python - <<'PY'
+          import json
+
+          with open("swgoh_972824625.json", encoding="utf-8") as f:
+              data = json.load(f)
+
+          print("Top-level keys:")
+          print(list(data.keys()))
+
+          for key, value in data.items():
+              if isinstance(value, list):
+                  print(f"{key}: {len(value)}")
+              else:
+                  print(f"{key}: {type(value).__name__}")
+          PY    
