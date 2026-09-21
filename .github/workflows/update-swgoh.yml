@@ -84,3 +84,13 @@ jobs:
         with:
           name: roster-inspection
           path: roster_definitions.txt
+
+      - name: Extract 10 relic units
+        run: |
+          python -c "import json; d=json.load(open('swgoh_972824625.json')); units=[u for u in d['rosterUnit'] if u.get('relic')]; selected=units[:10]; s='\n'.join(f'{u[\"definitionId\"]} | R{u[\"relic\"][\"currentTier\"]}' for u in selected); print(s); open('relic_units.txt','w').write(s+'\n')"
+      
+      - name: Upload relic inspection
+        uses: actions/upload-artifact@v4
+        with:
+          name: relic-inspection
+          path: relic_units.txt
