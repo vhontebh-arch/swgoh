@@ -99,7 +99,18 @@ jobs:
       - name: Inspect Comlink image
         run: |
           docker inspect swgoh-comlink \
-            --format 'Image={{.Config.Image}} Entrypoint={{json .Config.Entrypoint}} Cmd={{json .Config.Cmd}}'       
+            --format 'Image={{.Config.Image}} Entrypoint={{json .Config.Entrypoint}} Cmd={{json .Config.Cmd}}' 
+
+      - name: Test Comlink metadata
+        run: |
+          curl -sS \
+            -X POST \
+            -H "Content-Type: application/json" \
+            -d '{}' \
+            http://localhost:3000/metadata \
+            -o metadata.json
+
+          python -m json.tool metadata.json | head -n 40            
       
       - name: Inspect unit IDs
         run: |
