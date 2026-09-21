@@ -96,6 +96,10 @@ jobs:
         run: |
           python -c 'import json; d=json.load(open("swgoh_972824625.json")); [(print(u["definitionId"], [s["id"] for s in u.get("skill",[]) if s["id"].startswith("basicskill_")])) for u in d["rosterUnit"][:20]]'     
       
+      - name: Test unit name lookup
+        run: |
+          python -c 'import json; d=json.load(open("swgoh_972824625.json")); [(print(s["id"].replace("basicskill_",""))) for s in d["rosterUnit"][0]["skill"] if s["id"].startswith("basicskill_")]'
+    
       - name: Inspect roster unit
         run: |
           python -c 'import json; d=json.load(open("swgoh_972824625.json")); u=d["rosterUnit"][0]; print(list(u.keys()))'
