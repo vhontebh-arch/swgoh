@@ -31,5 +31,5 @@ jobs:
           curl -sS \
             -X POST \
             -H "Content-Type: application/json" \
-            -d '{"payload":{"allyCode":972824625}}' \
+            -d '{"payload":{"allyCode":"972824625"}}' \
             http://localhost:3000/player
