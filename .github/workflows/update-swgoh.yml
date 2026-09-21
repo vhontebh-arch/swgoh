@@ -109,11 +109,19 @@ jobs:
         run: |
           python -c 'import csv,json; d=json.load(open("swgoh_972824625.json")); f=open("roster.csv","w",newline="",encoding="utf-8"); w=csv.writer(f); w.writerow(["definitionId","id","rarity","level","gearTier","relicTier"]); [w.writerow([u.get("definitionId",""),u.get("id",""),u.get("currentRarity",""),u.get("currentLevel",""),u.get("currentTier",""),(u.get("relic") or {}).get("currentTier","")]) for u in d["rosterUnit"]]; f.close(); print("Wygenerowano roster.csv")'
     
-      - name: Upload roster CSV
-        uses: actions/upload-artifact@v4
-        with:
-          name: roster-csv
-          path: roster.csv
+      - name: Commit roster CSV
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add roster.csv
+
+          if git diff --cached --quiet; then
+            echo "Brak zmian roster CSV"
+          else
+            git commit -m "Update roster CSV"
+            git push
+          fi
 
       - name: Verify roster CSV
         run: |
