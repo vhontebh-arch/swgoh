@@ -2,12 +2,14 @@ import json
 import os
 from collections import defaultdict
 
+
 DATA_FILE = "data.json"
 PLAYER_FILE = "swgoh_972824625.json"
 C3PO_FILE = "c3po.json"
 LOCALIZATION_FILE = "localization.json"
 TARGETS_FILE = "targets.json"
 REPORT_FILE = "account_farming_report.md"
+
 
 IGNORE_GEAR_IDS = {"9999"}
 
@@ -519,6 +521,7 @@ def calculate_target(
         "required_direct_gear": required_direct_gear,
         "required_gear": required_gear,
         "required_relic": required_relic,
+        "total_required": dict(total_required),
         "shortages": shortages,
     }
 
@@ -529,6 +532,7 @@ def format_number(value):
 
 def generate_report(
     results,
+    total_required,
     total_shortages,
     inventory,
     names
@@ -562,15 +566,10 @@ def generate_report(
             total_shortages.items(),
             key=lambda x: (-x[1], x[0])
         ):
-            # Required/owned are reconstructed from inventory and shortage
-            # for report readability.
+            # Use the actual total requirement calculated from the
+            # gear/relic recipes. Do not reconstruct it from shortage.
             owned = inventory.get(item_id, 0)
-
-            # NOTE:
-            # We cannot reconstruct original required amount from the
-            # post-consumption inventory. The shortage itself is the
-            # authoritative farming number.
-            required_for_report = owned + shortage
+            required_for_report = total_required.get(item_id, 0)
 
             name = localized_name(item_id, names)
 
@@ -701,6 +700,7 @@ def main():
     target_list = targets.get("targets", [])
 
     results = []
+    total_required = defaultdict(int)
     total_shortages = defaultdict(int)
 
     for target in target_list:
@@ -736,11 +736,15 @@ def main():
 
         results.append(result)
 
+        for item_id, quantity in result["total_required"].items():
+            total_required[item_id] += quantity
+
         for item_id, quantity in result["shortages"].items():
             total_shortages[item_id] += quantity
 
     report = generate_report(
         results=results,
+        total_required=total_required,
         total_shortages=total_shortages,
         inventory=inventory,
         names=names,
