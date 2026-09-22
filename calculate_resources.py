@@ -11,7 +11,7 @@ OUTPUT_FILE = "account_farming_report.md"
 
 def load_json(path):
     with open(path, "r", encoding="utf-8") as f:
-        return json.load(f)
+        return json.load(f, strict=False)
 
 
 def as_int(value, default=0):
