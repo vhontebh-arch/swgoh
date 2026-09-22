@@ -1,23 +1,14 @@
 # Account Farming Report
 
-Raport uwzględnia posiadane materiały i sprzęt przed rozwinięciem recept craftingu.
+Automatycznie wygenerowany raport brakujących materiałów dla aktualnej kolejki farmienia.
+
+## Jar Jar Binks
+
+- **Gear:** G9 → G13
+- **Relic:** R1 → R5
+
+**Brak brakujących materiałów.**
 
 ## Łączne braki
 
-Brak brakujących materiałów dla wyznaczonych celów.
-
----
-
-## JARJARBINKS
-
-**Błąd:** Postać nie znajduje się w rosterze.
-
----
-
-## Sposób liczenia
-
-Dla każdego wymaganego przedmiotu kalkulator najpierw zużywa posiadane egzemplarze tego przedmiotu.
-
-Dopiero brakująca ilość jest rozwijana przez receptę. Na każdym kolejnym poziomie recepty posiadany materiał jest ponownie zużywany przed dalszym craftingiem.
-
-Dzięki temu raport pokazuje rzeczywisty brak do farmienia, a nie pełny koszt recepty przed uwzględnieniem magazynu.
+**Brak brakujących materiałów.**
