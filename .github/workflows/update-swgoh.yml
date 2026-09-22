@@ -71,68 +71,85 @@ jobs:
 
           data = json.load(open("data.json", encoding="utf-8"))
 
-          def walk(obj):
-              yield obj
-              if isinstance(obj, dict):
-                  for v in obj.values():
-                      yield from walk(v)
-              elif isinstance(obj, list):
-                  for v in obj:
-                      yield from walk(v)
-
-          print("=== JAR JAR UNIT DEFINITIONS ===")
-
-          for node in walk(data):
-              if isinstance(node, dict) and node.get("baseId") == "JARJARBINKS":
-                  print(json.dumps(node, indent=2, ensure_ascii=False))
+          print("=== TOP LEVEL KEYS ===")
+          print(list(data.keys()))
 
           print()
-          print("=== EQUIPMENT / RECIPE STRUCTURES ===")
+          print("=== JAR JAR DEFINITION ===")
 
-          found = 0
+          units = data.get("units", [])
 
-          for node in walk(data):
-              if not isinstance(node, dict):
-                  continue
+          print("Liczba units:", len(units))
 
-              if any(
-                  key in node
-                  for key in (
-                      "recipeId",
-                      "ingredients",
-                      "ingredient",
-                      "components",
-                      "component"
-                  )
-              ):
-                  text = json.dumps(node, ensure_ascii=False)
+          jarjar = None
 
-                  if (
-                      "JARJAR" in text.upper()
-                      or "recipeId" in node
-                  ):
-                      print(json.dumps(node, indent=2, ensure_ascii=False))
-                      found += 1
+          for unit in units:
+              if isinstance(unit, dict) and unit.get("baseId") == "JARJARBINKS":
+                  jarjar = unit
+                  break
 
-                      if found >= 100:
-                          break
+          if jarjar:
+              print(json.dumps(jarjar, indent=2, ensure_ascii=False))
+          else:
+              print("NIE ZNALEZIONO JARJARBINKS w data['units'].")
+
+          print()
+          print("=== RELEVANT TOP-LEVEL DATA ===")
+
+          for key in data.keys():
+              key_upper = key.upper()
+
+              if any(x in key_upper for x in (
+                  "EQUIPMENT",
+                  "RECIPE",
+                  "RELIC",
+                  "GEAR"
+              )):
+                  value = data[key]
+
+                  if isinstance(value, list):
+                      print(
+                          key,
+                          "-> list, entries:",
+                          len(value)
+                      )
+                  elif isinstance(value, dict):
+                      print(
+                          key,
+                          "-> dict, keys:",
+                          len(value)
+                      )
+                  else:
+                      print(
+                          key,
+                          "->",
+                          type(value).__name__
+                      )
 
           print()
           print("=== RELIC TIER DEFINITIONS ===")
 
-          for node in walk(data):
-              if not isinstance(node, dict):
-                  continue
+          relic = data.get("relicTierDefinition")
 
-              text = json.dumps(node, ensure_ascii=False).upper()
+          if relic is not None:
+              if isinstance(relic, list):
+                  print("entries:", len(relic))
+                  for entry in relic:
+                      print(json.dumps(
+                          entry,
+                          indent=2,
+                          ensure_ascii=False
+                      ))
+              else:
+                  print(json.dumps(
+                      relic,
+                      indent=2,
+                      ensure_ascii=False
+                  ))
+          else:
+              print("Brak top-level relicTierDefinition")
 
-              if (
-                  "RELICTIER" in text
-                  or "RELIC_TIER" in text
-              ):
-                  print(json.dumps(node, indent=2, ensure_ascii=False))
-
-          PY          
+          PY    
 
       - name: Download English localization
         run: |
