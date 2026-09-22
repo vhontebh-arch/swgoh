@@ -6,20 +6,29 @@
 
 | ID | Przedmiot | Wymagane | Posiadane | Brakuje |
 |---|---|---:|---:|---:|
-| `GRIND` | GRIND | 250 000 | 0 | **250 000** |
+| `GRIND` | GRIND | 1 201 300 | 0 | **1 201 300** |
+| `172Salvage` | 172Salvage | 150 | 34 | **116** |
+| `129Salvage` | 129Salvage | 120 | 38 | **82** |
+| `152Salvage` | 152Salvage | 80 | 0 | **80** |
+| `108Salvage` | 108Salvage | 100 | 22 | **78** |
+| `168PrototypeSalvage_V2` | 168PrototypeSalvage_V2 | 80 | 15 | **65** |
+| `168PrototypeSalvage` | 168PrototypeSalvage | 100 | 45 | **55** |
+| `170PrototypeSalvage` | 170PrototypeSalvage | 50 | 1 | **49** |
+| `173Salvage` | 173Salvage | 50 | 2 | **48** |
+| `123Component` | 123Component | 50 | 4 | **46** |
+| `148Salvage` | 148Salvage | 40 | 2 | **38** |
+| `144Salvage` | 144Salvage | 50 | 16 | **34** |
+| `147Salvage` | 147Salvage | 40 | 7 | **33** |
+| `158PrototypeSalvage` | 158PrototypeSalvage | 30 | 0 | **30** |
+| `120PrototypeSalvage` | 120PrototypeSalvage | 50 | 32 | **18** |
 | `RM_002` | Incomplete Signal Data | 65 | 49 | **16** |
+| `116PrototypeSalvage` | 116PrototypeSalvage | 50 | 36 | **14** |
+| `150Salvage` | 150Salvage | 50 | 37 | **13** |
+| `159PrototypeSalvage` | 159PrototypeSalvage | 30 | 17 | **13** |
 | `RM_003` | Flawed Signal Data | 15 | 2 | **13** |
-| `168` | Mk 12 ArmaTek Fusion Furnace | 2 | 0 | **2** |
-| `129` | Mk 8 BioTech Implant | 1 | 0 | **1** |
-| `134` | Mk 9 BAW Armor Mod | 1 | 0 | **1** |
-| `142` | Mk 6 A/KT Stun Gun | 1 | 0 | **1** |
-| `144` | Mk 6 Merr-Sonn Thermal Detonator | 1 | 0 | **1** |
-| `146` | Mk 10 Neuro-Saav Electrobinoculars | 1 | 0 | **1** |
-| `158` | Mk 12 ArmaTek Multi-tool | 1 | 0 | **1** |
-| `159` | Mk 12 ArmaTek Armor Plating | 1 | 0 | **1** |
-| `160` | Mk 12 ArmaTek Bayonet | 1 | 0 | **1** |
-| `174` | Mk 7 Kyrotech Power Converter | 1 | 0 | **1** |
-| `G12Finisher_JARJARBINKS_C` | G12Finisher_JARJARBINKS_C | 1 | 0 | **1** |
+| `153Salvage` | 153Salvage | 50 | 40 | **10** |
+| `151Salvage` | 151Salvage | 40 | 35 | **5** |
+| `160PrototypeSalvage` | 160PrototypeSalvage | 30 | 26 | **4** |
 
 ## Szczegóły
 
@@ -56,20 +65,29 @@ Gear: **G10 → G13** Relic: **R1 → R5**
 
 | ID | Przedmiot | Brakuje |
 |---|---|---:|
-| `GRIND` | GRIND | **250 000** |
+| `GRIND` | GRIND | **1 201 300** |
+| `172Salvage` | 172Salvage | **116** |
+| `129Salvage` | 129Salvage | **82** |
+| `152Salvage` | 152Salvage | **80** |
+| `108Salvage` | 108Salvage | **78** |
+| `168PrototypeSalvage_V2` | 168PrototypeSalvage_V2 | **65** |
+| `168PrototypeSalvage` | 168PrototypeSalvage | **55** |
+| `170PrototypeSalvage` | 170PrototypeSalvage | **49** |
+| `173Salvage` | 173Salvage | **48** |
+| `123Component` | 123Component | **46** |
+| `148Salvage` | 148Salvage | **38** |
+| `144Salvage` | 144Salvage | **34** |
+| `147Salvage` | 147Salvage | **33** |
+| `158PrototypeSalvage` | 158PrototypeSalvage | **30** |
+| `120PrototypeSalvage` | 120PrototypeSalvage | **18** |
 | `RM_002` | Incomplete Signal Data | **16** |
+| `116PrototypeSalvage` | 116PrototypeSalvage | **14** |
+| `150Salvage` | 150Salvage | **13** |
+| `159PrototypeSalvage` | 159PrototypeSalvage | **13** |
 | `RM_003` | Flawed Signal Data | **13** |
-| `168` | Mk 12 ArmaTek Fusion Furnace | **2** |
-| `129` | Mk 8 BioTech Implant | **1** |
-| `134` | Mk 9 BAW Armor Mod | **1** |
-| `142` | Mk 6 A/KT Stun Gun | **1** |
-| `144` | Mk 6 Merr-Sonn Thermal Detonator | **1** |
-| `146` | Mk 10 Neuro-Saav Electrobinoculars | **1** |
-| `158` | Mk 12 ArmaTek Multi-tool | **1** |
-| `159` | Mk 12 ArmaTek Armor Plating | **1** |
-| `160` | Mk 12 ArmaTek Bayonet | **1** |
-| `174` | Mk 7 Kyrotech Power Converter | **1** |
-| `G12Finisher_JARJARBINKS_C` | G12Finisher_JARJARBINKS_C | **1** |
+| `153Salvage` | 153Salvage | **10** |
+| `151Salvage` | 151Salvage | **5** |
+| `160PrototypeSalvage` | 160PrototypeSalvage | **4** |
 
 ## Informacje techniczne
 
