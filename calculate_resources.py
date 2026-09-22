@@ -53,7 +53,6 @@ def debug_find_item(data, target_id):
 
         if isinstance(value, dict):
 
-            # Direct occurrence as a value.
             for key, child in value.items():
 
                 child_path = f"{path}.{key}"
@@ -114,7 +113,7 @@ def debug_find_item(data, target_id):
         print(f"WYSTĄPIENIE #{number}")
         print("-" * 80)
 
-        print(f"JSON path:")
+        print("JSON path:")
         print(match["path"])
         print("")
 
@@ -132,8 +131,6 @@ def debug_find_item(data, target_id):
 
         print("")
 
-        # If the immediate parent is an ingredient object,
-        # try to print useful surrounding recipe information.
         parent = match["parent"]
 
         if isinstance(parent, dict):
@@ -171,8 +168,6 @@ def debug_find_item(data, target_id):
 
                 print("")
 
-        # If this occurrence is inside a list, print a larger
-        # contextual object when available.
         if isinstance(match["parent"], list):
 
             print("Kontekst listy:")
@@ -301,14 +296,50 @@ def build_equipment_database(data):
     return equipment
 
 
+def get_recipe_list(data):
+    """
+    Returns the recipe collection from data.json.
+
+    Current Comlink data uses the top-level key:
+        "recipe"
+
+    Some older/alternative data dumps use:
+        "recipes"
+
+    Support both formats so the calculator remains compatible.
+    """
+    recipes = data.get("recipe")
+
+    if isinstance(recipes, list):
+        return recipes
+
+    recipes = data.get("recipes")
+
+    if isinstance(recipes, list):
+        return recipes
+
+    return []
+
+
 def build_recipe_database(data):
     """
+    Maps result.id -> ingredient list.
+
     IMPORTANT:
     Recipes are mapped by result.id, NOT recipe object's own id.
     """
     recipes = {}
 
-    for recipe in data.get("recipes", []):
+    recipe_list = get_recipe_list(data)
+
+    print(
+        f"Znaleziono receptury gearu: {len(recipe_list)}"
+    )
+
+    for recipe in recipe_list:
+
+        if not isinstance(recipe, dict):
+            continue
 
         result = recipe.get("result")
 
@@ -320,7 +351,14 @@ def build_recipe_database(data):
         if not result_id:
             continue
 
-        recipes[result_id] = recipe.get("ingredients", [])
+        recipes[result_id] = recipe.get(
+            "ingredients",
+            []
+        )
+
+    print(
+        f"Zbudowano bazę receptur: {len(recipes)}"
+    )
 
     return recipes
 
@@ -343,7 +381,10 @@ def build_relic_recipe_database(data):
 
             if recipe_id in RELIC_RECIPE_IDS:
 
-                ingredients = value.get("ingredients", [])
+                ingredients = value.get(
+                    "ingredients",
+                    []
+                )
 
                 if isinstance(ingredients, list):
                     result[recipe_id] = ingredients
@@ -358,6 +399,10 @@ def build_relic_recipe_database(data):
 
     walk(data)
 
+    print(
+        f"Zbudowano bazę receptur relic: {len(result)}"
+    )
+
     return result
 
 
@@ -365,7 +410,11 @@ def get_unit_tier(unit_definition, tier):
 
     for unit_tier in unit_definition.get("unitTier", []):
 
-        if as_int(unit_tier.get("tier"), -1) == tier:
+        if as_int(
+            unit_tier.get("tier"),
+            -1
+        ) == tier:
+
             return unit_tier
 
     return None
@@ -857,6 +906,7 @@ def calculate_target(
 
 
 def format_number(value):
+
     return f"{value:,}".replace(
         ",",
         " "
