@@ -97,7 +97,7 @@ def debug_find_item(data, target_id):
                 walk(
                     child,
                     child_path,
-                    parent=value,
+                    parent=parent,
                     parent_path=path
                 )
 
@@ -252,12 +252,50 @@ def get_localized_names(localization):
     return names
 
 
-def localized_name(item_id, names):
+def localized_name(item_id, names, equipment=None):
     """
-    Try several known localization key patterns.
+    Returns a human-readable item name.
+
+    First tries direct localization keys.
+
+    If no direct localization key exists, uses the authoritative
+    nameKey from the equipment definition in data.json and resolves
+    it through the English localization bundle.
+
+    If that also fails, returns the technical item ID rather than
+    inventing a name.
     """
+
     if item_id in names:
         return names[item_id]
+
+    if equipment:
+
+        item = equipment.get(item_id)
+
+        if isinstance(item, dict):
+
+            name_key = item.get("nameKey")
+
+            if name_key:
+
+                value = names.get(
+                    name_key
+                )
+
+                if value:
+                    return value
+
+            # Defensive fallback for alternative data-dump formats.
+            for key in (
+                "name",
+                "displayName"
+            ):
+
+                value = item.get(key)
+
+                if isinstance(value, str) and value:
+                    return value
 
     candidates = [
         f"EQUIPMENT_{item_id}_NAME",
@@ -856,7 +894,8 @@ def calculate_target(
     recipes,
     relic_recipes,
     working_inventory,
-    names
+    names,
+    equipment
 ):
 
     unit = roster.get(
@@ -973,7 +1012,8 @@ def generate_report(
     total_required,
     total_shortages,
     inventory,
-    names
+    names,
+    equipment
 ):
 
     lines = []
@@ -1034,7 +1074,8 @@ def generate_report(
 
             name = localized_name(
                 item_id,
-                names
+                names,
+                equipment
             )
 
             lines.append(
@@ -1089,7 +1130,8 @@ def generate_report(
 
             name = localized_name(
                 item_id,
-                names
+                names,
+                equipment
             )
 
             lines.append(
@@ -1110,7 +1152,8 @@ def generate_report(
 
             name = localized_name(
                 item_id,
-                names
+                names,
+                equipment
             )
 
             lines.append(
@@ -1145,7 +1188,8 @@ def generate_report(
 
                 name = localized_name(
                     item_id,
-                    names
+                    names,
+                    equipment
                 )
 
                 lines.append(
@@ -1178,6 +1222,11 @@ def generate_report(
     lines.append(
         "- Wymagany gear pochodzi z "
         "`unitTier[].equipmentSet`."
+    )
+
+    lines.append(
+        "- Nazwy gearu są pobierane z `nameKey` "
+        "definicji equipment w `data.json` i lokalizacji ENG_US."
     )
 
     lines.append(
@@ -1240,6 +1289,10 @@ def main():
     )
 
     units = build_unit_database(
+        data
+    )
+
+    equipment = build_equipment_database(
         data
     )
 
@@ -1318,6 +1371,7 @@ def main():
             relic_recipes=relic_recipes,
             working_inventory=working_inventory,
             names=names,
+            equipment=equipment,
         )
 
         results.append(
@@ -1348,6 +1402,7 @@ def main():
         total_shortages=total_shortages,
         inventory=inventory,
         names=names,
+        equipment=equipment,
     )
 
     with open(
