@@ -192,8 +192,6 @@ def get_equipment_set(unit):
 def get_current_gear(unit):
     """
     Returns the character's current gear tier.
-
-    SWGOH data normally uses currentTier / tier / gearTier.
     """
     for key in ("currentTier", "tier", "gearTier"):
         if key in unit:
@@ -206,10 +204,12 @@ def get_current_relic(unit):
     """
     Returns the current relic level.
 
-    Supports the common SWGOH formats:
+    Supports:
       relic.currentTier
       relic.tier
+      relic.relicTier
       relicTier
+      currentRelicTier
     """
     relic = unit.get("relic")
 
@@ -226,9 +226,22 @@ def get_current_relic(unit):
 
 
 def build_player_roster(player_data, units):
+    """
+    Builds the player's roster.
+
+    The SWGOH export used by this project stores the roster under
+    'rosterUnit'. Older/export variants may use 'roster' or
+    'characters', so those are supported as fallbacks.
+    """
     roster = {}
 
-    source = player_data.get("roster", player_data.get("characters", []))
+    source = player_data.get(
+        "rosterUnit",
+        player_data.get(
+            "roster",
+            player_data.get("characters", [])
+        )
+    )
 
     if isinstance(source, dict):
         iterable = source.values()
@@ -239,7 +252,11 @@ def build_player_roster(player_data, units):
         if not isinstance(entry, dict):
             continue
 
-        base_id = entry.get("baseId") or entry.get("id")
+        base_id = (
+            entry.get("baseId")
+            or entry.get("id")
+            or entry.get("definitionId")
+        )
 
         if not base_id:
             continue
@@ -269,11 +286,17 @@ def read_c3po_inventory(c3po_data):
     if not isinstance(source, dict):
         return inventory
 
-    equipment = source.get("equipment", source.get("items", {}))
+    equipment = source.get(
+        "equipment",
+        source.get("items", {})
+    )
 
     if isinstance(equipment, dict):
         for item_id, quantity in equipment.items():
-            inventory[str(item_id)] += as_int(quantity, 0)
+            inventory[str(item_id)] += as_int(
+                quantity,
+                0
+            )
 
     elif isinstance(equipment, list):
         for item in equipment:
@@ -295,19 +318,27 @@ def read_c3po_inventory(c3po_data):
                 else item.get("amount", 0)
             )
 
-            inventory[str(item_id)] += as_int(quantity, 0)
+            inventory[str(item_id)] += as_int(
+                quantity,
+                0
+            )
 
     return inventory
 
 
-def expand_item(item_id, quantity, recipes, result=None, path=None):
+def expand_item(
+    item_id,
+    quantity,
+    recipes,
+    result=None,
+    path=None
+):
     """
     Theoretical recipe expansion.
 
     This function does NOT consume inventory.
-    It is kept for diagnostics / compatibility.
-
-    Inventory-aware calculation is performed by consume_or_expand().
+    Inventory-aware calculation is performed by
+    consume_or_expand().
     """
     if result is None:
         result = defaultdict(int)
@@ -374,17 +405,12 @@ def consume_or_expand(
     path=None
 ):
     """
-    Correct inventory-aware resource calculation.
+    Inventory-aware resource calculation.
 
-    Order of operations:
-
-    1. Look for the exact required item in inventory.
-    2. Consume as much as possible.
-    3. Only the remaining amount is crafted.
-    4. For every crafting ingredient, repeat the same process.
-    5. Only items with no recipe and no inventory become real shortages.
-
-    This is the key fix compared with the old calculator.
+    1. Consume the exact item from inventory first.
+    2. Only the remaining amount is crafted.
+    3. At every recipe level, consume inventory again.
+    4. Only genuinely missing terminal materials are shortages.
     """
     if not item_id or quantity <= 0:
         return
@@ -395,14 +421,16 @@ def consume_or_expand(
     if path is None:
         path = set()
 
-    # Prevent infinite recipe loops.
     if item_id in path:
         shortages[item_id] += quantity
         return
 
     owned = working_inventory.get(item_id, 0)
 
-    used = min(quantity, owned)
+    used = min(
+        quantity,
+        owned
+    )
 
     if used > 0:
         working_inventory[item_id] -= used
@@ -414,7 +442,6 @@ def consume_or_expand(
 
     ingredients = recipes.get(item_id)
 
-    # No recipe = terminal material / finished item.
     if not ingredients:
         shortages[item_id] += remaining
         return
@@ -457,9 +484,8 @@ def expand_equipment_requirements(
     recipes
 ):
     """
-    Returns theoretical terminal requirements without inventory.
-
-    Kept separately from the real shortage calculation.
+    Returns theoretical terminal requirements
+    without taking inventory into account.
     """
     result = defaultdict(int)
 
@@ -480,10 +506,8 @@ def get_gear_requirements(
     data
 ):
     """
-    Returns direct gear pieces required to move from the current
-    gear tier to target_gear_tier.
-
-    Gear is taken from the game's gear requirement definitions.
+    Returns direct gear pieces required to move from
+    current gear tier to target gear tier.
     """
     result = defaultdict(int)
 
@@ -512,7 +536,10 @@ def get_gear_requirements(
             if gear_id:
                 gear_data[str(gear_id)] = entry
 
-    for tier in range(current_gear + 1, min(target_gear_tier, 12) + 1):
+    for tier in range(
+        current_gear + 1,
+        min(target_gear_tier, 12) + 1
+    ):
         candidates = [
             f"gear_{tier}",
             f"GEAR{tier}",
@@ -573,8 +600,8 @@ def get_relic_requirements(
     relic_recipes
 ):
     """
-    Returns relic recipe ingredients required for each relic level
-    between current_relic + 1 and target_relic.
+    Returns relic recipe ingredients required for each
+    relic level between current and target.
     """
     result = defaultdict(int)
 
@@ -585,9 +612,14 @@ def get_relic_requirements(
         current_relic + 1,
         target_relic + 1
     ):
-        recipe_id = f"relic_promotion_recipe_{relic_level:02d}"
+        recipe_id = (
+            f"relic_promotion_recipe_{relic_level:02d}"
+        )
 
-        ingredients = relic_recipes.get(recipe_id, [])
+        ingredients = relic_recipes.get(
+            recipe_id,
+            []
+        )
 
         for ingredient in ingredients:
             if not isinstance(ingredient, dict):
@@ -614,7 +646,7 @@ def get_relic_requirements(
 def calculate_target(
     target,
     roster,
-    units,
+    data,
     recipes,
     relic_recipes,
     working_inventory
@@ -632,6 +664,17 @@ def calculate_target(
     )
 
     unit = roster.get(base_id)
+
+    # Fallback for exports where definitionId contains
+    # the character base ID.
+    if unit is None:
+        for candidate in roster.values():
+            if not isinstance(candidate, dict):
+                continue
+
+            if candidate.get("definitionId") == base_id:
+                unit = candidate
+                break
 
     if unit is None:
         return {
@@ -652,7 +695,7 @@ def calculate_target(
     direct_gear = get_gear_requirements(
         unit,
         target_gear_tier,
-        units
+        data
     )
 
     relic_materials = get_relic_requirements(
@@ -663,14 +706,7 @@ def calculate_target(
 
     shortages = defaultdict(int)
 
-    # IMPORTANT:
-    # Inventory is consumed BEFORE recipe expansion.
-    #
-    # This means:
-    #   owned finished gear -> used first
-    #   owned intermediate gear -> used first
-    #   only the remaining amount is crafted
-    #   only the final missing materials are reported
+    # First consume owned direct gear.
     for item_id, quantity in direct_gear.items():
         consume_or_expand(
             item_id,
@@ -680,7 +716,7 @@ def calculate_target(
             shortages
         )
 
-    # Relic materials use the exact same inventory-aware algorithm.
+    # Then consume owned relic materials.
     for item_id, quantity in relic_materials.items():
         consume_or_expand(
             item_id,
@@ -703,28 +739,6 @@ def calculate_target(
     }
 
 
-def format_item_list(items, localization):
-    if not items:
-        return "_brak_"
-
-    lines = []
-
-    for item_id, quantity in items.items():
-        if quantity <= 0:
-            continue
-
-        name = localized_name(item_id, localization)
-
-        lines.append(
-            f"- **{name}** ×{quantity} (`{item_id}`)"
-        )
-
-    if not lines:
-        return "_brak_"
-
-    return "\n".join(lines)
-
-
 def generate_report(
     results,
     localization,
@@ -740,10 +754,6 @@ def generate_report(
     )
     lines.append("")
 
-    # ---------------------------------------------------------
-    # SUMMARY
-    # ---------------------------------------------------------
-
     total_shortages = defaultdict(int)
 
     for result in results:
@@ -754,21 +764,23 @@ def generate_report(
     lines.append("")
 
     if total_shortages:
-        lines.append(
-            "| Materiał | Brakuje |"
-        )
-        lines.append(
-            "|---|---:|"
-        )
+        lines.append("| Materiał | Brakuje |")
+        lines.append("|---|---:|")
 
         for item_id, quantity in sorted(
             total_shortages.items(),
             key=lambda x: (
-                localized_name(x[0], localization).lower(),
+                localized_name(
+                    x[0],
+                    localization
+                ).lower(),
                 x[0]
             )
         ):
-            name = localized_name(item_id, localization)
+            name = localized_name(
+                item_id,
+                localization
+            )
 
             lines.append(
                 f"| {name} (`{item_id}`) | {quantity} |"
@@ -780,20 +792,20 @@ def generate_report(
 
     lines.append("")
 
-    # ---------------------------------------------------------
-    # TARGET DETAILS
-    # ---------------------------------------------------------
-
     for result in results:
         base_id = result["baseId"]
 
         lines.append("---")
         lines.append("")
-        lines.append(f"## {localized_name(base_id, localization)}")
+        lines.append(
+            f"## {localized_name(base_id, localization)}"
+        )
         lines.append("")
 
         if result.get("error"):
-            lines.append(f"**Błąd:** {result['error']}")
+            lines.append(
+                f"**Błąd:** {result['error']}"
+            )
             lines.append("")
             continue
 
@@ -817,7 +829,10 @@ def generate_report(
             lines.append("|---|---:|")
 
             for item_id, quantity in result["directGear"].items():
-                name = localized_name(item_id, localization)
+                name = localized_name(
+                    item_id,
+                    localization
+                )
 
                 lines.append(
                     f"| {name} (`{item_id}`) | {quantity} |"
@@ -835,7 +850,10 @@ def generate_report(
             lines.append("|---|---:|")
 
             for item_id, quantity in result["relicMaterials"].items():
-                name = localized_name(item_id, localization)
+                name = localized_name(
+                    item_id,
+                    localization
+                )
 
                 lines.append(
                     f"| {name} (`{item_id}`) | {quantity} |"
@@ -855,11 +873,17 @@ def generate_report(
             for item_id, quantity in sorted(
                 result["shortages"].items(),
                 key=lambda x: (
-                    localized_name(x[0], localization).lower(),
+                    localized_name(
+                        x[0],
+                        localization
+                    ).lower(),
                     x[0]
                 )
             ):
-                name = localized_name(item_id, localization)
+                name = localized_name(
+                    item_id,
+                    localization
+                )
 
                 lines.append(
                     f"| {name} (`{item_id}`) | {quantity} |"
@@ -870,10 +894,6 @@ def generate_report(
             )
 
         lines.append("")
-
-    # ---------------------------------------------------------
-    # INVENTORY NOTE
-    # ---------------------------------------------------------
 
     lines.append("---")
     lines.append("")
@@ -923,17 +943,17 @@ def main():
         c3po_data
     )
 
-    # IMPORTANT:
-    # One shared mutable inventory is intentional.
-    #
-    # If several targets require the same material, the first target
-    # consumes the inventory and the next target sees what remains.
+    # Shared mutable inventory.
+    # Targets consume the same inventory in order.
     working_inventory = defaultdict(
         int,
         original_inventory
     )
 
-    targets = targets_data.get("targets", [])
+    targets = targets_data.get(
+        "targets",
+        []
+    )
 
     results = []
 
@@ -941,7 +961,7 @@ def main():
         result = calculate_target(
             target,
             roster,
-            units,
+            data,
             recipes,
             relic_recipes,
             working_inventory
@@ -976,7 +996,10 @@ def main():
         print(base_id)
 
         if result.get("error"):
-            print("ERROR:", result["error"])
+            print(
+                "ERROR:",
+                result["error"]
+            )
             continue
 
         shortages = result["shortages"]
@@ -985,7 +1008,9 @@ def main():
             print("No shortages.")
             continue
 
-        for item_id, quantity in sorted(shortages.items()):
+        for item_id, quantity in sorted(
+            shortages.items()
+        ):
             print(
                 f"  {item_id}: {quantity}"
             )
