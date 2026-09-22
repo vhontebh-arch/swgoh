@@ -6,7 +6,6 @@
 
 | ID | Przedmiot | Wymagane | Posiadane | Brakuje |
 |---|---|---:|---:|---:|
-| `GRIND` | GRIND | 1 201 300 | 0 | **1 201 300** |
 | `172Salvage` | 172Salvage | 150 | 34 | **116** |
 | `129Salvage` | 129Salvage | 120 | 38 | **82** |
 | `152Salvage` | 152Salvage | 80 | 0 | **80** |
@@ -52,7 +51,6 @@ Gear: **G10 → G13** Relic: **R1 → R5**
 
 #### Materiały relic
 
-- `GRIND` × 250000 — GRIND
 - `SCV_001` × 120 — Carbonite Circuit Board
 - `SCV_002` × 160 — Bronzium Wiring
 - `RM_001` × 75 — Fragmented Signal Data
@@ -65,7 +63,6 @@ Gear: **G10 → G13** Relic: **R1 → R5**
 
 | ID | Przedmiot | Brakuje |
 |---|---|---:|
-| `GRIND` | GRIND | **1 201 300** |
 | `172Salvage` | 172Salvage | **116** |
 | `129Salvage` | 129Salvage | **82** |
 | `152Salvage` | 152Salvage | **80** |
@@ -97,3 +94,4 @@ Gear: **G10 → G13** Relic: **R1 → R5**
 - Receptury gearu są rozwijane rekurencyjnie.
 - Materiały reliców pochodzą z `relic_promotion_recipe_01...10`.
 - `9999` jest traktowane jako placeholder G13 i nie jest liczone jako gear.
+- `GRIND` oznacza koszt kredytów i jest całkowicie pomijane w analizie.
