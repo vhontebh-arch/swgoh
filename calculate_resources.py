@@ -651,6 +651,8 @@ def expand_item(
     output
 ):
 
+    
+    
     if not item_id or quantity <= 0:
         return
 
@@ -694,6 +696,8 @@ def expand_item(
             quantity * amount,
             recipes,
             output
+            if item_id == "GRIND":
+    return
         )
 
 
