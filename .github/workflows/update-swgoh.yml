@@ -64,6 +64,76 @@ jobs:
 
           python -m json.tool data.json | head -n 40
 
+      - name: Diagnose Jar Jar gear and relic data
+        run: |
+          python - <<'PY'
+          import json
+
+          data = json.load(open("data.json", encoding="utf-8"))
+
+          def walk(obj):
+              yield obj
+              if isinstance(obj, dict):
+                  for v in obj.values():
+                      yield from walk(v)
+              elif isinstance(obj, list):
+                  for v in obj:
+                      yield from walk(v)
+
+          print("=== JAR JAR UNIT DEFINITIONS ===")
+
+          for node in walk(data):
+              if isinstance(node, dict) and node.get("baseId") == "JARJARBINKS":
+                  print(json.dumps(node, indent=2, ensure_ascii=False))
+
+          print()
+          print("=== EQUIPMENT / RECIPE STRUCTURES ===")
+
+          found = 0
+
+          for node in walk(data):
+              if not isinstance(node, dict):
+                  continue
+
+              if any(
+                  key in node
+                  for key in (
+                      "recipeId",
+                      "ingredients",
+                      "ingredient",
+                      "components",
+                      "component"
+                  )
+              ):
+                  text = json.dumps(node, ensure_ascii=False)
+
+                  if (
+                      "JARJAR" in text.upper()
+                      or "recipeId" in node
+                  ):
+                      print(json.dumps(node, indent=2, ensure_ascii=False))
+                      found += 1
+
+                      if found >= 100:
+                          break
+
+          print()
+          print("=== RELIC TIER DEFINITIONS ===")
+
+          for node in walk(data):
+              if not isinstance(node, dict):
+                  continue
+
+              text = json.dumps(node, ensure_ascii=False).upper()
+
+              if (
+                  "RELICTIER" in text
+                  or "RELIC_TIER" in text
+              ):
+                  print(json.dumps(node, indent=2, ensure_ascii=False))
+
+          PY          
+
       - name: Download English localization
         run: |
           VERSION=$(python -c 'import json; print(json.load(open("metadata.json"))["latestLocalizationBundleVersion"])')
