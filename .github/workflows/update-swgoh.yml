@@ -174,6 +174,19 @@ jobs:
         run: |
           python -c 'import csv,json,base64,zipfile,io; d=json.load(open("swgoh_972824625.json")); loc=json.load(open("localization.json")); z=zipfile.ZipFile(io.BytesIO(base64.b64decode(loc["localizationBundle"]))); lines=z.read("Loc_ENG_US.txt").decode("utf-8","replace").splitlines(); names={x.split("|",1)[0]:x.split("|",1)[1] for x in lines if "|" in x}; f=open("roster.csv","w",newline="",encoding="utf-8"); w=csv.writer(f); w.writerow(["name","definitionId","baseId","id","rarity","level","gearTier","relicTier"]); [w.writerow([names.get("UNIT_"+next((s["id"].replace("basicskill_","") for s in u.get("skill",[]) if s["id"].startswith("basicskill_")),"")+"_NAME",""),u.get("definitionId",""),next((s["id"].replace("basicskill_","") for s in u.get("skill",[]) if s["id"].startswith("basicskill_")),""),u.get("id",""),u.get("currentRarity",""),u.get("currentLevel",""),u.get("currentTier",""),(u.get("relic") or {}).get("currentTier","")]) for u in d["rosterUnit"]]; f.close(); print("Wygenerowano roster.csv")'
 
+      - name: Diagnose C3PO JSON
+        run: |
+          python - <<'PY'
+          p = "c3po.json"
+          with open(p, "rb") as f:
+              data = f.read()
+
+          print("Rozmiar c3po.json:", len(data))
+          pos = 50000
+          print("Fragment wokół błędu:")
+          print(repr(data[pos-500:pos+500]))
+          PY
+      
       - name: Calculate account farming report
         run: |
           python calculate_resources.py
