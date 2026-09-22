@@ -1,3 +1,4 @@
+```python
 import json
 import os
 import csv
@@ -11,6 +12,7 @@ LOCALIZATION_FILE = "localization.json"
 TARGETS_FILE = "targets.json"
 REPORT_FILE = "account_farming_report.md"
 
+DEBUG_ITEM_ID = "G12Finisher_JARJARBINKS_C"
 
 IGNORE_GEAR_IDS = {"9999"}
 
@@ -30,6 +32,169 @@ def as_int(value, default=0):
         return int(value)
     except (TypeError, ValueError):
         return default
+
+
+def debug_find_item(data, target_id):
+    """
+    Recursively searches the entire data.json tree for target_id.
+
+    Prints every occurrence together with:
+    - JSON path to the occurrence
+    - containing object
+    - useful recipe/result context
+    """
+    print("")
+    print("=" * 80)
+    print(f"DEBUG: SZUKAM {target_id} W CAŁYM data.json")
+    print("=" * 80)
+
+    matches = []
+
+    def walk(value, path="$", parent=None, parent_path=None):
+
+        if isinstance(value, dict):
+
+            # Direct occurrence as a value.
+            for key, child in value.items():
+
+                child_path = f"{path}.{key}"
+
+                if child == target_id:
+                    matches.append({
+                        "path": child_path,
+                        "parent_path": path,
+                        "parent": value,
+                        "key": key,
+                        "value": child,
+                    })
+
+                walk(
+                    child,
+                    child_path,
+                    parent=value,
+                    parent_path=path
+                )
+
+        elif isinstance(value, list):
+
+            for index, child in enumerate(value):
+
+                child_path = f"{path}[{index}]"
+
+                if child == target_id:
+                    matches.append({
+                        "path": child_path,
+                        "parent_path": path,
+                        "parent": parent,
+                        "key": index,
+                        "value": child,
+                    })
+
+                walk(
+                    child,
+                    child_path,
+                    parent=value,
+                    parent_path=path
+                )
+
+    walk(data)
+
+    print("")
+    print(f"Liczba wystąpień: {len(matches)}")
+    print("")
+
+    if not matches:
+        print(f"!!! NIE ZNALEZIONO {target_id} !!!")
+        print("=" * 80)
+        print("")
+        return
+
+    for number, match in enumerate(matches, start=1):
+
+        print("-" * 80)
+        print(f"WYSTĄPIENIE #{number}")
+        print("-" * 80)
+
+        print(f"JSON path:")
+        print(match["path"])
+        print("")
+
+        print("Rodzic:")
+        try:
+            print(
+                json.dumps(
+                    match["parent"],
+                    indent=2,
+                    ensure_ascii=False
+                )
+            )
+        except Exception:
+            print(repr(match["parent"]))
+
+        print("")
+
+        # If the immediate parent is an ingredient object,
+        # try to print useful surrounding recipe information.
+        parent = match["parent"]
+
+        if isinstance(parent, dict):
+
+            interesting_keys = [
+                "id",
+                "result",
+                "ingredients",
+                "recipe",
+                "recipeId",
+                "type",
+                "name",
+                "quantity",
+                "minQuantity",
+                "maxQuantity",
+            ]
+
+            useful = {
+                key: parent[key]
+                for key in interesting_keys
+                if key in parent
+            }
+
+            if useful:
+
+                print("Istotne pola kontekstu:")
+
+                print(
+                    json.dumps(
+                        useful,
+                        indent=2,
+                        ensure_ascii=False
+                    )
+                )
+
+                print("")
+
+        # If this occurrence is inside a list, print a larger
+        # contextual object when available.
+        if isinstance(match["parent"], list):
+
+            print("Kontekst listy:")
+
+            try:
+                print(
+                    json.dumps(
+                        match["parent"],
+                        indent=2,
+                        ensure_ascii=False
+                    )
+                )
+            except Exception:
+                print(repr(match["parent"]))
+
+            print("")
+
+    print("=" * 80)
+    print("KONIEC DEBUG")
+    print("=" * 80)
+    print("")
 
 
 def get_localized_names(localization):
@@ -112,6 +277,7 @@ def build_unit_database(data):
     result = {}
 
     for unit in data.get("units", []):
+
         base_id = unit.get("baseId")
 
         if base_id:
@@ -127,6 +293,7 @@ def build_equipment_database(data):
     equipment = {}
 
     for item in data.get("equipment", []):
+
         item_id = item.get("id")
 
         if item_id:
@@ -143,6 +310,7 @@ def build_recipe_database(data):
     recipes = {}
 
     for recipe in data.get("recipes", []):
+
         result = recipe.get("result")
 
         if not isinstance(result, dict):
@@ -169,10 +337,13 @@ def build_relic_recipe_database(data):
     result = {}
 
     def walk(value):
+
         if isinstance(value, dict):
+
             recipe_id = value.get("id")
 
             if recipe_id in RELIC_RECIPE_IDS:
+
                 ingredients = value.get("ingredients", [])
 
                 if isinstance(ingredients, list):
@@ -182,6 +353,7 @@ def build_relic_recipe_database(data):
                 walk(child)
 
         elif isinstance(value, list):
+
             for child in value:
                 walk(child)
 
@@ -191,10 +363,9 @@ def build_relic_recipe_database(data):
 
 
 def get_unit_tier(unit_definition, tier):
-    """
-    Returns unitTier object for the requested gear tier.
-    """
+
     for unit_tier in unit_definition.get("unitTier", []):
+
         if as_int(unit_tier.get("tier"), -1) == tier:
             return unit_tier
 
@@ -202,19 +373,24 @@ def get_unit_tier(unit_definition, tier):
 
 
 def get_equipment_set(unit_definition, tier):
-    """
-    Returns equipment IDs required at a given gear tier.
-    """
-    unit_tier = get_unit_tier(unit_definition, tier)
+
+    unit_tier = get_unit_tier(
+        unit_definition,
+        tier
+    )
 
     if not unit_tier:
         return []
 
-    equipment_set = unit_tier.get("equipmentSet", [])
+    equipment_set = unit_tier.get(
+        "equipmentSet",
+        []
+    )
 
     result = []
 
     for item in equipment_set:
+
         if isinstance(item, str):
             item_id = item
 
@@ -236,35 +412,32 @@ def get_equipment_set(unit_definition, tier):
 
 
 def get_current_gear(unit):
-    """
-    Current player gear tier.
-    """
+
     return as_int(
-        unit.get("currentTier", unit.get("gearLevel", 0))
+        unit.get(
+            "currentTier",
+            unit.get("gearLevel", 0)
+        )
     )
 
 
 def get_current_relic(unit):
-    """
-    Current relic tier.
-    """
+
     relic = unit.get("relic")
 
     if not isinstance(relic, dict):
         return 0
 
     return as_int(
-        relic.get("currentTier", relic.get("tier", 0))
+        relic.get(
+            "currentTier",
+            relic.get("tier", 0)
+        )
     )
 
 
 def build_player_roster_from_csv(path):
-    """
-    Maps baseId -> player's roster unit using roster.csv.
 
-    roster.csv is generated by the existing SWGOH workflow and contains:
-    name, definitionId, baseId, id, rarity, level, gearTier, relicTier
-    """
     roster = {}
 
     with open(
@@ -277,7 +450,11 @@ def build_player_roster_from_csv(path):
         reader = csv.DictReader(f)
 
         for row in reader:
-            base_id = row.get("baseId", "").strip()
+
+            base_id = row.get(
+                "baseId",
+                ""
+            ).strip()
 
             if not base_id:
                 continue
@@ -299,29 +476,28 @@ def build_player_roster_from_csv(path):
 
 
 def read_c3po_inventory(c3po):
-    """
-    Reads equipment and material inventory from C3PO.
 
-    Supports the common C3PO inventory layouts.
-    """
     inventory = defaultdict(int)
 
-    inv = c3po.get("inventory", c3po)
+    inv = c3po.get(
+        "inventory",
+        c3po
+    )
 
     if not isinstance(inv, dict):
         return inventory
 
-    # ------------------------------------------------------------
-    # EQUIPMENT
-    # ------------------------------------------------------------
-
-    equipment = inv.get("equipment", [])
+    equipment = inv.get(
+        "equipment",
+        []
+    )
 
     if isinstance(equipment, dict):
 
         for item_id, value in equipment.items():
 
             if isinstance(value, dict):
+
                 quantity = value.get(
                     "quantity",
                     value.get(
@@ -333,7 +509,9 @@ def read_c3po_inventory(c3po):
             else:
                 quantity = value
 
-            inventory[item_id] += as_int(quantity)
+            inventory[item_id] += as_int(
+                quantity
+            )
 
     elif isinstance(equipment, list):
 
@@ -358,21 +536,21 @@ def read_c3po_inventory(c3po):
                 or 0
             )
 
-            inventory[item_id] += as_int(quantity)
+            inventory[item_id] += as_int(
+                quantity
+            )
 
-    # ------------------------------------------------------------
-    # MATERIAL
-    #
-    # C3PO stores relic materials and other materials here.
-    # ------------------------------------------------------------
-
-    materials = inv.get("material", [])
+    materials = inv.get(
+        "material",
+        []
+    )
 
     if isinstance(materials, dict):
 
         for item_id, value in materials.items():
 
             if isinstance(value, dict):
+
                 quantity = value.get(
                     "quantity",
                     value.get(
@@ -384,7 +562,9 @@ def read_c3po_inventory(c3po):
             else:
                 quantity = value
 
-            inventory[item_id] += as_int(quantity)
+            inventory[item_id] += as_int(
+                quantity
+            )
 
     elif isinstance(materials, list):
 
@@ -409,32 +589,40 @@ def read_c3po_inventory(c3po):
                 or 0
             )
 
-            inventory[item_id] += as_int(quantity)
+            inventory[item_id] += as_int(
+                quantity
+            )
 
     return inventory
 
 
-def expand_item(item_id, quantity, recipes, output):
-    """
-    Recursively expands crafted equipment into terminal materials.
+def expand_item(
+    item_id,
+    quantity,
+    recipes,
+    output
+):
 
-    output receives terminal item quantities.
-    """
     if not item_id or quantity <= 0:
         return
 
     if item_id in IGNORE_GEAR_IDS:
         return
 
-    ingredients = recipes.get(item_id)
+    ingredients = recipes.get(
+        item_id
+    )
 
     if not ingredients:
+
         output[item_id] += quantity
         return
 
     for ingredient in ingredients:
 
-        ingredient_id = ingredient.get("id")
+        ingredient_id = ingredient.get(
+            "id"
+        )
 
         if not ingredient_id:
             continue
@@ -442,7 +630,10 @@ def expand_item(item_id, quantity, recipes, output):
         amount = as_int(
             ingredient.get(
                 "minQuantity",
-                ingredient.get("quantity", 1)
+                ingredient.get(
+                    "quantity",
+                    1
+                )
             ),
             1
         )
@@ -450,7 +641,6 @@ def expand_item(item_id, quantity, recipes, output):
         if amount <= 0:
             continue
 
-        # GRIND is already a terminal resource.
         expand_item(
             ingredient_id,
             quantity * amount,
@@ -459,11 +649,11 @@ def expand_item(item_id, quantity, recipes, output):
         )
 
 
-def expand_equipment_requirements(required_equipment, recipes):
-    """
-    Converts direct equipment requirements into terminal material
-    requirements.
-    """
+def expand_equipment_requirements(
+    required_equipment,
+    recipes
+):
+
     result = defaultdict(int)
 
     for item_id, quantity in required_equipment.items():
@@ -483,10 +673,7 @@ def get_gear_requirements(
     current_gear,
     target_gear
 ):
-    """
-    Collects all direct gear pieces required from current+1 through
-    target gear tier.
-    """
+
     required = defaultdict(int)
 
     start = max(
@@ -499,7 +686,10 @@ def get_gear_requirements(
         12
     )
 
-    for tier in range(start, end + 1):
+    for tier in range(
+        start,
+        end + 1
+    ):
 
         for item_id in get_equipment_set(
             unit_definition,
@@ -515,10 +705,7 @@ def get_relic_requirements(
     target_relic,
     relic_recipes
 ):
-    """
-    Returns terminal relic-material requirements for current+1 through
-    target relic tier.
-    """
+
     result = defaultdict(int)
 
     start = max(
@@ -547,7 +734,9 @@ def get_relic_requirements(
 
         for ingredient in ingredients:
 
-            item_id = ingredient.get("id")
+            item_id = ingredient.get(
+                "id"
+            )
 
             if not item_id:
                 continue
@@ -555,7 +744,10 @@ def get_relic_requirements(
             quantity = as_int(
                 ingredient.get(
                     "minQuantity",
-                    ingredient.get("quantity", 1)
+                    ingredient.get(
+                        "quantity",
+                        1
+                    )
                 ),
                 1
             )
@@ -576,17 +768,19 @@ def calculate_target(
     working_inventory,
     names
 ):
-    """
-    Calculates one target while consuming the shared working inventory.
-    """
-    unit = roster.get(base_id)
+
+    unit = roster.get(
+        base_id
+    )
 
     if not unit:
         raise RuntimeError(
             f"Nie znaleziono {base_id} w rosterze."
         )
 
-    unit_definition = units.get(base_id)
+    unit_definition = units.get(
+        base_id
+    )
 
     if not unit_definition:
         raise RuntimeError(
@@ -594,8 +788,13 @@ def calculate_target(
             f"w data.json."
         )
 
-    current_gear = get_current_gear(unit)
-    current_relic = get_current_relic(unit)
+    current_gear = get_current_gear(
+        unit
+    )
+
+    current_relic = get_current_relic(
+        unit
+    )
 
     required_direct_gear = get_gear_requirements(
         unit_definition,
@@ -622,10 +821,6 @@ def calculate_target(
     for item_id, quantity in required_relic.items():
         total_required[item_id] += quantity
 
-    # ------------------------------------------------------------
-    # Calculate REAL shortage after subtracting inventory.
-    # ------------------------------------------------------------
-
     shortages = {}
 
     for item_id, required_quantity in total_required.items():
@@ -643,7 +838,6 @@ def calculate_target(
         if shortage > 0:
             shortages[item_id] = shortage
 
-        # Consume inventory that is actually available.
         working_inventory[item_id] = max(
             0,
             owned_quantity - required_quantity
@@ -664,7 +858,10 @@ def calculate_target(
 
 
 def format_number(value):
-    return f"{value:,}".replace(",", " ")
+    return f"{value:,}".replace(
+        ",",
+        " "
+    )
 
 
 def generate_report(
@@ -674,6 +871,7 @@ def generate_report(
     inventory,
     names
 ):
+
     lines = []
 
     lines.append(
@@ -710,7 +908,6 @@ def generate_report(
             "|---|---|---:|---:|---:|"
         )
 
-        # Sort by shortage descending.
         for item_id, shortage in sorted(
             total_shortages.items(),
             key=lambda x: (-x[1], x[0])
@@ -739,6 +936,7 @@ def generate_report(
             )
 
     else:
+
         lines.append(
             "Brak braków."
         )
@@ -775,7 +973,9 @@ def generate_report(
         lines.append("")
 
         for item_id, quantity in sorted(
-            result["required_direct_gear"].items()
+            result[
+                "required_direct_gear"
+            ].items()
         ):
 
             name = localized_name(
@@ -795,7 +995,9 @@ def generate_report(
 
         lines.append("")
 
-        for item_id, quantity in result["required_relic"].items():
+        for item_id, quantity in result[
+            "required_relic"
+        ].items():
 
             name = localized_name(
                 item_id,
@@ -880,7 +1082,9 @@ def generate_report(
         "i nie jest liczone jako gear."
     )
 
-    return "\n".join(lines)
+    return "\n".join(
+        lines
+    )
 
 
 def main():
@@ -891,6 +1095,15 @@ def main():
 
     data = load_json(
         DATA_FILE
+    )
+
+    # ------------------------------------------------------------
+    # DEBUG: G12Finisher_JARJARBINKS_C
+    # ------------------------------------------------------------
+
+    debug_find_item(
+        data,
+        DEBUG_ITEM_ID
     )
 
     c3po = load_json(
@@ -929,7 +1142,6 @@ def main():
         c3po
     )
 
-    # Shared inventory for all targets.
     working_inventory = defaultdict(int)
 
     for item_id, quantity in inventory.items():
@@ -989,11 +1201,15 @@ def main():
             result
         )
 
-        for item_id, quantity in result["total_required"].items():
+        for item_id, quantity in result[
+            "total_required"
+        ].items():
 
             total_required[item_id] += quantity
 
-        for item_id, quantity in result["shortages"].items():
+        for item_id, quantity in result[
+            "shortages"
+        ].items():
 
             total_shortages[item_id] += quantity
 
@@ -1037,3 +1253,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+```
