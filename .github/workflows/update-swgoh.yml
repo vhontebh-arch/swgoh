@@ -64,23 +64,12 @@ jobs:
 
           python -m json.tool data.json | head -n 40
 
-      - name: Diagnose gear recipes and relic costs
+      - name: Summarize gear and relic costs
         run: |
           python - <<'PY'
           import json
 
           data = json.load(open("data.json", encoding="utf-8"))
-
-          target_ids = {
-              "098", "102", "117", "122",
-              "116", "125", "129", "134", "142", "144", "146",
-              "158", "159", "160", "168", "174",
-              "176Ingredient",
-              "170Prototype",
-              "123Prototype",
-              "172Prototype",
-              "9999"
-          }
 
           def walk(obj):
               yield obj
@@ -91,9 +80,22 @@ jobs:
                   for v in obj:
                       yield from walk(v)
 
-          print("=== ALL RECIPE REFERENCES FOR JAR JAR GEAR ===")
+          # -------------------------------------------------
+          # Gear recipes
+          # -------------------------------------------------
 
-          found = {}
+          wanted = {
+              "098", "102", "117", "122",
+              "116", "125", "129", "134", "142", "144", "146",
+              "158", "159", "160", "168", "174",
+              "G12Finisher_JARJARBINKS_C",
+              "176Ingredient",
+              "170Prototype",
+              "123Prototype",
+              "172Prototype"
+          }
+
+          recipes = {}
 
           for node in walk(data):
               if not isinstance(node, dict):
@@ -104,34 +106,48 @@ jobs:
               if not isinstance(ingredients, list):
                   continue
 
+              node_id = str(node.get("id", ""))
+
               for ing in ingredients:
                   if not isinstance(ing, dict):
                       continue
 
+                  if str(ing.get("id", "")) in wanted:
+                      recipes[node_id] = node
+                      break
+
+          print("=== GEAR RECIPE SUMMARY ===")
+
+          for recipe_id in sorted(recipes):
+              node = recipes[recipe_id]
+
+              parts = []
+
+              for ing in node.get("ingredients", []):
                   iid = str(ing.get("id", ""))
+                  qty = ing.get("minQuantity", 1)
 
-                  if iid in target_ids:
-                      node_id = str(node.get("id", ""))
+                  parts.append(f"{iid} x{qty}")
 
-                      if node_id not in found:
-                          found[node_id] = node
+              result = node.get("result", {})
+              result_id = result.get("id", "?")
 
-          for node_id in sorted(found):
-              print()
-              print("### RECIPE:", node_id)
-              print(json.dumps(
-                  found[node_id],
-                  indent=2,
-                  ensure_ascii=False
-              ))
+              print(
+                  f"{recipe_id} -> {result_id}: "
+                  + ", ".join(parts)
+              )
 
           print()
-          print("TOTAL RECIPES FOUND:", len(found))
+          print(f"RECIPES FOUND: {len(recipes)}")
+
+          # -------------------------------------------------
+          # Relic promotion table
+          # -------------------------------------------------
 
           print()
-          print("=== RELIC PROMOTION TABLE ===")
+          print("=== RELIC PROMOTION TABLE SUMMARY ===")
 
-          relic_found = []
+          relic_tables = []
 
           for node in walk(data):
               if not isinstance(node, dict):
@@ -142,48 +158,93 @@ jobs:
               if (
                   node_id == "relic_promotion_table"
                   or "relic_promotion" in node_id.lower()
-                  or "RELIC_PROMOTION" in node_id
               ):
-                  relic_found.append(node)
+                  relic_tables.append(node)
 
-          for node in relic_found:
-              print()
-              print("### RELIC TABLE:", node.get("id"))
-              print(json.dumps(
-                  node,
-                  indent=2,
-                  ensure_ascii=False
-              ))
+          print(f"TABLES FOUND: {len(relic_tables)}")
 
-          print()
-          print("RELIC TABLES FOUND:", len(relic_found))
+          for table in relic_tables:
+              print(f"TABLE ID: {table.get('id')}")
 
-          print()
-          print("=== SIGNAL DATA MATERIAL DEFINITIONS ===")
+              # pokaż tylko nazwy pól najwyższego poziomu
+              print(
+                  "FIELDS:",
+                  ", ".join(sorted(table.keys()))
+              )
 
-          signal_ids = {
-              "RM_001",
-              "RM_002",
-              "RM_003",
-              "RM_004"
-          }
+              # szukamy struktur zawierających tier/koszt
+              for key, value in table.items():
 
-          for node in walk(data):
-              if not isinstance(node, dict):
-                  continue
+                  if key == "id":
+                      continue
 
-              node_id = str(node.get("id", ""))
+                  if isinstance(value, (list, dict)):
+                      text = json.dumps(
+                          value,
+                          ensure_ascii=False,
+                          separators=(",", ":")
+                      )
 
-              if node_id in signal_ids:
-                  print()
-                  print("###", node_id)
-                  print(json.dumps(
-                      node,
-                      indent=2,
-                      ensure_ascii=False
-                  ))
+                      if any(
+                          x in text.lower()
+                          for x in (
+                              "tier",
+                              "material",
+                              "quantity",
+                              "cost",
+                              "rm_",
+                              "signal"
+                          )
+                      ):
+                          print(f"{key}: {text[:3000]}")
+
+          # -------------------------------------------------
+          # Save compact diagnostic file
+          # -------------------------------------------------
+
+          with open(
+              "gear_relic_diagnostic.txt",
+              "w",
+              encoding="utf-8"
+          ) as f:
+
+              f.write("GEAR RECIPES\n")
+
+              for recipe_id in sorted(recipes):
+                  node = recipes[recipe_id]
+
+                  parts = []
+
+                  for ing in node.get("ingredients", []):
+                      parts.append(
+                          f"{ing.get('id')} x{ing.get('minQuantity', 1)}"
+                      )
+
+                  f.write(
+                      f"{recipe_id} -> "
+                      f"{node.get('result', {}).get('id', '?')}: "
+                      + ", ".join(parts)
+                      + "\n"
+                  )
+
+              f.write("\nRELIC TABLES\n")
+
+              for table in relic_tables:
+                  f.write(
+                      json.dumps(
+                          table,
+                          indent=2,
+                          ensure_ascii=False
+                      )
+                  )
+                  f.write("\n")
 
           PY
+
+          echo
+          echo "=== COMPACT RESULT ==="
+          cat gear_relic_diagnostic.txt
+          
       - name: Download English localization
         run: |
           VERSION=$(python -c 'import json; print(json.load(open("metadata.json"))["latestLocalizationBundleVersion"])')
