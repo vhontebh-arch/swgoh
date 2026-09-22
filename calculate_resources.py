@@ -15,6 +15,12 @@ DEBUG_ITEM_ID = "G12Finisher_JARJARBINKS_C"
 
 IGNORE_GEAR_IDS = {"9999"}
 
+# GRIND = koszt kredytów w recepturach.
+# Kredyty są celowo całkowicie pomijane w analizie braków.
+IGNORE_RESOURCE_IDS = {
+    "GRIND",
+}
+
 RELIC_RECIPE_IDS = [
     f"relic_promotion_recipe_{i:02d}"
     for i in range(1, 11)
@@ -202,6 +208,7 @@ def get_localized_names(localization):
         return names
 
     bundle = localization.get("localizationBundle")
+
     if not bundle:
         return names
 
@@ -226,9 +233,13 @@ def get_localized_names(localization):
 
             filename = candidates[0]
 
-        text = z.read(filename).decode("utf-8", "replace")
+        text = z.read(filename).decode(
+            "utf-8",
+            "replace"
+        )
 
         for line in text.splitlines():
+
             if "|" not in line:
                 continue
 
@@ -256,6 +267,7 @@ def localized_name(item_id, names):
     ]
 
     for key in candidates:
+
         value = names.get(key)
 
         if value:
@@ -408,7 +420,10 @@ def build_relic_recipe_database(data):
 
 def get_unit_tier(unit_definition, tier):
 
-    for unit_tier in unit_definition.get("unitTier", []):
+    for unit_tier in unit_definition.get(
+        "unitTier",
+        []
+    ):
 
         if as_int(
             unit_tier.get("tier"),
@@ -550,7 +565,10 @@ def read_c3po_inventory(c3po):
                     "quantity",
                     value.get(
                         "count",
-                        value.get("amount", 0)
+                        value.get(
+                            "amount",
+                            0
+                        )
                     )
                 )
 
@@ -603,7 +621,10 @@ def read_c3po_inventory(c3po):
                     "quantity",
                     value.get(
                         "count",
-                        value.get("amount", 0)
+                        value.get(
+                            "amount",
+                            0
+                        )
                     )
                 )
 
@@ -651,12 +672,16 @@ def expand_item(
     output
 ):
 
-    
-    
     if not item_id or quantity <= 0:
         return
 
+    # Placeholder G13 / ignored gear.
     if item_id in IGNORE_GEAR_IDS:
+        return
+
+    # GRIND represents credit cost.
+    # Credits are deliberately excluded from the farming analysis.
+    if item_id in IGNORE_RESOURCE_IDS:
         return
 
     ingredients = recipes.get(
@@ -670,11 +695,18 @@ def expand_item(
 
     for ingredient in ingredients:
 
+        if not isinstance(ingredient, dict):
+            continue
+
         ingredient_id = ingredient.get(
             "id"
         )
 
         if not ingredient_id:
+            continue
+
+        # Ignore credit cost at the ingredient level too.
+        if ingredient_id in IGNORE_RESOURCE_IDS:
             continue
 
         amount = as_int(
@@ -696,8 +728,6 @@ def expand_item(
             quantity * amount,
             recipes,
             output
-            if item_id == "GRIND":
-    return
         )
 
 
@@ -747,6 +777,7 @@ def get_gear_requirements(
             unit_definition,
             tier
         ):
+
             required[item_id] += 1
 
     return required
@@ -786,11 +817,18 @@ def get_relic_requirements(
 
         for ingredient in ingredients:
 
+            if not isinstance(ingredient, dict):
+                continue
+
             item_id = ingredient.get(
                 "id"
             )
 
             if not item_id:
+                continue
+
+            # Kredyty nie są częścią analizy reliców.
+            if item_id in IGNORE_RESOURCE_IDS:
                 continue
 
             quantity = as_int(
@@ -868,14 +906,27 @@ def calculate_target(
     total_required = defaultdict(int)
 
     for item_id, quantity in required_gear.items():
+
+        if item_id in IGNORE_RESOURCE_IDS:
+            continue
+
         total_required[item_id] += quantity
 
     for item_id, quantity in required_relic.items():
+
+        if item_id in IGNORE_RESOURCE_IDS:
+            continue
+
         total_required[item_id] += quantity
 
     shortages = {}
 
     for item_id, required_quantity in total_required.items():
+
+        # Dodatkowe zabezpieczenie:
+        # kredyty nigdy nie powinny wejść do raportu.
+        if item_id in IGNORE_RESOURCE_IDS:
+            continue
 
         owned_quantity = working_inventory.get(
             item_id,
@@ -965,6 +1016,11 @@ def generate_report(
             total_shortages.items(),
             key=lambda x: (-x[1], x[0])
         ):
+
+            # GRIND nie powinien się tutaj znaleźć,
+            # ale zostawiamy dodatkowe zabezpieczenie.
+            if item_id in IGNORE_RESOURCE_IDS:
+                continue
 
             owned = inventory.get(
                 item_id,
@@ -1084,6 +1140,9 @@ def generate_report(
                 key=lambda x: (-x[1], x[0])
             ):
 
+                if item_id in IGNORE_RESOURCE_IDS:
+                    continue
+
                 name = localized_name(
                     item_id,
                     names
@@ -1133,6 +1192,11 @@ def generate_report(
     lines.append(
         "- `9999` jest traktowane jako placeholder G13 "
         "i nie jest liczone jako gear."
+    )
+
+    lines.append(
+        "- `GRIND` oznacza koszt kredytów i jest "
+        "całkowicie pomijane w analizie."
     )
 
     return "\n".join(
@@ -1198,6 +1262,12 @@ def main():
     working_inventory = defaultdict(int)
 
     for item_id, quantity in inventory.items():
+
+        # Kredyty nie są częścią inventory używanego
+        # przez kalkulator farmienia.
+        if item_id in IGNORE_RESOURCE_IDS:
+            continue
+
         working_inventory[item_id] = quantity
 
     target_list = targets.get(
@@ -1258,11 +1328,17 @@ def main():
             "total_required"
         ].items():
 
+            if item_id in IGNORE_RESOURCE_IDS:
+                continue
+
             total_required[item_id] += quantity
 
         for item_id, quantity in result[
             "shortages"
         ].items():
+
+            if item_id in IGNORE_RESOURCE_IDS:
+                continue
 
             total_shortages[item_id] += quantity
 
@@ -1298,6 +1374,9 @@ def main():
         total_shortages.items(),
         key=lambda x: (-x[1], x[0])
     ):
+
+        if item_id in IGNORE_RESOURCE_IDS:
+            continue
 
         print(
             f"  {item_id}: {quantity}"
