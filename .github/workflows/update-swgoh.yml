@@ -64,92 +64,52 @@ jobs:
 
           python -m json.tool data.json | head -n 40
 
-      - name: Diagnose Jar Jar gear and relic data
+      - name: Diagnose Jar Jar structure
         run: |
           python - <<'PY'
           import json
 
           data = json.load(open("data.json", encoding="utf-8"))
 
-          print("=== TOP LEVEL KEYS ===")
-          print(list(data.keys()))
+          jarjar = next(
+              (
+                  u for u in data.get("units", [])
+                  if isinstance(u, dict)
+                  and u.get("baseId") == "JARJARBINKS"
+              ),
+              None
+          )
+
+          if not jarjar:
+              print("JAR JAR NOT FOUND")
+              raise SystemExit(1)
+
+          print("=== JAR JAR KEYS ===")
+          print(sorted(jarjar.keys()))
 
           print()
-          print("=== JAR JAR DEFINITION ===")
+          print("=== POSSIBLE GEAR/RELIC FIELDS ===")
 
-          units = data.get("units", [])
-
-          print("Liczba units:", len(units))
-
-          jarjar = None
-
-          for unit in units:
-              if isinstance(unit, dict) and unit.get("baseId") == "JARJARBINKS":
-                  jarjar = unit
-                  break
-
-          if jarjar:
-              print(json.dumps(jarjar, indent=2, ensure_ascii=False))
-          else:
-              print("NIE ZNALEZIONO JARJARBINKS w data['units'].")
-
-          print()
-          print("=== RELEVANT TOP-LEVEL DATA ===")
-
-          for key in data.keys():
+          for key, value in jarjar.items():
               key_upper = key.upper()
 
               if any(x in key_upper for x in (
-                  "EQUIPMENT",
-                  "RECIPE",
+                  "EQUIP",
+                  "GEAR",
                   "RELIC",
-                  "GEAR"
+                  "TIER",
+                  "REQUIRE",
+                  "LEVEL"
               )):
-                  value = data[key]
-
-                  if isinstance(value, list):
-                      print(
-                          key,
-                          "-> list, entries:",
-                          len(value)
-                      )
-                  elif isinstance(value, dict):
-                      print(
-                          key,
-                          "-> dict, keys:",
-                          len(value)
-                      )
-                  else:
-                      print(
-                          key,
-                          "->",
-                          type(value).__name__
-                      )
-
-          print()
-          print("=== RELIC TIER DEFINITIONS ===")
-
-          relic = data.get("relicTierDefinition")
-
-          if relic is not None:
-              if isinstance(relic, list):
-                  print("entries:", len(relic))
-                  for entry in relic:
-                      print(json.dumps(
-                          entry,
-                          indent=2,
-                          ensure_ascii=False
-                      ))
-              else:
+                  print()
+                  print("FIELD:", key)
                   print(json.dumps(
-                      relic,
+                      value,
                       indent=2,
                       ensure_ascii=False
                   ))
-          else:
-              print("Brak top-level relicTierDefinition")
 
-          PY    
+          PY
 
       - name: Download English localization
         run: |
