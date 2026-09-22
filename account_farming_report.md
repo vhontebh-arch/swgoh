@@ -6,6 +6,9 @@
 
 | ID | Przedmiot | Wymagane | Posiadane | Brakuje |
 |---|---|---:|---:|---:|
+| `GRIND` | GRIND | 250 000 | 0 | **250 000** |
+| `RM_002` | Incomplete Signal Data | 65 | 49 | **16** |
+| `RM_003` | Flawed Signal Data | 15 | 2 | **13** |
 | `144` | Mk 6 Merr-Sonn Thermal Detonator | 3 | 0 | **3** |
 | `129` | Mk 8 BioTech Implant | 2 | 0 | **2** |
 | `168` | Mk 12 ArmaTek Fusion Furnace | 2 | 0 | **2** |
@@ -44,11 +47,22 @@ Gear: **G9 → G13** Relic: **R1 → R5**
 
 #### Materiały relic
 
+- `GRIND` × 250000 — GRIND
+- `SCV_001` × 120 — Carbonite Circuit Board
+- `SCV_002` × 160 — Bronzium Wiring
+- `RM_001` × 75 — Fragmented Signal Data
+- `SCV_003` × 90 — Chromium Transistor
+- `RM_002` × 65 — Incomplete Signal Data
+- `SCV_004` × 20 — Aurodium Heatsink
+- `RM_003` × 15 — Flawed Signal Data
 
 #### Braki
 
 | ID | Przedmiot | Brakuje |
 |---|---|---:|
+| `GRIND` | GRIND | **250 000** |
+| `RM_002` | Incomplete Signal Data | **16** |
+| `RM_003` | Flawed Signal Data | **13** |
 | `144` | Mk 6 Merr-Sonn Thermal Detonator | **3** |
 | `129` | Mk 8 BioTech Implant | **2** |
 | `168` | Mk 12 ArmaTek Fusion Furnace | **2** |
