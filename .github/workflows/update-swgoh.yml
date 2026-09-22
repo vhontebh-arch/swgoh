@@ -64,206 +64,47 @@ jobs:
 
           python -m json.tool data.json | head -n 40
 
-      - name: Summarize gear and relic costs
+      - name: Diagnose relic costs
         run: |
-          python - <<'PY'
+          python -c '
           import json
+          d=json.load(open("data.json",encoding="utf-8"))
 
-          data = json.load(open("data.json", encoding="utf-8"))
+          def w(x):
+              yield x
+              if isinstance(x,dict):
+                  for v in x.values():
+                      yield from w(v)
+              elif isinstance(x,list):
+                  for v in x:
+                      yield from w(v)
 
-          def walk(obj):
-              yield obj
-              if isinstance(obj, dict):
-                  for v in obj.values():
-                      yield from walk(v)
-              elif isinstance(obj, list):
-                  for v in obj:
-                      yield from walk(v)
+          print("=== RELIC PROMOTION ===")
 
-          # -------------------------------------------------
-          # GEAR RECIPES
-          # -------------------------------------------------
-
-          wanted = {
-              "098", "102", "117", "122",
-              "116", "125", "129", "134", "142", "144", "146",
-              "158", "159", "160", "168", "174",
-              "G12Finisher_JARJARBINKS_C",
-              "176Ingredient",
-              "170Prototype",
-              "123Prototype",
-              "172Prototype"
-          }
-
-          recipes = {}
-
-          for node in walk(data):
-              if not isinstance(node, dict):
+          for x in w(d):
+              if not isinstance(x,dict):
                   continue
-
-              ingredients = node.get("ingredients")
-
-              if not isinstance(ingredients, list):
-                  continue
-
-              node_id = str(node.get("id", ""))
-
-              for ing in ingredients:
-                  if (
-                      isinstance(ing, dict)
-                      and str(ing.get("id", "")) in wanted
-                  ):
-                      recipes[node_id] = node
-                      break
-
-          output = []
-
-          output.append("## GEAR RECIPES")
-          output.append("")
-
-          for recipe_id in sorted(recipes):
-              node = recipes[recipe_id]
-
-              parts = []
-
-              for ing in node.get("ingredients", []):
-                  parts.append(
-                      f"{ing.get('id')} x{ing.get('minQuantity', 1)}"
-                  )
-
-              result_id = node.get("result", {}).get("id", "?")
-
-              output.append(
-                  f"- `{recipe_id}` -> `{result_id}`: "
-                  + ", ".join(parts)
-              )
-
-          output.append("")
-          output.append(
-              f"**Recipes found:** {len(recipes)}"
-          )
-
-          # -------------------------------------------------
-          # RELIC PROMOTION TABLE
-          # -------------------------------------------------
-
-          output.append("")
-          output.append("## RELIC PROMOTION TABLE")
-          output.append("")
-
-          relic_tables = []
-
-          for node in walk(data):
-              if not isinstance(node, dict):
-                  continue
-
-              node_id = str(node.get("id", ""))
-
-              if (
-                  node_id == "relic_promotion_table"
-                  or "relic_promotion" in node_id.lower()
+              i=str(x.get("id",""))
+              if "relic" in i.lower() and (
+                  "promotion" in i.lower()
+                  or "cost" in i.lower()
+                  or "upgrade" in i.lower()
               ):
-                  relic_tables.append(node)
+                  print("ID:",i)
+                  print("KEYS:",",".join(x.keys()))
 
-          output.append(
-              f"**Tables found:** {len(relic_tables)}"
-          )
+          print("=== RELIC UPGRADE TABLE ===")
 
-          for table in relic_tables:
-              output.append("")
-              output.append(
-                  f"### `{table.get('id')}`"
-              )
+          for x in w(d):
+              if isinstance(x,dict) and x.get("id")=="relic_promotion_table":
+                  print(json.dumps(x,ensure_ascii=False,separators=(",",":"))[:15000])
 
-              output.append(
-                  "**Top-level fields:** "
-                  + ", ".join(sorted(table.keys()))
-              )
+          print("=== SIGNAL DATA ===")
 
-              # Print compact representations of nested structures,
-              # but keep the GitHub summary manageable.
-              for key, value in table.items():
-
-                  if key == "id":
-                      continue
-
-                  if isinstance(value, (dict, list)):
-                      text = json.dumps(
-                          value,
-                          ensure_ascii=False,
-                          separators=(",", ":")
-                      )
-
-                      output.append("")
-                      output.append(
-                          f"**{key}:**"
-                      )
-                      output.append(
-                          "```json"
-                      )
-                      output.append(
-                          text[:12000]
-                      )
-                      output.append(
-                          "```"
-                      )
-
-          # -------------------------------------------------
-          # SIGNAL DATA DEFINITIONS
-          # -------------------------------------------------
-
-          output.append("")
-          output.append("## SIGNAL DATA DEFINITIONS")
-          output.append("")
-
-          signal_ids = {
-              "RM_001",
-              "RM_002",
-              "RM_003",
-              "RM_004"
-          }
-
-          found_signal = set()
-
-          for node in walk(data):
-              if not isinstance(node, dict):
-                  continue
-
-              node_id = str(node.get("id", ""))
-
-              if node_id in signal_ids:
-                  found_signal.add(node_id)
-
-                  output.append("")
-                  output.append(f"### `{node_id}`")
-                  output.append("```json")
-                  output.append(
-                      json.dumps(
-                          node,
-                          indent=2,
-                          ensure_ascii=False
-                      )[:5000]
-                  )
-                  output.append("```")
-
-          output.append("")
-          output.append(
-              f"**Signal definitions found:** "
-              f"{len(found_signal)}/{len(signal_ids)}"
-          )
-
-          # -------------------------------------------------
-          # WRITE TO GITHUB JOB SUMMARY
-          # -------------------------------------------------
-
-          with open(
-              "${GITHUB_STEP_SUMMARY}",
-              "w",
-              encoding="utf-8"
-          ) as f:
-              f.write("\n".join(output))
-
-          PY
+          for x in w(d):
+              if isinstance(x,dict) and str(x.get("id","")) in {"RM_001","RM_002","RM_003","RM_004"}:
+                  print(x.get("id"),json.dumps(x,ensure_ascii=False,separators=(",",":"))[:1000])
+          '
           
       - name: Download English localization
         run: |
