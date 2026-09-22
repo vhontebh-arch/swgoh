@@ -1,5 +1,6 @@
-import csv
 import json
+import os
+import csv
 from collections import defaultdict
 
 
@@ -10,6 +11,7 @@ LOCALIZATION_FILE = "localization.json"
 TARGETS_FILE = "targets.json"
 REPORT_FILE = "account_farming_report.md"
 
+
 IGNORE_GEAR_IDS = {"9999"}
 
 RELIC_RECIPE_IDS = [
@@ -18,287 +20,308 @@ RELIC_RECIPE_IDS = [
 ]
 
 
-# ============================================================
-# BASIC HELPERS
-# ============================================================
-
 def load_json(path):
     with open(path, "r", encoding="utf-8") as f:
-        return json.load(f)
+        return json.load(f, strict=False)
 
 
 def as_int(value, default=0):
     try:
-        if value is None:
-            return default
         return int(value)
     except (TypeError, ValueError):
         return default
 
 
-def normalize_id(value):
-    if value is None:
-        return ""
-    return str(value).strip()
+def get_localized_names(localization):
+    """
+    Builds a localization dictionary from the localization bundle when
+    possible. The calculator does not depend on localization being complete.
+    """
+    names = {}
+
+    if not isinstance(localization, dict):
+        return names
+
+    bundle = localization.get("localizationBundle")
+    if not bundle:
+        return names
+
+    try:
+        import base64
+        import io
+        import zipfile
+
+        raw = base64.b64decode(bundle)
+        z = zipfile.ZipFile(io.BytesIO(raw))
+
+        filename = "Loc_ENG_US.txt"
+
+        if filename not in z.namelist():
+            candidates = [
+                x for x in z.namelist()
+                if x.lower().endswith(".txt")
+            ]
+
+            if not candidates:
+                return names
+
+            filename = candidates[0]
+
+        text = z.read(filename).decode("utf-8", "replace")
+
+        for line in text.splitlines():
+            if "|" not in line:
+                continue
+
+            key, value = line.split("|", 1)
+            names[key] = value
+
+    except Exception:
+        pass
+
+    return names
 
 
-# ============================================================
-# LOCALIZATION
-# ============================================================
+def localized_name(item_id, names):
+    """
+    Try several known localization key patterns.
+    """
+    if item_id in names:
+        return names[item_id]
 
-def build_localization(localization_data):
+    candidates = [
+        f"EQUIPMENT_{item_id}_NAME",
+        f"UNIT_{item_id}_NAME",
+        f"{item_id}_NAME",
+        item_id,
+    ]
+
+    for key in candidates:
+        value = names.get(key)
+
+        if value:
+            return value
+
+    return item_id
+
+
+def build_unit_database(data):
+    """
+    Maps baseId -> unit definition.
+    """
     result = {}
 
-    if isinstance(localization_data, dict):
-        for key, value in localization_data.items():
-            if isinstance(value, str):
-                result[str(key)] = value
+    for unit in data.get("units", []):
+        base_id = unit.get("baseId")
+
+        if base_id:
+            result[base_id] = unit
 
     return result
 
 
-def localize(localization, key):
-    if not key:
-        return ""
+def build_equipment_database(data):
+    """
+    Maps equipment ID -> equipment object.
+    """
+    equipment = {}
 
-    key = str(key)
+    for item in data.get("equipment", []):
+        item_id = item.get("id")
 
-    if key in localization:
-        return localization[key]
+        if item_id:
+            equipment[item_id] = item
 
-    return key
+    return equipment
 
-
-# ============================================================
-# UNIT DATABASE
-# ============================================================
-
-def build_unit_database(data):
-    units = {}
-
-    raw_units = data.get("units", [])
-
-    if isinstance(raw_units, dict):
-        raw_units = list(raw_units.values())
-
-    for unit in raw_units:
-        if not isinstance(unit, dict):
-            continue
-
-        base_id = (
-            unit.get("baseId")
-            or unit.get("baseID")
-            or unit.get("id")
-        )
-
-        if not base_id:
-            continue
-
-        units[base_id] = unit
-
-    return units
-
-
-# ============================================================
-# RECIPE DATABASE
-# ============================================================
 
 def build_recipe_database(data):
+    """
+    IMPORTANT:
+    Recipes are mapped by result.id, NOT recipe object's own id.
+    """
     recipes = {}
 
-    raw_recipes = (
-        data.get("recipes")
-        or data.get("recipe")
-        or []
-    )
+    for recipe in data.get("recipes", []):
+        result = recipe.get("result")
 
-    if isinstance(raw_recipes, dict):
-        raw_recipes = list(raw_recipes.values())
-
-    for recipe in raw_recipes:
-        if not isinstance(recipe, dict):
+        if not isinstance(result, dict):
             continue
 
-        recipe_id = (
-            recipe.get("id")
-            or recipe.get("recipeId")
-            or recipe.get("recipe_id")
-        )
+        result_id = result.get("id")
 
-        if recipe_id:
-            recipes[recipe_id] = recipe
+        if not result_id:
+            continue
+
+        recipes[result_id] = recipe.get("ingredients", [])
 
     return recipes
 
 
 def build_relic_recipe_database(data):
-    recipes = {}
+    """
+    Maps relic_promotion_recipe_01 ... _10 to ingredient lists.
+    """
+    result = {}
 
-    raw_recipes = data.get("recipes", [])
+    for recipe in data.get("recipes", []):
+        recipe_id = recipe.get("id")
 
-    if isinstance(raw_recipes, dict):
-        raw_recipes = list(raw_recipes.values())
+        if recipe_id in RELIC_RECIPE_IDS:
+            result[recipe_id] = recipe.get("ingredients", [])
 
-    for recipe in raw_recipes:
-        if not isinstance(recipe, dict):
+    return result
+
+
+def get_unit_tier(unit_definition, tier):
+    """
+    Returns unitTier object for the requested gear tier.
+    """
+    for unit_tier in unit_definition.get("unitTier", []):
+        if as_int(unit_tier.get("tier"), -1) == tier:
+            return unit_tier
+
+    return None
+
+
+def get_equipment_set(unit_definition, tier):
+    """
+    Returns equipment IDs required at a given gear tier.
+    """
+    unit_tier = get_unit_tier(unit_definition, tier)
+
+    if not unit_tier:
+        return []
+
+    equipment_set = unit_tier.get("equipmentSet", [])
+
+    result = []
+
+    for item in equipment_set:
+        if isinstance(item, str):
+            item_id = item
+
+        elif isinstance(item, dict):
+            item_id = item.get("id")
+
+        else:
             continue
 
-        recipe_id = str(
-            recipe.get("id")
-            or recipe.get("recipeId")
-            or ""
-        )
+        if not item_id:
+            continue
 
-        if recipe_id.startswith("relic_promotion_recipe_"):
-            recipes[recipe_id] = recipe
+        if item_id in IGNORE_GEAR_IDS:
+            continue
 
-    return recipes
+        result.append(item_id)
+
+    return result
 
 
-# ============================================================
-# ROSTER CSV
-# ============================================================
+def get_current_gear(unit):
+    """
+    Current player gear tier.
+    """
+    return as_int(
+        unit.get("currentTier", unit.get("gearLevel", 0))
+    )
 
-def build_roster_from_csv(path):
+
+def get_current_relic(unit):
+    """
+    Current relic tier.
+    """
+    relic = unit.get("relic")
+
+    if not isinstance(relic, dict):
+        return 0
+
+    return as_int(
+        relic.get("currentTier", relic.get("tier", 0))
+    )
+
+
+def build_player_roster_from_csv(path):
+    """
+    Maps baseId -> player's roster unit using roster.csv.
+
+    roster.csv is generated by the existing SWGOH workflow and contains:
+    name, definitionId, baseId, id, rarity, level, gearTier, relicTier
+    """
     roster = {}
 
-    with open(path, "r", encoding="utf-8-sig", newline="") as f:
+    with open(
+        path,
+        "r",
+        encoding="utf-8-sig",
+        newline=""
+    ) as f:
+
         reader = csv.DictReader(f)
 
         for row in reader:
-            base_id = normalize_id(row.get("baseId"))
-
-            if not base_id:
-                base_id = normalize_id(row.get("definitionId"))
-
-                if ":" in base_id:
-                    base_id = base_id.split(":", 1)[0]
+            base_id = row.get("baseId", "").strip()
 
             if not base_id:
                 continue
 
-            gear_tier = as_int(
-                row.get("gearTier"),
-                as_int(row.get("gear"), 0)
-            )
-
-            relic_tier = as_int(
-                row.get("relicTier"),
-                as_int(row.get("relic"), 0)
-            )
-
-            rarity = as_int(
-                row.get("rarity"),
-                as_int(row.get("stars"), 0)
-            )
-
-            level = as_int(row.get("level"), 0)
-
             roster[base_id] = {
-                "baseId": base_id,
-                "definitionId": row.get("definitionId", ""),
-                "currentTier": gear_tier,
-                "gearTier": gear_tier,
+                "currentTier": as_int(
+                    row.get("gearTier"),
+                    0
+                ),
                 "relic": {
-                    "currentTier": relic_tier
-                },
-                "relicTier": relic_tier,
-                "currentRarity": rarity,
-                "currentLevel": level,
-                "name": row.get("name", base_id),
+                    "currentTier": as_int(
+                        row.get("relicTier"),
+                        0
+                    )
+                }
             }
 
     return roster
 
 
-# ============================================================
-# CURRENT GEAR / RELIC
-# ============================================================
-
-def get_current_gear(unit):
-    if not unit:
-        return 0
-
-    for key in (
-        "currentTier",
-        "gearTier",
-        "tier",
-    ):
-        if key in unit:
-            return as_int(unit.get(key), 0)
-
-    return 0
-
-
-def get_current_relic(unit):
-    if not unit:
-        return 0
-
-    relic = unit.get("relic")
-
-    if isinstance(relic, dict):
-        for key in (
-            "currentTier",
-            "tier",
-            "relicTier",
-        ):
-            if key in relic:
-                return as_int(relic.get(key), 0)
-
-    for key in (
-        "relicTier",
-        "currentRelicTier",
-    ):
-        if key in unit:
-            return as_int(unit.get(key), 0)
-
-    return 0
-
-
-# ============================================================
-# C3PO INVENTORY
-# ============================================================
-
-def read_c3po_inventory(c3po_data):
+def read_c3po_inventory(c3po):
     """
-    Reads both:
-      inventory.equipment
-      inventory.material
+    Reads equipment and material inventory from C3PO.
 
-    C3PO may represent these collections either as lists
-    or dictionaries, depending on the export/version.
+    Supports the common C3PO inventory layouts.
     """
-
     inventory = defaultdict(int)
 
-    raw_inventory = c3po_data.get("inventory", {})
+    inv = c3po.get("inventory", c3po)
 
-    if not isinstance(raw_inventory, dict):
+    if not isinstance(inv, dict):
         return inventory
 
-    # --------------------------------------------------------
+    # ------------------------------------------------------------
     # EQUIPMENT
-    # --------------------------------------------------------
+    # ------------------------------------------------------------
 
-    equipment = raw_inventory.get("equipment", [])
+    equipment = inv.get("equipment", [])
 
     if isinstance(equipment, dict):
-        for item_id, item_data in equipment.items():
 
-            if isinstance(item_data, dict):
-                quantity = (
-                    item_data.get("quantity")
-                    or item_data.get("amount")
-                    or item_data.get("count")
-                    or 0
+        for item_id, value in equipment.items():
+
+            if isinstance(value, dict):
+                quantity = value.get(
+                    "quantity",
+                    value.get(
+                        "count",
+                        value.get("amount", 0)
+                    )
                 )
-            else:
-                quantity = item_data
 
-            inventory[normalize_id(item_id)] += as_int(quantity)
+            else:
+                quantity = value
+
+            inventory[item_id] += as_int(quantity)
 
     elif isinstance(equipment, list):
+
         for item in equipment:
+
             if not isinstance(item, dict):
                 continue
 
@@ -308,39 +331,48 @@ def read_c3po_inventory(c3po_data):
                 or item.get("itemId")
             )
 
+            if not item_id:
+                continue
+
             quantity = (
                 item.get("quantity")
-                or item.get("amount")
                 or item.get("count")
+                or item.get("amount")
                 or 0
             )
 
-            if item_id:
-                inventory[normalize_id(item_id)] += as_int(quantity)
+            inventory[item_id] += as_int(quantity)
 
-    # --------------------------------------------------------
+    # ------------------------------------------------------------
     # MATERIAL
-    # --------------------------------------------------------
+    #
+    # C3PO stores relic materials and other materials here.
+    # ------------------------------------------------------------
 
-    materials = raw_inventory.get("material", [])
+    materials = inv.get("material", [])
 
     if isinstance(materials, dict):
-        for item_id, item_data in materials.items():
 
-            if isinstance(item_data, dict):
-                quantity = (
-                    item_data.get("quantity")
-                    or item_data.get("amount")
-                    or item_data.get("count")
-                    or 0
+        for item_id, value in materials.items():
+
+            if isinstance(value, dict):
+                quantity = value.get(
+                    "quantity",
+                    value.get(
+                        "count",
+                        value.get("amount", 0)
+                    )
                 )
-            else:
-                quantity = item_data
 
-            inventory[normalize_id(item_id)] += as_int(quantity)
+            else:
+                quantity = value
+
+            inventory[item_id] += as_int(quantity)
 
     elif isinstance(materials, list):
+
         for item in materials:
+
             if not isinstance(item, dict):
                 continue
 
@@ -350,677 +382,640 @@ def read_c3po_inventory(c3po_data):
                 or item.get("itemId")
             )
 
+            if not item_id:
+                continue
+
             quantity = (
                 item.get("quantity")
-                or item.get("amount")
                 or item.get("count")
+                or item.get("amount")
                 or 0
             )
 
-            if item_id:
-                inventory[normalize_id(item_id)] += as_int(quantity)
+            inventory[item_id] += as_int(quantity)
 
     return inventory
 
 
-# ============================================================
-# RECIPE PARSING
-# ============================================================
-
-def extract_recipe_components(recipe):
+def expand_item(item_id, quantity, recipes, output):
     """
-    Attempts to extract recipe ingredients from several common
-    SWGOH data structures.
+    Recursively expands crafted equipment into terminal materials.
+
+    output receives terminal item quantities.
     """
+    if not item_id or quantity <= 0:
+        return
 
-    if not isinstance(recipe, dict):
-        return []
+    if item_id in IGNORE_GEAR_IDS:
+        return
 
-    possible_keys = (
-        "ingredients",
-        "components",
-        "recipeIngredients",
-        "items",
-        "requirements",
-    )
+    ingredients = recipes.get(item_id)
 
-    raw = None
+    if not ingredients:
+        output[item_id] += quantity
+        return
 
-    for key in possible_keys:
-        if key in recipe:
-            raw = recipe[key]
-            break
+    for ingredient in ingredients:
 
-    if raw is None:
-        return []
+        ingredient_id = ingredient.get("id")
 
-    if isinstance(raw, dict):
-        raw = list(raw.values())
-
-    if not isinstance(raw, list):
-        return []
-
-    result = []
-
-    for component in raw:
-        if not isinstance(component, dict):
+        if not ingredient_id:
             continue
 
-        item_id = (
-            component.get("id")
-            or component.get("itemId")
-            or component.get("equipmentId")
-            or component.get("materialId")
-            or component.get("resourceId")
+        amount = as_int(
+            ingredient.get(
+                "minQuantity",
+                ingredient.get("quantity", 1)
+            ),
+            1
         )
 
-        quantity = (
-            component.get("quantity")
-            or component.get("amount")
-            or component.get("count")
-            or component.get("requiredQuantity")
-            or 0
+        if amount <= 0:
+            continue
+
+        # GRIND is already a terminal resource.
+        expand_item(
+            ingredient_id,
+            quantity * amount,
+            recipes,
+            output
         )
 
-        if item_id:
-            result.append(
-                (
-                    normalize_id(item_id),
-                    as_int(quantity)
-                )
-            )
+
+def expand_equipment_requirements(required_equipment, recipes):
+    """
+    Converts direct equipment requirements into terminal material
+    requirements.
+    """
+    result = defaultdict(int)
+
+    for item_id, quantity in required_equipment.items():
+
+        expand_item(
+            item_id,
+            quantity,
+            recipes,
+            result
+        )
 
     return result
 
 
-# ============================================================
-# RECURSIVE RESOURCE CONSUMPTION
-# ============================================================
-
-def expand_item(
-    item_id,
-    quantity,
-    recipes,
-    inventory,
-    shortages,
-    stack=None,
+def get_gear_requirements(
+    unit_definition,
+    current_gear,
+    target_gear
 ):
     """
-    Consume an item from inventory.
-
-    If insufficient inventory exists, recursively expand the missing
-    amount through its recipe.
-
-    This is the key part that prevents double-counting resources
-    already owned by the player.
+    Collects all direct gear pieces required from current+1 through
+    target gear tier.
     """
+    required = defaultdict(int)
 
-    item_id = normalize_id(item_id)
-    quantity = as_int(quantity)
-
-    if quantity <= 0:
-        return
-
-    if stack is None:
-        stack = set()
-
-    # Prevent circular recipes.
-    if item_id in stack:
-        shortages[item_id] += quantity
-        return
-
-    owned = inventory.get(item_id, 0)
-
-    if owned >= quantity:
-        inventory[item_id] -= quantity
-        return
-
-    if owned > 0:
-        quantity -= owned
-        inventory[item_id] = 0
-
-    recipe = recipes.get(item_id)
-
-    if not recipe:
-        shortages[item_id] += quantity
-        return
-
-    components = extract_recipe_components(recipe)
-
-    if not components:
-        shortages[item_id] += quantity
-        return
-
-    stack.add(item_id)
-
-    for component_id, component_quantity in components:
-        required = component_quantity * quantity
-
-        expand_item(
-            component_id,
-            required,
-            recipes,
-            inventory,
-            shortages,
-            stack,
-        )
-
-    stack.remove(item_id)
-
-
-def consume_or_expand(
-    item_id,
-    quantity,
-    recipes,
-    inventory,
-    shortages,
-):
-    expand_item(
-        item_id,
-        quantity,
-        recipes,
-        inventory,
-        shortages,
+    start = max(
+        current_gear + 1,
+        1
     )
 
+    end = min(
+        target_gear,
+        12
+    )
 
-# ============================================================
-# GEAR REQUIREMENTS
-# ============================================================
+    for tier in range(start, end + 1):
 
-def get_gear_requirements(unit, target_gear_tier, data):
-    """
-    Returns direct gear item requirements needed to move a unit
-    from its current gear tier to target tier.
+        for item_id in get_equipment_set(
+            unit_definition,
+            tier
+        ):
+            required[item_id] += 1
 
-    Handles several common SWGOH data layouts.
-    """
+    return required
 
-    current_tier = get_current_gear(unit)
-
-    if current_tier >= target_gear_tier:
-        return []
-
-    gear_data = data.get("gear", {})
-
-    if not gear_data:
-        return []
-
-    requirements = []
-
-    # --------------------------------------------------------
-    # Locate character's gear progression
-    # --------------------------------------------------------
-
-    progression = None
-
-    if isinstance(gear_data, dict):
-
-        base_id = unit.get("baseId")
-
-        if base_id in gear_data:
-            progression = gear_data[base_id]
-
-        elif unit.get("definitionId") in gear_data:
-            progression = gear_data[unit.get("definitionId")]
-
-    elif isinstance(gear_data, list):
-
-        base_id = unit.get("baseId")
-
-        for entry in gear_data:
-            if not isinstance(entry, dict):
-                continue
-
-            entry_base = (
-                entry.get("baseId")
-                or entry.get("unitBaseId")
-                or entry.get("characterId")
-            )
-
-            if entry_base == base_id:
-                progression = entry
-                break
-
-    if progression is None:
-        return []
-
-    # --------------------------------------------------------
-    # Progression as dict
-    # --------------------------------------------------------
-
-    if isinstance(progression, dict):
-
-        for tier in range(current_tier + 1, target_gear_tier + 1):
-
-            tier_data = (
-                progression.get(str(tier))
-                or progression.get(tier)
-                or progression.get(f"G{tier}")
-            )
-
-            if tier_data is None:
-                continue
-
-            if isinstance(tier_data, dict):
-                components = extract_recipe_components(tier_data)
-
-                for item_id, quantity in components:
-                    requirements.append((item_id, quantity))
-
-            elif isinstance(tier_data, list):
-
-                for item in tier_data:
-                    if not isinstance(item, dict):
-                        continue
-
-                    item_id = (
-                        item.get("id")
-                        or item.get("itemId")
-                        or item.get("equipmentId")
-                    )
-
-                    quantity = (
-                        item.get("quantity")
-                        or item.get("amount")
-                        or item.get("count")
-                        or 0
-                    )
-
-                    if item_id:
-                        requirements.append(
-                            (
-                                normalize_id(item_id),
-                                as_int(quantity),
-                            )
-                        )
-
-    # --------------------------------------------------------
-    # Progression as list
-    # --------------------------------------------------------
-
-    elif isinstance(progression, list):
-
-        for tier_data in progression:
-
-            if not isinstance(tier_data, dict):
-                continue
-
-            tier = as_int(
-                tier_data.get("tier")
-                or tier_data.get("gearTier")
-                or tier_data.get("level"),
-                0,
-            )
-
-            if tier <= current_tier or tier > target_gear_tier:
-                continue
-
-            components = extract_recipe_components(tier_data)
-
-            for item_id, quantity in components:
-                requirements.append((item_id, quantity))
-
-    return requirements
-
-
-# ============================================================
-# RELIC REQUIREMENTS
-# ============================================================
 
 def get_relic_requirements(
     current_relic,
     target_relic,
-    relic_recipes,
+    relic_recipes
 ):
-    requirements = []
+    """
+    Returns terminal relic-material requirements for current+1 through
+    target relic tier.
+    """
+    result = defaultdict(int)
 
-    if current_relic >= target_relic:
-        return requirements
+    start = max(
+        current_relic + 1,
+        1
+    )
+
+    end = min(
+        target_relic,
+        10
+    )
 
     for relic_tier in range(
-        current_relic + 1,
-        target_relic + 1
+        start,
+        end + 1
     ):
-
-        if relic_tier <= 0:
-            continue
 
         recipe_id = (
             f"relic_promotion_recipe_{relic_tier:02d}"
         )
 
-        recipe = relic_recipes.get(recipe_id)
-
-        if not recipe:
-            continue
-
-        components = extract_recipe_components(recipe)
-
-        for item_id, quantity in components:
-            requirements.append(
-                (
-                    item_id,
-                    quantity,
-                )
-            )
-
-    return requirements
-
-
-# ============================================================
-# TARGET CALCULATION
-# ============================================================
-
-def calculate_target(
-    target,
-    roster,
-    units,
-    data,
-    recipes,
-    relic_recipes,
-    inventory,
-):
-    base_id = normalize_id(
-        target.get("baseId")
-    )
-
-    if not base_id:
-        return {
-            "baseId": "",
-            "name": "UNKNOWN",
-            "error": "Target has no baseId",
-            "gear": [],
-            "relic": [],
-            "shortages": {},
-        }
-
-    roster_unit = roster.get(base_id)
-
-    if roster_unit is None:
-        return {
-            "baseId": base_id,
-            "name": base_id,
-            "error": "Character not found in roster.csv",
-            "gear": [],
-            "relic": [],
-            "shortages": {},
-        }
-
-    unit_definition = units.get(base_id, {})
-
-    name = (
-        roster_unit.get("name")
-        or unit_definition.get("name")
-        or base_id
-    )
-
-    current_gear = get_current_gear(roster_unit)
-    current_relic = get_current_relic(roster_unit)
-
-    target_gear = as_int(
-        target.get("targetGearTier"),
-        current_gear,
-    )
-
-    target_relic = as_int(
-        target.get("targetRelicTier"),
-        current_relic,
-    )
-
-    shortages = defaultdict(int)
-
-    gear_requirements = get_gear_requirements(
-        roster_unit,
-        target_gear,
-        data,
-    )
-
-    for item_id, quantity in gear_requirements:
-        consume_or_expand(
-            item_id,
-            quantity,
-            recipes,
-            inventory,
-            shortages,
+        ingredients = relic_recipes.get(
+            recipe_id,
+            []
         )
 
-    relic_requirements = get_relic_requirements(
-        current_relic,
-        target_relic,
-        relic_recipes,
+        for ingredient in ingredients:
+
+            item_id = ingredient.get("id")
+
+            if not item_id:
+                continue
+
+            quantity = as_int(
+                ingredient.get(
+                    "minQuantity",
+                    ingredient.get("quantity", 1)
+                ),
+                1
+            )
+
+            result[item_id] += quantity
+
+    return result
+
+
+def calculate_target(
+    base_id,
+    target_gear,
+    target_relic,
+    roster,
+    units,
+    recipes,
+    relic_recipes,
+    working_inventory,
+    names
+):
+    """
+    Calculates one target while consuming the shared working inventory.
+    """
+    unit = roster.get(base_id)
+
+    if not unit:
+        raise RuntimeError(
+            f"Nie znaleziono {base_id} w rosterze."
+        )
+
+    unit_definition = units.get(base_id)
+
+    if not unit_definition:
+        raise RuntimeError(
+            f"Nie znaleziono definicji jednostki {base_id} "
+            f"w data.json."
+        )
+
+    current_gear = get_current_gear(unit)
+    current_relic = get_current_relic(unit)
+
+    required_direct_gear = get_gear_requirements(
+        unit_definition,
+        current_gear,
+        target_gear
     )
 
-    for item_id, quantity in relic_requirements:
-        consume_or_expand(
+    required_gear = expand_equipment_requirements(
+        required_direct_gear,
+        recipes
+    )
+
+    required_relic = get_relic_requirements(
+        current_relic,
+        target_relic,
+        relic_recipes
+    )
+
+    total_required = defaultdict(int)
+
+    for item_id, quantity in required_gear.items():
+        total_required[item_id] += quantity
+
+    for item_id, quantity in required_relic.items():
+        total_required[item_id] += quantity
+
+    # ------------------------------------------------------------
+    # Calculate REAL shortage after subtracting inventory.
+    # ------------------------------------------------------------
+
+    shortages = {}
+
+    for item_id, required_quantity in total_required.items():
+
+        owned_quantity = working_inventory.get(
             item_id,
-            quantity,
-            recipes,
-            inventory,
-            shortages,
+            0
+        )
+
+        shortage = max(
+            0,
+            required_quantity - owned_quantity
+        )
+
+        if shortage > 0:
+            shortages[item_id] = shortage
+
+        # Consume inventory that is actually available.
+        working_inventory[item_id] = max(
+            0,
+            owned_quantity - required_quantity
         )
 
     return {
-        "baseId": base_id,
-        "name": name,
-        "currentGear": current_gear,
-        "targetGear": target_gear,
-        "currentRelic": current_relic,
-        "targetRelic": target_relic,
-        "gear": gear_requirements,
-        "relic": relic_requirements,
-        "shortages": dict(shortages),
+        "base_id": base_id,
+        "current_gear": current_gear,
+        "target_gear": target_gear,
+        "current_relic": current_relic,
+        "target_relic": target_relic,
+        "required_direct_gear": required_direct_gear,
+        "required_gear": required_gear,
+        "required_relic": required_relic,
+        "total_required": dict(total_required),
+        "shortages": shortages,
     }
 
 
-# ============================================================
-# REPORT
-# ============================================================
+def format_number(value):
+    return f"{value:,}".replace(",", " ")
+
 
 def generate_report(
     results,
-    localization,
-    output_path,
+    total_required,
+    total_shortages,
+    inventory,
+    names
 ):
     lines = []
 
-    lines.append("# Account Farming Report")
-    lines.append("")
     lines.append(
-        "Automatycznie wygenerowany raport brakujących "
-        "materiałów dla aktualnej kolejki farmienia."
+        "# Account Farming Report"
     )
-    lines.append("")
 
-    total_shortages = defaultdict(int)
+    lines.append("")
 
     for result in results:
 
-        name = result.get("name", result.get("baseId"))
-
         lines.append(
-            f"## {name}"
-        )
-        lines.append("")
-
-        if result.get("error"):
-            lines.append(
-                f"**Błąd:** {result['error']}"
-            )
-            lines.append("")
-            continue
-
-        lines.append(
-            f"- **Gear:** "
-            f"G{result['currentGear']} → "
-            f"G{result['targetGear']}"
+            f"- **{result['base_id']}**: "
+            f"G{result['current_gear']} → "
+            f"G{result['target_gear']}, "
+            f"R{result['current_relic']} → "
+            f"R{result['target_relic']}"
         )
 
-        lines.append(
-            f"- **Relic:** "
-            f"R{result['currentRelic']} → "
-            f"R{result['targetRelic']}"
-        )
-
-        lines.append("")
-
-        shortages = result.get("shortages", {})
-
-        if not shortages:
-            lines.append(
-                "**Brak brakujących materiałów.**"
-            )
-            lines.append("")
-            continue
-
-        lines.append("### Braki")
-        lines.append("")
-
-        for item_id, quantity in sorted(
-            shortages.items(),
-            key=lambda x: (
-                localize(localization, x[0]).lower(),
-                x[0],
-            ),
-        ):
-            total_shortages[item_id] += quantity
-
-            display_name = localize(
-                localization,
-                item_id,
-            )
-
-            lines.append(
-                f"- **{display_name}** "
-                f"`{item_id}` × **{quantity}**"
-            )
-
-        lines.append("")
-
-    lines.append("## Łączne braki")
     lines.append("")
 
-    if not total_shortages:
+    lines.append(
+        "## Łączne braki"
+    )
+
+    lines.append("")
+
+    if total_shortages:
+
         lines.append(
-            "**Brak brakujących materiałów.**"
+            "| ID | Przedmiot | Wymagane | Posiadane | Brakuje |"
         )
-    else:
-        for item_id, quantity in sorted(
+
+        lines.append(
+            "|---|---|---:|---:|---:|"
+        )
+
+        # Sort by shortage descending.
+        for item_id, shortage in sorted(
             total_shortages.items(),
-            key=lambda x: (
-                localize(localization, x[0]).lower(),
-                x[0],
-            ),
+            key=lambda x: (-x[1], x[0])
         ):
-            display_name = localize(
-                localization,
+
+            owned = inventory.get(
                 item_id,
+                0
+            )
+
+            required_for_report = total_required.get(
+                item_id,
+                0
+            )
+
+            name = localized_name(
+                item_id,
+                names
             )
 
             lines.append(
-                f"- **{display_name}** "
-                f"`{item_id}` × **{quantity}**"
+                f"| `{item_id}` | {name} | "
+                f"{format_number(required_for_report)} | "
+                f"{format_number(owned)} | "
+                f"**{format_number(shortage)}** |"
             )
+
+    else:
+        lines.append(
+            "Brak braków."
+        )
 
     lines.append("")
 
-    with open(
-        output_path,
-        "w",
-        encoding="utf-8",
-    ) as f:
-        f.write("\n".join(lines))
+    lines.append(
+        "## Szczegóły"
+    )
 
+    lines.append("")
 
-# ============================================================
-# MAIN
-# ============================================================
+    for result in results:
+
+        lines.append(
+            f"### {result['base_id']}"
+        )
+
+        lines.append("")
+
+        lines.append(
+            f"Gear: **G{result['current_gear']} → "
+            f"G{result['target_gear']}** "
+            f"Relic: **R{result['current_relic']} → "
+            f"R{result['target_relic']}**"
+        )
+
+        lines.append("")
+
+        lines.append(
+            "#### Bezpośredni wymagany gear"
+        )
+
+        lines.append("")
+
+        for item_id, quantity in sorted(
+            result["required_direct_gear"].items()
+        ):
+
+            name = localized_name(
+                item_id,
+                names
+            )
+
+            lines.append(
+                f"- `{item_id}` × {quantity} — {name}"
+            )
+
+        lines.append("")
+
+        lines.append(
+            "#### Materiały relic"
+        )
+
+        lines.append("")
+
+        for item_id, quantity in result["required_relic"].items():
+
+            name = localized_name(
+                item_id,
+                names
+            )
+
+            lines.append(
+                f"- `{item_id}` × {quantity} — {name}"
+            )
+
+        lines.append("")
+
+        lines.append(
+            "#### Braki"
+        )
+
+        lines.append("")
+
+        if result["shortages"]:
+
+            lines.append(
+                "| ID | Przedmiot | Brakuje |"
+            )
+
+            lines.append(
+                "|---|---|---:|"
+            )
+
+            for item_id, shortage in sorted(
+                result["shortages"].items(),
+                key=lambda x: (-x[1], x[0])
+            ):
+
+                name = localized_name(
+                    item_id,
+                    names
+                )
+
+                lines.append(
+                    f"| `{item_id}` | {name} | "
+                    f"**{format_number(shortage)}** |"
+                )
+
+        else:
+
+            lines.append(
+                "Brak braków."
+            )
+
+        lines.append("")
+
+    lines.append(
+        "## Informacje techniczne"
+    )
+
+    lines.append("")
+
+    lines.append(
+        "- Inventory pochodzi z `c3po.json`."
+    )
+
+    lines.append(
+        "- Aktualny gear/relic pochodzi z `roster.csv`."
+    )
+
+    lines.append(
+        "- Wymagany gear pochodzi z "
+        "`unitTier[].equipmentSet`."
+    )
+
+    lines.append(
+        "- Receptury gearu są rozwijane rekurencyjnie."
+    )
+
+    lines.append(
+        "- Materiały reliców pochodzą z "
+        "`relic_promotion_recipe_01...10`."
+    )
+
+    lines.append(
+        "- `9999` jest traktowane jako placeholder G13 "
+        "i nie jest liczone jako gear."
+    )
+
+    return "\n".join(lines)
+
 
 def main():
 
-    print("Loading data...")
-
-    data = load_json(DATA_FILE)
-    c3po_data = load_json(C3PO_FILE)
-    localization_data = load_json(LOCALIZATION_FILE)
-    targets_data = load_json(TARGETS_FILE)
-
-    print("Building databases...")
-
-    units = build_unit_database(data)
-    recipes = build_recipe_database(data)
-    relic_recipes = build_relic_recipe_database(data)
-
-    localization = build_localization(
-        localization_data
+    print(
+        "Ładowanie danych..."
     )
 
-    print("Loading roster.csv...")
+    data = load_json(
+        DATA_FILE
+    )
 
-    roster = build_roster_from_csv(
+    c3po = load_json(
+        C3PO_FILE
+    )
+
+    localization = load_json(
+        LOCALIZATION_FILE
+    )
+
+    targets = load_json(
+        TARGETS_FILE
+    )
+
+    names = get_localized_names(
+        localization
+    )
+
+    units = build_unit_database(
+        data
+    )
+
+    recipes = build_recipe_database(
+        data
+    )
+
+    relic_recipes = build_relic_recipe_database(
+        data
+    )
+
+    roster = build_player_roster_from_csv(
         ROSTER_FILE
     )
 
-    print(
-        f"Roster entries: {len(roster)}"
+    inventory = read_c3po_inventory(
+        c3po
     )
 
-    print("Loading C3PO inventory...")
+    # Shared inventory for all targets.
+    working_inventory = defaultdict(int)
 
-    original_inventory = read_c3po_inventory(
-        c3po_data
-    )
+    for item_id, quantity in inventory.items():
+        working_inventory[item_id] = quantity
 
-    print(
-        f"Inventory items: "
-        f"{len(original_inventory)}"
-    )
-
-    working_inventory = defaultdict(
-        int,
-        original_inventory,
-    )
-
-    targets = targets_data.get(
+    target_list = targets.get(
         "targets",
-        [],
+        []
     )
 
     results = []
 
-    for target in targets:
+    total_required = defaultdict(int)
+    total_shortages = defaultdict(int)
+
+    for target in target_list:
 
         base_id = target.get(
-            "baseId",
-            "UNKNOWN",
+            "baseId"
         )
 
+        target_gear = as_int(
+            target.get(
+                "targetGearTier",
+                0
+            )
+        )
+
+        target_relic = as_int(
+            target.get(
+                "targetRelicTier",
+                0
+            )
+        )
+
+        if not base_id:
+            continue
+
         print(
-            f"Calculating: {base_id}"
+            f"Liczenie {base_id}: "
+            f"G{target_gear}, R{target_relic}"
         )
 
         result = calculate_target(
-            target=target,
+            base_id=base_id,
+            target_gear=target_gear,
+            target_relic=target_relic,
             roster=roster,
             units=units,
-            data=data,
             recipes=recipes,
             relic_recipes=relic_recipes,
-            inventory=working_inventory,
+            working_inventory=working_inventory,
+            names=names,
         )
 
-        results.append(result)
+        results.append(
+            result
+        )
 
-    generate_report(
+        for item_id, quantity in result["total_required"].items():
+
+            total_required[item_id] += quantity
+
+        for item_id, quantity in result["shortages"].items():
+
+            total_shortages[item_id] += quantity
+
+    report = generate_report(
         results=results,
-        localization=localization,
-        output_path=REPORT_FILE,
+        total_required=total_required,
+        total_shortages=total_shortages,
+        inventory=inventory,
+        names=names,
+    )
+
+    with open(
+        REPORT_FILE,
+        "w",
+        encoding="utf-8"
+    ) as f:
+
+        f.write(
+            report
+        )
+
+    print("")
+    print(
+        "Wygenerowano account_farming_report.md"
     )
 
     print("")
     print(
-        f"Report written to {REPORT_FILE}"
+        "Łączne braki:"
     )
+
+    for item_id, quantity in sorted(
+        total_shortages.items(),
+        key=lambda x: (-x[1], x[0])
+    ):
+
+        print(
+            f"  {item_id}: {quantity}"
+        )
 
 
 if __name__ == "__main__":
