@@ -135,7 +135,7 @@ jobs:
               x=recipes[i]
               parts=[]
 
-              for ing in x.get("ingredients",[]):
+              for ing in (x.get("ingredients") or []):
                   if isinstance(ing,dict):
                       parts.append(
                           str(ing.get("id","?"))
@@ -143,10 +143,16 @@ jobs:
                           + str(ing.get("minQuantity",1))
                       )
 
-              result=x.get("result",{})
+              result=x.get("result") or {}
               rid=result.get("id","?")
 
-              print(i,"=>",rid,":",", ".join(parts))
+              print(
+                  i,
+                  "=>",
+                  rid,
+                  ":",
+                  ", ".join(parts)
+              )
 
           print("=== END ===")
           '
