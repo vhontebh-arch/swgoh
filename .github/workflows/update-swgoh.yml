@@ -105,6 +105,51 @@ jobs:
               if isinstance(x,dict) and str(x.get("id","")) in {"RM_001","RM_002","RM_003","RM_004"}:
                   print(x.get("id"),json.dumps(x,ensure_ascii=False,separators=(",",":"))[:1000])
           '
+
+      - name: Show relic recipes
+        run: |
+          python -c '
+          import json
+          d=json.load(open("data.json",encoding="utf-8"))
+
+          def w(x):
+              yield x
+              if isinstance(x,dict):
+                  for v in x.values():
+                      yield from w(v)
+              elif isinstance(x,list):
+                  for v in x:
+                      yield from w(v)
+
+          recipes={}
+
+          for x in w(d):
+              if isinstance(x,dict):
+                  i=str(x.get("id",""))
+                  if i.startswith("relic_promotion_recipe_"):
+                      recipes[i]=x
+
+          print("=== RELIC RECIPES ===")
+
+          for i in sorted(recipes):
+              x=recipes[i]
+              parts=[]
+
+              for ing in x.get("ingredients",[]):
+                  if isinstance(ing,dict):
+                      parts.append(
+                          str(ing.get("id","?"))
+                          + " x"
+                          + str(ing.get("minQuantity",1))
+                      )
+
+              result=x.get("result",{})
+              rid=result.get("id","?")
+
+              print(i,"=>",rid,":",", ".join(parts))
+
+          print("=== END ===")
+          '
           
       - name: Download English localization
         run: |
