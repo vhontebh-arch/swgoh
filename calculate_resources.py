@@ -161,14 +161,31 @@ def build_recipe_database(data):
 def build_relic_recipe_database(data):
     """
     Maps relic_promotion_recipe_01 ... _10 to ingredient lists.
+
+    Relic promotion recipes are not necessarily stored in the same
+    top-level collection as ordinary gear recipes, so search the
+    complete data tree recursively.
     """
     result = {}
 
-    for recipe in data.get("recipes", []):
-        recipe_id = recipe.get("id")
+    def walk(value):
+        if isinstance(value, dict):
+            recipe_id = value.get("id")
 
-        if recipe_id in RELIC_RECIPE_IDS:
-            result[recipe_id] = recipe.get("ingredients", [])
+            if recipe_id in RELIC_RECIPE_IDS:
+                ingredients = value.get("ingredients", [])
+
+                if isinstance(ingredients, list):
+                    result[recipe_id] = ingredients
+
+            for child in value.values():
+                walk(child)
+
+        elif isinstance(value, list):
+            for child in value:
+                walk(child)
+
+    walk(data)
 
     return result
 
