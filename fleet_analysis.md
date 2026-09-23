@@ -6,11 +6,11 @@ Automatyczna analiza flot na podstawie `ships.csv`.
 
 ## Podsumowanie konta
 
-- Wszystkich statków: **59**
-- 7★: **44**
+- Wszystkich statków: **65**
+- 7★: **48**
 - 6★: **4**
 - 5★: **5**
-- 4★: **6**
+- 4★: **8**
 
 ## Executor
 
@@ -18,157 +18,209 @@ Automatyczna analiza flot na podstawie `ships.csv`.
 
 | Statek | ★ | Level | Gear | Status | Rola |
 |---|---:|---:|---:|---|---|
-| Hound's Tooth | 7★ | 85 | G1 | READY | CORE |
-| Razor Crest | 7★ | 85 | G1 | READY | CORE |
-| TIE Advanced x1 | 7★ | 85 | G1 | READY | CORE |
-| Imperial TIE Bomber | 7★ | 85 | G1 | READY | CORE |
-| Imperial TIE Fighter | 7★ | 85 | G1 | READY | CORE |
-| TIE Defender | 5★ | 85 | G1 | 5★ → 7★ | REINFORCEMENT |
-| TIE Reaper | 4★ | 85 | G1 | 4★ → 7★ | REINFORCEMENT |
+| Hound's Tooth | — | — | — | **BRAK W CSV** | CORE |
+| Razor Crest | — | — | — | **BRAK W CSV** | CORE |
+| TIE Advanced x1 | — | — | — | **BRAK W CSV** | CORE |
+| Imperial TIE Bomber | — | — | — | **BRAK W CSV** | CORE |
+| Imperial TIE Fighter | — | — | — | **BRAK W CSV** | CORE |
+| TIE Defender | — | — | — | **BRAK W CSV** | REINFORCEMENT |
+| TIE Reaper | — | — | — | **BRAK W CSV** | REINFORCEMENT |
 
-**Core poniżej 7★:** 0
+**Core poniżej 7★:** 5
 **Reinforcementy poniżej 7★:** 2
 
+### Braki CORE
+- **Hound's Tooth** — 0★ → 7★
+- **Imperial TIE Bomber** — 0★ → 7★
+- **Imperial TIE Fighter** — 0★ → 7★
+- **Razor Crest** — 0★ → 7★
+- **TIE Advanced x1** — 0★ → 7★
+
 ### Braki reinforcementów
-- TIE Reaper — 4★ → 7★
-- TIE Defender — 5★ → 7★
+- TIE Defender — 0★ → 7★
+- TIE Reaper — 0★ → 7★
 
 ## Malevolence
 
-**Capital ship:** Malevolence — 7★
+**Capital ship:** Malevolence — BRAK W CSV
 
 | Statek | ★ | Level | Gear | Status | Rola |
 |---|---:|---:|---:|---|---|
-| Vulture Droid | 4★ | 85 | G1 | 4★ → 7★ | CORE |
-| Hyena Bomber | 4★ | 85 | G1 | 4★ → 7★ | CORE |
-| Sun Fac's Geonosian Starfighter | 7★ | 85 | G1 | READY | CORE |
-| Geonosian Spy's Starfighter | 7★ | 85 | G1 | READY | CORE |
-| Geonosian Soldier's Starfighter | 7★ | 85 | G1 | READY | CORE |
-| Imperial TIE Bomber | 7★ | 85 | G1 | READY | REINFORCEMENT |
-| IG-2000 | 7★ | 85 | G1 | READY | REINFORCEMENT |
+| Vulture Droid | — | — | — | **BRAK W CSV** | CORE |
+| Hyena Bomber | — | — | — | **BRAK W CSV** | CORE |
+| Sun Fac's Geonosian Starfighter | — | — | — | **BRAK W CSV** | CORE |
+| Geonosian Spy's Starfighter | — | — | — | **BRAK W CSV** | CORE |
+| Geonosian Soldier's Starfighter | — | — | — | **BRAK W CSV** | CORE |
+| Imperial TIE Bomber | — | — | — | **BRAK W CSV** | REINFORCEMENT |
+| IG-2000 | — | — | — | **BRAK W CSV** | REINFORCEMENT |
 
-**Core poniżej 7★:** 2
-**Reinforcementy poniżej 7★:** 0
+**Core poniżej 7★:** 5
+**Reinforcementy poniżej 7★:** 2
 
 ### Braki CORE
-- **Hyena Bomber** — 4★ → 7★
-- **Vulture Droid** — 4★ → 7★
+- **Geonosian Soldier's Starfighter** — 0★ → 7★
+- **Geonosian Spy's Starfighter** — 0★ → 7★
+- **Hyena Bomber** — 0★ → 7★
+- **Sun Fac's Geonosian Starfighter** — 0★ → 7★
+- **Vulture Droid** — 0★ → 7★
+
+### Braki reinforcementów
+- IG-2000 — 0★ → 7★
+- Imperial TIE Bomber — 0★ → 7★
 
 ## Negotiator
 
-**Capital ship:** Negotiator — 7★
+**Capital ship:** Negotiator — BRAK W CSV
 
 | Statek | ★ | Level | Gear | Status | Rola |
 |---|---:|---:|---:|---|---|
-| Anakin's Eta-2 Starfighter | 7★ | 85 | G1 | READY | CORE |
-| Ahsoka Tano's Jedi Starfighter | 7★ | 85 | G1 | READY | CORE |
-| Umbaran Starfighter | 7★ | 85 | G1 | READY | CORE |
-| Clone Sergeant's ARC-170 | 7★ | 85 | G1 | READY | CORE |
-| Plo Koon's Jedi Starfighter | 7★ | 85 | G1 | READY | CORE |
-| Raven's Claw | 7★ | 85 | G1 | READY | REINFORCEMENT |
+| Anakin's Eta-2 Starfighter | — | — | — | **BRAK W CSV** | CORE |
+| Ahsoka Tano's Jedi Starfighter | — | — | — | **BRAK W CSV** | CORE |
+| Umbaran Starfighter | — | — | — | **BRAK W CSV** | CORE |
+| Clone Sergeant's ARC-170 | — | — | — | **BRAK W CSV** | CORE |
+| Plo Koon's Jedi Starfighter | — | — | — | **BRAK W CSV** | CORE |
+| Raven's Claw | — | — | — | **BRAK W CSV** | REINFORCEMENT |
 
-**Core poniżej 7★:** 0
-**Reinforcementy poniżej 7★:** 0
+**Core poniżej 7★:** 5
+**Reinforcementy poniżej 7★:** 1
 
-Wszystkie zdefiniowane statki tej floty są 7★.
+### Braki CORE
+- **Ahsoka Tano's Jedi Starfighter** — 0★ → 7★
+- **Anakin's Eta-2 Starfighter** — 0★ → 7★
+- **Clone Sergeant's ARC-170** — 0★ → 7★
+- **Plo Koon's Jedi Starfighter** — 0★ → 7★
+- **Umbaran Starfighter** — 0★ → 7★
+
+### Braki reinforcementów
+- Raven's Claw — 0★ → 7★
 
 ## Finalizer
 
-**Capital ship:** Finalizer — 7★
+**Capital ship:** Finalizer — BRAK W CSV
 
 | Statek | ★ | Level | Gear | Status | Rola |
 |---|---:|---:|---:|---|---|
-| First Order TIE Fighter | 7★ | 85 | G1 | READY | CORE |
-| First Order SF TIE Fighter | 7★ | 85 | G1 | READY | CORE |
-| TIE Silencer | 7★ | 85 | G1 | READY | CORE |
-| TIE Echelon | 6★ | 85 | G1 | 6★ → 7★ | CORE |
-| TIE/IN Interceptor Prototype | 5★ | 85 | G1 | 5★ → 7★ | REINFORCEMENT |
+| First Order TIE Fighter | — | — | — | **BRAK W CSV** | CORE |
+| First Order SF TIE Fighter | — | — | — | **BRAK W CSV** | CORE |
+| TIE Silencer | — | — | — | **BRAK W CSV** | CORE |
+| TIE Echelon | — | — | — | **BRAK W CSV** | CORE |
+| TIE/IN Interceptor Prototype | — | — | — | **BRAK W CSV** | REINFORCEMENT |
 
-**Core poniżej 7★:** 1
+**Core poniżej 7★:** 4
 **Reinforcementy poniżej 7★:** 1
 
 ### Braki CORE
-- **TIE Echelon** — 6★ → 7★
+- **First Order SF TIE Fighter** — 0★ → 7★
+- **First Order TIE Fighter** — 0★ → 7★
+- **TIE Echelon** — 0★ → 7★
+- **TIE Silencer** — 0★ → 7★
 
 ### Braki reinforcementów
-- TIE/IN Interceptor Prototype — 5★ → 7★
+- TIE/IN Interceptor Prototype — 0★ → 7★
 
 ## Raddus
 
-**Capital ship:** Raddus — 7★
+**Capital ship:** Raddus — BRAK W CSV
 
 | Statek | ★ | Level | Gear | Status | Rola |
 |---|---:|---:|---:|---|---|
-| Resistance X-wing | 7★ | 85 | G1 | READY | CORE |
-| Poe Dameron's X-wing | 7★ | 85 | G1 | READY | CORE |
-| MG-100 StarFortress SF-17 | 7★ | 85 | G1 | READY | CORE |
-| Rebel Y-wing | 7★ | 85 | G1 | READY | CORE |
-| Rogue One | 4★ | 85 | G1 | 4★ → 7★ | REINFORCEMENT |
+| Resistance X-wing | — | — | — | **BRAK W CSV** | CORE |
+| Poe Dameron's X-wing | — | — | — | **BRAK W CSV** | CORE |
+| MG-100 StarFortress SF-17 | — | — | — | **BRAK W CSV** | CORE |
+| Rebel Y-wing | — | — | — | **BRAK W CSV** | CORE |
+| Rogue One | — | — | — | **BRAK W CSV** | REINFORCEMENT |
 
-**Core poniżej 7★:** 0
-**Reinforcementy poniżej 7★:** 1
-
-### Braki reinforcementów
-- Rogue One — 4★ → 7★
-
-## Home One
-
-**Capital ship:** Home One — 7★
-
-| Statek | ★ | Level | Gear | Status | Rola |
-|---|---:|---:|---:|---|---|
-| Han's Millennium Falcon | 7★ | 85 | G1 | READY | CORE |
-| Biggs Darklighter's X-wing | 7★ | 85 | G1 | READY | CORE |
-| Wedge Antilles's X-wing | 7★ | 85 | G1 | READY | CORE |
-| Bistan's U-wing | 7★ | 85 | G1 | READY | CORE |
-| Rebel Y-wing | 7★ | 85 | G1 | READY | CORE |
-| Ghost | 7★ | 85 | G1 | READY | REINFORCEMENT |
-| Phantom II | 7★ | 85 | G1 | READY | REINFORCEMENT |
-
-**Core poniżej 7★:** 0
-**Reinforcementy poniżej 7★:** 0
-
-Wszystkie zdefiniowane statki tej floty są 7★.
-
-## Chimaera
-
-**Capital ship:** Chimaera — 7★
-
-| Statek | ★ | Level | Gear | Status | Rola |
-|---|---:|---:|---:|---|---|
-| Hound's Tooth | 7★ | 85 | G1 | READY | CORE |
-| TIE Defender | 5★ | 85 | G1 | 5★ → 7★ | CORE |
-| Imperial TIE Bomber | 7★ | 85 | G1 | READY | CORE |
-| Imperial TIE Fighter | 7★ | 85 | G1 | READY | CORE |
-| TIE Advanced x1 | 7★ | 85 | G1 | READY | CORE |
-| TIE Reaper | 4★ | 85 | G1 | 4★ → 7★ | REINFORCEMENT |
-
-**Core poniżej 7★:** 1
+**Core poniżej 7★:** 4
 **Reinforcementy poniżej 7★:** 1
 
 ### Braki CORE
-- **TIE Defender** — 5★ → 7★
+- **MG-100 StarFortress SF-17** — 0★ → 7★
+- **Poe Dameron's X-wing** — 0★ → 7★
+- **Rebel Y-wing** — 0★ → 7★
+- **Resistance X-wing** — 0★ → 7★
 
 ### Braki reinforcementów
-- TIE Reaper — 4★ → 7★
+- Rogue One — 0★ → 7★
 
-## Endurance
+## Home One
 
-**Capital ship:** Endurance — 7★
+**Capital ship:** Home One — BRAK W CSV
 
 | Statek | ★ | Level | Gear | Status | Rola |
 |---|---:|---:|---:|---|---|
-| Raven's Claw | 7★ | 85 | G1 | READY | CORE |
-| Plo Koon's Jedi Starfighter | 7★ | 85 | G1 | READY | CORE |
-| Anakin's Eta-2 Starfighter | 7★ | 85 | G1 | READY | CORE |
-| Ahsoka Tano's Jedi Starfighter | 7★ | 85 | G1 | READY | CORE |
-| Clone Sergeant's ARC-170 | 7★ | 85 | G1 | READY | REINFORCEMENT |
-| Umbaran Starfighter | 7★ | 85 | G1 | READY | REINFORCEMENT |
+| Han's Millennium Falcon | — | — | — | **BRAK W CSV** | CORE |
+| Biggs Darklighter's X-wing | — | — | — | **BRAK W CSV** | CORE |
+| Wedge Antilles's X-wing | — | — | — | **BRAK W CSV** | CORE |
+| Bistan's U-wing | — | — | — | **BRAK W CSV** | CORE |
+| Rebel Y-wing | — | — | — | **BRAK W CSV** | CORE |
+| Ghost | — | — | — | **BRAK W CSV** | REINFORCEMENT |
+| Phantom II | — | — | — | **BRAK W CSV** | REINFORCEMENT |
 
-**Core poniżej 7★:** 0
-**Reinforcementy poniżej 7★:** 0
+**Core poniżej 7★:** 5
+**Reinforcementy poniżej 7★:** 2
 
-Wszystkie zdefiniowane statki tej floty są 7★.
+### Braki CORE
+- **Biggs Darklighter's X-wing** — 0★ → 7★
+- **Bistan's U-wing** — 0★ → 7★
+- **Han's Millennium Falcon** — 0★ → 7★
+- **Rebel Y-wing** — 0★ → 7★
+- **Wedge Antilles's X-wing** — 0★ → 7★
+
+### Braki reinforcementów
+- Ghost — 0★ → 7★
+- Phantom II — 0★ → 7★
+
+## Chimaera
+
+**Capital ship:** Chimaera — BRAK W CSV
+
+| Statek | ★ | Level | Gear | Status | Rola |
+|---|---:|---:|---:|---|---|
+| Hound's Tooth | — | — | — | **BRAK W CSV** | CORE |
+| TIE Defender | — | — | — | **BRAK W CSV** | CORE |
+| Imperial TIE Bomber | — | — | — | **BRAK W CSV** | CORE |
+| Imperial TIE Fighter | — | — | — | **BRAK W CSV** | CORE |
+| TIE Advanced x1 | — | — | — | **BRAK W CSV** | CORE |
+| TIE Reaper | — | — | — | **BRAK W CSV** | REINFORCEMENT |
+
+**Core poniżej 7★:** 5
+**Reinforcementy poniżej 7★:** 1
+
+### Braki CORE
+- **Hound's Tooth** — 0★ → 7★
+- **Imperial TIE Bomber** — 0★ → 7★
+- **Imperial TIE Fighter** — 0★ → 7★
+- **TIE Advanced x1** — 0★ → 7★
+- **TIE Defender** — 0★ → 7★
+
+### Braki reinforcementów
+- TIE Reaper — 0★ → 7★
+
+## Endurance
+
+**Capital ship:** Endurance — BRAK W CSV
+
+| Statek | ★ | Level | Gear | Status | Rola |
+|---|---:|---:|---:|---|---|
+| Raven's Claw | — | — | — | **BRAK W CSV** | CORE |
+| Plo Koon's Jedi Starfighter | — | — | — | **BRAK W CSV** | CORE |
+| Anakin's Eta-2 Starfighter | — | — | — | **BRAK W CSV** | CORE |
+| Ahsoka Tano's Jedi Starfighter | — | — | — | **BRAK W CSV** | CORE |
+| Clone Sergeant's ARC-170 | — | — | — | **BRAK W CSV** | REINFORCEMENT |
+| Umbaran Starfighter | — | — | — | **BRAK W CSV** | REINFORCEMENT |
+
+**Core poniżej 7★:** 4
+**Reinforcementy poniżej 7★:** 2
+
+### Braki CORE
+- **Ahsoka Tano's Jedi Starfighter** — 0★ → 7★
+- **Anakin's Eta-2 Starfighter** — 0★ → 7★
+- **Plo Koon's Jedi Starfighter** — 0★ → 7★
+- **Raven's Claw** — 0★ → 7★
+
+### Braki reinforcementów
+- Clone Sergeant's ARC-170 — 0★ → 7★
+- Umbaran Starfighter — 0★ → 7★
 
 ## Profundity
 
@@ -176,17 +228,21 @@ Wszystkie zdefiniowane statki tej floty są 7★.
 
 | Statek | ★ | Level | Gear | Status | Rola |
 |---|---:|---:|---:|---|---|
-| Outrider | 6★ | 85 | G1 | 6★ → 7★ | CORE |
-| Bistan's U-wing | 7★ | 85 | G1 | READY | CORE |
-| Rebel Y-wing | 7★ | 85 | G1 | READY | CORE |
-| Wedge Antilles's X-wing | 7★ | 85 | G1 | READY | CORE |
-| Biggs Darklighter's X-wing | 7★ | 85 | G1 | READY | CORE |
+| Outrider | — | — | — | **BRAK W CSV** | CORE |
+| Bistan's U-wing | — | — | — | **BRAK W CSV** | CORE |
+| Rebel Y-wing | — | — | — | **BRAK W CSV** | CORE |
+| Wedge Antilles's X-wing | — | — | — | **BRAK W CSV** | CORE |
+| Biggs Darklighter's X-wing | — | — | — | **BRAK W CSV** | CORE |
 
-**Core poniżej 7★:** 1
+**Core poniżej 7★:** 5
 **Reinforcementy poniżej 7★:** 0
 
 ### Braki CORE
-- **Outrider** — 6★ → 7★
+- **Biggs Darklighter's X-wing** — 0★ → 7★
+- **Bistan's U-wing** — 0★ → 7★
+- **Outrider** — 0★ → 7★
+- **Rebel Y-wing** — 0★ → 7★
+- **Wedge Antilles's X-wing** — 0★ → 7★
 
 ## Leviathan
 
@@ -194,22 +250,23 @@ Wszystkie zdefiniowane statki tej floty są 7★.
 
 | Statek | ★ | Level | Gear | Status | Rola |
 |---|---:|---:|---:|---|---|
-| Mark VI Interceptor | 5★ | 85 | G1 | 5★ → 7★ | CORE |
-| TIE Dagger | 5★ | 85 | G1 | 5★ → 7★ | CORE |
-| Sith Fighter | 4★ | 85 | G1 | 4★ → 7★ | CORE |
-| Ebon Hawk | 7★ | 85 | G1 | READY | CORE |
-| TIE Reaper | 4★ | 85 | G1 | 4★ → 7★ | REINFORCEMENT |
+| Mark VI Interceptor | — | — | — | **BRAK W CSV** | CORE |
+| TIE Dagger | — | — | — | **BRAK W CSV** | CORE |
+| Sith Fighter | — | — | — | **BRAK W CSV** | CORE |
+| Ebon Hawk | — | — | — | **BRAK W CSV** | CORE |
+| TIE Reaper | — | — | — | **BRAK W CSV** | REINFORCEMENT |
 
-**Core poniżej 7★:** 3
+**Core poniżej 7★:** 4
 **Reinforcementy poniżej 7★:** 1
 
 ### Braki CORE
-- **Sith Fighter** — 4★ → 7★
-- **Mark VI Interceptor** — 5★ → 7★
-- **TIE Dagger** — 5★ → 7★
+- **Ebon Hawk** — 0★ → 7★
+- **Mark VI Interceptor** — 0★ → 7★
+- **Sith Fighter** — 0★ → 7★
+- **TIE Dagger** — 0★ → 7★
 
 ### Braki reinforcementów
-- TIE Reaper — 4★ → 7★
+- TIE Reaper — 0★ → 7★
 
 ## Statki związane z Journey
 
@@ -217,87 +274,101 @@ Wszystkie zdefiniowane statki tej floty są 7★.
 
 | Statek | ★ | Status |
 |---|---:|---|
-| Razor Crest | 7★ | READY |
+| Razor Crest | — | BRAK W CSV |
 | Slave I | — | BRAK W CSV |
-| IG-2000 | 7★ | READY |
-| Hound's Tooth | 7★ | READY |
-| TIE Advanced x1 | 7★ | READY |
-| Imperial TIE Bomber | 7★ | READY |
-| Imperial TIE Fighter | 7★ | READY |
+| IG-2000 | — | BRAK W CSV |
+| Hound's Tooth | — | BRAK W CSV |
+| TIE Advanced x1 | — | BRAK W CSV |
+| Imperial TIE Bomber | — | BRAK W CSV |
+| Imperial TIE Fighter | — | BRAK W CSV |
 
 **Braki:**
+- Hound's Tooth — 0★ → 7★
+- IG-2000 — 0★ → 7★
+- Imperial TIE Bomber — 0★ → 7★
+- Imperial TIE Fighter — 0★ → 7★
+- Razor Crest — 0★ → 7★
 - Slave I — 0★ → 7★
+- TIE Advanced x1 — 0★ → 7★
 
 ### Profundity
 
 | Statek | ★ | Status |
 |---|---:|---|
-| Outrider | 6★ | 6★ → 7★ |
-| Bistan's U-wing | 7★ | READY |
-| Wedge Antilles's X-wing | 7★ | READY |
-| Biggs Darklighter's X-wing | 7★ | READY |
-| Rebel Y-wing | 7★ | READY |
+| Outrider | — | BRAK W CSV |
+| Bistan's U-wing | — | BRAK W CSV |
+| Wedge Antilles's X-wing | — | BRAK W CSV |
+| Biggs Darklighter's X-wing | — | BRAK W CSV |
+| Rebel Y-wing | — | BRAK W CSV |
 
 **Braki:**
-- Outrider — 6★ → 7★
+- Biggs Darklighter's X-wing — 0★ → 7★
+- Bistan's U-wing — 0★ → 7★
+- Outrider — 0★ → 7★
+- Rebel Y-wing — 0★ → 7★
+- Wedge Antilles's X-wing — 0★ → 7★
 
 ### Leviathan
 
 | Statek | ★ | Status |
 |---|---:|---|
-| Mark VI Interceptor | 5★ | 5★ → 7★ |
-| TIE Dagger | 5★ | 5★ → 7★ |
+| Mark VI Interceptor | — | BRAK W CSV |
+| TIE Dagger | — | BRAK W CSV |
 | B-28 Extinction-class Bomber | — | BRAK W CSV |
-| Scimitar | 7★ | READY |
-| Sith Fighter | 4★ | 4★ → 7★ |
-| Ebon Hawk | 7★ | READY |
+| Scimitar | — | BRAK W CSV |
+| Sith Fighter | — | BRAK W CSV |
+| Ebon Hawk | — | BRAK W CSV |
 
 **Braki:**
 - B-28 Extinction-class Bomber — 0★ → 7★
-- Sith Fighter — 4★ → 7★
-- Mark VI Interceptor — 5★ → 7★
-- TIE Dagger — 5★ → 7★
+- Ebon Hawk — 0★ → 7★
+- Mark VI Interceptor — 0★ → 7★
+- Scimitar — 0★ → 7★
+- Sith Fighter — 0★ → 7★
+- TIE Dagger — 0★ → 7★
 
 ## Statki używane przez wiele flot
 
 | Statek | ★ | Floty |
 |---|---:|---|
-| Imperial TIE Bomber | 7★ | Executor, Malevolence, Chimaera |
-| Rebel Y-wing | 7★ | Raddus, Home One, Profundity |
-| TIE Reaper | 4★ | Executor, Chimaera, Leviathan |
-| Ahsoka Tano's Jedi Starfighter | 7★ | Negotiator, Endurance |
-| Anakin's Eta-2 Starfighter | 7★ | Negotiator, Endurance |
-| Biggs Darklighter's X-wing | 7★ | Home One, Profundity |
-| Bistan's U-wing | 7★ | Home One, Profundity |
-| Clone Sergeant's ARC-170 | 7★ | Negotiator, Endurance |
-| Hound's Tooth | 7★ | Executor, Chimaera |
-| Imperial TIE Fighter | 7★ | Executor, Chimaera |
-| Plo Koon's Jedi Starfighter | 7★ | Negotiator, Endurance |
-| Raven's Claw | 7★ | Negotiator, Endurance |
-| TIE Advanced x1 | 7★ | Executor, Chimaera |
-| TIE Defender | 5★ | Executor, Chimaera |
-| Umbaran Starfighter | 7★ | Negotiator, Endurance |
-| Wedge Antilles's X-wing | 7★ | Home One, Profundity |
+| Imperial TIE Bomber | — | Executor, Malevolence, Chimaera |
+| Rebel Y-wing | — | Raddus, Home One, Profundity |
+| TIE Reaper | — | Executor, Chimaera, Leviathan |
+| Ahsoka Tano's Jedi Starfighter | — | Negotiator, Endurance |
+| Anakin's Eta-2 Starfighter | — | Negotiator, Endurance |
+| Biggs Darklighter's X-wing | — | Home One, Profundity |
+| Bistan's U-wing | — | Home One, Profundity |
+| Clone Sergeant's ARC-170 | — | Negotiator, Endurance |
+| Hound's Tooth | — | Executor, Chimaera |
+| Imperial TIE Fighter | — | Executor, Chimaera |
+| Plo Koon's Jedi Starfighter | — | Negotiator, Endurance |
+| Raven's Claw | — | Negotiator, Endurance |
+| TIE Advanced x1 | — | Executor, Chimaera |
+| TIE Defender | — | Executor, Chimaera |
+| Umbaran Starfighter | — | Negotiator, Endurance |
+| Wedge Antilles's X-wing | — | Home One, Profundity |
 
 ## Statki <7★
 
 | Statek | ★ | Level | Gear |
 |---|---:|---:|---:|
-| BTL-B Y-wing Starfighter | 4★ | 85 | G1 |
-| Hyena Bomber | 4★ | 85 | G1 |
-| Rogue One | 4★ | 85 | G1 |
-| Sith Fighter | 4★ | 85 | G1 |
-| TIE Reaper | 4★ | 85 | G1 |
-| Vulture Droid | 4★ | 85 | G1 |
-| Mark VI Interceptor | 5★ | 85 | G1 |
-| Punishing One | 5★ | 85 | G1 |
-| TIE Dagger | 5★ | 85 | G1 |
-| TIE Defender | 5★ | 85 | G1 |
-| TIE/IN Interceptor Prototype | 5★ | 85 | G1 |
-| Marauder | 6★ | 85 | G1 |
-| Outrider | 6★ | 85 | G1 |
-| Rebel B-wing | 6★ | 85 | G1 |
-| TIE Echelon | 6★ | 85 | G1 |
+| EMPERORSSHUTTLE | 4★ | 85 | G1 |
+| HYENABOMBER | 4★ | 85 | G1 |
+| ROGUEONESHIP | 4★ | 85 | G1 |
+| SITHBOMBER | 4★ | 85 | G1 |
+| SITHFIGHTER | 4★ | 85 | G1 |
+| TIEREAPER | 4★ | 85 | G1 |
+| VULTUREDROID | 4★ | 85 | G1 |
+| YWINGCLONEWARS | 4★ | 85 | G1 |
+| PUNISHINGONE | 5★ | 85 | G1 |
+| SITHSUPREMACYCLASS | 5★ | 85 | G1 |
+| TIEDAGGER | 5★ | 85 | G1 |
+| TIEDEFENDER | 5★ | 85 | G1 |
+| TIEINTERCEPTOR | 5★ | 85 | G1 |
+| BWINGREBEL | 6★ | 85 | G1 |
+| FIRSTORDERTIEECHELON | 6★ | 85 | G1 |
+| MARAUDER | 6★ | 85 | G1 |
+| OUTRIDER | 6★ | 85 | G1 |
 
 ## Uwagi
 

@@ -6,27 +6,27 @@
 
 | ID | Przedmiot | Wymagane | Posiadane | Brakuje |
 |---|---|---:|---:|---:|
-| `172Salvage` | Mk 7 Kyrotech Shock Prod Prototype Salvage | 150 | 8 | **142** |
-| `129Salvage` | Mk 8 BioTech Implant Salvage | 120 | 38 | **82** |
-| `152Salvage` | Mk 6 Athakam Medpac Salvage | 80 | 0 | **80** |
-| `108Salvage` | Mk 3 Carbanti Sensor Array Salvage | 100 | 28 | **72** |
-| `168PrototypeSalvage_V2` | Mk 12 Czerka Stun Cuffs Prototype Salvage | 80 | 15 | **65** |
-| `168PrototypeSalvage` | Mk 12 ArmaTek Fusion Furnace Prototype Salvage | 100 | 45 | **55** |
-| `123Component` | Mk 8 Neuro-Saav Electrobinoculars Component | 50 | 4 | **46** |
-| `170PrototypeSalvage` | Mk 12 ArmaTek Holo Lens Prototype Salvage | 50 | 8 | **42** |
-| `148Salvage` | Mk 7 Nubian Design Tech Salvage | 40 | 2 | **38** |
-| `147Salvage` | Mk 8 Nubian Security Scanner Salvage | 40 | 7 | **33** |
-| `158PrototypeSalvage` | Mk 12 ArmaTek Multi-tool Prototype Salvage | 30 | 0 | **30** |
-| `120PrototypeSalvage` | Mk 5 Merr-Sonn Thermal Detonator Prototype Salvage | 50 | 32 | **18** |
-| `173Salvage` | Mk 9 Kyrotech Battle Computer Prototype Salvage | 50 | 34 | **16** |
-| `RM_002` | Incomplete Signal Data | 65 | 49 | **16** |
-| `150Salvage` | Mk 4 Zaltin Bacta Gel Salvage | 50 | 37 | **13** |
-| `159PrototypeSalvage` | Mk 12 ArmaTek Armor Plating Prototype Salvage | 30 | 17 | **13** |
-| `153Salvage` | Mk 9 BioTech Implant Salvage | 50 | 40 | **10** |
-| `RM_003` | Flawed Signal Data | 15 | 7 | **8** |
-| `144Salvage` | Mk 6 Merr-Sonn Thermal Detonator Salvage | 50 | 45 | **5** |
-| `151Salvage` | Mk 7 Chiewab Hypo Syringe Salvage | 40 | 35 | **5** |
-| `160PrototypeSalvage` | Mk 12 ArmaTek Bayonet Prototype Salvage | 30 | 26 | **4** |
+| `172Salvage` | 172Salvage | 150 | 8 | **142** |
+| `129Salvage` | 129Salvage | 120 | 38 | **82** |
+| `152Salvage` | 152Salvage | 80 | 0 | **80** |
+| `108Salvage` | 108Salvage | 100 | 28 | **72** |
+| `168PrototypeSalvage_V2` | 168PrototypeSalvage_V2 | 80 | 15 | **65** |
+| `168PrototypeSalvage` | 168PrototypeSalvage | 100 | 45 | **55** |
+| `123Component` | 123Component | 50 | 4 | **46** |
+| `170PrototypeSalvage` | 170PrototypeSalvage | 50 | 8 | **42** |
+| `148Salvage` | 148Salvage | 40 | 2 | **38** |
+| `147Salvage` | 147Salvage | 40 | 7 | **33** |
+| `158PrototypeSalvage` | 158PrototypeSalvage | 30 | 0 | **30** |
+| `120PrototypeSalvage` | 120PrototypeSalvage | 50 | 32 | **18** |
+| `173Salvage` | 173Salvage | 50 | 34 | **16** |
+| `RM_002` | RM_002 | 65 | 49 | **16** |
+| `150Salvage` | 150Salvage | 50 | 37 | **13** |
+| `159PrototypeSalvage` | 159PrototypeSalvage | 30 | 17 | **13** |
+| `153Salvage` | 153Salvage | 50 | 40 | **10** |
+| `RM_003` | RM_003 | 15 | 7 | **8** |
+| `144Salvage` | 144Salvage | 50 | 45 | **5** |
+| `151Salvage` | 151Salvage | 40 | 35 | **5** |
+| `160PrototypeSalvage` | 160PrototypeSalvage | 30 | 26 | **4** |
 
 ## Szczegóły
 
@@ -36,53 +36,53 @@ Gear: **G10 → G13** Relic: **R1 → R5**
 
 #### Bezpośredni wymagany gear
 
-- `129` × 1 — Mk 8 BioTech Implant
-- `134` × 1 — Mk 9 BAW Armor Mod
-- `142` × 1 — Mk 6 A/KT Stun Gun
-- `144` × 1 — Mk 6 Merr-Sonn Thermal Detonator
-- `146` × 1 — Mk 10 Neuro-Saav Electrobinoculars
-- `158` × 1 — Mk 12 ArmaTek Multi-tool
-- `159` × 1 — Mk 12 ArmaTek Armor Plating
-- `160` × 1 — Mk 12 ArmaTek Bayonet
-- `168` × 2 — Mk 12 ArmaTek Fusion Furnace
-- `174` × 1 — Mk 7 Kyrotech Power Converter
-- `G12Finisher_JARJARBINKS_C` × 1 — Power Cell Injector (Ionic) - Jar Jar Binks
+- `129` × 1 — 129
+- `134` × 1 — 134
+- `142` × 1 — 142
+- `144` × 1 — 144
+- `146` × 1 — 146
+- `158` × 1 — 158
+- `159` × 1 — 159
+- `160` × 1 — 160
+- `168` × 2 — 168
+- `174` × 1 — 174
+- `G12Finisher_JARJARBINKS_C` × 1 — G12Finisher_JARJARBINKS_C
 
 #### Materiały relic
 
-- `SCV_001` × 120 — Carbonite Circuit Board
-- `SCV_002` × 160 — Bronzium Wiring
-- `RM_001` × 75 — Fragmented Signal Data
-- `SCV_003` × 90 — Chromium Transistor
-- `RM_002` × 65 — Incomplete Signal Data
-- `SCV_004` × 20 — Aurodium Heatsink
-- `RM_003` × 15 — Flawed Signal Data
+- `SCV_001` × 120 — SCV_001
+- `SCV_002` × 160 — SCV_002
+- `RM_001` × 75 — RM_001
+- `SCV_003` × 90 — SCV_003
+- `RM_002` × 65 — RM_002
+- `SCV_004` × 20 — SCV_004
+- `RM_003` × 15 — RM_003
 
 #### Braki
 
 | ID | Przedmiot | Brakuje |
 |---|---|---:|
-| `172Salvage` | Mk 7 Kyrotech Shock Prod Prototype Salvage | **142** |
-| `129Salvage` | Mk 8 BioTech Implant Salvage | **82** |
-| `152Salvage` | Mk 6 Athakam Medpac Salvage | **80** |
-| `108Salvage` | Mk 3 Carbanti Sensor Array Salvage | **72** |
-| `168PrototypeSalvage_V2` | Mk 12 Czerka Stun Cuffs Prototype Salvage | **65** |
-| `168PrototypeSalvage` | Mk 12 ArmaTek Fusion Furnace Prototype Salvage | **55** |
-| `123Component` | Mk 8 Neuro-Saav Electrobinoculars Component | **46** |
-| `170PrototypeSalvage` | Mk 12 ArmaTek Holo Lens Prototype Salvage | **42** |
-| `148Salvage` | Mk 7 Nubian Design Tech Salvage | **38** |
-| `147Salvage` | Mk 8 Nubian Security Scanner Salvage | **33** |
-| `158PrototypeSalvage` | Mk 12 ArmaTek Multi-tool Prototype Salvage | **30** |
-| `120PrototypeSalvage` | Mk 5 Merr-Sonn Thermal Detonator Prototype Salvage | **18** |
-| `173Salvage` | Mk 9 Kyrotech Battle Computer Prototype Salvage | **16** |
-| `RM_002` | Incomplete Signal Data | **16** |
-| `150Salvage` | Mk 4 Zaltin Bacta Gel Salvage | **13** |
-| `159PrototypeSalvage` | Mk 12 ArmaTek Armor Plating Prototype Salvage | **13** |
-| `153Salvage` | Mk 9 BioTech Implant Salvage | **10** |
-| `RM_003` | Flawed Signal Data | **8** |
-| `144Salvage` | Mk 6 Merr-Sonn Thermal Detonator Salvage | **5** |
-| `151Salvage` | Mk 7 Chiewab Hypo Syringe Salvage | **5** |
-| `160PrototypeSalvage` | Mk 12 ArmaTek Bayonet Prototype Salvage | **4** |
+| `172Salvage` | 172Salvage | **142** |
+| `129Salvage` | 129Salvage | **82** |
+| `152Salvage` | 152Salvage | **80** |
+| `108Salvage` | 108Salvage | **72** |
+| `168PrototypeSalvage_V2` | 168PrototypeSalvage_V2 | **65** |
+| `168PrototypeSalvage` | 168PrototypeSalvage | **55** |
+| `123Component` | 123Component | **46** |
+| `170PrototypeSalvage` | 170PrototypeSalvage | **42** |
+| `148Salvage` | 148Salvage | **38** |
+| `147Salvage` | 147Salvage | **33** |
+| `158PrototypeSalvage` | 158PrototypeSalvage | **30** |
+| `120PrototypeSalvage` | 120PrototypeSalvage | **18** |
+| `173Salvage` | 173Salvage | **16** |
+| `RM_002` | RM_002 | **16** |
+| `150Salvage` | 150Salvage | **13** |
+| `159PrototypeSalvage` | 159PrototypeSalvage | **13** |
+| `153Salvage` | 153Salvage | **10** |
+| `RM_003` | RM_003 | **8** |
+| `144Salvage` | 144Salvage | **5** |
+| `151Salvage` | 151Salvage | **5** |
+| `160PrototypeSalvage` | 160PrototypeSalvage | **4** |
 
 ## Informacje techniczne
 
