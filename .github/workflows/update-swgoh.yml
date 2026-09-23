@@ -472,11 +472,20 @@ jobs:
           )
 
 
-          localization = json.loads(
-              raw.decode(
-                  "utf-8"
-              )
-          )
+print("=== DEBUG LOCALIZATION ===")
+print("TOP LEVEL KEYS:", list(localization.keys()))
+
+for key, value in localization.items():
+    print("KEY:", key, "TYPE:", type(value).__name__)
+    if isinstance(value, list):
+        print("LIST LENGTH:", len(value))
+        if value:
+            print("FIRST ITEM:", value[0])
+    elif isinstance(value, dict):
+        print("DICT KEYS:", list(value.keys())[:20])
+        print("DICT SAMPLE:", list(value.items())[:3])
+
+print("=== END DEBUG ===")
 
 
           if not isinstance(
