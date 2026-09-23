@@ -60,8 +60,17 @@ jobs:
           rows = []
 
           for unit in player.get("rosterUnit", []):
-              definition_id = unit.get("definitionId", "")
-              base_id = definition_id.split(":", 1)[0]
+              base_id = ""
+
+              for skill in unit.get("skill", []):
+                  skill_id = skill.get("id", "")
+
+                  if skill_id.startswith("basicskill_"):
+                      base_id = skill_id.replace(
+                          "basicskill_",
+                          ""
+                      )
+                      break
 
               game_unit = units.get(base_id, {})
 
@@ -71,14 +80,32 @@ jobs:
               rows.append({
                   "name": base_id,
                   "baseId": base_id,
-                  "definitionId": definition_id,
-                  "id": unit.get("id", ""),
-                  "rarity": unit.get("currentRarity", ""),
-                  "level": unit.get("currentLevel", ""),
-                  "gearTier": unit.get("currentTier", ""),
+                  "definitionId": unit.get(
+                      "definitionId",
+                      ""
+                  ),
+                  "id": unit.get(
+                      "id",
+                      ""
+                  ),
+                  "rarity": unit.get(
+                      "currentRarity",
+                      ""
+                  ),
+                  "level": unit.get(
+                      "currentLevel",
+                      ""
+                  ),
+                  "gearTier": unit.get(
+                      "currentTier",
+                      ""
+                  ),
                   "relicTier": (
                       unit.get("relic") or {}
-                  ).get("currentTier", "")
+                  ).get(
+                      "currentTier",
+                      ""
+                  )
               })
 
           fields = [
@@ -102,6 +129,7 @@ jobs:
                   f,
                   fieldnames=fields
               )
+
               writer.writeheader()
               writer.writerows(rows)
 
@@ -130,10 +158,6 @@ jobs:
               open("localization.json", encoding="utf-8")
           )
 
-          # ------------------------------------------------------------
-          # Localization
-          # ------------------------------------------------------------
-
           bundle = base64.b64decode(
               localization["localizationBundle"]
           )
@@ -156,10 +180,6 @@ jobs:
                   key, value = line.split("|", 1)
                   names[key] = value
 
-          # ------------------------------------------------------------
-          # Game units indexed by baseId
-          # ------------------------------------------------------------
-
           units = {}
 
           for unit in game.get("units", []):
@@ -168,24 +188,20 @@ jobs:
               if base_id:
                   units[base_id] = unit
 
-          # ------------------------------------------------------------
-          # Generate ship list
-          #
-          # IMPORTANT:
-          # Use definitionId as the authoritative source of the
-          # player's unit identity.
-          #
-          # Example:
-          #   definitionId = "SLAVE1:SEVEN_STAR"
-          #   base_id       = "SLAVE1"
-          #
-          # Do NOT derive ship identity from basicskill_... because
-          # some ships do not expose that skill in a reliable way.
-          # ------------------------------------------------------------
-
           ships = []
 
           for unit in player.get("rosterUnit", []):
+
+              # --------------------------------------------------------
+              # IMPORTANT:
+              # Ship identity is taken from definitionId.
+              #
+              # Example:
+              # SLAVE1:SEVEN_STAR -> SLAVE1
+              #
+              # This replaces the old basicskill_ detection, which
+              # failed to identify at least one owned ship.
+              # --------------------------------------------------------
 
               definition_id = unit.get(
                   "definitionId",
@@ -249,10 +265,6 @@ jobs:
                   )
               })
 
-          # ------------------------------------------------------------
-          # Write CSV
-          # ------------------------------------------------------------
-
           fields = [
               "name",
               "definitionId",
@@ -270,7 +282,6 @@ jobs:
               newline="",
               encoding="utf-8"
           ) as f:
-
               writer = csv.DictWriter(
                   f,
                   fieldnames=fields
@@ -279,34 +290,11 @@ jobs:
               writer.writeheader()
               writer.writerows(ships)
 
-          # ------------------------------------------------------------
-          # Diagnostics
-          # ------------------------------------------------------------
-
-          print("")
-          print("========================================")
           print("Wygenerowano ships.csv")
           print("Liczba statków:", len(ships))
-          print("========================================")
-          print("")
-
-          print("Pierwsze statki:")
-
-          for ship in ships[:10]:
-              print(
-                  ship["name"],
-                  "|",
-                  ship["baseId"],
-                  "|",
-                  ship["definitionId"],
-                  "|",
-                  ship["rarity"],
-                  "★"
-              )
 
           print("")
           print("Kontrola kluczowych statków:")
-          print("")
 
           important_ships = [
               "SLAVE1",
@@ -377,8 +365,6 @@ jobs:
                   "★:",
                   star_counts[rarity]
               )
-
-          print("")
           PY
 
           python generate_ships.py
