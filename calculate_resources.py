@@ -199,32 +199,105 @@ def debug_find_item(data, target_id):
 
 def get_localized_names(localization):
     """
-    Builds a localization dictionary from the localization bundle when
-    possible. The calculator does not depend on localization being complete.
+    Builds a localization dictionary.
+
+    Current swgoh-utils/gamedata localization format is:
+
+        {
+            "version": "...",
+            "data": {
+                "LOCALIZATION_KEY": "Localized text",
+                ...
+            }
+        }
+
+    Older Comlink responses may instead use:
+        - localization
+        - localizationBundle
+
+    The calculator supports all three formats.
     """
     names = {}
 
     if not isinstance(localization, dict):
         return names
 
-    # Current gamedata format: direct JSON from
-    # Loc_ENG_US.txt.json.br
+    # ------------------------------------------------------------
+    # CURRENT GAMEDATA FORMAT
+    #
+    # Loc_ENG_US.txt.json.br decompresses to:
+    #
+    # {
+    #     "version": "...",
+    #     "data": {
+    #         "KEY": "Value"
+    #     }
+    # }
+    # ------------------------------------------------------------
+
+    data = localization.get("data")
+
+    if isinstance(data, dict):
+
+        for key, value in data.items():
+
+            if isinstance(value, str):
+                names[key] = value
+
+        if names:
+            return names
+
+    # ------------------------------------------------------------
+    # Alternative / older format:
+    #
+    # {
+    #     "localization": {
+    #         "KEY": "Value"
+    #     }
+    # }
+    # ------------------------------------------------------------
+
     direct = localization.get("localization")
 
     if isinstance(direct, dict):
+
         for key, value in direct.items():
+
             if isinstance(value, str):
                 names[key] = value
 
-    if not names:
-        for key, value in localization.items():
-            if isinstance(value, str):
-                names[key] = value
+        if names:
+            return names
+
+    # ------------------------------------------------------------
+    # Very old/simple JSON format:
+    #
+    # {
+    #     "KEY": "Value",
+    #     ...
+    # }
+    #
+    # Do not treat "version" itself as a localization entry.
+    # ------------------------------------------------------------
+
+    for key, value in localization.items():
+
+        if key == "version":
+            continue
+
+        if isinstance(value, str):
+            names[key] = value
 
     if names:
         return names
 
+    # ------------------------------------------------------------
     # Legacy Comlink format.
+    #
+    # localizationBundle = base64 encoded ZIP containing
+    # Loc_ENG_US.txt
+    # ------------------------------------------------------------
+
     bundle = localization.get("localizationBundle")
 
     if not bundle:
@@ -236,13 +309,18 @@ def get_localized_names(localization):
         import zipfile
 
         raw = base64.b64decode(bundle)
-        z = zipfile.ZipFile(io.BytesIO(raw))
+
+        z = zipfile.ZipFile(
+            io.BytesIO(raw)
+        )
 
         filename = "Loc_ENG_US.txt"
 
         if filename not in z.namelist():
+
             candidates = [
-                x for x in z.namelist()
+                x
+                for x in z.namelist()
                 if x.lower().endswith(".txt")
             ]
 
@@ -262,6 +340,7 @@ def get_localized_names(localization):
                 continue
 
             key, value = line.split("|", 1)
+
             names[key] = value
 
     except Exception:
@@ -274,18 +353,34 @@ def localized_name(item_id, names, equipment=None):
     """
     Returns a human-readable item name.
 
-    First tries direct localization keys.
+    Resolution order:
 
-    If no direct localization key exists, uses the authoritative
-    nameKey from the equipment definition in data.json and resolves
-    it through the English localization bundle.
-
-    If that also fails, returns the technical item ID rather than
-    inventing a name.
+    1. Direct localization key matching item_id.
+    2. equipment[item_id]["nameKey"] -> localization.
+    3. Optional name/displayName fields in equipment.
+    4. Common fallback localization key formats.
+    5. Technical item ID as final fallback.
     """
 
+    # ------------------------------------------------------------
+    # 1. Direct localization key.
+    #
+    # This is important for IDs such as:
+    # 172Salvage
+    # 129Salvage
+    # 152Salvage
+    # ------------------------------------------------------------
+
     if item_id in names:
-        return names[item_id]
+
+        value = names[item_id]
+
+        if isinstance(value, str) and value:
+            return value
+
+    # ------------------------------------------------------------
+    # 2. Authoritative equipment nameKey.
+    # ------------------------------------------------------------
 
     if equipment:
 
@@ -297,14 +392,15 @@ def localized_name(item_id, names, equipment=None):
 
             if name_key:
 
-                value = names.get(
-                    name_key
-                )
+                value = names.get(name_key)
 
-                if value:
+                if isinstance(value, str) and value:
                     return value
 
-            # Defensive fallback for alternative data-dump formats.
+            # ----------------------------------------------------
+            # Defensive fallback for alternative data formats.
+            # ----------------------------------------------------
+
             for key in (
                 "name",
                 "displayName"
@@ -314,6 +410,10 @@ def localized_name(item_id, names, equipment=None):
 
                 if isinstance(value, str) and value:
                     return value
+
+    # ------------------------------------------------------------
+    # 3. Defensive localization key variants.
+    # ------------------------------------------------------------
 
     candidates = [
         f"EQUIPMENT_{item_id}_NAME",
@@ -326,8 +426,15 @@ def localized_name(item_id, names, equipment=None):
 
         value = names.get(key)
 
-        if value:
+        if isinstance(value, str) and value:
             return value
+
+    # ------------------------------------------------------------
+    # 4. Nothing resolved.
+    #
+    # Returning the technical ID is preferable to inventing
+    # a potentially incorrect name.
+    # ------------------------------------------------------------
 
     return item_id
 
@@ -1306,6 +1413,10 @@ def main():
         localization
     )
 
+    print(
+        f"Liczba wpisów lokalizacji: {len(names)}"
+    )
+
     units = build_unit_database(
         data
     )
@@ -1451,8 +1562,14 @@ def main():
         if item_id in IGNORE_RESOURCE_IDS:
             continue
 
+        name = localized_name(
+            item_id,
+            names,
+            equipment
+        )
+
         print(
-            f"  {item_id}: {quantity}"
+            f"  {item_id}: {quantity} — {name}"
         )
 
 
