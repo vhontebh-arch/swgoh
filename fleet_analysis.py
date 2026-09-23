@@ -6,12 +6,6 @@ SHIPS_FILE = Path("ships.csv")
 REPORT_FILE = Path("fleet_analysis.md")
 
 
-# ---------------------------------------------------------------------------
-# Ship name -> baseId
-# ships.csv is keyed by baseId, while fleet definitions below use readable
-# names. Keep the readable names in fleet definitions and resolve them here.
-# ---------------------------------------------------------------------------
-
 SHIP_ID_ALIASES = {
     # Capital ships
     "Executor": "CAPITALEXECUTOR",
@@ -43,7 +37,7 @@ SHIP_ID_ALIASES = {
     "Geonosian Soldier's Starfighter": "GEONOSIANSTARFIGHTER1",
     "IG-2000": "IG2000",
 
-    # Negotiator / Republic
+    # Negotiator
     "Anakin's Eta-2 Starfighter": "JEDISTARFIGHTERANAKIN",
     "Ahsoka Tano's Jedi Starfighter": "JEDISTARFIGHTERAHSOKATANO",
     "Umbaran Starfighter": "UMBARANSTARFIGHTER",
@@ -51,21 +45,21 @@ SHIP_ID_ALIASES = {
     "Plo Koon's Jedi Starfighter": "JEDISTARFIGHTERCONSULAR",
     "Raven's Claw": "RAVENSCLAW",
 
-    # Finalizer / First Order
+    # Finalizer
     "First Order TIE Fighter": "TIEFIGHTERFIRSTORDER",
     "First Order SF TIE Fighter": "TIEFIGHTERFOSF",
     "TIE Silencer": "TIESILENCER",
     "TIE Echelon": "FIRSTORDERTIEECHELON",
     "TIE/IN Interceptor Prototype": "TIEINTERCEPTOR",
 
-    # Raddus / Resistance
+    # Raddus
     "Resistance X-wing": "XWINGRESISTANCE",
     "Poe Dameron's X-wing": "XWINGBLACKONE",
     "MG-100 StarFortress SF-17": "MG100STARFORTRESSSF17",
     "Rebel Y-wing": "YWINGREBEL",
     "Rogue One": "ROGUEONESHIP",
 
-    # Home One / Rebel
+    # Home One
     "Han's Millennium Falcon": "MILLENNIUMFALCON",
     "Biggs Darklighter's X-wing": "XWINGRED2",
     "Wedge Antilles's X-wing": "XWINGRED3",
@@ -85,10 +79,6 @@ SHIP_ID_ALIASES = {
     "Ebon Hawk": "EBONHAWK",
 }
 
-
-# ---------------------------------------------------------------------------
-# Fleet definitions
-# ---------------------------------------------------------------------------
 
 FLEETS = {
     "Executor": {
@@ -231,7 +221,6 @@ FLEETS = {
 }
 
 
-# Ships required for the relevant journey/event requirements.
 JOURNEY_REQUIREMENTS = {
     "Executor": [
         "Razor Crest",
@@ -262,22 +251,11 @@ JOURNEY_REQUIREMENTS = {
 }
 
 
-# ---------------------------------------------------------------------------
-# Helpers
-# ---------------------------------------------------------------------------
-
 def ship_id(name):
-    """
-    Convert a human-readable ship name to the baseId used by ships.csv.
-    If the supplied value is already a baseId, leave it unchanged.
-    """
     return SHIP_ID_ALIASES.get(name, name)
 
 
 def display_name(name):
-    """
-    Convert a baseId back to the readable name used in the report.
-    """
     for readable, base_id in SHIP_ID_ALIASES.items():
         if base_id == name:
             return readable
@@ -286,12 +264,6 @@ def display_name(name):
 
 
 def load_ships():
-    """
-    Load ships.csv indexed by baseId.
-
-    Older versions of this script indexed by the display 'name' column.
-    That breaks when ships.csv contains baseId values such as HOUNDSTOOTH.
-    """
     ships = {}
 
     if not SHIPS_FILE.exists():
@@ -305,8 +277,6 @@ def load_ships():
             base_id = (row.get("baseId") or "").strip()
             name = (row.get("name") or "").strip()
 
-            # Primary key: baseId.
-            # Fallback is retained for compatibility with older ships.csv.
             key = base_id or ship_id(name)
 
             if key:
@@ -316,21 +286,23 @@ def load_ships():
 
 
 def get_ship(ships, name):
-    """
-    Resolve a readable fleet-definition name to the corresponding
-    baseId and return the ship row.
-    """
     return ships.get(ship_id(name))
 
 
 def stars(row):
+    if not row:
+        return 0
+
     try:
-        return int(row.get("stars", 0) or 0)
+        return int(row.get("rarity", 0) or 0)
     except (TypeError, ValueError):
         return 0
 
 
 def level(row):
+    if not row:
+        return 0
+
     try:
         return int(row.get("level", 0) or 0)
     except (TypeError, ValueError):
@@ -338,8 +310,11 @@ def level(row):
 
 
 def gear(row):
+    if not row:
+        return 0
+
     try:
-        return int(row.get("gear", 0) or 0)
+        return int(row.get("gearTier", 0) or 0)
     except (TypeError, ValueError):
         return 0
 
@@ -386,10 +361,6 @@ def get_missing(ships, names, required_stars=7):
     return missing
 
 
-# ---------------------------------------------------------------------------
-# Report sections
-# ---------------------------------------------------------------------------
-
 def write_fleet_section(lines, fleet_name, fleet, ships):
     lines.append(f"## {fleet_name}")
     lines.append("")
@@ -397,7 +368,7 @@ def write_fleet_section(lines, fleet_name, fleet, ships):
     capital = fleet["capital"]
     capital_row = get_ship(ships, capital)
 
-    lines.append(f"### Capital ship")
+    lines.append("### Capital ship")
     lines.append("")
     lines.append(format_ship_row(capital, capital_row))
     lines.append("")
@@ -440,6 +411,7 @@ def write_journey_section(lines, ships):
             lines.append("- **7★ requirement: COMPLETE**")
         else:
             lines.append("- **7★ requirement: NOT COMPLETE**")
+
             for item in missing:
                 lines.append(f"  - {item}")
 
@@ -447,13 +419,14 @@ def write_journey_section(lines, ships):
 
 
 def write_cross_fleet_usage(lines, ships):
-    """
-    Show ships used by more than one defined fleet.
-    """
     usage = {}
 
     for fleet_name, fleet in FLEETS.items():
-        all_ships = [fleet["capital"]] + fleet["core"] + fleet["reinforcements"]
+        all_ships = (
+            [fleet["capital"]]
+            + fleet["core"]
+            + fleet["reinforcements"]
+        )
 
         for name in all_ships:
             sid = ship_id(name)
@@ -467,7 +440,8 @@ def write_cross_fleet_usage(lines, ships):
             usage[sid]["fleets"].append(fleet_name)
 
     shared = [
-        item for item in usage.values()
+        item
+        for item in usage.values()
         if len(item["fleets"]) > 1
     ]
 
@@ -492,9 +466,6 @@ def write_cross_fleet_usage(lines, ships):
 
 
 def write_low_star_priority(lines, ships):
-    """
-    List ships below 7★ which occur in one of the defined fleets.
-    """
     fleet_ship_names = []
 
     for fleet in FLEETS.values():
@@ -555,15 +526,13 @@ def write_low_star_priority(lines, ships):
     lines.append("")
 
 
-# ---------------------------------------------------------------------------
-# Main
-# ---------------------------------------------------------------------------
-
 def main():
     ships = load_ships()
 
     if not ships:
-        raise SystemExit("ERROR: No ships loaded from ships.csv")
+        raise SystemExit(
+            "ERROR: No ships loaded from ships.csv"
+        )
 
     lines = [
         "# Fleet Analysis",
@@ -592,12 +561,10 @@ def main():
     print(f"Generated {REPORT_FILE}")
     print(f"Ships loaded: {len(ships)}")
 
-    # Explicit sanity check for Executor requirements.
-    executor_required = JOURNEY_REQUIREMENTS["Executor"]
-
     print("")
     print("Executor hard-check:")
 
+    executor_required = JOURNEY_REQUIREMENTS["Executor"]
     executor_ok = True
 
     for name in executor_required:
