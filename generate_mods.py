@@ -34,19 +34,56 @@ SLOT_NAMES = {
 }
 
 
+# Stat IDs used by SWGOH exports.
+#
+# The export contains two groups:
+# - percentage/stat IDs used by the mod data
+# - flat stat IDs used by the mod data
+#
+# Keep the IDs already confirmed in Vhonte's export and add
+# the missing IDs that were previously printed as "Stat XX".
 STAT_NAMES = {
+    # Percentage stats
     1: "Health %",
     5: "Offense %",
+    16: "Critical Damage %",
     17: "Defense %",
     18: "Potency %",
     28: "Protection %",
     41: "Critical Avoidance %",
     42: "Tenacity %",
+    54: "Critical Chance %",
+    
+    # Flat stats
     48: "Health",
     49: "Protection",
     53: "Defense",
     55: "Offense",
     56: "Speed",
+}
+
+
+# Stats whose values are stored by the export as scaled integers.
+# The CSV will contain:
+#   primaryValue      -> human-readable value
+#   primaryValueRaw   -> original export value
+#
+# Percentage values in the Comlink export are stored at 1,000,000
+# units per 1%. For example:
+#
+#   23500000 -> 23.5%
+#   8500000  -> 8.5%
+#
+PERCENT_STAT_IDS = {
+    1,
+    5,
+    16,
+    17,
+    18,
+    28,
+    41,
+    42,
+    54,
 }
 
 
@@ -68,9 +105,6 @@ def find_mod_lists(obj, path="root"):
       - unequippedMod
       - equippedStatMod
       - equippedMod
-
-    This makes the generator tolerant of slightly different
-    Comlink/C-3PO export layouts.
     """
 
     found = []
@@ -206,7 +240,7 @@ def get_raw_value(stat):
     return ""
 
 
-def format_value(value):
+def format_value(value, stat_id=None):
     if value in ("", None):
         return ""
 
@@ -214,6 +248,15 @@ def format_value(value):
         number = float(value)
     except (TypeError, ValueError):
         return str(value)
+
+    # Percentage values in the export use micro-percent units.
+    if stat_id in PERCENT_STAT_IDS:
+        number /= 1_000_000
+
+        if number.is_integer():
+            return f"{int(number)}%"
+
+        return f"{number:.6f}".rstrip("0").rstrip(".") + "%"
 
     if number.is_integer():
         return str(int(number))
@@ -256,13 +299,15 @@ def get_roll_values(stat):
 
 
 def stat_columns(prefix, stat):
+    stat_id = get_stat_id(stat)
     raw_value = get_raw_value(stat)
 
     return {
         f"{prefix}Stat": get_stat_name(stat),
 
         f"{prefix}Value": format_value(
-            raw_value
+            raw_value,
+            stat_id,
         ),
 
         f"{prefix}ValueRaw": (
@@ -280,6 +325,28 @@ def stat_columns(prefix, stat):
             for value in get_roll_values(stat)
         ),
     }
+
+
+def get_assigned_to(mod):
+    """
+    Try all known character-assignment fields.
+
+    Different SWGOH export layouts use different fields.
+    """
+
+    for key in (
+        "assignedTo",
+        "characterId",
+        "unitId",
+        "ownerId",
+        "equippedTo",
+    ):
+        value = mod.get(key)
+
+        if value:
+            return value
+
+    return ""
 
 
 def normalize_mod(mod, source_type):
@@ -367,16 +434,8 @@ def normalize_mod(mod, source_type):
 
         "source": source_type,
 
-        "assignedTo": (
-            mod.get(
-                "assignedTo",
-                ""
-            )
-            or mod.get(
-                "characterId",
-                ""
-            )
-            or ""
+        "assignedTo": get_assigned_to(
+            mod
         ),
     }
 
