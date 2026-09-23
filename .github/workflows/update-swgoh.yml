@@ -472,20 +472,9 @@ jobs:
           )
 
 
-print("=== DEBUG LOCALIZATION ===")
-print("TOP LEVEL KEYS:", list(localization.keys()))
-
-for key, value in localization.items():
-    print("KEY:", key, "TYPE:", type(value).__name__)
-    if isinstance(value, list):
-        print("LIST LENGTH:", len(value))
-        if value:
-            print("FIRST ITEM:", value[0])
-    elif isinstance(value, dict):
-        print("DICT KEYS:", list(value.keys())[:20])
-        print("DICT SAMPLE:", list(value.items())[:3])
-
-print("=== END DEBUG ===")
+          localization = json.loads(
+              raw.decode("utf-8")
+          )
 
 
           if not isinstance(
@@ -495,6 +484,72 @@ print("=== END DEBUG ===")
               raise RuntimeError(
                   "Localization nie jest obiektem JSON."
               )
+
+
+          # ========================================================
+          # DEBUG LOCALIZATION
+          # ========================================================
+
+          print("")
+          print("=" * 80)
+          print("DEBUG LOCALIZATION")
+          print("=" * 80)
+
+          print(
+              "TOP LEVEL KEYS:",
+              list(localization.keys())
+          )
+
+          for key, value in localization.items():
+
+              print("")
+              print(
+                  "KEY:",
+                  key
+              )
+
+              print(
+                  "TYPE:",
+                  type(value).__name__
+              )
+
+              if isinstance(
+                  value,
+                  list
+              ):
+
+                  print(
+                      "LIST LENGTH:",
+                      len(value)
+                  )
+
+                  if value:
+
+                      print(
+                          "FIRST ITEM:",
+                          value[0]
+                      )
+
+              elif isinstance(
+                  value,
+                  dict
+              ):
+
+                  print(
+                      "DICT KEYS:",
+                      list(value.keys())[:20]
+                  )
+
+                  print(
+                      "DICT SAMPLE:",
+                      list(value.items())[:3]
+                  )
+
+          print("")
+          print("=" * 80)
+          print("END DEBUG LOCALIZATION")
+          print("=" * 80)
+          print("")
 
 
           with open(
@@ -793,11 +848,6 @@ print("=== END DEBUG ===")
 
       # ============================================================
       # GENERATE SHIPS CSV
-      #
-      # NIE MA generate_ships.py.
-      #
-      # ships.csv powstaje tutaj bezpośrednio z rosterUnit.
-      # combatType == 2 oznacza statek.
       # ============================================================
 
       - name: Generate ships CSV
@@ -950,6 +1000,7 @@ print("=== END DEBUG ===")
           print("")
 
           for row in rows:
+
               print(
                   f"{row['name']} | "
                   f"{row['rarity']} ★ | "
