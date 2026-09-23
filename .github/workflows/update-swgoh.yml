@@ -2,6 +2,8 @@ name: Update SWGOH data
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "0 6 * * *"
 
 permissions:
   contents: write
@@ -11,199 +13,101 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
       - name: Checkout repository
-        uses: actions/checkout@v6
-
-      - name: Start Comlink
-        run: |
-          docker pull ghcr.io/swgoh-utils/swgoh-comlink:latest
-
-          docker run -d \
-            --name swgoh-comlink \
-            --env APP_NAME="Vhonte SWGOH updater" \
-            -p 3000:3000 \
-            ghcr.io/swgoh-utils/swgoh-comlink:latest
+        uses: actions/checkout@v4
 
       - name: Download player data
         run: |
-          sleep 10
-
-          curl -sS \
-            -X POST \
-            -H "Content-Type: application/json" \
-            -d '{"payload":{"allyCode":"972824625"}}' \
-            http://localhost:3000/player \
+          curl -L \
+            "https://swgoh4.life/api/player/972824625" \
             -o swgoh_972824625.json
 
-          python -m json.tool swgoh_972824625.json > /dev/null
-
-          echo "Pobrano dane:"
-          wc -c swgoh_972824625.json
-
-      - name: Test Comlink metadata
+      - name: Download game data
         run: |
-          curl -sS \
-            -X POST \
-            -H "Content-Type: application/json" \
-            -d '{}' \
-            http://localhost:3000/metadata \
-            -o metadata.json
-
-          python -m json.tool metadata.json | head -n 40
-
-      - name: Test Comlink data
-        run: |
-          VERSION=$(python -c 'import json; print(json.load(open("metadata.json"))["latestGamedataVersion"])')
-
-          curl -sS \
-            -X POST \
-            -H "Content-Type: application/json" \
-            -d "{\"payload\":{\"version\":\"$VERSION\",\"items\":\"-1\"}}" \
-            http://localhost:3000/data \
+          curl -L \
+            "https://swgoh4.life/api/data" \
             -o data.json
 
-          python -m json.tool data.json | head -n 40
-
-      - name: Diagnose relic costs
+      - name: Download localization
         run: |
-          python -c '
-          import json
-          d=json.load(open("data.json",encoding="utf-8"))
-
-          def w(x):
-              yield x
-              if isinstance(x,dict):
-                  for v in x.values():
-                      yield from w(v)
-              elif isinstance(x,list):
-                  for v in x:
-                      yield from w(v)
-
-          print("=== RELIC PROMOTION ===")
-
-          for x in w(d):
-              if not isinstance(x,dict):
-                  continue
-              i=str(x.get("id",""))
-              if "relic" in i.lower() and (
-                  "promotion" in i.lower()
-                  or "cost" in i.lower()
-                  or "upgrade" in i.lower()
-              ):
-                  print("ID:",i)
-                  print("KEYS:",",".join(x.keys()))
-
-          print("=== RELIC UPGRADE TABLE ===")
-
-          for x in w(d):
-              if isinstance(x,dict) and x.get("id")=="relic_promotion_table":
-                  print(json.dumps(x,ensure_ascii=False,separators=(",",":"))[:15000])
-
-          print("=== SIGNAL DATA ===")
-
-          for x in w(d):
-              if isinstance(x,dict) and str(x.get("id","")) in {"RM_001","RM_002","RM_003","RM_004"}:
-                  print(x.get("id"),json.dumps(x,ensure_ascii=False,separators=(",",":"))[:1000])
-          '
-
-      - name: Show relic recipes
-        run: |
-          python -c '
-          import json
-          d=json.load(open("data.json",encoding="utf-8"))
-
-          def w(x):
-              yield x
-              if isinstance(x,dict):
-                  for v in x.values():
-                      yield from w(v)
-              elif isinstance(x,list):
-                  for v in x:
-                      yield from w(v)
-
-          recipes={}
-
-          for x in w(d):
-              if isinstance(x,dict):
-                  i=str(x.get("id",""))
-                  if i.startswith("relic_promotion_recipe_"):
-                      recipes[i]=x
-
-          print("=== RELIC RECIPES ===")
-
-          for i in sorted(recipes):
-              x=recipes[i]
-              parts=[]
-
-              for ing in (x.get("ingredients") or []):
-                  if isinstance(ing,dict):
-                      parts.append(
-                          str(ing.get("id","?"))
-                          + " x"
-                          + str(ing.get("minQuantity",1))
-                      )
-
-              result=x.get("result") or {}
-              rid=result.get("id","?")
-
-              print(
-                  i,
-                  "=>",
-                  rid,
-                  ":",
-                  ", ".join(parts)
-              )
-
-          print("=== END ===")
-          '
-          
-      - name: Download English localization
-        run: |
-          VERSION=$(python -c 'import json; print(json.load(open("metadata.json"))["latestLocalizationBundleVersion"])')
-
-          curl -sS \
-            -X POST \
-            -H "Content-Type: application/json" \
-            -d "{\"payload\":{\"id\":\"${VERSION}:ENG_US\"}}" \
-            http://localhost:3000/localization \
+          curl -L \
+            "https://swgoh4.life/api/localization" \
             -o localization.json
-
-          python -c 'import json; d=json.load(open("localization.json")); print("Klucze odpowiedzi:",list(d.keys())); print("Rozmiar odpowiedzi:",len(open("localization.json","rb").read()),"bytes")'
 
       - name: Generate roster CSV
         run: |
-          python -c 'import csv,json,base64,zipfile,io; d=json.load(open("swgoh_972824625.json")); loc=json.load(open("localization.json")); z=zipfile.ZipFile(io.BytesIO(base64.b64decode(loc["localizationBundle"]))); lines=z.read("Loc_ENG_US.txt").decode("utf-8","replace").splitlines(); names={x.split("|",1)[0]:x.split("|",1)[1] for x in lines if "|" in x}; f=open("roster.csv","w",newline="",encoding="utf-8"); w=csv.writer(f); w.writerow(["name","definitionId","baseId","id","rarity","level","gearTier","relicTier"]); [w.writerow([names.get("UNIT_"+next((s["id"].replace("basicskill_","") for s in u.get("skill",[]) if s["id"].startswith("basicskill_")),"")+"_NAME",""),u.get("definitionId",""),next((s["id"].replace("basicskill_","") for s in u.get("skill",[]) if s["id"].startswith("basicskill_")),""),u.get("id",""),u.get("currentRarity",""),u.get("currentLevel",""),u.get("currentTier",""),(u.get("relic") or {}).get("currentTier","")]) for u in d["rosterUnit"]]; f.close(); print("Wygenerowano roster.csv")'
-
-      - name: Diagnose C3PO JSON
-        run: |
           python - <<'PY'
-          p = "c3po.json"
-          with open(p, "rb") as f:
-              data = f.read()
+          import csv
+          import json
 
-          print("Rozmiar c3po.json:", len(data))
-          pos = 50000
-          print("Fragment wokół błędu:")
-          print(repr(data[pos-500:pos+500]))
+          player = json.load(
+              open("swgoh_972824625.json", encoding="utf-8")
+          )
+
+          game = json.load(
+              open("data.json", encoding="utf-8")
+          )
+
+          units = {}
+
+          for unit in game.get("units", []):
+              base_id = unit.get("baseId")
+
+              if base_id:
+                  units[base_id] = unit
+
+          rows = []
+
+          for unit in player.get("rosterUnit", []):
+              definition_id = unit.get("definitionId", "")
+              base_id = definition_id.split(":", 1)[0]
+
+              game_unit = units.get(base_id, {})
+
+              if game_unit.get("combatType") != 1:
+                  continue
+
+              rows.append({
+                  "name": base_id,
+                  "baseId": base_id,
+                  "definitionId": definition_id,
+                  "id": unit.get("id", ""),
+                  "rarity": unit.get("currentRarity", ""),
+                  "level": unit.get("currentLevel", ""),
+                  "gearTier": unit.get("currentTier", ""),
+                  "relicTier": (
+                      unit.get("relic") or {}
+                  ).get("currentTier", "")
+              })
+
+          fields = [
+              "name",
+              "baseId",
+              "definitionId",
+              "id",
+              "rarity",
+              "level",
+              "gearTier",
+              "relicTier"
+          ]
+
+          with open(
+              "roster.csv",
+              "w",
+              newline="",
+              encoding="utf-8"
+          ) as f:
+              writer = csv.DictWriter(
+                  f,
+                  fieldnames=fields
+              )
+              writer.writeheader()
+              writer.writerows(rows)
+
+          print("Wygenerowano roster.csv")
+          print("Liczba postaci:", len(rows))
           PY
-      
-      - name: Calculate account farming report
-        run: |
-          python calculate_resources.py
-          echo "Wygenerowano account_farming_report.md"
-      
-      - name: Verify roster CSV
-        run: |
-          echo "Liczba jednostek:"
-          tail -n +2 roster.csv | wc -l
-
-          echo
-          echo "Pierwsze 10 jednostek:"
-          head -n 11 roster.csv
-
-          echo
-          echo "Admiral Piett:"
-          grep "ADMIRALPIETT" roster.csv || true
 
       - name: Generate ships CSV
         run: |
@@ -225,6 +129,10 @@ jobs:
           localization = json.load(
               open("localization.json", encoding="utf-8")
           )
+
+          # ------------------------------------------------------------
+          # Localization
+          # ------------------------------------------------------------
 
           bundle = base64.b64decode(
               localization["localizationBundle"]
@@ -248,6 +156,10 @@ jobs:
                   key, value = line.split("|", 1)
                   names[key] = value
 
+          # ------------------------------------------------------------
+          # Game units indexed by baseId
+          # ------------------------------------------------------------
+
           units = {}
 
           for unit in game.get("units", []):
@@ -256,27 +168,50 @@ jobs:
               if base_id:
                   units[base_id] = unit
 
+          # ------------------------------------------------------------
+          # Generate ship list
+          #
+          # IMPORTANT:
+          # Use definitionId as the authoritative source of the
+          # player's unit identity.
+          #
+          # Example:
+          #   definitionId = "SLAVE1:SEVEN_STAR"
+          #   base_id       = "SLAVE1"
+          #
+          # Do NOT derive ship identity from basicskill_... because
+          # some ships do not expose that skill in a reliable way.
+          # ------------------------------------------------------------
+
           ships = []
 
           for unit in player.get("rosterUnit", []):
-              base_id = ""
 
-              for skill in unit.get("skill", []):
-                  skill_id = skill.get("id", "")
+              definition_id = unit.get(
+                  "definitionId",
+                  ""
+              )
 
-                  if skill_id.startswith("basicskill_"):
-                      base_id = skill_id.replace(
-                          "basicskill_",
-                          ""
-                      )
-                      break
+              if not definition_id:
+                  continue
 
-              game_unit = units.get(base_id, {})
+              base_id = definition_id.split(
+                  ":",
+                  1
+              )[0]
+
+              game_unit = units.get(
+                  base_id,
+                  {}
+              )
 
               if game_unit.get("combatType") != 2:
                   continue
 
-              name_key = game_unit.get("nameKey", "")
+              name_key = game_unit.get(
+                  "nameKey",
+                  ""
+              )
 
               name = names.get(
                   name_key,
@@ -288,12 +223,12 @@ jobs:
 
               ships.append({
                   "name": name,
-                  "definitionId": unit.get(
-                      "definitionId",
+                  "definitionId": definition_id,
+                  "baseId": base_id,
+                  "id": unit.get(
+                      "id",
                       ""
                   ),
-                  "baseId": base_id,
-                  "id": unit.get("id", ""),
                   "rarity": unit.get(
                       "currentRarity",
                       ""
@@ -314,6 +249,10 @@ jobs:
                   )
               })
 
+          # ------------------------------------------------------------
+          # Write CSV
+          # ------------------------------------------------------------
+
           fields = [
               "name",
               "definitionId",
@@ -331,6 +270,7 @@ jobs:
               newline="",
               encoding="utf-8"
           ) as f:
+
               writer = csv.DictWriter(
                   f,
                   fieldnames=fields
@@ -339,8 +279,18 @@ jobs:
               writer.writeheader()
               writer.writerows(ships)
 
+          # ------------------------------------------------------------
+          # Diagnostics
+          # ------------------------------------------------------------
+
+          print("")
+          print("========================================")
           print("Wygenerowano ships.csv")
           print("Liczba statków:", len(ships))
+          print("========================================")
+          print("")
+
+          print("Pierwsze statki:")
 
           for ship in ships[:10]:
               print(
@@ -348,9 +298,87 @@ jobs:
                   "|",
                   ship["baseId"],
                   "|",
+                  ship["definitionId"],
+                  "|",
                   ship["rarity"],
                   "★"
               )
+
+          print("")
+          print("Kontrola kluczowych statków:")
+          print("")
+
+          important_ships = [
+              "SLAVE1",
+              "RAZORCREST",
+              "IG2000",
+              "HOUNDSTOOTH",
+              "TIEADVANCED",
+              "TIEBOMBERIMPERIAL",
+              "TIEFIGHTERIMPERIAL",
+              "OUTRIDER",
+              "B28EXTINCTIONCLASSBOMBER",
+              "MARKVIINTERCEPTOR",
+              "TIEDAGGER",
+              "EBONHAWK",
+              "SCIMITAR"
+          ]
+
+          ships_by_base_id = {
+              ship["baseId"]: ship
+              for ship in ships
+          }
+
+          for base_id in important_ships:
+
+              ship = ships_by_base_id.get(
+                  base_id
+              )
+
+              if ship:
+                  print(
+                      "OK   |",
+                      base_id,
+                      "|",
+                      ship["name"],
+                      "|",
+                      ship["rarity"],
+                      "★",
+                      "|",
+                      ship["definitionId"]
+                  )
+              else:
+                  print(
+                      "BRAK |",
+                      base_id
+                  )
+
+          print("")
+          print("Statystyka gwiazdek:")
+
+          star_counts = {}
+
+          for ship in ships:
+              rarity = ship["rarity"]
+
+              star_counts[rarity] = (
+                  star_counts.get(
+                      rarity,
+                      0
+                  ) + 1
+              )
+
+          for rarity in sorted(
+              star_counts,
+              reverse=True
+          ):
+              print(
+                  rarity,
+                  "★:",
+                  star_counts[rarity]
+              )
+
+          print("")
           PY
 
           python generate_ships.py
@@ -358,23 +386,32 @@ jobs:
       - name: Generate ship analysis
         run: |
           python ship_analysis.py
-          echo "Wygenerowano ship_analysis.md"  
+          echo "Wygenerowano ship_analysis.md"
 
       - name: Generate fleet analysis
         run: |
           python fleet_analysis.py
-          echo "Wygenerowano fleet_analysis.md"          
-          
-      - name: Commit roster CSV
+          echo "Wygenerowano fleet_analysis.md"
+
+      - name: Calculate farming resources
+        run: |
+          python calculate_resources.py
+
+      - name: Commit generated files
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add roster.csv ships.csv account_farming_report.md ship_analysis.md fleet_analysis.md
+          git add \
+            roster.csv \
+            ships.csv \
+            account_farming_report.md \
+            ship_analysis.md \
+            fleet_analysis.md
 
           if git diff --cached --quiet; then
-            echo "Brak zmian roster CSV"
+            echo "Brak zmian"
           else
-            git commit -m "Update roster CSV"
+            git commit -m "Update SWGOH data"
             git push
           fi
