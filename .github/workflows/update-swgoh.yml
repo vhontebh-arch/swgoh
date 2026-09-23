@@ -784,13 +784,171 @@ jobs:
 
       # ============================================================
       # GENERATE SHIPS CSV
+      #
+      # NIE MA generate_ships.py.
+      #
+      # ships.csv powstaje tutaj bezpośrednio z rosterUnit.
+      # combatType == 2 oznacza statek.
       # ============================================================
 
       - name: Generate ships CSV
         run: |
           set -e
 
-          python generate_ships.py
+          python - <<'PY'
+          import csv
+          import json
+
+
+          with open(
+              "swgoh_972824625.json",
+              encoding="utf-8"
+          ) as f:
+
+              player = json.load(f)
+
+
+          with open(
+              "data.json",
+              encoding="utf-8"
+          ) as f:
+
+              game = json.load(f)
+
+
+          units = {}
+
+
+          for unit in game.get(
+              "units",
+              []
+          ):
+
+              base_id = unit.get(
+                  "baseId"
+              )
+
+              if base_id:
+                  units[base_id] = unit
+
+
+          rows = []
+
+
+          for unit in player.get(
+              "rosterUnit",
+              []
+          ):
+
+              definition_id = unit.get(
+                  "definitionId",
+                  ""
+              )
+
+              if not definition_id:
+                  continue
+
+
+              base_id = definition_id.split(
+                  ":",
+                  1
+              )[0]
+
+
+              game_unit = units.get(
+                  base_id,
+                  {}
+              )
+
+
+              if game_unit.get(
+                  "combatType"
+              ) != 2:
+                  continue
+
+
+              rows.append({
+                  "name": base_id,
+                  "definitionId": definition_id,
+                  "baseId": base_id,
+                  "id": unit.get(
+                      "id",
+                      ""
+                  ),
+                  "rarity": unit.get(
+                      "currentRarity",
+                      ""
+                  ),
+                  "level": unit.get(
+                      "currentLevel",
+                      ""
+                  ),
+                  "gearTier": unit.get(
+                      "currentTier",
+                      ""
+                  ),
+                  "relicTier": (
+                      unit.get(
+                          "relic"
+                      ) or {}
+                  ).get(
+                      "currentTier",
+                      ""
+                  )
+              })
+
+
+          fields = [
+              "name",
+              "definitionId",
+              "baseId",
+              "id",
+              "rarity",
+              "level",
+              "gearTier",
+              "relicTier"
+          ]
+
+
+          with open(
+              "ships.csv",
+              "w",
+              newline="",
+              encoding="utf-8"
+          ) as f:
+
+              writer = csv.DictWriter(
+                  f,
+                  fieldnames=fields
+              )
+
+              writer.writeheader()
+              writer.writerows(rows)
+
+
+          print("")
+          print("=" * 60)
+          print("SHIPS")
+          print("=" * 60)
+          print("")
+          print(
+              "Wygenerowano ships.csv"
+          )
+          print(
+              "Liczba statków:",
+              len(rows)
+          )
+          print("")
+
+          for row in rows:
+              print(
+                  f"{row['name']} | "
+                  f"{row['rarity']} ★ | "
+                  f"Level {row['level']} | "
+                  f"G{row['gearTier']}"
+              )
+
+          PY
 
           test -s ships.csv
 
