@@ -17,23 +17,126 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # ================================================================
+      # PLAYER DATA
+      # ================================================================
+
       - name: Download player data
         run: |
-          curl -L \
+          set -e
+
+          echo "Pobieranie player data..."
+
+          curl -fL \
+            --retry 3 \
+            --retry-delay 2 \
+            --retry-all-errors \
+            -A "Mozilla/5.0" \
             "https://swgoh4.life/api/player/972824625" \
             -o swgoh_972824625.json
 
+          echo "Rozmiar pliku:"
+          wc -c swgoh_972824625.json
+
+          if [ ! -s swgoh_972824625.json ]; then
+            echo "ERROR: swgoh_972824625.json jest pusty."
+            exit 1
+          fi
+
+          echo "Walidacja JSON..."
+
+          if ! python -m json.tool swgoh_972824625.json > /dev/null; then
+            echo "ERROR: player data nie jest poprawnym JSON-em."
+            echo ""
+            echo "Początek odpowiedzi endpointu:"
+            head -c 1000 swgoh_972824625.json || true
+            echo ""
+            exit 1
+          fi
+
+          echo "Player data OK."
+
+      # ================================================================
+      # GAME DATA
+      # ================================================================
+
       - name: Download game data
         run: |
-          curl -L \
+          set -e
+
+          echo "Pobieranie game data..."
+
+          curl -fL \
+            --retry 3 \
+            --retry-delay 2 \
+            --retry-all-errors \
+            -A "Mozilla/5.0" \
             "https://swgoh4.life/api/data" \
             -o data.json
 
+          echo "Rozmiar pliku:"
+          wc -c data.json
+
+          if [ ! -s data.json ]; then
+            echo "ERROR: data.json jest pusty."
+            exit 1
+          fi
+
+          echo "Walidacja JSON..."
+
+          if ! python -m json.tool data.json > /dev/null; then
+            echo "ERROR: data.json nie jest poprawnym JSON-em."
+            echo ""
+            echo "Początek odpowiedzi endpointu:"
+            head -c 1000 data.json || true
+            echo ""
+            exit 1
+          fi
+
+          echo "Game data OK."
+
+      # ================================================================
+      # LOCALIZATION
+      # ================================================================
+
       - name: Download localization
         run: |
-          curl -L \
+          set -e
+
+          echo "Pobieranie localization..."
+
+          curl -fL \
+            --retry 3 \
+            --retry-delay 2 \
+            --retry-all-errors \
+            -A "Mozilla/5.0" \
             "https://swgoh4.life/api/localization" \
             -o localization.json
+
+          echo "Rozmiar pliku:"
+          wc -c localization.json
+
+          if [ ! -s localization.json ]; then
+            echo "ERROR: localization.json jest pusty."
+            exit 1
+          fi
+
+          echo "Walidacja JSON..."
+
+          if ! python -m json.tool localization.json > /dev/null; then
+            echo "ERROR: localization.json nie jest poprawnym JSON-em."
+            echo ""
+            echo "Początek odpowiedzi endpointu:"
+            head -c 1000 localization.json || true
+            echo ""
+            exit 1
+          fi
+
+          echo "Localization OK."
+
+      # ================================================================
+      # ROSTER CSV
+      # ================================================================
 
       - name: Generate roster CSV
         run: |
@@ -41,13 +144,17 @@ jobs:
           import csv
           import json
 
-          player = json.load(
-              open("swgoh_972824625.json", encoding="utf-8")
-          )
+          with open(
+              "swgoh_972824625.json",
+              encoding="utf-8"
+          ) as f:
+              player = json.load(f)
 
-          game = json.load(
-              open("data.json", encoding="utf-8")
-          )
+          with open(
+              "data.json",
+              encoding="utf-8"
+          ) as f:
+              game = json.load(f)
 
           units = {}
 
@@ -60,19 +167,24 @@ jobs:
           rows = []
 
           for unit in player.get("rosterUnit", []):
-              base_id = ""
 
-              for skill in unit.get("skill", []):
-                  skill_id = skill.get("id", "")
+              definition_id = unit.get(
+                  "definitionId",
+                  ""
+              )
 
-                  if skill_id.startswith("basicskill_"):
-                      base_id = skill_id.replace(
-                          "basicskill_",
-                          ""
-                      )
-                      break
+              if not definition_id:
+                  continue
 
-              game_unit = units.get(base_id, {})
+              base_id = definition_id.split(
+                  ":",
+                  1
+              )[0]
+
+              game_unit = units.get(
+                  base_id,
+                  {}
+              )
 
               if game_unit.get("combatType") != 1:
                   continue
@@ -80,10 +192,7 @@ jobs:
               rows.append({
                   "name": base_id,
                   "baseId": base_id,
-                  "definitionId": unit.get(
-                      "definitionId",
-                      ""
-                  ),
+                  "definitionId": definition_id,
                   "id": unit.get(
                       "id",
                       ""
@@ -125,6 +234,7 @@ jobs:
               newline="",
               encoding="utf-8"
           ) as f:
+
               writer = csv.DictWriter(
                   f,
                   fieldnames=fields
@@ -137,6 +247,10 @@ jobs:
           print("Liczba postaci:", len(rows))
           PY
 
+      # ================================================================
+      # SHIPS CSV
+      # ================================================================
+
       - name: Generate ships CSV
         run: |
           cat > generate_ships.py <<'PY'
@@ -146,17 +260,23 @@ jobs:
           import zipfile
           import io
 
-          player = json.load(
-              open("swgoh_972824625.json", encoding="utf-8")
-          )
+          with open(
+              "swgoh_972824625.json",
+              encoding="utf-8"
+          ) as f:
+              player = json.load(f)
 
-          game = json.load(
-              open("data.json", encoding="utf-8")
-          )
+          with open(
+              "data.json",
+              encoding="utf-8"
+          ) as f:
+              game = json.load(f)
 
-          localization = json.load(
-              open("localization.json", encoding="utf-8")
-          )
+          with open(
+              "localization.json",
+              encoding="utf-8"
+          ) as f:
+              localization = json.load(f)
 
           bundle = base64.b64decode(
               localization["localizationBundle"]
@@ -192,16 +312,15 @@ jobs:
 
           for unit in player.get("rosterUnit", []):
 
-              # --------------------------------------------------------
-              # IMPORTANT:
-              # Ship identity is taken from definitionId.
+              # ========================================================
+              # Ship identity comes from definitionId.
               #
               # Example:
               # SLAVE1:SEVEN_STAR -> SLAVE1
               #
-              # This replaces the old basicskill_ detection, which
-              # failed to identify at least one owned ship.
-              # --------------------------------------------------------
+              # This is more reliable than trying to identify ships
+              # through basicskill_ entries.
+              # ========================================================
 
               definition_id = unit.get(
                   "definitionId",
@@ -282,6 +401,7 @@ jobs:
               newline="",
               encoding="utf-8"
           ) as f:
+
               writer = csv.DictWriter(
                   f,
                   fieldnames=fields
@@ -295,6 +415,7 @@ jobs:
 
           print("")
           print("Kontrola kluczowych statków:")
+          print("")
 
           important_ships = [
               "SLAVE1",
@@ -365,23 +486,41 @@ jobs:
                   "★:",
                   star_counts[rarity]
               )
+
+          print("")
           PY
 
           python generate_ships.py
+
+      # ================================================================
+      # SHIP ANALYSIS
+      # ================================================================
 
       - name: Generate ship analysis
         run: |
           python ship_analysis.py
           echo "Wygenerowano ship_analysis.md"
 
+      # ================================================================
+      # FLEET ANALYSIS
+      # ================================================================
+
       - name: Generate fleet analysis
         run: |
           python fleet_analysis.py
           echo "Wygenerowano fleet_analysis.md"
 
+      # ================================================================
+      # FARMING CALCULATOR
+      # ================================================================
+
       - name: Calculate farming resources
         run: |
           python calculate_resources.py
+
+      # ================================================================
+      # COMMIT
+      # ================================================================
 
       - name: Commit generated files
         run: |
