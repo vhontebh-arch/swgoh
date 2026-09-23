@@ -30,34 +30,65 @@ SLOT_NAMES = {
     6: "Cross",
 }
 
-# Aktualne mapowanie unitStatId używane w eksporcie.
+# Aktualne mapowanie unitStatId używane przez eksport raw.
+#
+# Potwierdzone na podstawie swgoh-stat-calc:
+# 1  = Health
+# 5  = Speed
+# 16 = Critical Damage %
+# 17 = Potency %
+# 18 = Tenacity %
+# 28 = Protection
+# 41 = Offense
+# 42 = Defense
+# 48 = Offense %
+# 49 = Defense %
+# 53 = Critical Chance %
+# 54 = Critical Avoidance %
+# 55 = Health %
+# 56 = Protection %
+# 57 = Speed %
 STAT_NAMES = {
-    1: "Health %",
-    5: "Offense %",
+    1: "Health",
+    5: "Speed",
     16: "Critical Damage %",
-    17: "Offense",
-    18: "Defense",
-    28: "Protection %",
-    41: "Potency %",
-    42: "Tenacity %",
-    48: "Health",
-    49: "Protection",
-    53: "Defense",
-    54: "Critical Chance %",
-    55: "Offense",
-    56: "Speed",
+    17: "Potency %",
+    18: "Tenacity %",
+    28: "Protection",
+    41: "Offense",
+    42: "Defense",
+    48: "Offense %",
+    49: "Defense %",
+    53: "Critical Chance %",
+    54: "Critical Avoidance %",
+    55: "Health %",
+    56: "Protection %",
+    57: "Speed %",
 }
 
-# Tylko te statystyki są zapisane w statValueDecimal
-# w milionowych częściach wartości procentowej.
+# Statystyki płaskie w statValueDecimal są zapisane
+# w skali 1/10000 względem wartości wyświetlanej.
+FLAT_STAT_IDS = {
+    1,   # Health
+    5,   # Speed
+    28,  # Protection
+    41,  # Offense
+    42,  # Defense
+}
+
+# Statystyki procentowe w statValueDecimal są zapisane
+# w skali 1/100 względem wartości wyświetlanej.
 PERCENT_STAT_IDS = {
-    1,   # Health %
-    5,   # Offense %
     16,  # Critical Damage %
-    28,  # Protection %
-    41,  # Potency %
-    42,  # Tenacity %
-    54,  # Critical Chance %
+    17,  # Potency %
+    18,  # Tenacity %
+    48,  # Offense %
+    49,  # Defense %
+    53,  # Critical Chance %
+    54,  # Critical Avoidance %
+    55,  # Health %
+    56,  # Protection %
+    57,  # Speed %
 }
 
 
@@ -78,25 +109,44 @@ def find_mod_lists(obj, path="root"):
 
     if isinstance(obj, dict):
         for key, value in obj.items():
-            if key in {"unequippedMod", "equippedStatMod", "equippedMod"}:
+            if key in {
+                "unequippedMod",
+                "equippedStatMod",
+                "equippedMod",
+            }:
                 if isinstance(value, list):
-                    found.append((f"{path}.{key}", value, key))
+                    found.append(
+                        (
+                            f"{path}.{key}",
+                            value,
+                            key,
+                        )
+                    )
 
             found.extend(
-                find_mod_lists(value, f"{path}.{key}")
+                find_mod_lists(
+                    value,
+                    f"{path}.{key}",
+                )
             )
 
     elif isinstance(obj, list):
         for index, value in enumerate(obj):
             found.extend(
-                find_mod_lists(value, f"{path}[{index}]")
+                find_mod_lists(
+                    value,
+                    f"{path}[{index}]",
+                )
             )
 
     return found
 
 
 def decode_definition_id(definition_id):
-    value = as_int(definition_id, 0)
+    value = as_int(
+        definition_id,
+        0,
+    )
 
     if value < 100 or value > 999:
         return "", 0, ""
@@ -108,9 +158,15 @@ def decode_definition_id(definition_id):
     slot_id = int(text[2])
 
     return (
-        SET_NAMES.get(set_id, f"Set {set_id}"),
+        SET_NAMES.get(
+            set_id,
+            f"Set {set_id}",
+        ),
         dots,
-        SLOT_NAMES.get(slot_id, f"Slot {slot_id}"),
+        SLOT_NAMES.get(
+            slot_id,
+            f"Slot {slot_id}",
+        ),
     )
 
 
@@ -118,9 +174,16 @@ def get_stat_container(stat):
     if not isinstance(stat, dict):
         return {}
 
-    value = stat.get("stat", stat)
+    value = stat.get(
+        "stat",
+        stat,
+    )
 
-    return value if isinstance(value, dict) else {}
+    return (
+        value
+        if isinstance(value, dict)
+        else {}
+    )
 
 
 def get_stat_id(stat):
@@ -128,7 +191,7 @@ def get_stat_id(stat):
 
     return as_int(
         container.get("unitStatId"),
-        -1
+        -1,
     )
 
 
@@ -140,22 +203,44 @@ def get_stat_name(stat):
 
     return STAT_NAMES.get(
         stat_id,
-        f"Stat {stat_id}"
+        f"Stat {stat_id}",
     )
 
 
 def get_raw_value(stat):
     container = get_stat_container(stat)
 
-    for key in (
-        "statValueDecimal",
-        "value",
-        "statValue",
-    ):
-        if key in container:
-            return container[key]
+    # statValueDecimal jest wartością wygodną do
+    # prezentacji po zastosowaniu odpowiedniej skali.
+    if "statValueDecimal" in container:
+        return container["statValueDecimal"]
+
+    # Fallback dla innych formatów danych.
+    if "value" in container:
+        return container["value"]
+
+    if "statValue" in container:
+        return container["statValue"]
+
+    # Ostateczny fallback: unscaledDecimalValue.
+    # Dla raw eksportu powinno być ono dostępne,
+    # ale nie używamy go jako podstawowego źródła,
+    # ponieważ jest w innej skali.
+    if "unscaledDecimalValue" in container:
+        return container["unscaledDecimalValue"]
 
     return ""
+
+
+def format_number(number):
+    if number.is_integer():
+        return str(int(number))
+
+    return (
+        f"{number:.6f}"
+        .rstrip("0")
+        .rstrip(".")
+    )
 
 
 def format_value(value, stat_id=None):
@@ -167,39 +252,18 @@ def format_value(value, stat_id=None):
     except (TypeError, ValueError):
         return str(value)
 
-    # Procentowe statystyki z eksportu są zapisane
-    # jako milionowe części procenta.
-    #
-    # Przykłady z surowego JSON:
-    #   Health 3970000  -> 3.97%
-    #   Offense 50000   -> 0.05%
-    #   Protection 5070000 -> 5.07%
-    #
-    # Natomiast:
-    #   stat 17 = 154  -> 154 flat
-    #   stat 18 = 123  -> 123 flat
+    if stat_id in FLAT_STAT_IDS:
+        number /= 10_000
+        return format_number(number)
+
     if stat_id in PERCENT_STAT_IDS:
-        number /= 1_000_000
+        number /= 100
+        return f"{format_number(number)}%"
 
-        if number.is_integer():
-            return f"{int(number)}%"
-
-        return (
-            f"{number:.6f}"
-            .rstrip("0")
-            .rstrip(".")
-            + "%"
-        )
-
-    # Statystyki płaskie pozostają bez skalowania.
-    if number.is_integer():
-        return str(int(number))
-
-    return (
-        f"{number:.6f}"
-        .rstrip("0")
-        .rstrip(".")
-    )
+    # Nieznane ID pozostawiamy bez skalowania.
+    # Dzięki temu nowe statystyki nie zostaną
+    # po cichu błędnie przeliczone.
+    return format_number(number)
 
 
 def get_roll_count(stat):
@@ -213,7 +277,7 @@ def get_roll_count(stat):
         if key in stat:
             return as_int(
                 stat[key],
-                0
+                0,
             )
 
     return 0
@@ -244,7 +308,7 @@ def stat_columns(prefix, stat):
         f"{prefix}Stat": get_stat_name(stat),
         f"{prefix}Value": format_value(
             raw_value,
-            stat_id
+            stat_id,
         ),
         f"{prefix}ValueRaw": (
             str(raw_value)
@@ -298,12 +362,12 @@ def normalize_mod(mod, source_type):
 
     primary = mod.get(
         "primaryStat",
-        {}
+        {},
     )
 
     secondaries = mod.get(
         "secondaryStat",
-        []
+        [],
     )
 
     if not isinstance(secondaries, list):
@@ -313,25 +377,31 @@ def normalize_mod(mod, source_type):
         "id": mod_id,
         "definitionId": as_int(
             definition_id,
-            0
+            0,
         ),
         "set": mod_set,
         "dots": dots,
         "slot": slot,
         "tier": as_int(
             mod.get("tier"),
-            0
+            0,
         ),
         "level": as_int(
             mod.get("level"),
-            0
+            0,
         ),
         "locked": bool(
-            mod.get("locked", False)
+            mod.get(
+                "locked",
+                False,
+            )
         ),
         "rerolledCount": as_int(
-            mod.get("rerolledCount", 0),
-            0
+            mod.get(
+                "rerolledCount",
+                0,
+            ),
+            0,
         ),
         "equipped": (
             source_type != "unequippedMod"
@@ -343,7 +413,7 @@ def normalize_mod(mod, source_type):
     row.update(
         stat_columns(
             "primary",
-            primary
+            primary,
         )
     )
 
@@ -357,7 +427,7 @@ def normalize_mod(mod, source_type):
         row.update(
             stat_columns(
                 f"secondary{index}",
-                stat
+                stat,
             )
         )
 
@@ -379,7 +449,7 @@ def extract_mods_from_file(path):
         for mod in mods:
             normalized = normalize_mod(
                 mod,
-                source_type
+                source_type,
             )
 
             if normalized:
