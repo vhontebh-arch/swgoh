@@ -10,87 +10,87 @@ Loaded **65 ships** from `ships.csv`.
 
 ### Core fleet
 
-- **Hound's Tooth** — 0★, Lv 85, G0
-- **Razor Crest** — 0★, Lv 85, G0
-- **TIE Advanced x1** — 0★, Lv 85, G0
-- **Imperial TIE Bomber** — 0★, Lv 85, G0
-- **Imperial TIE Fighter** — 0★, Lv 85, G0
+- **Hound's Tooth** — 7★, Lv 85, G1
+- **Razor Crest** — 7★, Lv 85, G1
+- **TIE Advanced x1** — 7★, Lv 85, G1
+- **Imperial TIE Bomber** — 7★, Lv 85, G1
+- **Imperial TIE Fighter** — 7★, Lv 85, G1
 
 ### Reinforcements
 
-- **TIE Defender** — 0★, Lv 85, G0
-- **TIE Reaper** — 0★, Lv 85, G0
+- **TIE Defender** — 5★, Lv 85, G1
+- **TIE Reaper** — 4★, Lv 85, G1
 
 ## Malevolence
 
 ### Capital ship
 
-- **Malevolence** — 0★, Lv 85, G0
+- **Malevolence** — 7★, Lv 85, G1
 
 ### Core fleet
 
-- **Vulture Droid** — 0★, Lv 85, G0
-- **Hyena Bomber** — 0★, Lv 85, G0
-- **Sun Fac's Geonosian Starfighter** — 0★, Lv 85, G0
-- **Geonosian Spy's Starfighter** — 0★, Lv 85, G0
-- **Geonosian Soldier's Starfighter** — 0★, Lv 85, G0
+- **Vulture Droid** — 4★, Lv 85, G1
+- **Hyena Bomber** — 4★, Lv 85, G1
+- **Sun Fac's Geonosian Starfighter** — 7★, Lv 85, G1
+- **Geonosian Spy's Starfighter** — 7★, Lv 85, G1
+- **Geonosian Soldier's Starfighter** — 7★, Lv 85, G1
 
 ### Reinforcements
 
-- **Imperial TIE Bomber** — 0★, Lv 85, G0
-- **IG-2000** — 0★, Lv 85, G0
+- **Imperial TIE Bomber** — 7★, Lv 85, G1
+- **IG-2000** — 7★, Lv 85, G1
 
 ## Negotiator
 
 ### Capital ship
 
-- **Negotiator** — 0★, Lv 85, G0
+- **Negotiator** — 7★, Lv 85, G1
 
 ### Core fleet
 
-- **Anakin's Eta-2 Starfighter** — 0★, Lv 85, G0
-- **Ahsoka Tano's Jedi Starfighter** — 0★, Lv 85, G0
-- **Umbaran Starfighter** — 0★, Lv 85, G0
-- **Clone Sergeant's ARC-170** — 0★, Lv 85, G0
-- **Plo Koon's Jedi Starfighter** — 0★, Lv 85, G0
+- **Anakin's Eta-2 Starfighter** — 7★, Lv 85, G1
+- **Ahsoka Tano's Jedi Starfighter** — 7★, Lv 85, G1
+- **Umbaran Starfighter** — 7★, Lv 85, G1
+- **Clone Sergeant's ARC-170** — 7★, Lv 85, G1
+- **Plo Koon's Jedi Starfighter** — 7★, Lv 85, G1
 
 ### Reinforcements
 
-- **Raven's Claw** — 0★, Lv 85, G0
+- **Raven's Claw** — 7★, Lv 85, G1
 
 ## Finalizer
 
 ### Capital ship
 
-- **Finalizer** — 0★, Lv 85, G0
+- **Finalizer** — 7★, Lv 85, G1
 
 ### Core fleet
 
-- **First Order TIE Fighter** — 0★, Lv 85, G0
-- **First Order SF TIE Fighter** — 0★, Lv 85, G0
-- **TIE Silencer** — 0★, Lv 85, G0
-- **TIE Echelon** — 0★, Lv 85, G0
+- **First Order TIE Fighter** — 7★, Lv 85, G1
+- **First Order SF TIE Fighter** — 7★, Lv 85, G1
+- **TIE Silencer** — 7★, Lv 85, G1
+- **TIE Echelon** — 6★, Lv 85, G1
 
 ### Reinforcements
 
-- **TIE/IN Interceptor Prototype** — 0★, Lv 85, G0
+- **TIE/IN Interceptor Prototype** — 5★, Lv 85, G1
 
 ## Raddus
 
 ### Capital ship
 
-- **Raddus** — 0★, Lv 85, G0
+- **Raddus** — 7★, Lv 85, G1
 
 ### Core fleet
 
-- **Resistance X-wing** — 0★, Lv 85, G0
-- **Poe Dameron's X-wing** — 0★, Lv 85, G0
-- **MG-100 StarFortress SF-17** — 0★, Lv 85, G0
-- **Rebel Y-wing** — 0★, Lv 85, G0
+- **Resistance X-wing** — 7★, Lv 85, G1
+- **Poe Dameron's X-wing** — 7★, Lv 85, G1
+- **MG-100 StarFortress SF-17** — 7★, Lv 85, G1
+- **Rebel Y-wing** — 7★, Lv 85, G1
 
 ### Reinforcements
 
-- **Rogue One** — 0★, Lv 85, G0
+- **Rogue One** — 4★, Lv 85, G1
 
 ## Home One
 
@@ -100,34 +100,34 @@ Loaded **65 ships** from `ships.csv`.
 
 ### Core fleet
 
-- **Han's Millennium Falcon** — 0★, Lv 85, G0
-- **Biggs Darklighter's X-wing** — 0★, Lv 85, G0
-- **Wedge Antilles's X-wing** — 0★, Lv 85, G0
-- **Bistan's U-wing** — 0★, Lv 85, G0
-- **Rebel Y-wing** — 0★, Lv 85, G0
+- **Han's Millennium Falcon** — 7★, Lv 85, G1
+- **Biggs Darklighter's X-wing** — 7★, Lv 85, G1
+- **Wedge Antilles's X-wing** — 7★, Lv 85, G1
+- **Bistan's U-wing** — 7★, Lv 85, G1
+- **Rebel Y-wing** — 7★, Lv 85, G1
 
 ### Reinforcements
 
-- **Ghost** — 0★, Lv 85, G0
-- **Phantom II** — 0★, Lv 85, G0
+- **Ghost** — 7★, Lv 85, G1
+- **Phantom II** — 7★, Lv 85, G1
 
 ## Chimaera
 
 ### Capital ship
 
-- **Chimaera** — 0★, Lv 85, G0
+- **Chimaera** — 7★, Lv 85, G1
 
 ### Core fleet
 
-- **Hound's Tooth** — 0★, Lv 85, G0
-- **TIE Defender** — 0★, Lv 85, G0
-- **Imperial TIE Bomber** — 0★, Lv 85, G0
-- **Imperial TIE Fighter** — 0★, Lv 85, G0
-- **TIE Advanced x1** — 0★, Lv 85, G0
+- **Hound's Tooth** — 7★, Lv 85, G1
+- **TIE Defender** — 5★, Lv 85, G1
+- **Imperial TIE Bomber** — 7★, Lv 85, G1
+- **Imperial TIE Fighter** — 7★, Lv 85, G1
+- **TIE Advanced x1** — 7★, Lv 85, G1
 
 ### Reinforcements
 
-- **TIE Reaper** — 0★, Lv 85, G0
+- **TIE Reaper** — 4★, Lv 85, G1
 
 ## Endurance
 
@@ -137,15 +137,15 @@ Loaded **65 ships** from `ships.csv`.
 
 ### Core fleet
 
-- **Raven's Claw** — 0★, Lv 85, G0
-- **Plo Koon's Jedi Starfighter** — 0★, Lv 85, G0
-- **Anakin's Eta-2 Starfighter** — 0★, Lv 85, G0
-- **Ahsoka Tano's Jedi Starfighter** — 0★, Lv 85, G0
+- **Raven's Claw** — 7★, Lv 85, G1
+- **Plo Koon's Jedi Starfighter** — 7★, Lv 85, G1
+- **Anakin's Eta-2 Starfighter** — 7★, Lv 85, G1
+- **Ahsoka Tano's Jedi Starfighter** — 7★, Lv 85, G1
 
 ### Reinforcements
 
-- **Clone Sergeant's ARC-170** — 0★, Lv 85, G0
-- **Umbaran Starfighter** — 0★, Lv 85, G0
+- **Clone Sergeant's ARC-170** — 7★, Lv 85, G1
+- **Umbaran Starfighter** — 7★, Lv 85, G1
 
 ## Profundity
 
@@ -155,11 +155,11 @@ Loaded **65 ships** from `ships.csv`.
 
 ### Core fleet
 
-- **Outrider** — 0★, Lv 85, G0
-- **Bistan's U-wing** — 0★, Lv 85, G0
-- **Rebel Y-wing** — 0★, Lv 85, G0
-- **Wedge Antilles's X-wing** — 0★, Lv 85, G0
-- **Biggs Darklighter's X-wing** — 0★, Lv 85, G0
+- **Outrider** — 6★, Lv 85, G1
+- **Bistan's U-wing** — 7★, Lv 85, G1
+- **Rebel Y-wing** — 7★, Lv 85, G1
+- **Wedge Antilles's X-wing** — 7★, Lv 85, G1
+- **Biggs Darklighter's X-wing** — 7★, Lv 85, G1
 
 ## Leviathan
 
@@ -170,108 +170,62 @@ Loaded **65 ships** from `ships.csv`.
 ### Core fleet
 
 - **Mark VI Interceptor** — BRAK W CSV
-- **TIE Dagger** — 0★, Lv 85, G0
-- **Sith Fighter** — 0★, Lv 85, G0
-- **Ebon Hawk** — 0★, Lv 85, G0
+- **TIE Dagger** — 5★, Lv 85, G1
+- **Sith Fighter** — 4★, Lv 85, G1
+- **Ebon Hawk** — 7★, Lv 85, G1
 
 ### Reinforcements
 
-- **TIE Reaper** — 0★, Lv 85, G0
+- **TIE Reaper** — 4★, Lv 85, G1
 
 ## Journey requirements
 
 ### Executor
 
-- **7★ requirement: NOT COMPLETE**
-  - Razor Crest (0★)
-  - Slave I (0★)
-  - IG-2000 (0★)
-  - Hound's Tooth (0★)
-  - TIE Advanced x1 (0★)
-  - Imperial TIE Bomber (0★)
-  - Imperial TIE Fighter (0★)
+- **7★ requirement: COMPLETE**
 
 ### Profundity
 
 - **7★ requirement: NOT COMPLETE**
-  - Outrider (0★)
-  - Bistan's U-wing (0★)
-  - Wedge Antilles's X-wing (0★)
-  - Biggs Darklighter's X-wing (0★)
-  - Rebel Y-wing (0★)
+  - Outrider (6★)
 
 ### Leviathan
 
 - **7★ requirement: NOT COMPLETE**
   - Mark VI Interceptor
-  - TIE Dagger (0★)
+  - TIE Dagger (5★)
   - B-28 Extinction-class Bomber
   - Scimitar
-  - Sith Fighter (0★)
-  - Ebon Hawk (0★)
+  - Sith Fighter (4★)
 
 ## Cross-fleet ship usage
 
-- **Ahsoka Tano's Jedi Starfighter** — Negotiator, Endurance — 0★ / 7★
-- **Anakin's Eta-2 Starfighter** — Negotiator, Endurance — 0★ / 7★
-- **Biggs Darklighter's X-wing** — Home One, Profundity — 0★ / 7★
-- **Bistan's U-wing** — Home One, Profundity — 0★ / 7★
-- **Clone Sergeant's ARC-170** — Negotiator, Endurance — 0★ / 7★
-- **Hound's Tooth** — Executor, Chimaera — 0★ / 7★
-- **Imperial TIE Bomber** — Executor, Malevolence, Chimaera — 0★ / 7★
-- **Imperial TIE Fighter** — Executor, Chimaera — 0★ / 7★
-- **Plo Koon's Jedi Starfighter** — Negotiator, Endurance — 0★ / 7★
-- **Raven's Claw** — Negotiator, Endurance — 0★ / 7★
-- **Rebel Y-wing** — Raddus, Home One, Profundity — 0★ / 7★
-- **TIE Advanced x1** — Executor, Chimaera — 0★ / 7★
-- **TIE Defender** — Executor, Chimaera — 0★ / 7★
-- **TIE Reaper** — Executor, Chimaera, Leviathan — 0★ / 7★
-- **Umbaran Starfighter** — Negotiator, Endurance — 0★ / 7★
-- **Wedge Antilles's X-wing** — Home One, Profundity — 0★ / 7★
+- **Ahsoka Tano's Jedi Starfighter** — Negotiator, Endurance — OK
+- **Anakin's Eta-2 Starfighter** — Negotiator, Endurance — OK
+- **Biggs Darklighter's X-wing** — Home One, Profundity — OK
+- **Bistan's U-wing** — Home One, Profundity — OK
+- **Clone Sergeant's ARC-170** — Negotiator, Endurance — OK
+- **Hound's Tooth** — Executor, Chimaera — OK
+- **Imperial TIE Bomber** — Executor, Malevolence, Chimaera — OK
+- **Imperial TIE Fighter** — Executor, Chimaera — OK
+- **Plo Koon's Jedi Starfighter** — Negotiator, Endurance — OK
+- **Raven's Claw** — Negotiator, Endurance — OK
+- **Rebel Y-wing** — Raddus, Home One, Profundity — OK
+- **TIE Advanced x1** — Executor, Chimaera — OK
+- **TIE Defender** — Executor, Chimaera — 5★ / 7★
+- **TIE Reaper** — Executor, Chimaera, Leviathan — 4★ / 7★
+- **Umbaran Starfighter** — Negotiator, Endurance — OK
+- **Wedge Antilles's X-wing** — Home One, Profundity — OK
 
 ## Ships below 7★
 
-- **Ahsoka Tano's Jedi Starfighter** — 0★, Lv 85, G0
-- **Anakin's Eta-2 Starfighter** — 0★, Lv 85, G0
-- **Biggs Darklighter's X-wing** — 0★, Lv 85, G0
-- **Bistan's U-wing** — 0★, Lv 85, G0
-- **Chimaera** — 0★, Lv 85, G0
-- **Clone Sergeant's ARC-170** — 0★, Lv 85, G0
-- **Ebon Hawk** — 0★, Lv 85, G0
-- **Finalizer** — 0★, Lv 85, G0
-- **First Order SF TIE Fighter** — 0★, Lv 85, G0
-- **First Order TIE Fighter** — 0★, Lv 85, G0
-- **Geonosian Soldier's Starfighter** — 0★, Lv 85, G0
-- **Geonosian Spy's Starfighter** — 0★, Lv 85, G0
-- **Ghost** — 0★, Lv 85, G0
-- **Han's Millennium Falcon** — 0★, Lv 85, G0
-- **Hound's Tooth** — 0★, Lv 85, G0
-- **Hyena Bomber** — 0★, Lv 85, G0
-- **IG-2000** — 0★, Lv 85, G0
-- **Imperial TIE Bomber** — 0★, Lv 85, G0
-- **Imperial TIE Fighter** — 0★, Lv 85, G0
-- **MG-100 StarFortress SF-17** — 0★, Lv 85, G0
-- **Malevolence** — 0★, Lv 85, G0
-- **Negotiator** — 0★, Lv 85, G0
-- **Outrider** — 0★, Lv 85, G0
-- **Phantom II** — 0★, Lv 85, G0
-- **Plo Koon's Jedi Starfighter** — 0★, Lv 85, G0
-- **Poe Dameron's X-wing** — 0★, Lv 85, G0
-- **Raddus** — 0★, Lv 85, G0
-- **Raven's Claw** — 0★, Lv 85, G0
-- **Razor Crest** — 0★, Lv 85, G0
-- **Rebel Y-wing** — 0★, Lv 85, G0
-- **Resistance X-wing** — 0★, Lv 85, G0
-- **Rogue One** — 0★, Lv 85, G0
-- **Sith Fighter** — 0★, Lv 85, G0
-- **Sun Fac's Geonosian Starfighter** — 0★, Lv 85, G0
-- **TIE Advanced x1** — 0★, Lv 85, G0
-- **TIE Dagger** — 0★, Lv 85, G0
-- **TIE Defender** — 0★, Lv 85, G0
-- **TIE Echelon** — 0★, Lv 85, G0
-- **TIE Reaper** — 0★, Lv 85, G0
-- **TIE Silencer** — 0★, Lv 85, G0
-- **TIE/IN Interceptor Prototype** — 0★, Lv 85, G0
-- **Umbaran Starfighter** — 0★, Lv 85, G0
-- **Vulture Droid** — 0★, Lv 85, G0
-- **Wedge Antilles's X-wing** — 0★, Lv 85, G0
+- **Hyena Bomber** — 4★, Lv 85, G1
+- **Rogue One** — 4★, Lv 85, G1
+- **Sith Fighter** — 4★, Lv 85, G1
+- **TIE Reaper** — 4★, Lv 85, G1
+- **Vulture Droid** — 4★, Lv 85, G1
+- **TIE Dagger** — 5★, Lv 85, G1
+- **TIE Defender** — 5★, Lv 85, G1
+- **TIE/IN Interceptor Prototype** — 5★, Lv 85, G1
+- **Outrider** — 6★, Lv 85, G1
+- **TIE Echelon** — 6★, Lv 85, G1
