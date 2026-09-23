@@ -358,7 +358,12 @@ jobs:
       - name: Generate ship analysis
         run: |
           python ship_analysis.py
-          echo "Wygenerowano ship_analysis.md"          
+          echo "Wygenerowano ship_analysis.md"  
+
+      - name: Generate fleet analysis
+        run: |
+          python fleet_analysis.py
+          echo "Wygenerowano fleet_analysis.md"          
           
       - name: Commit roster CSV
         run: |
