@@ -365,7 +365,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add roster.csv ships.csv account_farming_report.md
+          git add roster.csv ships.csv account_farming_report.md ship_analysis.md
 
           if git diff --cached --quiet; then
             echo "Brak zmian roster CSV"
