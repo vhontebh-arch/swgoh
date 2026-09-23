@@ -173,25 +173,6 @@ jobs:
       # ============================================================
       # DOWNLOAD CURRENT GAME DATA
       # ============================================================
-      #
-      # Źródło:
-      # swgoh-utils/gamedata
-      #
-      # Repozytorium jest automatycznie aktualizowane po zmianach
-      # gry. Każda kolekcja ma strukturę:
-      #
-      # {
-      #   "version": "...",
-      #   "data": [...]
-      # }
-      #
-      # Potrzebujemy:
-      #
-      # units.json
-      # equipment.json
-      # recipe.json
-      #
-      # ============================================================
 
       - name: Download current game data
         run: |
@@ -205,13 +186,62 @@ jobs:
           echo "=" * 80
           echo ""
 
+          # --------------------------------------------------------
+          # UNITS
+          # --------------------------------------------------------
+
+          echo "Pobieranie units.json.br..."
+
           curl -fL \
             --retry 5 \
             --retry-delay 2 \
             --retry-all-errors \
             -A "Mozilla/5.0" \
-            "$BASE_URL/units.json" \
-            -o units_raw.json
+            "$BASE_URL/units.json.br" \
+            -o units_raw.json.br
+
+          test -s units_raw.json.br
+
+          echo "Rozpakowywanie units.json.br..."
+
+          python - <<'PY'
+          import brotli
+
+          with open(
+              "units_raw.json.br",
+              "rb"
+          ) as f:
+              compressed = f.read()
+
+          raw = brotli.decompress(
+              compressed
+          )
+
+          with open(
+              "units_raw.json",
+              "wb"
+          ) as f:
+              f.write(raw)
+
+          print(
+              "OK: units_raw.json"
+          )
+
+          print(
+              "Rozmiar po rozpakowaniu:",
+              len(raw),
+              "bytes"
+          )
+          PY
+
+          test -s units_raw.json
+
+          # --------------------------------------------------------
+          # EQUIPMENT
+          # --------------------------------------------------------
+
+          echo ""
+          echo "Pobieranie equipment.json..."
 
           curl -fL \
             --retry 5 \
@@ -221,6 +251,15 @@ jobs:
             "$BASE_URL/equipment.json" \
             -o equipment_raw.json
 
+          test -s equipment_raw.json
+
+          # --------------------------------------------------------
+          # RECIPE
+          # --------------------------------------------------------
+
+          echo ""
+          echo "Pobieranie recipe.json..."
+
           curl -fL \
             --retry 5 \
             --retry-delay 2 \
@@ -229,10 +268,18 @@ jobs:
             "$BASE_URL/recipe.json" \
             -o recipe_raw.json
 
+          test -s recipe_raw.json
+
+          # --------------------------------------------------------
+          # VALIDATION
+          # --------------------------------------------------------
+
           echo ""
-          echo "Rozmiary:"
+          echo "Rozmiary plików:"
+
           wc -c \
             units_raw.json \
+            units_raw.json.br \
             equipment_raw.json \
             recipe_raw.json
 
@@ -392,6 +439,7 @@ jobs:
 
           echo ""
           echo "Rozmiar:"
+
           wc -c localization.json.br
 
           test -s localization.json.br
@@ -779,27 +827,8 @@ jobs:
           )
 
 
-          # --------------------------------------------------------
-          # LOCALIZATION
-          # --------------------------------------------------------
-
-          #
-          # swgoh-utils/gamedata przechowuje lokalizację jako
-          # bezpośredni słownik JSON:
-          #
-          # {
-          #   "UNIT_SLAVE1_NAME": "Slave I",
-          #   ...
-          # }
-          #
-          # --------------------------------------------------------
-
           names = localization
 
-
-          # --------------------------------------------------------
-          # GAME UNITS
-          # --------------------------------------------------------
 
           units = {}
 
@@ -816,10 +845,6 @@ jobs:
               if base_id:
                   units[base_id] = unit
 
-
-          # --------------------------------------------------------
-          # SHIPS
-          # --------------------------------------------------------
 
           ships = []
 
