@@ -6,26 +6,25 @@
 
 | ID | Przedmiot | Wymagane | Posiadane | Brakuje |
 |---|---|---:|---:|---:|
-| `172Salvage` | Mk 7 Kyrotech Shock Prod Prototype Salvage | 150 | 34 | **116** |
+| `172Salvage` | Mk 7 Kyrotech Shock Prod Prototype Salvage | 150 | 8 | **142** |
 | `129Salvage` | Mk 8 BioTech Implant Salvage | 120 | 38 | **82** |
 | `152Salvage` | Mk 6 Athakam Medpac Salvage | 80 | 0 | **80** |
-| `108Salvage` | Mk 3 Carbanti Sensor Array Salvage | 100 | 22 | **78** |
+| `108Salvage` | Mk 3 Carbanti Sensor Array Salvage | 100 | 28 | **72** |
 | `168PrototypeSalvage_V2` | Mk 12 Czerka Stun Cuffs Prototype Salvage | 80 | 15 | **65** |
 | `168PrototypeSalvage` | Mk 12 ArmaTek Fusion Furnace Prototype Salvage | 100 | 45 | **55** |
-| `170PrototypeSalvage` | Mk 12 ArmaTek Holo Lens Prototype Salvage | 50 | 1 | **49** |
-| `173Salvage` | Mk 9 Kyrotech Battle Computer Prototype Salvage | 50 | 2 | **48** |
 | `123Component` | Mk 8 Neuro-Saav Electrobinoculars Component | 50 | 4 | **46** |
+| `170PrototypeSalvage` | Mk 12 ArmaTek Holo Lens Prototype Salvage | 50 | 8 | **42** |
 | `148Salvage` | Mk 7 Nubian Design Tech Salvage | 40 | 2 | **38** |
-| `144Salvage` | Mk 6 Merr-Sonn Thermal Detonator Salvage | 50 | 16 | **34** |
 | `147Salvage` | Mk 8 Nubian Security Scanner Salvage | 40 | 7 | **33** |
 | `158PrototypeSalvage` | Mk 12 ArmaTek Multi-tool Prototype Salvage | 30 | 0 | **30** |
 | `120PrototypeSalvage` | Mk 5 Merr-Sonn Thermal Detonator Prototype Salvage | 50 | 32 | **18** |
+| `173Salvage` | Mk 9 Kyrotech Battle Computer Prototype Salvage | 50 | 34 | **16** |
 | `RM_002` | Incomplete Signal Data | 65 | 49 | **16** |
-| `116PrototypeSalvage` | Mk 4 Chedak Comlink Prototype Salvage | 50 | 36 | **14** |
 | `150Salvage` | Mk 4 Zaltin Bacta Gel Salvage | 50 | 37 | **13** |
 | `159PrototypeSalvage` | Mk 12 ArmaTek Armor Plating Prototype Salvage | 30 | 17 | **13** |
-| `RM_003` | Flawed Signal Data | 15 | 2 | **13** |
 | `153Salvage` | Mk 9 BioTech Implant Salvage | 50 | 40 | **10** |
+| `RM_003` | Flawed Signal Data | 15 | 7 | **8** |
+| `144Salvage` | Mk 6 Merr-Sonn Thermal Detonator Salvage | 50 | 45 | **5** |
 | `151Salvage` | Mk 7 Chiewab Hypo Syringe Salvage | 40 | 35 | **5** |
 | `160PrototypeSalvage` | Mk 12 ArmaTek Bayonet Prototype Salvage | 30 | 26 | **4** |
 
@@ -63,26 +62,25 @@ Gear: **G10 → G13** Relic: **R1 → R5**
 
 | ID | Przedmiot | Brakuje |
 |---|---|---:|
-| `172Salvage` | Mk 7 Kyrotech Shock Prod Prototype Salvage | **116** |
+| `172Salvage` | Mk 7 Kyrotech Shock Prod Prototype Salvage | **142** |
 | `129Salvage` | Mk 8 BioTech Implant Salvage | **82** |
 | `152Salvage` | Mk 6 Athakam Medpac Salvage | **80** |
-| `108Salvage` | Mk 3 Carbanti Sensor Array Salvage | **78** |
+| `108Salvage` | Mk 3 Carbanti Sensor Array Salvage | **72** |
 | `168PrototypeSalvage_V2` | Mk 12 Czerka Stun Cuffs Prototype Salvage | **65** |
 | `168PrototypeSalvage` | Mk 12 ArmaTek Fusion Furnace Prototype Salvage | **55** |
-| `170PrototypeSalvage` | Mk 12 ArmaTek Holo Lens Prototype Salvage | **49** |
-| `173Salvage` | Mk 9 Kyrotech Battle Computer Prototype Salvage | **48** |
 | `123Component` | Mk 8 Neuro-Saav Electrobinoculars Component | **46** |
+| `170PrototypeSalvage` | Mk 12 ArmaTek Holo Lens Prototype Salvage | **42** |
 | `148Salvage` | Mk 7 Nubian Design Tech Salvage | **38** |
-| `144Salvage` | Mk 6 Merr-Sonn Thermal Detonator Salvage | **34** |
 | `147Salvage` | Mk 8 Nubian Security Scanner Salvage | **33** |
 | `158PrototypeSalvage` | Mk 12 ArmaTek Multi-tool Prototype Salvage | **30** |
 | `120PrototypeSalvage` | Mk 5 Merr-Sonn Thermal Detonator Prototype Salvage | **18** |
+| `173Salvage` | Mk 9 Kyrotech Battle Computer Prototype Salvage | **16** |
 | `RM_002` | Incomplete Signal Data | **16** |
-| `116PrototypeSalvage` | Mk 4 Chedak Comlink Prototype Salvage | **14** |
 | `150Salvage` | Mk 4 Zaltin Bacta Gel Salvage | **13** |
 | `159PrototypeSalvage` | Mk 12 ArmaTek Armor Plating Prototype Salvage | **13** |
-| `RM_003` | Flawed Signal Data | **13** |
 | `153Salvage` | Mk 9 BioTech Implant Salvage | **10** |
+| `RM_003` | Flawed Signal Data | **8** |
+| `144Salvage` | Mk 6 Merr-Sonn Thermal Detonator Salvage | **5** |
 | `151Salvage` | Mk 7 Chiewab Hypo Syringe Salvage | **5** |
 | `160PrototypeSalvage` | Mk 12 ArmaTek Bayonet Prototype Salvage | **4** |
 
