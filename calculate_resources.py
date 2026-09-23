@@ -207,6 +207,24 @@ def get_localized_names(localization):
     if not isinstance(localization, dict):
         return names
 
+    # Current gamedata format: direct JSON from
+    # Loc_ENG_US.txt.json.br
+    direct = localization.get("localization")
+
+    if isinstance(direct, dict):
+        for key, value in direct.items():
+            if isinstance(value, str):
+                names[key] = value
+
+    if not names:
+        for key, value in localization.items():
+            if isinstance(value, str):
+                names[key] = value
+
+    if names:
+        return names
+
+    # Legacy Comlink format.
     bundle = localization.get("localizationBundle")
 
     if not bundle:
