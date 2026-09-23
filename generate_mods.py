@@ -1,9 +1,14 @@
 import csv
 import json
+import os
 import sys
 
 
-C3PO_FILE = "c3po.json"
+DEFAULT_FILES = [
+    "swgoh_972824625.json",
+    "c3po.json",
+]
+
 OUTPUT_FILE = "mods.csv"
 
 
@@ -45,26 +50,6 @@ STAT_NAMES = {
 }
 
 
-PERCENT_STATS = {
-    1,
-    5,
-    17,
-    18,
-    28,
-    41,
-    42,
-}
-
-
-FLAT_STATS = {
-    48,
-    49,
-    53,
-    55,
-    56,
-}
-
-
 def as_int(value, default=0):
     try:
         return int(value)
@@ -77,51 +62,120 @@ def load_json(path):
         return json.load(f, strict=False)
 
 
+def find_mod_lists(obj, path="root"):
+    """
+    Recursively searches JSON for lists associated with:
+      - unequippedMod
+      - equippedStatMod
+      - equippedMod
+
+    This makes the generator tolerant of slightly different
+    Comlink/C-3PO export layouts.
+    """
+
+    found = []
+
+    if isinstance(obj, dict):
+
+        for key, value in obj.items():
+
+            if key in {
+                "unequippedMod",
+                "equippedStatMod",
+                "equippedMod",
+            }:
+                if isinstance(value, list):
+                    found.append(
+                        (
+                            f"{path}.{key}",
+                            value,
+                            key,
+                        )
+                    )
+
+            found.extend(
+                find_mod_lists(
+                    value,
+                    f"{path}.{key}",
+                )
+            )
+
+    elif isinstance(obj, list):
+
+        for index, value in enumerate(obj):
+            found.extend(
+                find_mod_lists(
+                    value,
+                    f"{path}[{index}]",
+                )
+            )
+
+    return found
+
+
 def decode_definition_id(definition_id):
     """
-    SWGOH mod definitionId:
+    Current SWGOH mod definition IDs use three digits:
 
         ABC
 
-    A = set
-    B = rarity / dots
-    C = slot
+        A = mod set
+        B = dots / rarity
+        C = shape / slot
 
     Example:
         756 = Potency / 5 dots / Cross
-        356 = Defense / 5 dots / Cross
-        152 = Speed / 5 dots / Arrow
     """
 
-    definition_id = as_int(definition_id, 0)
+    value = as_int(
+        definition_id,
+        0,
+    )
 
-    if definition_id < 100 or definition_id > 999:
+    if value < 100 or value > 999:
         return "", 0, ""
 
-    value = str(definition_id).zfill(3)
+    text = str(value).zfill(3)
 
-    set_id = int(value[0])
-    dots = int(value[1])
-    slot_id = int(value[2])
+    set_id = int(text[0])
+    dots = int(text[1])
+    slot_id = int(text[2])
 
     return (
-        SET_NAMES.get(set_id, f"Set {set_id}"),
+        SET_NAMES.get(
+            set_id,
+            f"Set {set_id}",
+        ),
         dots,
-        SLOT_NAMES.get(slot_id, f"Slot {slot_id}"),
+        SLOT_NAMES.get(
+            slot_id,
+            f"Slot {slot_id}",
+        ),
     )
 
 
-def get_stat_id(stat):
+def get_stat_container(stat):
     if not isinstance(stat, dict):
-        return -1
+        return {}
 
-    stat_data = stat.get("stat", {})
+    value = stat.get(
+        "stat",
+        stat,
+    )
 
-    if not isinstance(stat_data, dict):
-        return -1
+    if isinstance(value, dict):
+        return value
+
+    return {}
+
+
+def get_stat_id(stat):
+    container = get_stat_container(stat)
 
     return as_int(
-        stat_data.get("unitStatId"),
+        container.get(
+            "unitStatId"
+        ),
         -1,
     )
 
@@ -138,144 +192,116 @@ def get_stat_name(stat):
     )
 
 
-def get_stat_raw_value(stat):
-    if not isinstance(stat, dict):
-        return ""
+def get_raw_value(stat):
+    container = get_stat_container(stat)
 
-    stat_data = stat.get("stat", {})
-
-    if not isinstance(stat_data, dict):
-        return ""
-
-    return stat_data.get(
+    for key in (
         "statValueDecimal",
-        "",
-    )
+        "value",
+        "statValue",
+    ):
+        if key in container:
+            return container[key]
+
+    return ""
 
 
-def get_stat_display_value(stat):
-    stat_id = get_stat_id(stat)
-    raw = get_stat_raw_value(stat)
-
-    if raw == "":
+def format_value(value):
+    if value in ("", None):
         return ""
 
     try:
-        value = float(raw)
+        number = float(value)
     except (TypeError, ValueError):
-        return str(raw)
+        return str(value)
 
-    if stat_id == 56:
-        return str(int(round(value)))
+    if number.is_integer():
+        return str(int(number))
 
-    if stat_id in FLAT_STATS:
-        return str(int(round(value)))
-
-    if stat_id in PERCENT_STATS:
-        return f"{value / 100000:.2f}%"
-
-    return str(raw)
+    return f"{number:.6f}".rstrip("0").rstrip(".")
 
 
-def get_stat_roll_count(stat):
+def get_roll_count(stat):
     if not isinstance(stat, dict):
         return 0
 
-    return as_int(
-        stat.get("statRolls"),
-        0,
-    )
+    for key in (
+        "statRolls",
+        "rollCount",
+    ):
+        if key in stat:
+            return as_int(
+                stat[key],
+                0,
+            )
+
+    return 0
 
 
-def get_unscaled_rolls(stat):
+def get_roll_values(stat):
     if not isinstance(stat, dict):
         return []
 
-    values = stat.get(
+    for key in (
         "unscaledRollValue",
-        [],
-    )
-
-    if not isinstance(values, list):
-        return []
-
-    return values
-
-
-def get_rolls(stat):
-    if not isinstance(stat, dict):
-        return []
-
-    values = stat.get(
         "roll",
-        [],
-    )
+        "rollValues",
+    ):
+        value = stat.get(key)
 
-    if not isinstance(values, list):
-        return []
+        if isinstance(value, list):
+            return value
 
-    return values
-
-
-def extract_mods(c3po):
-    """
-    c3po.json currently stores unequipped mods at:
-
-        inventory.unequippedMod
-
-    The export therefore represents the mod inventory available
-    for swapping/farming analysis.
-
-    Equipped mods are not present in this c3po.json export.
-    """
-
-    inventory = c3po.get(
-        "inventory",
-        {},
-    )
-
-    if not isinstance(inventory, dict):
-        return []
-
-    mods = inventory.get(
-        "unequippedMod",
-        [],
-    )
-
-    if not isinstance(mods, list):
-        return []
-
-    return [
-        mod
-        for mod in mods
-        if isinstance(mod, dict)
-        and mod.get("id")
-        and mod.get("definitionId") is not None
-    ]
+    return []
 
 
-def build_stat_columns(prefix, stat):
+def stat_columns(prefix, stat):
+    raw_value = get_raw_value(stat)
+
     return {
         f"{prefix}Stat": get_stat_name(stat),
-        f"{prefix}Value": get_stat_display_value(stat),
-        f"{prefix}ValueRaw": get_stat_raw_value(stat),
-        f"{prefix}Rolls": get_stat_roll_count(stat),
-        f"{prefix}RawRolls": "|".join(
-            str(x)
-            for x in get_unscaled_rolls(stat)
+
+        f"{prefix}Value": format_value(
+            raw_value
         ),
-        f"{prefix}RollWeights": "|".join(
-            str(x)
-            for x in get_rolls(stat)
+
+        f"{prefix}ValueRaw": (
+            str(raw_value)
+            if raw_value != ""
+            else ""
+        ),
+
+        f"{prefix}Rolls": get_roll_count(
+            stat
+        ),
+
+        f"{prefix}RawRolls": "|".join(
+            str(value)
+            for value in get_roll_values(stat)
         ),
     }
 
 
-def build_row(mod):
-    definition_id = as_int(
-        mod.get("definitionId"),
-        0,
+def normalize_mod(mod, source_type):
+    if not isinstance(mod, dict):
+        return None
+
+    mod_id = mod.get("id")
+
+    if not mod_id:
+        return None
+
+    definition_id = mod.get(
+        "definitionId"
     )
+
+    if definition_id is None:
+        definition_id = mod.get(
+            "definition"
+        )
+
+    if definition_id is None:
+        return None
 
     mod_set, dots, slot = decode_definition_id(
         definition_id
@@ -291,12 +317,19 @@ def build_row(mod):
         [],
     )
 
-    if not isinstance(secondaries, list):
+    if not isinstance(
+        secondaries,
+        list,
+    ):
         secondaries = []
 
     row = {
-        "id": mod.get("id", ""),
-        "definitionId": definition_id,
+        "id": mod_id,
+
+        "definitionId": as_int(
+            definition_id,
+            0,
+        ),
 
         "set": mod_set,
         "dots": dots,
@@ -313,34 +346,58 @@ def build_row(mod):
         ),
 
         "locked": bool(
-            mod.get("locked", False)
+            mod.get(
+                "locked",
+                False,
+            )
         ),
 
         "rerolledCount": as_int(
-            mod.get("rerolledCount"),
+            mod.get(
+                "rerolledCount",
+                0,
+            ),
             0,
         ),
 
-        # Wszystkie mody z tego eksportu są niezałożone.
-        "equipped": False,
-        "assignedTo": "",
+        "equipped": (
+            source_type
+            != "unequippedMod"
+        ),
+
+        "source": source_type,
+
+        "assignedTo": (
+            mod.get(
+                "assignedTo",
+                ""
+            )
+            or mod.get(
+                "characterId",
+                ""
+            )
+            or ""
+        ),
     }
 
     row.update(
-        build_stat_columns(
+        stat_columns(
             "primary",
             primary,
         )
     )
 
     for index in range(1, 5):
+
         if index <= len(secondaries):
-            stat = secondaries[index - 1]
+            stat = secondaries[
+                index - 1
+            ]
         else:
             stat = {}
 
         row.update(
-            build_stat_columns(
+            stat_columns(
                 f"secondary{index}",
                 stat,
             )
@@ -349,8 +406,73 @@ def build_row(mod):
     return row
 
 
+def extract_mods_from_file(path):
+    data = load_json(path)
+
+    result = []
+
+    locations = find_mod_lists(
+        data
+    )
+
+    for location, mods, source_type in locations:
+
+        print(
+            f"Znaleziono {len(mods)} modów: "
+            f"{location}"
+        )
+
+        for mod in mods:
+
+            normalized = normalize_mod(
+                mod,
+                source_type,
+            )
+
+            if normalized:
+                result.append(
+                    normalized
+                )
+
+    return result
+
+
+def merge_mods(rows):
+    """
+    Same mod ID can appear in multiple parts
+    of the export.
+
+    Prefer equipped data over inventory data.
+    """
+
+    merged = {}
+
+    for row in rows:
+
+        mod_id = row["id"]
+
+        existing = merged.get(
+            mod_id
+        )
+
+        if existing is None:
+            merged[mod_id] = row
+            continue
+
+        if (
+            row["equipped"]
+            and not existing["equipped"]
+        ):
+            merged[mod_id] = row
+
+    return list(
+        merged.values()
+    )
+
+
 def write_csv(rows):
-    fieldnames = [
+
+    fields = [
         "id",
         "definitionId",
 
@@ -364,6 +486,7 @@ def write_csv(rows):
         "rerolledCount",
 
         "equipped",
+        "source",
         "assignedTo",
 
         "primaryStat",
@@ -371,55 +494,17 @@ def write_csv(rows):
         "primaryValueRaw",
         "primaryRolls",
         "primaryRawRolls",
-        "primaryRollWeights",
     ]
 
     for index in range(1, 5):
-        fieldnames.extend([
+
+        fields.extend([
             f"secondary{index}Stat",
             f"secondary{index}Value",
             f"secondary{index}ValueRaw",
             f"secondary{index}Rolls",
             f"secondary{index}RawRolls",
-            f"secondary{index}RollWeights",
         ])
-
-    with open(
-        OUTPUT_FILE,
-        "w",
-        encoding="utf-8-sig",
-        newline="",
-    ) as f:
-
-        writer = csv.DictWriter(
-            f,
-            fieldnames=fieldnames,
-            extrasaction="ignore",
-        )
-
-        writer.writeheader()
-        writer.writerows(rows)
-
-
-def main():
-    print(f"Ładowanie {C3PO_FILE}...")
-
-    c3po = load_json(
-        C3PO_FILE
-    )
-
-    mods = extract_mods(
-        c3po
-    )
-
-    print(
-        f"Znaleziono niezałożonych modów: {len(mods)}"
-    )
-
-    rows = [
-        build_row(mod)
-        for mod in mods
-    ]
 
     rows.sort(
         key=lambda row: (
@@ -431,59 +516,140 @@ def main():
         )
     )
 
-    write_csv(rows)
+    with open(
+        OUTPUT_FILE,
+        "w",
+        newline="",
+        encoding="utf-8-sig",
+    ) as f:
 
-    print(
-        f"Wygenerowano {OUTPUT_FILE}"
-    )
-
-    unknown_sets = sorted({
-        row["set"]
-        for row in rows
-        if row["set"].startswith("Set ")
-    })
-
-    unknown_slots = sorted({
-        row["slot"]
-        for row in rows
-        if row["slot"].startswith("Slot ")
-    })
-
-    if unknown_sets:
-        print(
-            "UWAGA - nierozpoznane sety:",
-            ", ".join(unknown_sets),
+        writer = csv.DictWriter(
+            f,
+            fieldnames=fields,
+            extrasaction="ignore",
         )
 
-    if unknown_slots:
-        print(
-            "UWAGA - nierozpoznane sloty:",
-            ", ".join(unknown_slots),
+        writer.writeheader()
+        writer.writerows(rows)
+
+
+def main():
+
+    print("=" * 80)
+    print("SWGOH MOD GENERATOR")
+    print("=" * 80)
+    print()
+
+    files = []
+
+    env_file = os.environ.get(
+        "MODS_SOURCE_FILE"
+    )
+
+    if env_file:
+        files.append(
+            env_file
         )
 
-    print(
-        "Gotowe."
+    for path in DEFAULT_FILES:
+
+        if (
+            path not in files
+            and os.path.exists(path)
+        ):
+            files.append(path)
+
+    if not files:
+        raise FileNotFoundError(
+            "Nie znaleziono żadnego źródła modów."
+        )
+
+    all_rows = []
+
+    for path in files:
+
+        print()
+        print(
+            f"--- Źródło: {path} ---"
+        )
+
+        rows = extract_mods_from_file(
+            path
+        )
+
+        print(
+            f"Znormalizowano: {len(rows)}"
+        )
+
+        all_rows.extend(
+            rows
+        )
+
+    rows = merge_mods(
+        all_rows
     )
+
+    if not rows:
+        raise RuntimeError(
+            "Nie znaleziono żadnych modów."
+        )
+
+    write_csv(
+        rows
+    )
+
+    equipped = sum(
+        1
+        for row in rows
+        if row["equipped"]
+    )
+
+    unequipped = len(rows) - equipped
+
+    print()
+    print("=" * 80)
+    print("WYNIK")
+    print("=" * 80)
+    print(
+        f"Łącznie modów: {len(rows)}"
+    )
+    print(
+        f"Założonych:    {equipped}"
+    )
+    print(
+        f"Niezałożonych: {unequipped}"
+    )
+    print(
+        f"CSV:           {OUTPUT_FILE}"
+    )
+    print("=" * 80)
 
 
 if __name__ == "__main__":
+
     try:
         main()
 
     except FileNotFoundError as exc:
+
         print(
-            f"BŁĄD: nie znaleziono pliku: {exc.filename}"
+            f"BŁĄD: {exc}"
         )
+
         sys.exit(1)
 
     except json.JSONDecodeError as exc:
+
         print(
             f"BŁĄD JSON: {exc}"
         )
+
         sys.exit(1)
 
     except Exception as exc:
+
         print(
             f"BŁĄD: {type(exc).__name__}: {exc}"
         )
+
         sys.exit(1)
