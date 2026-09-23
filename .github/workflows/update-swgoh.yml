@@ -85,6 +85,7 @@ jobs:
           echo ""
           echo "ERROR: Comlink nie wystartował."
           echo ""
+
           docker logs swgoh-comlink
 
           exit 1
@@ -170,6 +171,8 @@ jobs:
 
           PY
 
+          test -s swgoh_972824625.json
+
       # ============================================================
       # DOWNLOAD CURRENT GAME DATA
       # ============================================================
@@ -181,9 +184,9 @@ jobs:
           BASE_URL="https://raw.githubusercontent.com/swgoh-utils/gamedata/main"
 
           echo ""
-          echo "=" * 80
+          echo "================================================================================"
           echo "POBIERANIE AKTUALNEGO GAME DATA"
-          echo "=" * 80
+          echo "================================================================================"
           echo ""
 
           # --------------------------------------------------------
@@ -416,6 +419,8 @@ jobs:
 
           PY
 
+          test -s data.json
+
       # ============================================================
       # DOWNLOAD LOCALIZATION
       # ============================================================
@@ -437,12 +442,9 @@ jobs:
             "$BASE_URL/Loc_ENG_US.txt.json.br" \
             -o localization.json.br
 
-          echo ""
-          echo "Rozmiar:"
+          test -s localization.json.br
 
           wc -c localization.json.br
-
-          test -s localization.json.br
 
       # ============================================================
       # BUILD LOCALIZATION.JSON
@@ -520,38 +522,32 @@ jobs:
         run: |
           set -e
 
-          echo ""
-          echo "=" * 80
-          echo "WALIDACJA DANYCH"
-          echo "=" * 80
-          echo ""
-
           python - <<'PY'
           import json
 
 
-          player = json.load(
-              open(
-                  "swgoh_972824625.json",
-                  encoding="utf-8"
-              )
-          )
+          with open(
+              "swgoh_972824625.json",
+              encoding="utf-8"
+          ) as f:
+
+              player = json.load(f)
 
 
-          game = json.load(
-              open(
-                  "data.json",
-                  encoding="utf-8"
-              )
-          )
+          with open(
+              "data.json",
+              encoding="utf-8"
+          ) as f:
+
+              game = json.load(f)
 
 
-          localization = json.load(
-              open(
-                  "localization.json",
-                  encoding="utf-8"
-              )
-          )
+          with open(
+              "localization.json",
+              encoding="utf-8"
+          ) as f:
+
+              localization = json.load(f)
 
 
           roster = player.get(
@@ -601,31 +597,27 @@ jobs:
           )
 
 
-          if len(roster) == 0:
+          if not roster:
               raise RuntimeError(
                   "Roster jest pusty."
               )
 
-
-          if len(units) == 0:
+          if not units:
               raise RuntimeError(
                   "Units jest puste."
               )
 
-
-          if len(equipment) == 0:
+          if not equipment:
               raise RuntimeError(
                   "Equipment jest puste."
               )
 
-
-          if len(recipes) == 0:
+          if not recipes:
               raise RuntimeError(
                   "Recipe jest puste."
               )
 
-
-          if len(localization) == 0:
+          if not localization:
               raise RuntimeError(
                   "Localization jest pusta."
               )
@@ -651,20 +643,20 @@ jobs:
           import json
 
 
-          player = json.load(
-              open(
-                  "swgoh_972824625.json",
-                  encoding="utf-8"
-              )
-          )
+          with open(
+              "swgoh_972824625.json",
+              encoding="utf-8"
+          ) as f:
+
+              player = json.load(f)
 
 
-          game = json.load(
-              open(
-                  "data.json",
-                  encoding="utf-8"
-              )
-          )
+          with open(
+              "data.json",
+              encoding="utf-8"
+          ) as f:
+
+              game = json.load(f)
 
 
           units = {}
@@ -696,7 +688,6 @@ jobs:
                   ""
               )
 
-
               if not definition_id:
                   continue
 
@@ -716,7 +707,6 @@ jobs:
               if game_unit.get(
                   "combatType"
               ) != 1:
-
                   continue
 
 
@@ -790,6 +780,8 @@ jobs:
 
           PY
 
+          test -s roster.csv
+
       # ============================================================
       # GENERATE SHIPS CSV
       # ============================================================
@@ -798,331 +790,33 @@ jobs:
         run: |
           set -e
 
-          cat > generate_ships.py <<'PY'
-          import csv
-          import json
-
-
-          player = json.load(
-              open(
-                  "swgoh_972824625.json",
-                  encoding="utf-8"
-              )
-          )
-
-
-          game = json.load(
-              open(
-                  "data.json",
-                  encoding="utf-8"
-              )
-          )
-
-
-          localization = json.load(
-              open(
-                  "localization.json",
-                  encoding="utf-8"
-              )
-          )
-
-
-          names = localization
-
-
-          units = {}
-
-
-          for unit in game.get(
-              "units",
-              []
-          ):
-
-              base_id = unit.get(
-                  "baseId"
-              )
-
-              if base_id:
-                  units[base_id] = unit
-
-
-          ships = []
-
-
-          for unit in player.get(
-              "rosterUnit",
-              []
-          ):
-
-              definition_id = unit.get(
-                  "definitionId",
-                  ""
-              )
-
-
-              if not definition_id:
-                  continue
-
-
-              base_id = definition_id.split(
-                  ":",
-                  1
-              )[0]
-
-
-              game_unit = units.get(
-                  base_id,
-                  {}
-              )
-
-
-              if game_unit.get(
-                  "combatType"
-              ) != 2:
-
-                  continue
-
-
-              name_key = game_unit.get(
-                  "nameKey",
-                  ""
-              )
-
-
-              name = names.get(
-                  name_key
-              )
-
-
-              if not name:
-
-                  name = names.get(
-                      "UNIT_" + base_id + "_NAME"
-                  )
-
-
-              if not name:
-
-                  name = base_id
-
-
-              ships.append({
-                  "name": name,
-                  "definitionId": definition_id,
-                  "baseId": base_id,
-                  "id": unit.get(
-                      "id",
-                      ""
-                  ),
-                  "rarity": unit.get(
-                      "currentRarity",
-                      ""
-                  ),
-                  "level": unit.get(
-                      "currentLevel",
-                      ""
-                  ),
-                  "gearTier": unit.get(
-                      "currentTier",
-                      ""
-                  ),
-                  "relicTier": (
-                      unit.get(
-                          "relic"
-                      ) or {}
-                  ).get(
-                      "currentTier",
-                      ""
-                  )
-              })
-
-
-          fields = [
-              "name",
-              "definitionId",
-              "baseId",
-              "id",
-              "rarity",
-              "level",
-              "gearTier",
-              "relicTier"
-          ]
-
-
-          with open(
-              "ships.csv",
-              "w",
-              newline="",
-              encoding="utf-8"
-          ) as f:
-
-              writer = csv.DictWriter(
-                  f,
-                  fieldnames=fields
-              )
-
-              writer.writeheader()
-              writer.writerows(ships)
-
-
-          print(
-              "Wygenerowano ships.csv"
-          )
-
-          print(
-              "Liczba statków:",
-              len(ships)
-          )
-
-
-          # --------------------------------------------------------
-          # IMPORTANT SHIPS CHECK
-          # --------------------------------------------------------
-
-          print("")
-          print(
-              "Kontrola kluczowych statków:"
-          )
-          print("")
-
-
-          important_ships = [
-              "SLAVE1",
-              "RAZORCREST",
-              "IG2000",
-              "HOUNDSTOOTH",
-              "TIEADVANCED",
-              "TIEBOMBERIMPERIAL",
-              "TIEFIGHTERIMPERIAL",
-              "OUTRIDER",
-              "B28EXTINCTIONCLASSBOMBER",
-              "MARKVIINTERCEPTOR",
-              "TIEDAGGER",
-              "EBONHAWK",
-              "SCIMITAR"
-          ]
-
-
-          ships_by_base_id = {
-              ship["baseId"]: ship
-              for ship in ships
-          }
-
-
-          for base_id in important_ships:
-
-              ship = ships_by_base_id.get(
-                  base_id
-              )
-
-
-              if ship:
-
-                  print(
-                      "OK   |",
-                      base_id,
-                      "|",
-                      ship["name"],
-                      "|",
-                      ship["rarity"],
-                      "★",
-                      "|",
-                      ship["definitionId"]
-                  )
-
-              else:
-
-                  print(
-                      "BRAK |",
-                      base_id
-                  )
-
-
-          print("")
-          print(
-              "Statystyka gwiazdek:"
-          )
-
-
-          star_counts = {}
-
-
-          for ship in ships:
-
-              rarity = ship["rarity"]
-
-              star_counts[rarity] = (
-                  star_counts.get(
-                      rarity,
-                      0
-                  ) + 1
-              )
-
-
-          for rarity in sorted(
-              star_counts,
-              reverse=True
-          ):
-
-              print(
-                  rarity,
-                  "★:",
-                  star_counts[rarity]
-              )
-
-
-          print("")
-
-
-          # --------------------------------------------------------
-          # EXECUTOR HARD CHECK
-          # --------------------------------------------------------
-
-          executor_ships = [
-              "SLAVE1",
-              "RAZORCREST",
-              "IG2000",
-              "HOUNDSTOOTH",
-              "TIEADVANCED",
-              "TIEBOMBERIMPERIAL",
-              "TIEFIGHTERIMPERIAL"
-          ]
-
-
-          missing_executor = [
-              base_id
-              for base_id in executor_ships
-              if base_id not in ships_by_base_id
-          ]
-
-
-          if missing_executor:
-
-              print(
-                  "ERROR: Brak statków Executor:"
-              )
-
-
-              for base_id in missing_executor:
-
-                  print(
-                      " -",
-                      base_id
-                  )
-
-
-              raise SystemExit(
-                  1
-              )
-
-
-          print(
-              "Kontrola Executor: OK"
-          )
-
-          PY
-
           python generate_ships.py
+
+          test -s ships.csv
+
+      # ============================================================
+      # GENERATE MODS CSV
+      # ============================================================
+
+      - name: Generate mods CSV
+        run: |
+          set -e
+
+          python generate_mods.py
+
+          test -s mods.csv
+
+          echo ""
+          echo "=============================================="
+          echo "MODS"
+          echo "=============================================="
+
+          echo "Liczba modów:"
+          tail -n +2 mods.csv | wc -l
+
+          echo ""
+          echo "Pierwsze 5 rekordów:"
+          head -n 6 mods.csv
 
       # ============================================================
       # SHIP ANALYSIS
@@ -1133,6 +827,8 @@ jobs:
           set -e
 
           python ship_analysis.py
+
+          test -s ship_analysis.md
 
           echo "Wygenerowano ship_analysis.md"
 
@@ -1146,6 +842,8 @@ jobs:
 
           python fleet_analysis.py
 
+          test -s fleet_analysis.md
+
           echo "Wygenerowano fleet_analysis.md"
 
       # ============================================================
@@ -1158,6 +856,8 @@ jobs:
 
           python calculate_resources.py
 
+          test -s account_farming_report.md
+
       # ============================================================
       # FINAL VALIDATION
       # ============================================================
@@ -1168,17 +868,20 @@ jobs:
 
           test -s roster.csv
           test -s ships.csv
+          test -s mods.csv
           test -s account_farming_report.md
           test -s ship_analysis.md
           test -s fleet_analysis.md
 
           echo ""
-          echo "Wygenerowane pliki:"
-          echo ""
+          echo "=============================================="
+          echo "GENERATED FILES"
+          echo "=============================================="
 
           ls -lh \
             roster.csv \
             ships.csv \
+            mods.csv \
             account_farming_report.md \
             ship_analysis.md \
             fleet_analysis.md
@@ -1190,6 +893,10 @@ jobs:
           echo ""
           echo "Liczba statków:"
           tail -n +2 ships.csv | wc -l
+
+          echo ""
+          echo "Liczba modów:"
+          tail -n +2 mods.csv | wc -l
 
       # ============================================================
       # COMMIT
@@ -1208,6 +915,7 @@ jobs:
           git add \
             roster.csv \
             ships.csv \
+            mods.csv \
             account_farming_report.md \
             ship_analysis.md \
             fleet_analysis.md
