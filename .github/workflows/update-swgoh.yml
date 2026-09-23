@@ -15,40 +15,44 @@ jobs:
 
     steps:
 
-      # ------------------------------------------------------------
+      # ============================================================
       # CHECKOUT
-      # ------------------------------------------------------------
+      # ============================================================
 
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # ------------------------------------------------------------
+      # ============================================================
       # PYTHON
-      # ------------------------------------------------------------
+      # ============================================================
 
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
-      - name: Install SWGOH Comlink Python client
+      - name: Install dependencies
         run: |
+          set -e
+
           python -m pip install \
             --disable-pip-version-check \
             --no-cache-dir \
-            swgoh_comlink==2.3.0
+            swgoh_comlink==2.3.0 \
+            brotli
 
-      # ------------------------------------------------------------
+      # ============================================================
       # START COMLINK
-      # ------------------------------------------------------------
+      # ============================================================
 
       - name: Start SWGOH Comlink
         run: |
           set -e
 
-          echo "Pobieranie aktualnego obrazu SWGOH Comlink..."
+          echo "Pobieranie SWGOH Comlink..."
 
-          docker pull ghcr.io/swgoh-utils/swgoh-comlink:latest
+          docker pull \
+            ghcr.io/swgoh-utils/swgoh-comlink:latest
 
           echo "Uruchamianie Comlink..."
 
@@ -59,7 +63,7 @@ jobs:
             -e APP_NAME=vhonte-swgoh-github-actions \
             ghcr.io/swgoh-utils/swgoh-comlink:latest
 
-          echo "Oczekiwanie na uruchomienie Comlink..."
+          echo "Oczekiwanie na Comlink..."
 
           for i in $(seq 1 30); do
 
@@ -67,8 +71,10 @@ jobs:
               "http://127.0.0.1:3000/" \
               >/dev/null 2>&1
             then
+
               echo "Comlink działa."
               exit 0
+
             fi
 
             echo "Próba $i/30..."
@@ -76,24 +82,23 @@ jobs:
 
           done
 
+          echo ""
           echo "ERROR: Comlink nie wystartował."
           echo ""
-          echo "Logi Comlink:"
           docker logs swgoh-comlink
 
           exit 1
 
-      # ------------------------------------------------------------
-      # DOWNLOAD SWGOH DATA
-      # ------------------------------------------------------------
+      # ============================================================
+      # DOWNLOAD PLAYER DATA
+      # ============================================================
 
-      - name: Download SWGOH player, game data and localization
+      - name: Download player data
         run: |
           set -e
 
           python - <<'PY'
           import json
-          from pathlib import Path
 
           from swgoh_comlink import SwgohComlink
 
@@ -104,7 +109,7 @@ jobs:
 
           print("")
           print("=" * 80)
-          print("SWGOH COMLINK DATA DOWNLOAD")
+          print("POBIERANIE PLAYER DATA")
           print("=" * 80)
           print("")
 
@@ -114,246 +119,364 @@ jobs:
               version_cache_ttl=0
           ) as comlink:
 
-              # --------------------------------------------------
-              # PLAYER
-              # --------------------------------------------------
-
-              print("Pobieranie player data...")
-
               player = comlink.get_player(
                   allycode=ALLY_CODE,
                   enums=False
               )
 
-              if not isinstance(player, dict):
-                  raise RuntimeError(
-                      "Player data nie jest obiektem JSON."
-                  )
 
-              if not player.get("rosterUnit"):
-                  raise RuntimeError(
-                      "Player data nie zawiera rosterUnit."
-                  )
-
-              with open(
-                  "swgoh_972824625.json",
-                  "w",
-                  encoding="utf-8"
-              ) as f:
-                  json.dump(
-                      player,
-                      f,
-                      ensure_ascii=False
-                  )
-
-              print(
-                  "OK: player data"
+          if not isinstance(
+              player,
+              dict
+          ):
+              raise RuntimeError(
+                  "Player data nie jest obiektem JSON."
               )
 
-              print(
-                  "Liczba rosterUnit:",
-                  len(player["rosterUnit"])
+
+          roster = player.get(
+              "rosterUnit",
+              []
+          )
+
+
+          if not roster:
+              raise RuntimeError(
+                  "Player data nie zawiera rosterUnit."
               )
 
-              # --------------------------------------------------
-              # GAME DATA
-              # --------------------------------------------------
-              #
-              # Nie pobieramy segmentu 0 (200+ MB).
-              #
-              # Potrzebujemy:
-              #
-              # segment 1:
-              #   equipment
-              #
-              # segment 2:
-              #   recipe
-              #
-              # segment 3:
-              #   units
-              #
-              # Łączymy je w jeden data.json.
-              # --------------------------------------------------
 
-              game_data = {}
+          with open(
+              "swgoh_972824625.json",
+              "w",
+              encoding="utf-8"
+          ) as f:
 
-              for segment in (1, 2, 3):
-
-                  print("")
-                  print(
-                      f"Pobieranie game data segment {segment}..."
-                  )
-
-                  segment_data = comlink.get_game_data(
-                      include_pve_units=False,
-                      request_segment=segment,
-                      enums=False
-                  )
-
-                  if not isinstance(
-                      segment_data,
-                      dict
-                  ):
-                      raise RuntimeError(
-                          f"Segment {segment} "
-                          "nie jest obiektem JSON."
-                      )
-
-                  print(
-                      "Klucze segmentu:",
-                      len(segment_data)
-                  )
-
-                  for key, value in segment_data.items():
-
-                      if key in game_data:
-
-                          print(
-                              f"UWAGA: nadpisanie klucza "
-                              f"{key} z segmentu {segment}"
-                          )
-
-                      game_data[key] = value
-
-              # --------------------------------------------------
-              # VALIDATE REQUIRED COLLECTIONS
-              # --------------------------------------------------
-
-              required_collections = {
-                  "units": "units",
-                  "equipment": "equipment",
-                  "recipe": "recipe",
-              }
-
-              print("")
-              print(
-                  "Sprawdzanie wymaganych kolekcji..."
+              json.dump(
+                  player,
+                  f,
+                  ensure_ascii=False
               )
 
-              for key, description in required_collections.items():
 
-                  value = game_data.get(key)
+          print(
+              "OK: player data"
+          )
 
-                  if not isinstance(value, list):
-                      raise RuntimeError(
-                          f"Brak wymaganej kolekcji "
-                          f"{description} w data.json."
-                      )
-
-                  if not value:
-                      raise RuntimeError(
-                          f"Kolekcja {description} "
-                          "jest pusta."
-                      )
-
-                  print(
-                      f"OK: {description} = {len(value)}"
-                  )
-
-              with open(
-                  "data.json",
-                  "w",
-                  encoding="utf-8"
-              ) as f:
-                  json.dump(
-                      game_data,
-                      f,
-                      ensure_ascii=False
-                  )
-
-              print("")
-              print(
-                  "OK: data.json"
-              )
-
-              # --------------------------------------------------
-              # LOCALIZATION
-              # --------------------------------------------------
-
-              print("")
-              print(
-                  "Pobieranie lokalizacji ENG_US..."
-              )
-
-              localization = comlink.get_localization(
-                  locale="ENG_US",
-                  unzip=False,
-                  enums=False
-              )
-
-              if not isinstance(
-                  localization,
-                  dict
-              ):
-                  raise RuntimeError(
-                      "Localization data nie jest "
-                      "obiektem JSON."
-                  )
-
-              if not localization.get(
-                  "localizationBundle"
-              ):
-                  raise RuntimeError(
-                      "Brak localizationBundle."
-                  )
-
-              with open(
-                  "localization.json",
-                  "w",
-                  encoding="utf-8"
-              ) as f:
-                  json.dump(
-                      localization,
-                      f,
-                      ensure_ascii=False
-                  )
-
-              print(
-                  "OK: localization.json"
-              )
-
-          print("")
-          print("=" * 80)
-          print("COMLINK DATA DOWNLOAD ZAKOŃCZONY")
-          print("=" * 80)
-          print("")
+          print(
+              "Liczba rosterUnit:",
+              len(roster)
+          )
 
           PY
 
-      # ------------------------------------------------------------
-      # VALIDATE DOWNLOADED FILES
-      # ------------------------------------------------------------
+      # ============================================================
+      # DOWNLOAD CURRENT GAME DATA
+      # ============================================================
+      #
+      # Źródło:
+      # swgoh-utils/gamedata
+      #
+      # Repozytorium jest automatycznie aktualizowane po zmianach
+      # gry. Każda kolekcja ma strukturę:
+      #
+      # {
+      #   "version": "...",
+      #   "data": [...]
+      # }
+      #
+      # Potrzebujemy:
+      #
+      # units.json
+      # equipment.json
+      # recipe.json
+      #
+      # ============================================================
 
-      - name: Validate downloaded JSON files
+      - name: Download current game data
         run: |
           set -e
 
-          echo "Rozmiary plików:"
+          BASE_URL="https://raw.githubusercontent.com/swgoh-utils/gamedata/main"
+
+          echo ""
+          echo "=" * 80
+          echo "POBIERANIE AKTUALNEGO GAME DATA"
+          echo "=" * 80
+          echo ""
+
+          curl -fL \
+            --retry 5 \
+            --retry-delay 2 \
+            --retry-all-errors \
+            -A "Mozilla/5.0" \
+            "$BASE_URL/units.json" \
+            -o units_raw.json
+
+          curl -fL \
+            --retry 5 \
+            --retry-delay 2 \
+            --retry-all-errors \
+            -A "Mozilla/5.0" \
+            "$BASE_URL/equipment.json" \
+            -o equipment_raw.json
+
+          curl -fL \
+            --retry 5 \
+            --retry-delay 2 \
+            --retry-all-errors \
+            -A "Mozilla/5.0" \
+            "$BASE_URL/recipe.json" \
+            -o recipe_raw.json
+
+          echo ""
+          echo "Rozmiary:"
           wc -c \
-            swgoh_972824625.json \
-            data.json \
-            localization.json
+            units_raw.json \
+            equipment_raw.json \
+            recipe_raw.json
 
           echo ""
           echo "Walidacja JSON..."
 
           python -m json.tool \
-            swgoh_972824625.json \
+            units_raw.json \
             >/dev/null
 
           python -m json.tool \
-            data.json \
+            equipment_raw.json \
             >/dev/null
 
           python -m json.tool \
-            localization.json \
+            recipe_raw.json \
             >/dev/null
 
-          echo ""
-          echo "OK: wszystkie pliki są poprawnym JSON-em."
+          echo "JSON OK."
+
+      # ============================================================
+      # BUILD DATA.JSON
+      # ============================================================
+
+      - name: Build data.json
+        run: |
+          set -e
+
+          python - <<'PY'
+          import json
+
+
+          def load_collection(filename):
+
+              with open(
+                  filename,
+                  encoding="utf-8"
+              ) as f:
+
+                  obj = json.load(f)
+
+
+              if not isinstance(
+                  obj,
+                  dict
+              ):
+                  raise RuntimeError(
+                      f"{filename}: oczekiwano obiektu JSON."
+                  )
+
+
+              data = obj.get(
+                  "data"
+              )
+
+
+              if not isinstance(
+                  data,
+                  list
+              ):
+                  raise RuntimeError(
+                      f"{filename}: brak kolekcji data."
+                  )
+
+
+              if not data:
+                  raise RuntimeError(
+                      f"{filename}: kolekcja data jest pusta."
+                  )
+
+
+              print(
+                  filename,
+                  "->",
+                  len(data)
+              )
+
+
+              return data
+
+
+          units = load_collection(
+              "units_raw.json"
+          )
+
+          equipment = load_collection(
+              "equipment_raw.json"
+          )
+
+          recipe = load_collection(
+              "recipe_raw.json"
+          )
+
+
+          game_data = {
+              "units": units,
+              "equipment": equipment,
+              "recipe": recipe
+          }
+
+
+          with open(
+              "data.json",
+              "w",
+              encoding="utf-8"
+          ) as f:
+
+              json.dump(
+                  game_data,
+                  f,
+                  ensure_ascii=False
+              )
+
+
+          print("")
+          print(
+              "Wygenerowano data.json"
+          )
+
+          print(
+              "units:",
+              len(units)
+          )
+
+          print(
+              "equipment:",
+              len(equipment)
+          )
+
+          print(
+              "recipe:",
+              len(recipe)
+          )
+
+          PY
+
+      # ============================================================
+      # DOWNLOAD LOCALIZATION
+      # ============================================================
+
+      - name: Download current localization
+        run: |
+          set -e
+
+          BASE_URL="https://raw.githubusercontent.com/swgoh-utils/gamedata/main"
 
           echo ""
-          echo "Kontrola wymaganych danych..."
+          echo "Pobieranie ENG_US localization..."
+
+          curl -fL \
+            --retry 5 \
+            --retry-delay 2 \
+            --retry-all-errors \
+            -A "Mozilla/5.0" \
+            "$BASE_URL/Loc_ENG_US.txt.json.br" \
+            -o localization.json.br
+
+          echo ""
+          echo "Rozmiar:"
+          wc -c localization.json.br
+
+          test -s localization.json.br
+
+      # ============================================================
+      # BUILD LOCALIZATION.JSON
+      # ============================================================
+
+      - name: Build localization.json
+        run: |
+          set -e
+
+          python - <<'PY'
+          import json
+          import brotli
+
+
+          with open(
+              "localization.json.br",
+              "rb"
+          ) as f:
+
+              compressed = f.read()
+
+
+          raw = brotli.decompress(
+              compressed
+          )
+
+
+          localization = json.loads(
+              raw.decode(
+                  "utf-8"
+              )
+          )
+
+
+          if not isinstance(
+              localization,
+              dict
+          ):
+              raise RuntimeError(
+                  "Localization nie jest obiektem JSON."
+              )
+
+
+          with open(
+              "localization.json",
+              "w",
+              encoding="utf-8"
+          ) as f:
+
+              json.dump(
+                  localization,
+                  f,
+                  ensure_ascii=False
+              )
+
+
+          print(
+              "Wygenerowano localization.json"
+          )
+
+          print(
+              "Liczba wpisów:",
+              len(localization)
+          )
+
+          PY
+
+          test -s localization.json
+
+      # ============================================================
+      # VALIDATE ALL INPUT DATA
+      # ============================================================
+
+      - name: Validate input data
+        run: |
+          set -e
+
+          echo ""
+          echo "=" * 80
+          echo "WALIDACJA DANYCH"
+          echo "=" * 80
+          echo ""
 
           python - <<'PY'
           import json
@@ -366,12 +489,14 @@ jobs:
               )
           )
 
+
           game = json.load(
               open(
                   "data.json",
                   encoding="utf-8"
               )
           )
+
 
           localization = json.load(
               open(
@@ -423,50 +548,51 @@ jobs:
           )
 
           print(
-              "Localization bundle:",
-              "OK"
-              if localization.get("localizationBundle")
-              else "BRAK"
+              "Localization:",
+              len(localization)
           )
 
 
-          if not roster:
-              raise SystemExit(
-                  "ERROR: rosterUnit jest puste."
+          if len(roster) == 0:
+              raise RuntimeError(
+                  "Roster jest pusty."
               )
 
-          if not units:
-              raise SystemExit(
-                  "ERROR: units jest puste."
+
+          if len(units) == 0:
+              raise RuntimeError(
+                  "Units jest puste."
               )
 
-          if not equipment:
-              raise SystemExit(
-                  "ERROR: equipment jest puste."
+
+          if len(equipment) == 0:
+              raise RuntimeError(
+                  "Equipment jest puste."
               )
 
-          if not recipes:
-              raise SystemExit(
-                  "ERROR: recipe jest puste."
+
+          if len(recipes) == 0:
+              raise RuntimeError(
+                  "Recipe jest puste."
               )
 
-          if not localization.get(
-              "localizationBundle"
-          ):
-              raise SystemExit(
-                  "ERROR: localizationBundle jest pusty."
+
+          if len(localization) == 0:
+              raise RuntimeError(
+                  "Localization jest pusta."
               )
+
 
           print("")
           print(
-              "Walidacja danych OK."
+              "Wszystkie wymagane dane są dostępne."
           )
 
           PY
 
-      # ------------------------------------------------------------
+      # ============================================================
       # GENERATE ROSTER CSV
-      # ------------------------------------------------------------
+      # ============================================================
 
       - name: Generate roster CSV
         run: |
@@ -484,6 +610,7 @@ jobs:
               )
           )
 
+
           game = json.load(
               open(
                   "data.json",
@@ -493,6 +620,7 @@ jobs:
 
 
           units = {}
+
 
           for unit in game.get(
               "units",
@@ -520,6 +648,7 @@ jobs:
                   ""
               )
 
+
               if not definition_id:
                   continue
 
@@ -539,6 +668,7 @@ jobs:
               if game_unit.get(
                   "combatType"
               ) != 1:
+
                   continue
 
 
@@ -612,9 +742,9 @@ jobs:
 
           PY
 
-      # ------------------------------------------------------------
+      # ============================================================
       # GENERATE SHIPS CSV
-      # ------------------------------------------------------------
+      # ============================================================
 
       - name: Generate ships CSV
         run: |
@@ -623,9 +753,6 @@ jobs:
           cat > generate_ships.py <<'PY'
           import csv
           import json
-          import base64
-          import zipfile
-          import io
 
 
           player = json.load(
@@ -635,12 +762,14 @@ jobs:
               )
           )
 
+
           game = json.load(
               open(
                   "data.json",
                   encoding="utf-8"
               )
           )
+
 
           localization = json.load(
               open(
@@ -654,36 +783,18 @@ jobs:
           # LOCALIZATION
           # --------------------------------------------------------
 
-          bundle = base64.b64decode(
-              localization["localizationBundle"]
-          )
+          #
+          # swgoh-utils/gamedata przechowuje lokalizację jako
+          # bezpośredni słownik JSON:
+          #
+          # {
+          #   "UNIT_SLAVE1_NAME": "Slave I",
+          #   ...
+          # }
+          #
+          # --------------------------------------------------------
 
-          z = zipfile.ZipFile(
-              io.BytesIO(bundle)
-          )
-
-
-          lines = z.read(
-              "Loc_ENG_US.txt"
-          ).decode(
-              "utf-8",
-              "replace"
-          ).splitlines()
-
-
-          names = {}
-
-
-          for line in lines:
-
-              if "|" in line:
-
-                  key, value = line.split(
-                      "|",
-                      1
-                  )
-
-                  names[key] = value
+          names = localization
 
 
           # --------------------------------------------------------
@@ -723,6 +834,7 @@ jobs:
                   ""
               )
 
+
               if not definition_id:
                   continue
 
@@ -742,6 +854,7 @@ jobs:
               if game_unit.get(
                   "combatType"
               ) != 2:
+
                   continue
 
 
@@ -752,12 +865,20 @@ jobs:
 
 
               name = names.get(
-                  name_key,
-                  names.get(
-                      "UNIT_" + base_id + "_NAME",
-                      base_id
-                  )
+                  name_key
               )
+
+
+              if not name:
+
+                  name = names.get(
+                      "UNIT_" + base_id + "_NAME"
+                  )
+
+
+              if not name:
+
+                  name = base_id
 
 
               ships.append({
@@ -830,7 +951,7 @@ jobs:
 
 
           # --------------------------------------------------------
-          # CONTROL IMPORTANT SHIPS
+          # IMPORTANT SHIPS CHECK
           # --------------------------------------------------------
 
           print("")
@@ -868,6 +989,7 @@ jobs:
               ship = ships_by_base_id.get(
                   base_id
               )
+
 
               if ship:
 
@@ -928,7 +1050,7 @@ jobs:
 
 
           # --------------------------------------------------------
-          # HARD FAIL IF EXECUTOR SHIP IS MISSING
+          # EXECUTOR HARD CHECK
           # --------------------------------------------------------
 
           executor_ships = [
@@ -955,11 +1077,14 @@ jobs:
                   "ERROR: Brak statków Executor:"
               )
 
+
               for base_id in missing_executor:
+
                   print(
                       " -",
                       base_id
                   )
+
 
               raise SystemExit(
                   1
@@ -974,9 +1099,9 @@ jobs:
 
           python generate_ships.py
 
-      # ------------------------------------------------------------
+      # ============================================================
       # SHIP ANALYSIS
-      # ------------------------------------------------------------
+      # ============================================================
 
       - name: Generate ship analysis
         run: |
@@ -986,9 +1111,9 @@ jobs:
 
           echo "Wygenerowano ship_analysis.md"
 
-      # ------------------------------------------------------------
+      # ============================================================
       # FLEET ANALYSIS
-      # ------------------------------------------------------------
+      # ============================================================
 
       - name: Generate fleet analysis
         run: |
@@ -998,9 +1123,9 @@ jobs:
 
           echo "Wygenerowano fleet_analysis.md"
 
-      # ------------------------------------------------------------
+      # ============================================================
       # FARMING RESOURCES
-      # ------------------------------------------------------------
+      # ============================================================
 
       - name: Calculate farming resources
         run: |
@@ -1008,9 +1133,9 @@ jobs:
 
           python calculate_resources.py
 
-      # ------------------------------------------------------------
+      # ============================================================
       # FINAL VALIDATION
-      # ------------------------------------------------------------
+      # ============================================================
 
       - name: Validate generated files
         run: |
@@ -1041,9 +1166,9 @@ jobs:
           echo "Liczba statków:"
           tail -n +2 ships.csv | wc -l
 
-      # ------------------------------------------------------------
+      # ============================================================
       # COMMIT
-      # ------------------------------------------------------------
+      # ============================================================
 
       - name: Commit generated files
         run: |
@@ -1075,9 +1200,9 @@ jobs:
 
           fi
 
-      # ------------------------------------------------------------
+      # ============================================================
       # CLEANUP
-      # ------------------------------------------------------------
+      # ============================================================
 
       - name: Stop Comlink
         if: always()
