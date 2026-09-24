@@ -6,8 +6,8 @@
 
 | ID | Przedmiot | Wymagane | Posiadane | Brakuje |
 |---|---|---:|---:|---:|
-| `172Salvage` | Mk 7 Kyrotech Shock Prod Prototype Salvage | 100 | 4 | **96** |
-| `152Salvage` | Mk 6 Athakam Medpac Salvage | 80 | 10 | **70** |
+| `172Salvage` | Mk 7 Kyrotech Shock Prod Prototype Salvage | 100 | 14 | **86** |
+| `152Salvage` | Mk 6 Athakam Medpac Salvage | 80 | 13 | **67** |
 | `168PrototypeSalvage_V2` | Mk 12 Czerka Stun Cuffs Prototype Salvage | 80 | 15 | **65** |
 | `168PrototypeSalvage` | Mk 12 ArmaTek Fusion Furnace Prototype Salvage | 100 | 45 | **55** |
 | `123Component` | Mk 8 Neuro-Saav Electrobinoculars Component | 50 | 4 | **46** |
@@ -16,8 +16,8 @@
 | `151Salvage` | Mk 7 Chiewab Hypo Syringe Salvage | 40 | 5 | **35** |
 | `147Salvage` | Mk 8 Nubian Security Scanner Salvage | 40 | 7 | **33** |
 | `158PrototypeSalvage` | Mk 12 ArmaTek Multi-tool Prototype Salvage | 30 | 10 | **20** |
-| `RM_002` | Incomplete Signal Data | 65 | 51 | **14** |
 | `159PrototypeSalvage` | Mk 12 ArmaTek Armor Plating Prototype Salvage | 30 | 17 | **13** |
+| `RM_002` | Incomplete Signal Data | 65 | 55 | **10** |
 | `160PrototypeSalvage` | Mk 12 ArmaTek Bayonet Prototype Salvage | 30 | 26 | **4** |
 
 ## Szczegóły
@@ -48,8 +48,8 @@ Gear: **G11 → G13** Relic: **R1 → R5**
 
 | ID | Przedmiot | Brakuje |
 |---|---|---:|
-| `172Salvage` | Mk 7 Kyrotech Shock Prod Prototype Salvage | **96** |
-| `152Salvage` | Mk 6 Athakam Medpac Salvage | **70** |
+| `172Salvage` | Mk 7 Kyrotech Shock Prod Prototype Salvage | **86** |
+| `152Salvage` | Mk 6 Athakam Medpac Salvage | **67** |
 | `168PrototypeSalvage_V2` | Mk 12 Czerka Stun Cuffs Prototype Salvage | **65** |
 | `168PrototypeSalvage` | Mk 12 ArmaTek Fusion Furnace Prototype Salvage | **55** |
 | `123Component` | Mk 8 Neuro-Saav Electrobinoculars Component | **46** |
@@ -58,8 +58,8 @@ Gear: **G11 → G13** Relic: **R1 → R5**
 | `151Salvage` | Mk 7 Chiewab Hypo Syringe Salvage | **35** |
 | `147Salvage` | Mk 8 Nubian Security Scanner Salvage | **33** |
 | `158PrototypeSalvage` | Mk 12 ArmaTek Multi-tool Prototype Salvage | **20** |
-| `RM_002` | Incomplete Signal Data | **14** |
 | `159PrototypeSalvage` | Mk 12 ArmaTek Armor Plating Prototype Salvage | **13** |
+| `RM_002` | Incomplete Signal Data | **10** |
 | `160PrototypeSalvage` | Mk 12 ArmaTek Bayonet Prototype Salvage | **4** |
 
 ## Informacje techniczne

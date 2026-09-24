@@ -1547,6 +1547,7 @@ hPGzjctdTjG8azVwO0NoYw,755,Potency,5,Circle,3,15,False,0,True,equippedStatMod,,P
 rjc6GFMgQhObwy96iD42QQ,755,Potency,5,Circle,1,15,False,0,True,equippedStatMod,,Health %,5.88%,588,0,,Speed,5,50000,1,562020,Protection %,1.99%,199,1,1991,Health,358,3580000,1,35858819,Defense %,1.05%,105,1,1053
 sDidG1lDSM6KmzBeeKwKng,755,Potency,5,Circle,1,15,False,0,True,equippedStatMod,,Protection %,23.5%,2350,0,,Tenacity %,1.89%,189,1,1899,Speed,5,50000,1,500640,Offense %,0.47%,47,1,470,Defense %,0.92%,92,1,921
 tER44FKRRtq2ZwPhtrH6JA,755,Potency,5,Circle,1,15,False,0,False,unequippedMod,,Health %,5.88%,588,0,,Health,360,3600000,1,36036688,Speed,5,50000,1,580560,Protection,766,7660000,1,76676839,Tenacity %,1.61%,161,1,1611
+v_DsWx_8QaOLRX9FrePfYQ,755,Potency,5,Circle,5,15,False,0,True,equippedStatMod,,Protection %,23.5%,2350,0,,Critical Chance %,1.16%,116,1,1162,Health %,0.78%,78,1,785,Potency %,3.12%,312,2,1714|1407,Speed,15,150000,4,306810|329160|497880|403530
 y3itIHIrSQ66Nq1bKpFA_w,755,Potency,5,Circle,1,15,False,0,True,equippedStatMod,,Protection %,23.5%,2350,0,,Critical Chance %,1.67%,167,1,1671,Health,356,3560000,1,35618803,Protection,611,6110000,1,61194455,Speed,5,50000,1,566340
 ZkJucJjmSxyKEt4cahdI5g,755,Potency,5,Circle,2,9,False,0,True,equippedStatMod,,Protection %,14.5%,1450,0,,Defense,5,50000,1,568694,Potency %,1.24%,124,1,1242,Health,286,2860000,1,28688341,Offense %,0.44%,44,1,441
 bhYmanbBTDKTUsWGi-nyGQ,755,Potency,5,Circle,3,6,False,0,True,equippedStatMod,,Protection %,10%,1000,0,,Critical Chance %,2.1%,210,1,2100,Protection,458,4580000,1,45803437,Speed,5,50000,1,540630,Offense %,0.53%,53,1,534
@@ -1558,7 +1559,6 @@ VusymyikRv2dmFDEVZLByg,755,Potency,5,Circle,4,1,False,0,False,unequippedMod,,Hea
 _WRSeqqnRTOh_GC5Oc_GwA,755,Potency,5,Circle,2,1,False,0,False,unequippedMod,,Health %,0.63%,63,0,,Speed,5,50000,1,520170,,,,0,,,,,0,,,,,0,
 qq3aHRT_R32fC4gNJiF8ig,755,Potency,5,Circle,5,1,False,0,False,unequippedMod,,Health %,0.63%,63,0,,Offense %,0.3%,30,1,301,Protection %,1.88%,188,1,1885,Speed,5,50000,1,530340,Protection,438,4380000,1,43809997
 rRGaxmcHS0i0hFqpEUCC1w,755,Potency,5,Circle,2,1,False,0,False,unequippedMod,,Health %,0.63%,63,0,,Speed,5,50000,1,573540,,,,0,,,,,0,,,,,0,
-v_DsWx_8QaOLRX9FrePfYQ,755,Potency,5,Circle,5,1,False,0,True,equippedStatMod,,Protection %,2.5%,250,0,,Critical Chance %,1.16%,116,1,1162,Health %,0.78%,78,1,785,Potency %,1.71%,171,1,1714,Speed,3,30000,1,306810
 zxPmv7qCSNmhodr5uSnaHg,755,Potency,5,Circle,5,1,False,0,False,unequippedMod,,Health %,0.63%,63,0,,Offense %,0.36%,36,1,363,Speed,5,50000,1,503400,Protection %,2.05%,205,1,2057,Defense %,1.19%,119,1,1199
 6Iq5iArcRSiRXlSVFviI-w,756,Potency,5,Cross,1,15,False,0,False,unequippedMod,,Tenacity %,24%,2400,0,,Speed,5,50000,1,521700,Health,368,3680000,1,36881030,Potency %,1.95%,195,1,1950,Health %,0.89%,89,1,897
 8FuA-Xv7S32aURc8Z-KFcw,756,Potency,5,Cross,1,15,False,0,False,unequippedMod,,Tenacity %,24%,2400,0,,Critical Chance %,1.93%,193,1,1932,Potency %,2.19%,219,1,2196,Speed,5,50000,1,532950,Defense,8,80000,1,850738
