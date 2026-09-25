@@ -100,6 +100,7 @@ E1sbTh3qRNGPUlkefO813Q,556,Critical Chance,5,Cross,3,6,False,0,True,equippedStat
 qYr-gBMUTdiYobFJchTADg,556,Critical Chance,5,Cross,3,6,False,0,True,equippedStatMod,,Defense %,5%,500,0,,Defense,7,70000,1,741566,Protection %,1.43%,143,1,1433,Offense,39,390000,1,3883524,Speed,5,50000,1,568620
 64LiaPP_StyTrwPbtTNbGg,556,Critical Chance,5,Cross,4,1,False,0,False,unequippedMod,,Tenacity %,3%,300,0,,Health,407,4070000,1,40747002,Speed,5,50000,1,536820,Offense %,0.44%,44,1,448,,,,0,
 89PNwdpAQ4qiA-yHeINs5A,556,Critical Chance,5,Cross,3,1,False,0,True,equippedStatMod,,Defense %,1.25%,125,0,,Protection %,1.6%,160,1,1601,Speed,5,50000,1,526320,,,,0,,,,,0,
+Ru2w7ldLRH2Ss8rowBimSw,556,Critical Chance,5,Cross,4,1,False,0,False,unequippedMod,,Offense %,0.63%,63,0,,Health,339,3390000,1,33925833,Protection %,1.34%,134,1,1346,Offense,45,450000,1,4403136,,,,0,
 bcC7wHrZR4uoPHJJ6b2WGA,556,Critical Chance,5,Cross,2,1,False,0,False,unequippedMod,,Protection %,2.5%,250,0,,Speed,5,50000,1,565290,,,,0,,,,,0,,,,,0,
 cknARkC9SnaqpnTJ0YI-EQ,556,Critical Chance,5,Cross,3,1,False,0,True,equippedStatMod,,Defense %,1.25%,125,0,,Speed,5,50000,1,580530,Protection %,1.47%,147,1,1477,,,,0,,,,,0,
 sOr3Pj_CRYCZrG8I_q4rVQ,556,Critical Chance,5,Cross,4,1,False,0,True,equippedStatMod,,Protection %,2.5%,250,0,,Potency %,1.89%,189,1,1897,Speed,5,50000,1,578130,Protection,678,6780000,1,67814337,,,,0,
@@ -408,6 +409,7 @@ VD36Eub3SRWCMxKSybw5Cw,651,Critical Damage,5,Square,3,6,False,0,True,equippedSta
 YxWaeMtnREuiIksCOeQgGw,651,Critical Damage,5,Square,3,6,False,0,True,equippedStatMod,,Offense %,2.5%,250,0,,Protection %,1.72%,172,1,1726,Offense,40,400000,1,3903588,Speed,5,50000,1,556830,Health,336,3360000,1,33615098
 _AwAsfc3TNaUFm3qsNdGMw,651,Critical Damage,5,Square,3,6,False,0,True,equippedStatMod,,Offense %,2.5%,250,0,,Health,342,3420000,1,34272999,Protection,686,6860000,1,68694773,Speed,5,50000,1,518850,Critical Chance %,1.73%,173,1,1735
 FW0OyOedSZ-JS74Tu4VFFA,651,Critical Damage,5,Square,3,1,False,0,True,equippedStatMod,,Offense %,0.63%,63,0,,Speed,3,30000,1,321330,Tenacity %,1.76%,176,1,1762,,,,0,,,,,0,
+G08b121FT5ey4E1zmDrlQg,651,Critical Damage,5,Square,3,1,False,0,False,unequippedMod,,Offense %,0.63%,63,0,,Health,383,3830000,1,38385416,Speed,4,40000,1,482970,,,,0,,,,,0,
 kU312C_BTVqh3beTqhJAvw,651,Critical Damage,5,Square,3,1,False,0,True,equippedStatMod,,Offense %,0.63%,63,0,,Speed,5,50000,1,570930,Health,295,2950000,1,29596973,,,,0,,,,,0,
 wDU7o-WFQnSeKxeMTQIpcw,651,Critical Damage,5,Square,2,1,False,0,True,equippedStatMod,,Offense %,0.63%,63,0,,Speed,5,50000,1,553890,,,,0,,,,,0,,,,,0,
 wTA85CywTIKA5XDA-lcMbA,651,Critical Damage,5,Square,3,1,False,0,True,equippedStatMod,,Offense %,0.63%,63,0,,Speed,5,50000,1,572130,Protection %,1.85%,185,1,1858,,,,0,,,,,0,
