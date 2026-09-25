@@ -6,7 +6,7 @@
 
 | ID | Przedmiot | Wymagane | Posiadane | Brakuje |
 |---|---|---:|---:|---:|
-| `172Salvage` | Mk 7 Kyrotech Shock Prod Prototype Salvage | 100 | 24 | **76** |
+| `172Salvage` | Mk 7 Kyrotech Shock Prod Prototype Salvage | 100 | 26 | **74** |
 | `168PrototypeSalvage_V2` | Mk 12 Czerka Stun Cuffs Prototype Salvage | 80 | 15 | **65** |
 | `152Salvage` | Mk 6 Athakam Medpac Salvage | 80 | 18 | **62** |
 | `168PrototypeSalvage` | Mk 12 ArmaTek Fusion Furnace Prototype Salvage | 100 | 45 | **55** |
@@ -17,8 +17,8 @@
 | `147Salvage` | Mk 8 Nubian Security Scanner Salvage | 40 | 7 | **33** |
 | `158PrototypeSalvage` | Mk 12 ArmaTek Multi-tool Prototype Salvage | 30 | 10 | **20** |
 | `159PrototypeSalvage` | Mk 12 ArmaTek Armor Plating Prototype Salvage | 30 | 17 | **13** |
-| `RM_002` | Incomplete Signal Data | 65 | 59 | **6** |
 | `160PrototypeSalvage` | Mk 12 ArmaTek Bayonet Prototype Salvage | 30 | 26 | **4** |
+| `RM_002` | Incomplete Signal Data | 65 | 64 | **1** |
 
 ## Szczegóły
 
@@ -48,7 +48,7 @@ Gear: **G11 → G13** Relic: **R1 → R5**
 
 | ID | Przedmiot | Brakuje |
 |---|---|---:|
-| `172Salvage` | Mk 7 Kyrotech Shock Prod Prototype Salvage | **76** |
+| `172Salvage` | Mk 7 Kyrotech Shock Prod Prototype Salvage | **74** |
 | `168PrototypeSalvage_V2` | Mk 12 Czerka Stun Cuffs Prototype Salvage | **65** |
 | `152Salvage` | Mk 6 Athakam Medpac Salvage | **62** |
 | `168PrototypeSalvage` | Mk 12 ArmaTek Fusion Furnace Prototype Salvage | **55** |
@@ -59,8 +59,8 @@ Gear: **G11 → G13** Relic: **R1 → R5**
 | `147Salvage` | Mk 8 Nubian Security Scanner Salvage | **33** |
 | `158PrototypeSalvage` | Mk 12 ArmaTek Multi-tool Prototype Salvage | **20** |
 | `159PrototypeSalvage` | Mk 12 ArmaTek Armor Plating Prototype Salvage | **13** |
-| `RM_002` | Incomplete Signal Data | **6** |
 | `160PrototypeSalvage` | Mk 12 ArmaTek Bayonet Prototype Salvage | **4** |
+| `RM_002` | Incomplete Signal Data | **1** |
 
 ## Informacje techniczne
 
