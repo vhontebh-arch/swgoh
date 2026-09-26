@@ -5,11 +5,13 @@ Output: mod_analysis.csv and mod_analysis.md
 """
 
 import csv
+import json
 import os
 
 INPUT_FILE = "mods.csv"
 OUTPUT_CSV = "mod_analysis.csv"
 OUTPUT_MD = "mod_analysis.md"
+PROFILE_FILE = "mod_profiles.json"
 
 R5 = {
     "Critical Chance %": (1.125, 2.25), "Defense": (4.9, 9.8),
@@ -27,30 +29,48 @@ R6 = {
     "Protection": (460.0, 920.0), "Protection %": (1.5, 3.0),
     "Speed": (3.0, 6.0), "Tenacity %": (1.5, 3.0),
 }
-
 TOTAL = {(5,1):4,(5,2):5,(5,3):6,(5,4):7,(5,5):8,
          (6,1):8,(6,2):9,(6,3):10,(6,4):11,(6,5):12}
 TIER = {1:"E",2:"D",3:"C",4:"B",5:"A"}
 
+STAT_VALUE = {
+    "Speed": 1.00, "Offense %": 0.92, "Offense": 0.82,
+    "Health %": 0.72, "Protection %": 0.70, "Health": 0.48,
+    "Protection": 0.48, "Defense %": 0.42, "Defense": 0.34,
+    "Potency %": 0.34, "Tenacity %": 0.30,
+    "Critical Chance %": 0.25, "Critical Damage %": 0.25,
+    "Critical Avoidance %": 0.20, "Speed %": 0.15,
+}
+CAL_ATTEMPTS = {(6,1):1,(6,2):2,(6,3):3,(6,4):4,(6,5):6}
+CAL_COST = {1:15,2:25,3:40,4:75,5:100,6:150}
+
 def integer(value, default=0):
-    try: return int(value)
-    except (TypeError, ValueError): return default
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return default
 
 def number(value, default=0.0):
-    try: return float(str(value).replace("%",""))
-    except (TypeError, ValueError): return default
+    try:
+        return float(str(value).replace("%",""))
+    except (TypeError, ValueError):
+        return default
 
 def rolls(row, i):
     stat = row.get("secondary{}Stat".format(i), "").strip()
-    if not stat: return None
+    if not stat:
+        return None
     count = integer(row.get("secondary{}Rolls".format(i), ""))
     value = number(row.get("secondary{}Value".format(i), ""))
     raw = row.get("secondary{}RawRolls".format(i), "")
     values = []
     for item in raw.split("|"):
-        if not item: continue
-        try: raw_value = float(item)
-        except ValueError: continue
+        if not item:
+            continue
+        try:
+            raw_value = float(item)
+        except ValueError:
+            continue
         if stat in {"Health","Protection","Offense","Defense","Speed"}:
             values.append(raw_value / 10000.0)
         else:
@@ -58,26 +78,6 @@ def rolls(row, i):
     if not values and count:
         values = [value / count] * count
     return stat, value, count, values
-
-# Secondary-stat value weights are deliberately generic. Character-specific
-# profiles are layered on top when targets/profiles are available.
-STAT_VALUE = {
-    "Speed": 1.00,
-    "Offense %": 0.92,
-    "Offense": 0.82,
-    "Health %": 0.72,
-    "Protection %": 0.70,
-    "Health": 0.48,
-    "Protection": 0.48,
-    "Defense %": 0.42,
-    "Defense": 0.34,
-    "Potency %": 0.34,
-    "Tenacity %": 0.30,
-    "Critical Chance %": 0.25,
-    "Critical Damage %": 0.25,
-    "Critical Avoidance %": 0.20,
-    "Speed %": 0.15,
-}
 
 def quality(stat, value, count, values, dots):
     if not count:
@@ -93,8 +93,7 @@ def quality(stat, value, count, values, dots):
     return max(0.0, min(1.0, (per-low)/(high-low)))
 
 def roll_value(stat, value, count, values, dots):
-    q = quality(stat, value, count, values, dots)
-    return q * STAT_VALUE.get(stat, 0.10)
+    return quality(stat, value, count, values, dots) * STAT_VALUE.get(stat, 0.10)
 
 def projected_6e_quality(secs):
     if not secs:
@@ -125,13 +124,27 @@ def quality_metrics(secs, dots):
     return quality_pct, value_pct
 
 def best_future_roll(sec_stats, dots):
-    # For the generic model, future rolls go to the most valuable existing
-    # secondary. Character-specific optimization can override this later.
     if not sec_stats:
         return 0.0
     return max(STAT_VALUE.get(x[0], 0.10) for x in sec_stats)
 
-def next_action(row, secs, current_quality, current_value, potential):
+def investment(row):
+    dots = integer(row.get("dots"))
+    tier = integer(row.get("tier"))
+    level = integer(row.get("level"))
+    if level < 15:
+        return "upgrade"
+    if dots == 5 and tier < 5:
+        return "slice"
+    if dots == 5 and tier == 5:
+        return "6-dot"
+    if dots == 6 and tier < 5:
+        return "slice"
+    if dots == 6 and tier == 5:
+        return "calibration"
+    return "none"
+
+def next_action(row, secs, current_quality, current_value, potential, fit_score=0.0):
     dots = integer(row.get("dots"))
     tier = integer(row.get("tier"))
     level = integer(row.get("level"))
@@ -142,31 +155,31 @@ def next_action(row, secs, current_quality, current_value, potential):
         return ("UPGRADE", "nieujawnione wszystkie secondary")
 
     if level < 15:
-        if current_value >= 35 or speed:
-            return ("UPGRADE", "dokończenie do 15 ma dodatnią wartość oczekiwaną")
+        if current_value >= 35 or speed or fit_score >= 70:
+            return ("UPGRADE", "dokończenie do 15 ma dodatnią wartość dla jakości lub profilu postaci")
         return ("KEEP", "zbyt słaby profil przed 15")
 
     if dots == 5 and tier < 5:
-        if speed_rolls >= 2 or (current_value >= 43 and potential >= 58):
-            return ("SLICE", "wartość secondary uzasadnia kolejny roll")
+        if speed_rolls >= 2 or fit_score >= 70 or (current_value >= 43 and potential >= 58):
+            return ("SLICE", "wartość moda lub dopasowanie do postaci uzasadnia kolejny roll")
         if current_value >= 35 and potential >= 52:
             return ("KEEP", "obserwuj przed wydaniem materiałów")
         return ("KEEP", "wartość secondary zbyt niska")
 
     if dots == 5 and tier == 5:
         six_e = projected_6e_quality(secs)
-        if speed_rolls >= 2 or six_e >= 50 or (current_value >= 45 and len(secs) >= 3):
-            return ("SLICE_6E", "5A ma wystarczającą wartość do 6E")
+        if speed_rolls >= 2 or fit_score >= 72 or six_e >= 50 or (current_value >= 45 and len(secs) >= 3):
+            return ("SLICE_6E", "5A ma wystarczającą wartość lub dopasowanie do postaci")
         return ("KEEP", "5A nie uzasadnia kosztu 6E")
 
     if dots == 6 and tier < 5:
-        if speed_rolls >= 3 or (current_value >= 52 and potential >= 65):
+        if speed_rolls >= 3 or fit_score >= 72 or (current_value >= 52 and potential >= 65):
             return ("SLICE", "6-dot ma dobry profil do kolejnego rolla")
         return ("KEEP", "brak wystarczającej wartości do kolejnego slice")
 
     if dots == 6 and tier == 5:
-        if speed_rolls >= 3 or current_value >= 58:
-            return ("CALIBRATE", "6A ma wartość uzasadniającą calibration")
+        if speed_rolls >= 3 or fit_score >= 75 or current_value >= 58:
+            return ("CALIBRATE", "6A ma wartość lub dopasowanie uzasadniające calibration")
         return ("KEEP", "6A nie wymaga obecnie inwestycji")
 
     return ("KEEP", "brak dalszej inwestycji")
@@ -174,16 +187,12 @@ def next_action(row, secs, current_quality, current_value, potential):
 def analyze(row):
     dots = integer(row.get("dots"))
     tier = integer(row.get("tier"))
-    level = integer(row.get("level"))
     secs = [x for i in range(1, 5) if (x := rolls(row, i)) is not None]
-
     total = sum(x[2] for x in secs)
     current_quality, current_value = quality_metrics(secs, dots)
     target_total = TOTAL.get((dots, tier), total)
     remaining = max(0, target_total-total)
 
-    # Potential ceiling is now value-aware: perfect future rolls are assigned
-    # to the strongest currently present secondary.
     best_weight = best_future_roll(secs, dots)
     future_value = (current_value / 100.0) * total + remaining * best_weight
     potential_value = 100.0 * future_value / max(1, total + remaining)
@@ -201,10 +210,6 @@ def analyze(row):
     speed_rolls = speed[2] if speed else 0
     speed_quality = min(100.0, 100.0*speed_value/(6.0*speed_rolls)) if speed_rolls else 0.0
 
-    action, reason = next_action(
-        row, secs, current_quality, current_value, potential_value
-    )
-
     out = dict(row)
     out.update({
         "tierName": TIER.get(tier, "?"),
@@ -217,8 +222,6 @@ def analyze(row):
         "potentialCeiling": round(potential_value, 1),
         "potentialGain": round(max(0, potential_value-current_value), 1),
         "projected6EQuality": round(six_e_quality, 1),
-        "recommendedAction": action,
-        "reason": reason,
         "nextInvestment": investment(row),
         "calibrationAttemptsMax": calibration_max,
         "calibrationAttemptsUsed": calibration_used,
@@ -229,99 +232,172 @@ def analyze(row):
     return out
 
 def load_targets():
-    path = "targets.json"
-    if not os.path.exists(path):
+    if not os.path.exists("targets.json"):
         return []
     try:
-        with open(path, encoding="utf-8") as f:
-            data = __import__("json").load(f)
-        return data.get("targets", [])
+        with open("targets.json", encoding="utf-8") as f:
+            return json.load(f).get("targets", [])
     except Exception:
         return []
 
+def load_profiles():
+    if not os.path.exists(PROFILE_FILE):
+        return {}
+    try:
+        with open(PROFILE_FILE, encoding="utf-8") as f:
+            return json.load(f).get("profiles", {})
+    except Exception:
+        return {}
 
-def character_fit(row, targets):
-    # targets.json currently identifies development targets, but does not yet
-    # contain stat profiles. Keep this layer explicit and neutral until such
-    # profiles exist rather than guessing a character's desired stats.
+def score_profile(row, profile):
+    primary = row.get("primaryStat", "")
+    slot = row.get("slot", "")
+    primary_pref = profile.get("primary_preferences", {}).get(slot, {})
+    primary_fit = float(primary_pref.get(primary, 0.0)) * 100.0
+
+    secs = []
+    for i in range(1, 5):
+        x = rolls(row, i)
+        if x is not None:
+            stat, value, count, values = x
+            q = quality(stat, value, count, values, integer(row.get("dots")))
+            pref = float(profile.get("secondary_preferences", {}).get(stat, 0.0))
+            secs.append((q * 100.0, pref, count))
+
+    weighted = sum(q * pref * max(1, count) for q, pref, count in secs)
+    max_weight = sum(max(1, count) for q, pref, count in secs) or 1
+    secondary_fit = 100.0 * weighted / max_weight
+    set_name = row.get("set", "")
+    set_fit = float(profile.get("set_preferences", {}).get(set_name, 0.0)) * 100.0
+
+    fit_score = 0.20 * primary_fit + 0.15 * set_fit + 0.65 * secondary_fit
+    return {
+        "fitScore": round(fit_score, 1),
+        "primaryFit": round(primary_fit, 1),
+        "secondaryFit": round(secondary_fit, 1),
+        "setFit": round(set_fit, 1)
+    }
+
+def character_fit(row, targets, profiles):
     assigned = row.get("assignedTo", "")
-    for target in targets:
-        if target.get("baseId") == assigned:
-            return "TARGET"
-    return "GENERAL"
+    target_ids = {t.get("baseId") for t in targets}
 
+    if assigned in profiles:
+        result = score_profile(row, profiles[assigned])
+        result["characterFit"] = "TARGET" if assigned in target_ids else "PROFILED"
+        result["fitTarget"] = assigned
+        return result
+
+    candidates = [(tid, profiles.get(tid)) for tid in target_ids if profiles.get(tid)]
+    if not candidates:
+        return {"characterFit": "GENERAL", "fitScore": 0.0, "primaryFit": 0.0, "secondaryFit": 0.0, "setFit": 0.0, "fitTarget": ""}
+
+    best = None
+    for tid, profile in candidates:
+        result = score_profile(row, profile)
+        result["fitTarget"] = tid
+        if best is None or result["fitScore"] > best["fitScore"]:
+            best = result
+
+    best["characterFit"] = "CANDIDATE"
+    return best
 
 def main():
     if not os.path.exists(INPUT_FILE):
         raise FileNotFoundError(INPUT_FILE)
-    with open(INPUT_FILE,newline="",encoding="utf-8-sig") as f:
+
+    with open(INPUT_FILE, newline="", encoding="utf-8-sig") as f:
         source = list(csv.DictReader(f))
-    if not source: raise RuntimeError("mods.csv jest pusty.")
+    if not source:
+        raise RuntimeError("mods.csv jest pusty.")
 
     targets = load_targets()
+    profiles = load_profiles()
     rows = [analyze(row) for row in source]
-    for row in rows:
-        row["characterFit"] = character_fit(row, targets)
 
-    with open(OUTPUT_CSV,"w",newline="",encoding="utf-8-sig") as f:
+    for row in rows:
+        fit = character_fit(row, targets, profiles)
+        row.update(fit)
+        secs = [x for i in range(1, 5) if (x := rolls(row, i)) is not None]
+        action, reason = next_action(
+            row, secs, float(row["modQuality"]), float(row["modValue"]),
+            float(row["potentialCeiling"]), float(row.get("fitScore", 0.0))
+        )
+        row["recommendedAction"] = action
+        row["reason"] = reason
+
+    with open(OUTPUT_CSV, "w", newline="", encoding="utf-8-sig") as f:
         fields = list(rows[0].keys())
-        writer = csv.DictWriter(f,fieldnames=fields)
+        writer = csv.DictWriter(f, fieldnames=fields)
         writer.writeheader()
         writer.writerows(rows)
 
     order = {"CALIBRATE":0,"SLICE_6E":1,"SLICE":2,"UPGRADE":3,"KEEP":4}
-    rows.sort(key=lambda r:(order.get(r["recommendedAction"],9),
-                            -float(r["potentialCeiling"]),
-                            -float(r["modQuality"])))
+    rows.sort(key=lambda r: (
+        order.get(r["recommendedAction"], 9),
+        -float(r.get("fitScore", 0)),
+        -float(r["potentialCeiling"]),
+        -float(r["modQuality"])
+    ))
+
     counts = {}
-    for r in rows: counts[r["recommendedAction"]] = counts.get(r["recommendedAction"],0)+1
+    for r in rows:
+        counts[r["recommendedAction"]] = counts.get(r["recommendedAction"], 0) + 1
 
     lines = [
-        "# Analiza modów","",
-        "Model rozdziela **jakość obecnych rolli**, **potencjał dalszego rozwoju** "
-        "i **rodzaj następnej inwestycji**.","",
+        "# Analiza modów", "",
+        "Model rozdziela **jakość obecnych rolli**, **potencjał dalszego rozwoju**, "
+        "**dopasowanie do postaci** i **rodzaj następnej inwestycji**.", "",
         "- Modów: **{}**".format(len(rows)),
         "- UPGRADE: **{}**".format(counts.get("UPGRADE",0)),
         "- SLICE: **{}**".format(counts.get("SLICE",0)),
         "- SLICE_6E: **{}**".format(counts.get("SLICE_6E",0)),
         "- CALIBRATE: **{}**".format(counts.get("CALIBRATE",0)),
-        "- KEEP: **{}**".format(counts.get("KEEP",0)),"",
-        "## Najważniejsi kandydaci","",
-        "| Akcja | Mod | Set | Tier | Lvl | Quality | Value | 6E proj. | Speed | Potencjał | Inwestycja |",
-        "|---|---|---|---|---:|---:|---:|---:|---|"
+        "- KEEP: **{}**".format(counts.get("KEEP",0)), "",
+        "## Najważniejsi kandydaci", "",
+        "| Akcja | Mod | Set | Tier | Lvl | Quality | Value | Fit | 6E proj. | Speed | Potencjał | Inwestycja |",
+        "|---|---|---|---|---:|---:|---:|---:|---:|---:|---:|---|"
     ]
+
     for r in rows[:75]:
-        mod = "{} {} {}".format(r["slot"],r["primaryStat"],r["primaryValue"])
-        lines.append("| {} | {} | {} | {}{} | {} | {:.1f}% | {:.1f}% | {:.1f}% | {} |".format(
-            r["recommendedAction"],mod,r["set"],r["dots"],r["tierName"],
-            r["level"],float(r["modQuality"]),float(r["modValue"]),float(r["projected6EQuality"]),
-            float(r["speedQuality"]),float(r["potentialCeiling"]),r["nextInvestment"]))
+        mod = "{} {} {}".format(r["slot"], r["primaryStat"], r["primaryValue"])
+        lines.append(
+            "| {} | {} | {} | {}{} | {} | {:.1f}% | {:.1f}% | {:.1f}% | {:.1f}% | {:.1f}% | {:.1f}% | {} |".format(
+                r["recommendedAction"], mod, r["set"], r["dots"], r["tierName"],
+                r["level"], float(r["modQuality"]), float(r["modValue"]),
+                float(r.get("fitScore",0)), float(r["projected6EQuality"]),
+                float(r["speedQuality"]), float(r["potentialCeiling"]), r["nextInvestment"]
+            )
+        )
+
     lines += [
-        "","## Definicje","",
+        "", "## Definicje", "",
         "- **Quality** — jakość wykonanych rolli względem zakresu dla 5-dot/6-dot.",
-        "- **Value** — jakość rolla pomnożona przez ogólną użyteczność statystyki; oddziela „dobry roll” od „dobrego secondary”.",
+        "- **Value** — jakość rolla pomnożona przez ogólną, niezależną od postaci użyteczność statystyki.",
+        "- **Fit** — dopasowanie moda do profilu konkretnej postaci; dla nieprzypisanych modów pokazuje najlepszego aktywnego kandydata.",
         "- **Potential** — sufit wartości przy idealnych przyszłych rollach; nie jest prognozą RNG.",
         "- **UPGRADE** — mod nie jest jeszcze na 15.",
-        "- **SLICE** — kolejny tier ma uzasadnienie jakościowe.",
+        "- **SLICE** — kolejny tier ma uzasadnienie jakościowe lub profilowe.",
         "- **SLICE_6E** — 5A jest oceniane również przez projekcję jakości po wzroście statystyk do 6E.",
         "- **CALIBRATE** — 6A jest na końcu slicing i może korzystać z calibration.",
-        "- **Calibration hit chance** — 25% normalnie; 33,3%, gdy jeden secondary ma już 5 rolli i nie może dostać kolejnego.",
+        "- **Calibration hit chance** — model pomocniczy; nie oznacza gwarancji konkretnego wyniku.",
         "",
         "Calibration pozostaje losowe: wybrany roll jest usuwany z wybranego secondary, "
-        "a nowy roll trafia losowo do dostępnych secondary. Analyzer wskazuje "
-        "kandydatów, ale nie udaje, że zna wynik konkretnej próby."
+        "a nowy roll trafia losowo do dostępnych secondary. Analyzer wskazuje kandydatów, "
+        "ale nie udaje, że zna wynik konkretnej próby."
     ]
-    with open(OUTPUT_MD,"w",encoding="utf-8") as f:
-        f.write("\\n".join(lines)+"\\n")
+
+    with open(OUTPUT_MD, "w", encoding="utf-8") as f:
+        f.write("\n".join(lines) + "\n")
 
     print("="*80)
     print("SWGOH MOD ANALYZER")
     print("="*80)
-    print("Modów:",len(rows))
+    print("Modów:", len(rows))
     for action in ("UPGRADE","SLICE","SLICE_6E","CALIBRATE","KEEP"):
-        print("{:<12}: {}".format(action,counts.get(action,0)))
-    print("CSV:",OUTPUT_CSV)
-    print("REPORT:",OUTPUT_MD)
+        print("{:<12}: {}".format(action, counts.get(action,0)))
+    print("CSV:", OUTPUT_CSV)
+    print("REPORT:", OUTPUT_MD)
 
 if __name__ == "__main__":
     main()
