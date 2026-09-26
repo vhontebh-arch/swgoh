@@ -96,19 +96,18 @@ Model rozdziela **jakość obecnych rolli**, **potencjał dalszego rozwoju**, **
 
 ### JARJARBINKS — najlepszy wirtualny build 6/6
 
-- Wynik optymalny: **341.8** (profil + bonusy setów)
-- Aktualny wynik: **182.1**
-- Zmiana: **+159.7**
-- Bonus setów w ocenie: **15.00**
-
+- Wynik optymalny: **357.8** (profil + bonusy setów)
+- Aktualny wynik: **197.4**
+- Zmiana: **+160.4**
+- Bonus setów w ocenie: **37.64**
 | Slot | Set | Primary | Mod ID | Źródło | Fit |
 |---|---|---|---|---|---:|
 | Square | Speed | Offense % 8.5% | uQbjV3YQR0SJV7o3_tbCJw | POSTAĆ: ADMIRALPIETT | 52.9 |
-| Diamond | Speed | Defense % 20% | ok8L5i3bR8aqhsz_XdF7lw | POSTAĆ: SEVENTHSISTER | 52.9 |
+| Diamond | Potency | Defense % 20% | WOnQWH88RwOFQH2g1HZhtg | POSTAĆ: EPIXPOE | 47.1 |
 | Circle | Speed | Protection % 23.5% | xWcqG0JlSVKmESpCYcOiEg | POSTAĆ: COLONELSTARCK | 59.0 |
 | Arrow | Speed | Speed 30 | g8dLMiERRyuej_Q0kScoKQ | POSTAĆ: 4LOM | 54.0 |
 | Triangle | Speed | Critical Chance % 12% | 4usuu6ZZT4uCc72IUSIZ4w | POSTAĆ: 4LOM | 58.4 |
-| Cross | Speed | Defense % 11.75% | 3IFABCx0Q1ujNoSjCNeRQg | POSTAĆ: HOTHHAN | 49.6 |
+| Cross | Potency | Potency % 24% | HwXF5YR4QKatx2787JKZvQ | POSTAĆ: AAYLASECURA | 48.8 |
 
 ## Jar Jar Binks — kandydaci
 
