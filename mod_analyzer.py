@@ -464,7 +464,7 @@ def main():
         "- SLICE_6E: **{}**".format(counts.get("SLICE_6E",0)),
         "- CALIBRATE: **{}**".format(counts.get("CALIBRATE",0)),
         "- EQUIP: **{}**".format(counts.get("EQUIP",0)),
-        "        - REPLACE: **{}**".format(counts.get("REPLACE",0)),
+        "- REPLACE: **{}**".format(counts.get("REPLACE",0)),
         "- KEEP: **{}**".format(counts.get("KEEP",0)), "",
         "## Najważniejsi kandydaci", "",
         "| Akcja | Mod | Set | Tier | Lvl | Quality | Value | Fit | 6E proj. | Speed | Potencjał | Inwestycja |",
