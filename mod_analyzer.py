@@ -102,7 +102,7 @@ def mod_description(row):
         value = str(row.get("secondary{}Value".format(i), "") or "").strip()
         if stat:
             secondary.append("{} {}".format(stat, value))
-    return "{} | {} | {} {} | secondary: {} | {}★ {} lvl{} | ID: {}".format(
+    return "{} | {} | {} {} | secondary: {} | {}★ {} lvl{}".format(
         row.get("slot",""),
         row.get("set",""),
         row.get("primaryStat",""),
