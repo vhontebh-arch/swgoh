@@ -1,1 +1,1 @@
-connector trigger
+connector trigger 2
