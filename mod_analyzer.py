@@ -94,6 +94,26 @@ def rolls(row, i):
         values = [value / count] * count
     return stat, value, count, values
 
+def mod_description(row):
+    """Human-searchable mod identification; never relies on the current owner."""
+    secondary = []
+    for i in range(1, 5):
+        stat = str(row.get("secondary{}Stat".format(i), "") or "").strip()
+        value = str(row.get("secondary{}Value".format(i), "") or "").strip()
+        if stat:
+            secondary.append("{} {}".format(stat, value))
+    return "{} | {} | {} {} | secondary: {} | {}★ {} lvl{} | ID: {}".format(
+        row.get("slot",""),
+        row.get("set",""),
+        row.get("primaryStat",""),
+        row.get("primaryValue",""),
+        ", ".join(secondary) if secondary else "brak",
+        row.get("dots",""),
+        row.get("tierName",""),
+        row.get("level",""),
+        row.get("id","")
+    )
+
 def quality(stat, value, count, values, dots):
     if not count:
         return 0.0
@@ -1230,22 +1250,20 @@ def main():
                 ", ".join("{}={}".format(k,v) for k,v in sorted(item["after"].items())) or "—",
                 "OK" if item["ok"] else "BŁĄD"))
     lines += ["", "### Ruchy — kolejność fizyczna", "",
-              "**Ważne:** każdy mod jest przenoszony tylko raz. Najpierw właściwy mod z `Źródło` trafia **bezpośrednio** do celu. Dopiero potem wykonujemy PATCH-y uzupełniające sloty powstałe po zabraniu moda. PATCH-y idą w kolejności zależności — od bezpośredniego zależnego do MAGAZYNU.", "",
-              "| Krok | Typ | Operacja | Mod | ID | Status |", "|---:|---|---|---|---|---|"]
+              "**Ważne:** każdy mod jest przenoszony tylko raz. Najpierw właściwy mod z `Źródło` trafia **bezpośrednio** do celu. Dopiero potem wykonujemy PATCH-y. Ponieważ wyszukiwanie po postaci nie jest dostępne, każda operacja zawiera slot, set, primary, wszystkie dostępne secondary, liczbę gwiazdek, tier, poziom i ID moda.", "",
+              "| Krok | Typ | Operacja | Mod — parametry wyszukiwalne | Status |", "|---:|---|---|---|---|"]
     if (chain_result.get("safe")):
         step_no = 1
         for p in chain_result.get("plans",[]):
             m=p["mod"]
-            lines.append("| {} | MOD | {} → {} | {} {} {} | {} | SAFE |".format(
-                step_no, pname(owner(m)), pname(p["target_owner"]), m.get("slot",""),
-                m.get("primaryStat",""), m.get("primaryValue",""), m.get("id","")))
+            lines.append("| {} | MOD | {} → {} | {} | SAFE |".format(
+                step_no, pname(owner(m)), pname(p["target_owner"]), mod_description(m)))
             step_no += 1
             for move in p.get("moves", []):
                 replacement = move["replacement"]
                 src_name = pname(owner(replacement)) if is_true(replacement.get("equipped")) else "MAGAZYN"
-                lines.append("| {} | PATCH | {} → {} | {} {} {} | {} | SAFE |".format(
-                    step_no, src_name, move["name"], replacement.get("slot",""),
-                    replacement.get("primaryStat",""), replacement.get("primaryValue",""), replacement.get("id","")))
+                lines.append("| {} | PATCH | {} → {} | {} | SAFE |".format(
+                    step_no, src_name, move["name"], mod_description(replacement)))
                 step_no += 1
     else:
         lines.append("| — | — | — | — | BLOCKED |")
