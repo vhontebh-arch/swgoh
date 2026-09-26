@@ -12,7 +12,7 @@ INPUT_FILE = "mods.csv"
 OUTPUT_CSV = "mod_analysis.csv"
 OUTPUT_MD = "mod_analysis.md"
 PROFILE_FILE = "mod_profiles.json"
-ANALYZER_VERSION = "2026-09-26-equip-empty-slots-fix-target-occupancy"
+ANALYZER_VERSION = "2026-09-26-source-labels"
 
 R5 = {
     "Critical Chance %": (1.125, 2.25), "Defense": (4.9, 9.8),
@@ -292,6 +292,39 @@ def load_player_aliases():
 
     return aliases
 
+def load_player_names():
+    names = {}
+    roster_path = "roster.csv"
+    if os.path.exists(roster_path):
+        try:
+            with open(roster_path, newline="", encoding="utf-8-sig") as f:
+                for item in csv.DictReader(f):
+                    name = str(item.get("name", "") or "").strip()
+                    base_id = str(item.get("baseId", "") or "").strip()
+                    definition = str(item.get("definitionId", "") or "").strip()
+                    unit_id = str(item.get("id", "") or "").strip()
+                    if base_id and name:
+                        names[base_id] = name
+                    for value in (unit_id, definition):
+                        if value and name:
+                            names[value] = name
+        except Exception:
+            pass
+    return names
+
+def source_label(row, aliases, names):
+    if not is_true(row.get("equipped")):
+        return "MAGAZYN"
+    assigned = str(row.get("assignedTo", "") or "").strip()
+    base_id = aliases.get(assigned, assigned)
+    name = names.get(assigned) or names.get(base_id)
+    if name:
+        return "POSTAĆ: " + name
+    if base_id:
+        return "POSTAĆ: " + base_id
+    return "POSTAĆ: nieznana"
+
+
 def score_profile(row, profile):
     primary = row.get("primaryStat", "")
     slot = row.get("slot", "")
@@ -421,6 +454,7 @@ def main():
     targets = load_targets()
     profiles = load_profiles()
     aliases = load_player_aliases()
+    names = load_player_names()
     rows = [analyze(row) for row in source]
 
     for row in rows:
@@ -435,6 +469,7 @@ def main():
         row["reason"] = reason
         row["replacementGain"] = 0.0
         row["replacesModId"] = ""
+        row["source"] = source_label(row, aliases, names)
 
     apply_replacements(rows, {t.get("baseId") for t in targets})
 
@@ -469,15 +504,15 @@ def main():
         "- REPLACE: **{}**".format(counts.get("REPLACE",0)),
         "- KEEP: **{}**".format(counts.get("KEEP",0)), "",
         "## Najważniejsi kandydaci", "",
-        "| Akcja | Mod | Set | Tier | Lvl | Quality | Value | Fit | 6E proj. | Speed | Potencjał | Inwestycja |",
-        "|---|---|---|---|---:|---:|---:|---:|---:|---:|---:|---|"
+        "| Akcja | Mod | Źródło | Set | Tier | Lvl | Quality | Value | Fit | 6E proj. | Speed | Potencjał | Inwestycja |",
+        "|---|---|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---|"
     ]
 
     for r in rows[:75]:
         mod = "{} {} {}".format(r["slot"], r["primaryStat"], r["primaryValue"])
         lines.append(
-            "| {} | {} | {} | {}{} | {} | {:.1f}% | {:.1f}% | {:.1f}% | {:.1f}% | {:.1f}% | {:.1f}% | {} |".format(
-                r["recommendedAction"], mod, r["set"], r["dots"], r["tierName"],
+            "| {} | {} | {} | {} | {}{} | {} | {:.1f}% | {:.1f}% | {:.1f}% | {:.1f}% | {:.1f}% | {:.1f}% | {} |".format(
+                r["recommendedAction"], mod, r["source"], r["set"], r["dots"], r["tierName"],
                 r["level"], float(r["modQuality"]), float(r["modValue"]),
                 float(r.get("fitScore",0)), float(r["projected6EQuality"]),
                 float(r["speedQuality"]), float(r["potentialCeiling"]), r["nextInvestment"]
@@ -500,8 +535,8 @@ def main():
     for r in jar_rows[:18]:
         mod = "{} {} {}".format(r["slot"], r["primaryStat"], r["primaryValue"])
         lines.append(
-            "| {} | {} | {} | {}{} | {} | {} | {:.1f}% | {:.1f} |".format(
-                r["recommendedAction"], mod, r["slot"], r["set"],
+            "| {} | {} | {} | {} | {} | {}{} | {} | {:.1f}% | {:.1f} |".format(
+                r["recommendedAction"], mod, r["source"], r["slot"], r["set"],
                 r["dots"], r["tierName"], r["level"],
                 float(r.get("fitScore", 0)),
                 float(r.get("replacementGain", 0))
@@ -514,6 +549,8 @@ def main():
         "- **Value** — jakość rolla pomnożona przez ogólną, niezależną od postaci użyteczność statystyki.",
         "- **Fit** — dopasowanie moda do profilu konkretnej postaci; dla nieprzypisanych modów pokazuje najlepszego aktywnego kandydata.",
         "- **Potential** — sufit wartości przy idealnych przyszłych rollach; nie jest prognozą RNG.",
+        "- **Źródło MAGAZYN** — mod nie jest obecnie założony na żadnej postaci.",
+        "- **Źródło POSTAĆ: [nazwa]** — mod jest obecnie założony na wskazanej postaci.",
         "- **EQUIP** — slot docelowej postaci jest pusty; wskazany mod jest najlepszym dostępnym niezałożonym modem dla tego slotu.",
         "- **REPLACE** — niezałożony mod jest wyraźnie lepszy od obecnego moda tej samej postaci i slotu.",
         "- **UPGRADE** — mod nie jest jeszcze na 15.",
