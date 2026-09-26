@@ -1162,6 +1162,10 @@ def main():
         row["replacesModId"] = ""
         row["source"] = source_label(row, aliases, names)
 
+    def display_name(owner_id):
+        base_id = aliases.get(owner_id, owner_id)
+        return names.get(owner_id) or names.get(base_id) or base_id or "nieznana"
+
     optimizer = optimize_target_build(rows, {t.get("baseId") for t in targets}, profiles, aliases, names)
     chain_result = apply_optimizer_replacements(rows, optimizer, {t.get("baseId") for t in targets}, profiles, aliases, names)
 
@@ -1256,7 +1260,7 @@ def main():
         for p in chain_result.get("plans",[]):
             m=p["mod"]
             lines.append("| {} | MOD | {} → {} | {} | SAFE |".format(
-                step_no, pname(owner(m)), pname(p["target_owner"]), mod_description(m)))
+                step_no, display_name(owner(m)), display_name(p["target_owner"]), mod_description(m)))
             step_no += 1
             for move in p.get("moves", []):
                 replacement = move["replacement"]
