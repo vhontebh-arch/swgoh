@@ -846,7 +846,7 @@ def main():
     for r in jar_rows[:18]:
         mod = "{} {} {}".format(r["slot"], r["primaryStat"], r["primaryValue"])
         lines.append(
-            "| {} | {} | {} | {} | {} | {}{} | {} | {:.1f}% | {:.1f} | {:.1f} | {} |".format(
+            "| {} | {} | {} | {} | {} | {}{} | {} | {:.1f}% | {:.2f} | {:.1f} | {:.1f} | {:.1f} | {} |".format(
                 r["recommendedAction"], mod, r["source"], r["slot"], r["set"],
                 r["dots"], r["tierName"], r["level"],
                 float(r.get("fitScore", 0)),
