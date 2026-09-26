@@ -572,9 +572,7 @@ def apply_replacements(rows, target_base_ids, profiles=None, aliases=None, names
                 if chain is None:
                     continue
                 steps = flatten(chain)
-                account_gain = target_gain + sum(
-                    float(step["gain"]) for step in steps[1:]
-                )
+                account_gain = target_gain + float(chain["gain"])
                 # The first step is the source mod being moved to the target.
                 # Subsequent steps are the repairs needed for the source chain.
                 if account_gain <= 0:
