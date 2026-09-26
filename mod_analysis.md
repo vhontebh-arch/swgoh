@@ -4,20 +4,27 @@ Model rozdziela **jakość obecnych rolli**, **potencjał dalszego rozwoju**, **
 
 - Modów: **2163**
 - UPGRADE: **834**
-- SLICE: **719**
-- SLICE_6E: **136**
+- SLICE: **714**
+- SLICE_6E: **135**
 - CALIBRATE: **94**
 - EQUIP: **3**
 - REPLACE: **0**
+- PATCH: **6**
 - KEEP: **377**
 
 ## Najważniejsi kandydaci
 
 | Akcja | Mod | Źródło | Set | Tier | Lvl | Quality | Value | Fit | 6E proj. | Speed | Potencjał | Inwestycja |
 |---|---|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---|
-| EQUIP | Triangle Health % 16% | MAGAZYN | Potency | 6A | 15 | 100.0% | 62.6% | 68.5% | 0.0% | 94.4% | 62.6% | calibration |
+| EQUIP | Arrow Speed 30 | POSTAĆ: COLONELSTARCK | Speed | 5E | 15 | 100.0% | 50.0% | 86.0% | 0.0% | 0.0% | 50.0% | slice |
+| EQUIP | Diamond Defense % 20% | POSTAĆ: GRANDMOFFTARKIN | Speed | 6A | 15 | 100.0% | 69.0% | 72.6% | 0.0% | 88.9% | 69.0% | calibration |
 | EQUIP | Square Offense % 5.88% | MAGAZYN | Health | 5A | 15 | 100.0% | 64.0% | 67.3% | 54.5% | 88.9% | 64.0% | 6-dot |
-| EQUIP | Diamond Defense % 11.75% | MAGAZYN | Health | 5E | 15 | 100.0% | 72.5% | 63.6% | 0.0% | 83.3% | 72.5% | slice |
+| PATCH | Arrow Protection % 23.5% | MAGAZYN | Speed | 5E | 15 | 100.0% | 78.0% | 59.6% | 0.0% | 83.3% | 78.0% | slice |
+| PATCH | Diamond Defense % 11.75% | MAGAZYN | Health | 5E | 15 | 100.0% | 83.5% | 53.1% | 0.0% | 83.3% | 83.5% | slice |
+| PATCH | Diamond Defense % 11.75% | POSTAĆ: B2SUPERBATTLEDROID | Potency | 5C | 15 | 100.0% | 85.7% | 48.8% | 0.0% | 75.0% | 85.7% | slice |
+| PATCH | Diamond Defense % 11.75% | POSTAĆ: GREEDO | Critical Chance | 5E | 15 | 100.0% | 86.5% | 33.2% | 0.0% | 83.3% | 86.5% | slice |
+| PATCH | Diamond Defense % 11.75% | POSTAĆ: TUSKENHUNTRESS | Critical Damage | 5E | 15 | 100.0% | 86.5% | 33.2% | 0.0% | 83.3% | 86.5% | slice |
+| PATCH | Arrow Health % 5.88% | POSTAĆ: ADMINISTRATORLANDO | Critical Damage | 5A | 15 | 100.0% | 79.0% | 27.1% | 31.6% | 75.0% | 79.0% | 6-dot |
 | CALIBRATE | Circle Protection % 24% | POSTAĆ: GRANDMOFFTARKIN | Potency | 6A | 15 | 100.0% | 64.3% | 83.5% | 0.0% | 75.0% | 64.3% | calibration |
 | CALIBRATE | Cross Potency % 30% | POSTAĆ: MARAJADE | Speed | 6A | 15 | 100.0% | 68.2% | 81.9% | 0.0% | 79.2% | 68.2% | calibration |
 | CALIBRATE | Circle Protection % 24% | POSTAĆ: FIFTHBROTHER | Speed | 6A | 15 | 100.0% | 66.7% | 78.0% | 0.0% | 70.8% | 66.7% | calibration |
@@ -26,10 +33,10 @@ Model rozdziela **jakość obecnych rolli**, **potencjał dalszego rozwoju**, **
 | CALIBRATE | Arrow Speed 32 | POSTAĆ: FIFTHBROTHER | Speed | 6A | 15 | 100.0% | 46.3% | 76.3% | 0.0% | 0.0% | 46.3% | calibration |
 | CALIBRATE | Arrow Speed 32 | POSTAĆ: MARAJADE | Potency | 6A | 15 | 100.0% | 49.0% | 75.6% | 0.0% | 0.0% | 49.0% | calibration |
 | CALIBRATE | Cross Potency % 30% | MAGAZYN | Health | 6A | 15 | 100.0% | 62.8% | 75.0% | 0.0% | 83.3% | 62.8% | calibration |
-| CALIBRATE | Diamond Defense % 20% | POSTAĆ: GRANDMOFFTARKIN | Speed | 6A | 15 | 100.0% | 69.0% | 72.6% | 0.0% | 88.9% | 69.0% | calibration |
 | CALIBRATE | Diamond Defense % 20% | POSTAĆ: VANGUARDTEMPLEGUARD | Speed | 6A | 15 | 100.0% | 64.3% | 70.4% | 0.0% | 70.0% | 64.3% | calibration |
 | CALIBRATE | Square Offense % 8.5% | POSTAĆ: EMPERORPALPATINE | Potency | 6A | 15 | 100.0% | 60.3% | 69.9% | 0.0% | 88.9% | 60.3% | calibration |
 | CALIBRATE | Square Offense % 8.5% | POSTAĆ: MARAJADE | Speed | 6A | 15 | 100.0% | 57.7% | 69.0% | 0.0% | 70.8% | 57.7% | calibration |
+| CALIBRATE | Triangle Health % 16% | MAGAZYN | Potency | 6A | 15 | 100.0% | 62.6% | 68.5% | 0.0% | 94.4% | 62.6% | calibration |
 | CALIBRATE | Circle Protection % 24% | POSTAĆ: MARAJADE | Speed | 6A | 15 | 100.0% | 55.2% | 67.1% | 0.0% | 88.9% | 55.2% | calibration |
 | CALIBRATE | Circle Health % 16% | POSTAĆ: ENFYSNEST | Tenacity | 6A | 15 | 100.0% | 71.0% | 67.0% | 0.0% | 83.3% | 71.0% | calibration |
 | CALIBRATE | Arrow Protection % 24% | POSTAĆ: JEDIKNIGHTREVAN | Speed | 6A | 15 | 100.0% | 68.2% | 66.2% | 0.0% | 80.0% | 68.2% | calibration |
@@ -84,48 +91,45 @@ Model rozdziela **jakość obecnych rolli**, **potencjał dalszego rozwoju**, **
 | CALIBRATE | Circle Protection % 24% | POSTAĆ: REY | Critical Damage | 6A | 15 | 100.0% | 73.8% | 47.4% | 0.0% | 87.5% | 73.8% | calibration |
 | CALIBRATE | Cross Offense % 8.5% | POSTAĆ: KYLEKATARN | Health | 6A | 15 | 100.0% | 48.2% | 47.4% | 0.0% | 94.4% | 48.2% | calibration |
 | CALIBRATE | Square Offense % 8.5% | POSTAĆ: NINTHSISTER | Tenacity | 6A | 15 | 100.0% | 68.0% | 47.1% | 0.0% | 77.8% | 68.0% | calibration |
-| CALIBRATE | Diamond Defense % 20% | POSTAĆ: EPIXFINN | Speed | 6A | 15 | 100.0% | 68.8% | 46.6% | 0.0% | 77.8% | 68.8% | calibration |
-| CALIBRATE | Square Offense % 8.5% | POSTAĆ: REYJEDITRAINING | Health | 6A | 15 | 100.0% | 52.7% | 46.1% | 0.0% | 77.8% | 52.7% | calibration |
-| CALIBRATE | Diamond Defense % 20% | POSTAĆ: JEDIKNIGHTREVAN | Speed | 6A | 15 | 100.0% | 56.8% | 45.7% | 0.0% | 72.2% | 56.8% | calibration |
-| CALIBRATE | Circle Health % 16% | POSTAĆ: HERMITYODA | Speed | 6A | 15 | 100.0% | 78.3% | 45.4% | 0.0% | 91.7% | 78.3% | calibration |
-| CALIBRATE | Square Offense % 8.5% | POSTAĆ: ENFYSNEST | Tenacity | 6A | 15 | 100.0% | 68.3% | 44.9% | 0.0% | 88.9% | 68.3% | calibration |
-| CALIBRATE | Triangle Health % 16% | POSTAĆ: OPERATIVE | Speed | 6A | 15 | 100.0% | 62.8% | 44.7% | 0.0% | 66.7% | 62.8% | calibration |
 
 ## Jar Jar Binks — kandydaci
 
 Analiza porównuje mody wyposażone z kandydatami z inventory dla każdego slotu.
 
-| Akcja | Mod | Slot | Set | Tier | Lvl | Fit | Zysk vs obecny |
-|---|---|---|---|---|---:|---:|---:|
-| UPGRADE | Circle Protection % 2.5% | POSTAĆ: DISGUISEDCLONETROOPER | Circle | Speed | 5D | 1 | 100.0% | 0.0 |
-| UPGRADE | Circle Protection % 2.5% | POSTAĆ: OMEGAS3 | Circle | Speed | 5D | 1 | 100.0% | 0.0 |
-| UPGRADE | Circle Protection % 2.5% | POSTAĆ: DIRECTORKRENNIC | Circle | Speed | 5D | 1 | 100.0% | 0.0 |
-| UPGRADE | Triangle Protection % 2.5% | POSTAĆ: DARTHSION | Triangle | Speed | 5D | 1 | 100.0% | 0.0 |
-| UPGRADE | Circle Protection % 2.5% | POSTAĆ: JAWAENGINEER | Circle | Speed | 5C | 1 | 97.4% | 0.0 |
-| UPGRADE | Arrow Speed 4 | POSTAĆ: LOBOT | Arrow | Speed | 5D | 1 | 94.8% | 0.0 |
-| UPGRADE | Circle Health % 0.63% | POSTAĆ: ADMIRALRADDUS | Circle | Speed | 5D | 1 | 91.0% | 0.0 |
-| UPGRADE | Circle Protection % 2.5% | MAGAZYN | Circle | Health | 5C | 1 | 90.7% | 0.0 |
-| UPGRADE | Circle Protection % 2.5% | MAGAZYN | Circle | Health | 5C | 1 | 90.7% | 0.0 |
-| UPGRADE | Circle Protection % 2.5% | MAGAZYN | Circle | Health | 5C | 1 | 90.7% | 0.0 |
-| UPGRADE | Circle Health % 0.63% | MAGAZYN | Circle | Potency | 5D | 1 | 90.2% | 0.0 |
-| UPGRADE | Circle Health % 0.63% | MAGAZYN | Circle | Potency | 5D | 1 | 90.2% | 0.0 |
-| UPGRADE | Circle Health % 0.63% | MAGAZYN | Circle | Potency | 5D | 1 | 90.2% | 0.0 |
-| UPGRADE | Triangle Health % 0.63% | POSTAĆ: BADBATCHECHO | Triangle | Potency | 5D | 1 | 90.2% | 0.0 |
-| UPGRADE | Arrow Speed 4 | POSTAĆ: SITHASSASSIN | Arrow | Speed | 5D | 1 | 88.3% | 0.0 |
-| SLICE_6E | Circle Protection % 23.5% | POSTAĆ: JARJARBINKS | Circle | Potency | 5A | 15 | 87.6% | 0.0 |
-| UPGRADE | Cross Potency % 3% | MAGAZYN | Cross | Health | 5C | 1 | 87.4% | 0.0 |
-| UPGRADE | Cross Potency % 3% | POSTAĆ: WATTAMBOR | Cross | Health | 5C | 1 | 87.4% | 0.0 |
+| Akcja | Mod | Źródło | Slot | Set | Tier | Lvl | Fit | Zysk celu | Bilans konta | Łańcuch |
+|---|---|---|---|---|---|---:|---:|---:|---:|---:|
+| UPGRADE | Circle Protection % 2.5% | POSTAĆ: DISGUISEDCLONETROOPER | Circle | Speed | 5D | 1 | 100.0% | 0.0 | 0.0 | 0 |
+| UPGRADE | Circle Protection % 2.5% | POSTAĆ: OMEGAS3 | Circle | Speed | 5D | 1 | 100.0% | 0.0 | 0.0 | 0 |
+| UPGRADE | Circle Protection % 2.5% | POSTAĆ: DIRECTORKRENNIC | Circle | Speed | 5D | 1 | 100.0% | 0.0 | 0.0 | 0 |
+| UPGRADE | Triangle Protection % 2.5% | POSTAĆ: DARTHSION | Triangle | Speed | 5D | 1 | 100.0% | 0.0 | 0.0 | 0 |
+| UPGRADE | Circle Protection % 2.5% | POSTAĆ: JAWAENGINEER | Circle | Speed | 5C | 1 | 97.4% | 0.0 | 0.0 | 0 |
+| UPGRADE | Arrow Speed 4 | POSTAĆ: LOBOT | Arrow | Speed | 5D | 1 | 94.8% | 0.0 | 0.0 | 0 |
+| UPGRADE | Circle Health % 0.63% | POSTAĆ: ADMIRALRADDUS | Circle | Speed | 5D | 1 | 91.0% | 0.0 | 0.0 | 0 |
+| UPGRADE | Circle Protection % 2.5% | MAGAZYN | Circle | Health | 5C | 1 | 90.7% | 0.0 | 0.0 | 0 |
+| UPGRADE | Circle Protection % 2.5% | MAGAZYN | Circle | Health | 5C | 1 | 90.7% | 0.0 | 0.0 | 0 |
+| UPGRADE | Circle Protection % 2.5% | MAGAZYN | Circle | Health | 5C | 1 | 90.7% | 0.0 | 0.0 | 0 |
+| UPGRADE | Circle Health % 0.63% | MAGAZYN | Circle | Potency | 5D | 1 | 90.2% | 0.0 | 0.0 | 0 |
+| UPGRADE | Circle Health % 0.63% | MAGAZYN | Circle | Potency | 5D | 1 | 90.2% | 0.0 | 0.0 | 0 |
+| UPGRADE | Circle Health % 0.63% | MAGAZYN | Circle | Potency | 5D | 1 | 90.2% | 0.0 | 0.0 | 0 |
+| UPGRADE | Triangle Health % 0.63% | POSTAĆ: BADBATCHECHO | Triangle | Potency | 5D | 1 | 90.2% | 0.0 | 0.0 | 0 |
+| UPGRADE | Arrow Speed 4 | POSTAĆ: SITHASSASSIN | Arrow | Speed | 5D | 1 | 88.3% | 0.0 | 0.0 | 0 |
+| SLICE_6E | Circle Protection % 23.5% | POSTAĆ: JARJARBINKS | Circle | Potency | 5A | 15 | 87.6% | 0.0 | 0.0 | 0 |
+| UPGRADE | Cross Potency % 3% | MAGAZYN | Cross | Health | 5C | 1 | 87.4% | 0.0 | 0.0 | 0 |
+| UPGRADE | Cross Potency % 3% | POSTAĆ: WATTAMBOR | Cross | Health | 5C | 1 | 87.4% | 0.0 | 0.0 | 0 |
 
 ## Definicje
 
 - **Quality** — jakość wykonanych rolli względem zakresu dla 5-dot/6-dot.
 - **Value** — jakość rolla pomnożona przez ogólną, niezależną od postaci użyteczność statystyki.
-- **Fit** — dopasowanie moda do profilu konkretnej postaci; dla nieprzypisanych modów pokazuje najlepszego aktywnego kandydata.
+- **Fit** — dopasowanie moda do aktywnego profilu celu; obecnie szczegółowy profil ma Jar Jar Binks.
+- **AccountGain** — bilans całej operacji przeniesienia i PATCH-a dla źródła; dla źródeł bez profilu używany jest globalny ModValue.
 - **Potential** — sufit wartości przy idealnych przyszłych rollach; nie jest prognozą RNG.
 - **Źródło MAGAZYN** — mod nie jest obecnie założony na żadnej postaci.
 - **Źródło POSTAĆ: [nazwa]** — mod jest obecnie założony na wskazanej postaci.
-- **EQUIP** — slot docelowej postaci jest pusty; wskazany mod jest najlepszym dostępnym niezałożonym modem dla tego slotu.
-- **REPLACE** — niezałożony mod jest wyraźnie lepszy od obecnego moda tej samej postaci i slotu.
+- **EQUIP** — pusty slot celu; mod jest przydzielany tylko wtedy, gdy bilans całej operacji dla konta jest dodatni.
+- **PATCH** — mod z magazynu, który bezpośrednio zastępuje mod zabrany z innej postaci.
+- **REPLACE** — mod jest przenoszony do celu tylko wtedy, gdy poprawa celu i uwzględniona strata źródłowej postaci dają dodatni bilans dla konta.
+- **AccountGain** — zysk celu minus strata wartości źródłowej postaci; dzięki temu mod nie jest zabierany, jeśli operacja pogarsza cały roster. Dla postaci bez profilu strata jest liczona przez globalny ModValue.
 - **UPGRADE** — mod nie jest jeszcze na 15.
 - **SLICE** — kolejny tier ma uzasadnienie jakościowe lub profilowe.
 - **SLICE_6E** — 5A jest oceniane również przez projekcję jakości po wzroście statystyk do 6E.
