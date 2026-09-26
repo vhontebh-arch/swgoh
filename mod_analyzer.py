@@ -12,7 +12,7 @@ INPUT_FILE = "mods.csv"
 OUTPUT_CSV = "mod_analysis.csv"
 OUTPUT_MD = "mod_analysis.md"
 PROFILE_FILE = "mod_profiles.json"
-ANALYZER_VERSION = "2026-09-26-replacement-fit-fix"
+ANALYZER_VERSION = "2026-09-26-fit-100-owner-fix"
 
 R5 = {
     "Critical Chance %": (1.125, 2.25), "Defense": (4.9, 9.8),
@@ -284,7 +284,7 @@ def score_profile(row, profile):
             stat, value, count, values = x
             q = quality(stat, value, count, values, integer(row.get("dots")))
             pref = float(profile.get("secondary_preferences", {}).get(stat, 0.0))
-            secs.append((q * 100.0, pref, count))
+            secs.append((q, pref, count))
 
     # q is already normalized to 0..1. Convert to 0..100 only once
     # after weighting; the previous version multiplied by 100 twice.
