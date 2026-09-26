@@ -848,7 +848,7 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
 
     plans, failed, used_ids = [], [], set()
     for target_id, opt in optimizer.items():
-        target_owner = next((o for (o,_s),r in eq.items() if base(r) == target_id), None)
+        target_owner = next((o for (o,_s),r in working_eq.items() if base(r) == target_id), None)
         if not target_owner:
             failed.append((target_id, "brak ownera celu")); continue
         for mod in opt.get("mods", []):
