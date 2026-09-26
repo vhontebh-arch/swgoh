@@ -12,7 +12,7 @@ INPUT_FILE = "mods.csv"
 OUTPUT_CSV = "mod_analysis.csv"
 OUTPUT_MD = "mod_analysis.md"
 PROFILE_FILE = "mod_profiles.json"
-ANALYZER_VERSION = "2026-09-26-fit-100-owner-fix"
+ANALYZER_VERSION = "2026-09-26-fit-100-roster-alias-fix"
 
 R5 = {
     "Critical Chance %": (1.125, 2.25), "Defense": (4.9, 9.8),
@@ -269,6 +269,26 @@ def load_player_aliases():
         for value in (base_id, unit_id, definition):
             if value:
                 aliases[value] = base_id
+
+    # The generated roster.csv is a reliable flat fallback for owner mapping.
+    # Some current SWGOH snapshots do not expose rosterUnit at the JSON root.
+    roster_path = "roster.csv"
+    if os.path.exists(roster_path):
+        try:
+            with open(roster_path, newline="", encoding="utf-8-sig") as f:
+                for item in csv.DictReader(f):
+                    base_id = str(item.get("baseId", "") or "")
+                    definition = str(item.get("definitionId", "") or "")
+                    unit_id = str(item.get("id", "") or "")
+                    if not base_id and definition:
+                        base_id = definition.split(":", 1)[0]
+                    if base_id:
+                        for value in (base_id, unit_id, definition):
+                            if value:
+                                aliases[value] = base_id
+        except Exception:
+            pass
+
     return aliases
 
 def score_profile(row, profile):
