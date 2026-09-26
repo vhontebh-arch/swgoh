@@ -12,7 +12,7 @@ INPUT_FILE = "mods.csv"
 OUTPUT_CSV = "mod_analysis.csv"
 OUTPUT_MD = "mod_analysis.md"
 PROFILE_FILE = "mod_profiles.json"
-ANALYZER_VERSION = "2026-09-26-set-aware-global-chain-optimization"
+ANALYZER_VERSION = "2026-09-26-set-bonus-normalized-scoring"
 
 R5 = {
     "Critical Chance %": (1.125, 2.25), "Defense": (4.9, 9.8),
@@ -417,6 +417,23 @@ def apply_replacements(rows, target_base_ids, profiles=None, aliases=None, names
             return float(score_profile(r, profile)["fitScore"])
         return float(r.get("modValue", 0) or 0)
 
+    # Set bonuses are percentages of the character's base stat, not
+    # secondary-stat rolls.  We therefore value them separately from
+    # STAT_VALUE.  For non-speed percentage stats we normalize the set bonus
+    # against the maximum 5A secondary roll for the same stat.  Speed uses a
+    # 150 base-speed reference (10% = 15 speed), because the roster export
+    # does not contain per-character pre-mod base stats.
+    SET_REFERENCE_BASE_SPEED = 150.0
+    SET_BONUS_MAX_SECONDARY = {
+        "Critical Chance %": 2.25,
+        "Defense %": 1.70,
+        "Health %": 1.125,
+        "Offense %": 0.563,
+        "Potency %": 2.25,
+        "Tenacity %": 2.25,
+        "Critical Damage %": 36.0,
+    }
+
     def set_bonus_score(mods):
         total = 0.0
         grouped = {}
@@ -424,13 +441,26 @@ def apply_replacements(rows, target_base_ids, profiles=None, aliases=None, names
             set_name = str(mod.get("set", "") or "")
             if set_name in SET_RULES:
                 grouped.setdefault(set_name, []).append(mod)
+
         for set_name, members in grouped.items():
             stat, required, minimum, maximum = SET_RULES[set_name]
             members.sort(key=lambda m: integer(m.get("level")), reverse=True)
+
             for start in range(0, len(members) - required + 1, required):
                 group = members[start:start + required]
                 bonus = maximum if all(integer(m.get("level")) >= 15 for m in group) else minimum
-                total += bonus * STAT_VALUE.get(stat, 0.10)
+
+                if stat == "Speed":
+                    effective_units = (bonus / 100.0) * SET_REFERENCE_BASE_SPEED
+                    reference_units = 6.0
+                else:
+                    reference_units = SET_BONUS_MAX_SECONDARY.get(stat)
+                    if not reference_units:
+                        continue
+                    effective_units = bonus / reference_units
+
+                total += effective_units * STAT_VALUE.get(stat, 0.10)
+
         return total
 
     def owner_mods(owner):
