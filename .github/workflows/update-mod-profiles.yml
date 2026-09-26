@@ -6,6 +6,7 @@ on:
     paths:
       - "update_mod_profiles.py"
       - ".github/workflows/update-mod-profiles.yml"
+      - ".github/workflows/update-trigger.txt"
   schedule:
     # 05:15 UTC = 07:15 CEST / 06:15 CET.
     # Kept separate from the main 06:00 UTC account-data workflow.
