@@ -926,11 +926,14 @@ def get_gear_requirements(
         1
     )
 
-    # G13 is a real gear tier for farming purposes: its equipmentSet contains the G12 finisher pieces.
-    # The previous cap at 12 silently skipped every G12 -> G13 finisher requirement.
+    # Normal gear requirements are represented by the equipmentSet of the
+    # tier being reached. G12 finishers are the exception: SWGOH data stores
+    # them in the tier-12 equipmentSet, but they are consumed on the G12 -> G13
+    # promotion. Therefore a unit already at G12 still needs the tier-12
+    # G12Finisher_* entries when the target is G13+.
     end = min(
         target_gear,
-        13
+        12
     )
 
     for tier in range(
@@ -944,6 +947,14 @@ def get_gear_requirements(
         ):
 
             required[item_id] += 1
+
+    if current_gear >= 12 and target_gear >= 13:
+        for item_id in get_equipment_set(
+            unit_definition,
+            12
+        ):
+            if item_id.startswith("G12Finisher_"):
+                required[item_id] += 1
 
     return required
 
