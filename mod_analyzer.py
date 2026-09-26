@@ -784,28 +784,24 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
         return float(r.get("modValue", 0) or 0)
 
     def set_bonus_score(mods):
-        total = 0.0
+        # Value complete sets as set completions, using the character profile
+        # preference. This keeps the optimizer focused on set identity rather
+        # than raw-unit conversion (e.g. Speed percentage into speed points).
         grouped = {}
         for mod in mods:
             set_name = str(mod.get("set", "") or "")
             if set_name in SET_RULES:
                 grouped.setdefault(set_name, []).append(mod)
+
+        total = 0.0
         for set_name, members in grouped.items():
-            stat, required, minimum, maximum = SET_RULES[set_name]
-            members = sorted(members, key=lambda m: integer(m.get("level")), reverse=True)
+            _, required, minimum, maximum = SET_RULES[set_name]
             complete_groups = len(members) // required
+            preference = float(profile.get("set_preferences", {}).get(set_name, 0.0))
             for group_index in range(complete_groups):
                 group = members[group_index * required:(group_index + 1) * required]
-                bonus = maximum if all(integer(m.get("level")) >= 15 for m in group) else minimum
-                if stat == "Speed":
-                    effective_units = (bonus / 100.0) * SET_REFERENCE_BASE_SPEED
-                    reference_units = 6.0
-                else:
-                    reference_units = SET_BONUS_MAX_SECONDARY.get(stat)
-                    if not reference_units:
-                        continue
-                    effective_units = bonus / reference_units
-                total += effective_units * STAT_VALUE.get(stat, 0.10)
+                level_factor = 1.0 if all(integer(m.get("level")) >= 15 for m in group) else 0.5
+                total += 20.0 * preference * level_factor
         return total
 
     target_ids = set(target_base_ids)
@@ -1010,7 +1006,7 @@ def main():
             "- Wynik optymalny: **{:.1f}** (profil + bonusy setów)".format(opt["totalScore"]),
             "- Aktualny wynik: **{:.1f}**".format(opt["currentScore"]),
             "- Zmiana: **{:+.1f}**".format(opt["gain"]),
-            "- Bonus setów w ocenie: **{:.2f}**".format(opt["setBonusScore"]), "",
+            "- Bonus setów w ocenie: **{:.2f}**".format(opt["setBonusScore"]),
             "| Slot | Set | Primary | Mod ID | Źródło | Fit |",
             "|---|---|---|---|---|---:|"
         ]
