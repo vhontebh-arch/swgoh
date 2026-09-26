@@ -12,7 +12,7 @@ INPUT_FILE = "mods.csv"
 OUTPUT_CSV = "mod_analysis.csv"
 OUTPUT_MD = "mod_analysis.md"
 PROFILE_FILE = "mod_profiles.json"
-ANALYZER_VERSION = "2026-09-26-fit-100-roster-alias-fix"
+ANALYZER_VERSION = "2026-09-26-equip-empty-slots"
 
 R5 = {
     "Critical Chance %": (1.125, 2.25), "Defense": (4.9, 9.8),
@@ -360,8 +360,39 @@ def apply_replacements(rows, target_base_ids):
             if current is None or float(row.get("fitScore", 0)) > float(current.get("fitScore", 0)):
                 equipped_by_target_slot[key] = row
 
+    # A target character may have fewer than six mods. Empty slots are
+    # therefore actionable and must not be silently skipped.
+    best_candidate_by_slot = {}
     for row in rows:
         if row.get("characterFit") != "CANDIDATE":
+            continue
+        if is_true(row.get("equipped")):
+            continue
+        if integer(row.get("level")) < 15 or integer(row.get("dots")) < 5:
+            continue
+        target = row.get("fitTarget", "")
+        if target not in target_base_ids:
+            continue
+        key = (target, row.get("slot", ""))
+        current = best_candidate_by_slot.get(key)
+        if current is None or float(row.get("fitScore", 0)) > float(current.get("fitScore", 0)):
+            best_candidate_by_slot[key] = row
+
+    for (target, slot), candidate in best_candidate_by_slot.items():
+        if (target, slot) in equipped_by_target_slot:
+            continue
+        candidate["replacementGain"] = 0.0
+        candidate["replacesModId"] = ""
+        candidate["recommendedAction"] = "EQUIP"
+        candidate["reason"] = "slot postaci jest pusty; to najlepszy dostępny niezałożony mod dla tego slotu"
+
+    # Compare candidates against occupied target slots.
+    for row in rows:
+        if row.get("characterFit") != "CANDIDATE":
+            continue
+        if row.get("recommendedAction") == "EQUIP":
+            continue
+        if is_true(row.get("equipped")):
             continue
         if integer(row.get("level")) < 15 or integer(row.get("dots")) < 5:
             continue
@@ -411,7 +442,7 @@ def main():
         writer.writeheader()
         writer.writerows(rows)
 
-    order = {"REPLACE":0,"CALIBRATE":1,"SLICE_6E":2,"SLICE":3,"UPGRADE":4,"KEEP":5}
+    order = {"EQUIP":0,"REPLACE":1,"CALIBRATE":2,"SLICE_6E":3,"SLICE":4,"UPGRADE":5,"KEEP":6}
     rows.sort(key=lambda r: (
         order.get(r["recommendedAction"], 9),
         -float(r.get("fitScore", 0)),
@@ -432,7 +463,8 @@ def main():
         "- SLICE: **{}**".format(counts.get("SLICE",0)),
         "- SLICE_6E: **{}**".format(counts.get("SLICE_6E",0)),
         "- CALIBRATE: **{}**".format(counts.get("CALIBRATE",0)),
-        "- REPLACE: **{}**".format(counts.get("REPLACE",0)),
+        "- EQUIP: **{}**".format(counts.get("EQUIP",0)),
+        "        - REPLACE: **{}**".format(counts.get("REPLACE",0)),
         "- KEEP: **{}**".format(counts.get("KEEP",0)), "",
         "## Najważniejsi kandydaci", "",
         "| Akcja | Mod | Set | Tier | Lvl | Quality | Value | Fit | 6E proj. | Speed | Potencjał | Inwestycja |",
@@ -480,6 +512,7 @@ def main():
         "- **Value** — jakość rolla pomnożona przez ogólną, niezależną od postaci użyteczność statystyki.",
         "- **Fit** — dopasowanie moda do profilu konkretnej postaci; dla nieprzypisanych modów pokazuje najlepszego aktywnego kandydata.",
         "- **Potential** — sufit wartości przy idealnych przyszłych rollach; nie jest prognozą RNG.",
+        "- **EQUIP** — slot docelowej postaci jest pusty; wskazany mod jest najlepszym dostępnym niezałożonym modem dla tego slotu.",
         "- **REPLACE** — niezałożony mod jest wyraźnie lepszy od obecnego moda tej samej postaci i slotu.",
         "- **UPGRADE** — mod nie jest jeszcze na 15.",
         "- **SLICE** — kolejny tier ma uzasadnienie jakościowe lub profilowe.",
@@ -498,7 +531,7 @@ def main():
     print("SWGOH MOD ANALYZER")
     print("="*80)
     print("Modów:", len(rows))
-    for action in ("UPGRADE","SLICE","SLICE_6E","CALIBRATE","REPLACE","KEEP"):
+    for action in ("EQUIP","REPLACE","UPGRADE","SLICE","SLICE_6E","CALIBRATE","KEEP"):
         print("{:<12}: {}".format(action, counts.get(action,0)))
     print("CSV:", OUTPUT_CSV)
     print("REPORT:", OUTPUT_MD)
