@@ -12,7 +12,7 @@ INPUT_FILE = "mods.csv"
 OUTPUT_CSV = "mod_analysis.csv"
 OUTPUT_MD = "mod_analysis.md"
 PROFILE_FILE = "mod_profiles.json"
-ANALYZER_VERSION = "2026-09-26-fast-global-chain-optimization"
+ANALYZER_VERSION = "2026-09-26-set-aware-global-chain-optimization"
 
 R5 = {
     "Critical Chance %": (1.125, 2.25), "Defense": (4.9, 9.8),
@@ -44,6 +44,17 @@ STAT_VALUE = {
 }
 CAL_ATTEMPTS = {(6,1):1,(6,2):2,(6,3):3,(6,4):4,(6,5):6}
 CAL_COST = {1:15,2:25,3:40,4:75,5:100,6:150}
+
+SET_RULES = {
+    "Critical Chance": ("Critical Chance %", 2, 4.0, 8.0),
+    "Critical Damage": ("Critical Damage %", 4, 15.0, 30.0),
+    "Defense": ("Defense %", 2, 12.5, 25.0),
+    "Health": ("Health %", 2, 5.0, 10.0),
+    "Offense": ("Offense %", 4, 7.5, 15.0),
+    "Potency": ("Potency %", 2, 7.5, 15.0),
+    "Speed": ("Speed", 4, 5.0, 10.0),
+    "Tenacity": ("Tenacity %", 2, 10.0, 20.0),
+}
 
 def is_true(value):
     return str(value).strip().lower() in {"1", "true", "yes", "y"}
@@ -406,9 +417,36 @@ def apply_replacements(rows, target_base_ids, profiles=None, aliases=None, names
             return float(score_profile(r, profile)["fitScore"])
         return float(r.get("modValue", 0) or 0)
 
+    def set_bonus_score(mods):
+        total = 0.0
+        grouped = {}
+        for mod in mods:
+            set_name = str(mod.get("set", "") or "")
+            if set_name in SET_RULES:
+                grouped.setdefault(set_name, []).append(mod)
+        for set_name, members in grouped.items():
+            stat, required, minimum, maximum = SET_RULES[set_name]
+            members.sort(key=lambda m: integer(m.get("level")), reverse=True)
+            for start in range(0, len(members) - required + 1, required):
+                group = members[start:start + required]
+                bonus = maximum if all(integer(m.get("level")) >= 15 for m in group) else minimum
+                total += bonus * STAT_VALUE.get(stat, 0.10)
+        return total
+
+    def owner_mods(owner):
+        return [r for (o, _slot), r in eq.items() if o == owner]
+
+    def set_delta(owner, slot, replacement):
+        before = set_bonus_score(owner_mods(owner))
+        current = eq.get((owner, slot))
+        after_mods = [r for r in owner_mods(owner) if r is not current]
+        after_mods.append(replacement)
+        return set_bonus_score(after_mods) - before
+
     # Only relevant, fully developed mods participate in exchanges.
     eq = {}
     target = {}
+    target_owner = {}
     inventory = {}
     byslot = {}
     for r in rows:
@@ -425,6 +463,7 @@ def apply_replacements(rows, target_base_ids, profiles=None, aliases=None, names
             eq[(owner, slot)] = r
             if base(r) in targets:
                 target[(base(r), slot)] = r
+                target_owner[base(r)] = owner
 
             # Only mature mods are eligible to be used as replacement/source
             # candidates in the account optimizer.
@@ -481,7 +520,11 @@ def apply_replacements(rows, target_base_ids, profiles=None, aliases=None, names
 
         for replacement in ranked_candidates(owner, slot, forbidden):
             replacement_id = rid(replacement)
-            direct_gain = score(replacement, who) - current_score
+            direct_gain = (
+                score(replacement, who)
+                - current_score
+                + set_delta(owner, slot, replacement)
+            )
             if direct_gain <= -80:
                 continue
 
@@ -553,7 +596,11 @@ def apply_replacements(rows, target_base_ids, profiles=None, aliases=None, names
             candidates.sort(key=lambda r: score(r, target_id) - current_score, reverse=True)
 
             for replacement in candidates[:MAX_BRANCH]:
-                target_gain = score(replacement, target_id) - current_score
+                target_gain = (
+                    score(replacement, target_id)
+                    - current_score
+                    + set_delta(target_owner.get(target_id, ""), slot, replacement)
+                )
                 if current is not None and target_gain < 8:
                     continue
                 if current is None and target_gain <= 0:
@@ -610,7 +657,7 @@ def apply_replacements(rows, target_base_ids, profiles=None, aliases=None, names
         replacement = proposal["r"]
         replacement["replacementGain"] = round(proposal["tg"], 1)
         replacement["accountGain"] = round(proposal["ag"], 1)
-        replacement["sourceLoss"] = round(max(0.0, proposal["tg"] - proposal["ag"]), 1)
+        replacement["sourceLoss"] = round(proposal["tg"] - proposal["ag"], 1)
         replacement["chainLength"] = 1 + len(proposal["steps"])
         replacement["chainId"] = "{}:{}".format(proposal["t"], proposal["s"])
         path = [proposal["t"]]
@@ -636,7 +683,7 @@ def apply_replacements(rows, target_base_ids, profiles=None, aliases=None, names
             patch["patchOwnerName"] = step["name"]
             patch["patchSlot"] = proposal["s"]
             patch["accountGain"] = round(proposal["ag"], 1)
-            patch["sourceLoss"] = round(max(0.0, -float(step["gain"])), 1)
+            patch["sourceLoss"] = round(-float(step["gain"]), 1)
             patch["chainLength"] = replacement["chainLength"]
             patch["chainStep"] = index
             patch["chainId"] = replacement["chainId"]
