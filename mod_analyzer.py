@@ -918,16 +918,17 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
             mod["recommendedAction"]="REPLACE"; mod["chainStatus"]="SAFE"
             mod["chainId"]="{}:{}".format(plan["target"],slot)
             mod["chainLength"]=1+len(plan["moves"]); mod["chainGain"]=round(plan["chain_gain"],1)
-            # moves describe dependency repair from the selected mod's source outward.
-            # That is the reverse of the safe physical execution order.
+            # Physical execution starts with the selected mod, then repairs the vacated slot.
+            # Every PATCH is a separate mod transfer; the selected mod never travels through
+            # another character.
+            selected_path = "{} -> {}".format(pname(owner(mod)), pname(plan["target_owner"]))
             repair_path = []
-            for move in reversed(plan["moves"]):
+            for move in plan["moves"]:
                 replacement = move["replacement"]
                 replacement_source = pname(owner(replacement)) if is_true(replacement.get("equipped")) else "MAGAZYN"
-                repair_path.append("{} -> {}".format(replacement_source, move["name"]))
-            selected_path = "{} -> {}".format(pname(owner(mod)), pname(plan["target_owner"]))
-            mod["chainPath"] = ("; ".join(repair_path) + "; " if repair_path else "") + "MOD: " + selected_path
-            mod["reason"]="BEZPIECZNY ŁAŃCUCH; PATCH-y wykonuj od końca łańcucha do źródła, a właściwy mod bezpośrednio do celu"
+                repair_path.append("PATCH: {} -> {}".format(replacement_source, move["name"]))
+            mod["chainPath"] = "MOD: " + selected_path + (("; " + "; ".join(repair_path)) if repair_path else "")
+            mod["reason"]="BEZPIECZNY ŁAŃCUCH; najpierw MOD bezpośrednio do celu, potem PATCH-y w kolejności zależności"
             for idx,move in enumerate(plan["moves"],1):
                 patch=move["replacement"]; patch["recommendedAction"]="PATCH"; patch["chainStatus"]="SAFE"
                 patch["patchOwner"]=move["owner"]; patch["patchOwnerName"]=move["name"]; patch["patchSlot"]=slot
@@ -1229,23 +1230,23 @@ def main():
                 ", ".join("{}={}".format(k,v) for k,v in sorted(item["after"].items())) or "—",
                 "OK" if item["ok"] else "BŁĄD"))
     lines += ["", "### Ruchy — kolejność fizyczna", "",
-              "**Ważne:** właściwy mod z `Źródło` trafia **bezpośrednio** do celu. PATCH-y służą wyłącznie do uzupełnienia pustych slotów po zabraniu moda; wykonujemy je od końca łańcucha do źródła.", "",
-              "| Krok | Operacja | Mod | ID | Status |", "|---:|---|---|---|---|"]
-    if chain_result.get("safe"):
+              "**Ważne:** każdy mod jest przenoszony tylko raz. Najpierw właściwy mod z `Źródło` trafia **bezpośrednio** do celu. Dopiero potem wykonujemy PATCH-y uzupełniające sloty powstałe po zabraniu moda. PATCH-y idą w kolejności zależności — od bezpośredniego zależnego do MAGAZYNU.", "",
+              "| Krok | Typ | Operacja | Mod | ID | Status |", "|---:|---|---|---|---|---|"]
+    if (chain_result.get("safe")):
         step_no = 1
         for p in chain_result.get("plans",[]):
             m=p["mod"]
-            for move in reversed(p.get("moves", [])):
-                replacement = move["replacement"]
-                src_name = pname(owner(replacement)) if is_true(replacement.get("equipped")) else "MAGAZYN"
-                lines.append("| {} | {} → {} | {} {} {} | {} | SAFE |".format(
-                    step_no, src_name, move["name"], replacement.get("slot",""),
-                    replacement.get("primaryStat",""), replacement.get("primaryValue",""), replacement.get("id","")))
-                step_no += 1
-            lines.append("| {} | {} → {} | {} {} {} | {} | SAFE |".format(
+            lines.append("| {} | MOD | {} → {} | {} {} {} | {} | SAFE |".format(
                 step_no, pname(owner(m)), pname(p["target_owner"]), m.get("slot",""),
                 m.get("primaryStat",""), m.get("primaryValue",""), m.get("id","")))
             step_no += 1
+            for move in p.get("moves", []):
+                replacement = move["replacement"]
+                src_name = pname(owner(replacement)) if is_true(replacement.get("equipped")) else "MAGAZYN"
+                lines.append("| {} | PATCH | {} → {} | {} {} {} | {} | SAFE |".format(
+                    step_no, src_name, move["name"], replacement.get("slot",""),
+                    replacement.get("primaryStat",""), replacement.get("primaryValue",""), replacement.get("id","")))
+                step_no += 1
     else:
         lines.append("| — | — | — | — | BLOCKED |")
     
