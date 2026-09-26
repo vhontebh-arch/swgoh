@@ -4,10 +4,10 @@ Model rozdziela **jakość obecnych rolli**, **potencjał dalszego rozwoju**, **
 
 - Modów: **2163**
 - UPGRADE: **834**
-- SLICE: **720**
-- SLICE_6E: **137**
-- CALIBRATE: **95**
-- EQUIP: **0**
+- SLICE: **719**
+- SLICE_6E: **136**
+- CALIBRATE: **94**
+- EQUIP: **3**
 - REPLACE: **0**
 - KEEP: **377**
 
@@ -15,6 +15,9 @@ Model rozdziela **jakość obecnych rolli**, **potencjał dalszego rozwoju**, **
 
 | Akcja | Mod | Set | Tier | Lvl | Quality | Value | Fit | 6E proj. | Speed | Potencjał | Inwestycja |
 |---|---|---|---|---:|---:|---:|---:|---:|---:|---:|---|
+| EQUIP | Triangle Health % 16% | Potency | 6A | 15 | 100.0% | 62.6% | 68.5% | 0.0% | 94.4% | 62.6% | calibration |
+| EQUIP | Square Offense % 5.88% | Health | 5A | 15 | 100.0% | 64.0% | 67.3% | 54.5% | 88.9% | 64.0% | 6-dot |
+| EQUIP | Diamond Defense % 11.75% | Health | 5E | 15 | 100.0% | 72.5% | 63.6% | 0.0% | 83.3% | 72.5% | slice |
 | CALIBRATE | Circle Protection % 24% | Potency | 6A | 15 | 100.0% | 64.3% | 83.5% | 0.0% | 75.0% | 64.3% | calibration |
 | CALIBRATE | Cross Potency % 30% | Speed | 6A | 15 | 100.0% | 68.2% | 81.9% | 0.0% | 79.2% | 68.2% | calibration |
 | CALIBRATE | Circle Protection % 24% | Speed | 6A | 15 | 100.0% | 66.7% | 78.0% | 0.0% | 70.8% | 66.7% | calibration |
@@ -27,7 +30,6 @@ Model rozdziela **jakość obecnych rolli**, **potencjał dalszego rozwoju**, **
 | CALIBRATE | Diamond Defense % 20% | Speed | 6A | 15 | 100.0% | 64.3% | 70.4% | 0.0% | 70.0% | 64.3% | calibration |
 | CALIBRATE | Square Offense % 8.5% | Potency | 6A | 15 | 100.0% | 60.3% | 69.9% | 0.0% | 88.9% | 60.3% | calibration |
 | CALIBRATE | Square Offense % 8.5% | Speed | 6A | 15 | 100.0% | 57.7% | 69.0% | 0.0% | 70.8% | 57.7% | calibration |
-| CALIBRATE | Triangle Health % 16% | Potency | 6A | 15 | 100.0% | 62.6% | 68.5% | 0.0% | 94.4% | 62.6% | calibration |
 | CALIBRATE | Circle Protection % 24% | Speed | 6A | 15 | 100.0% | 55.2% | 67.1% | 0.0% | 88.9% | 55.2% | calibration |
 | CALIBRATE | Circle Health % 16% | Tenacity | 6A | 15 | 100.0% | 71.0% | 67.0% | 0.0% | 83.3% | 71.0% | calibration |
 | CALIBRATE | Arrow Protection % 24% | Speed | 6A | 15 | 100.0% | 68.2% | 66.2% | 0.0% | 80.0% | 68.2% | calibration |
@@ -88,8 +90,6 @@ Model rozdziela **jakość obecnych rolli**, **potencjał dalszego rozwoju**, **
 | CALIBRATE | Circle Health % 16% | Speed | 6A | 15 | 100.0% | 78.3% | 45.4% | 0.0% | 91.7% | 78.3% | calibration |
 | CALIBRATE | Square Offense % 8.5% | Tenacity | 6A | 15 | 100.0% | 68.3% | 44.9% | 0.0% | 88.9% | 68.3% | calibration |
 | CALIBRATE | Triangle Health % 16% | Speed | 6A | 15 | 100.0% | 62.8% | 44.7% | 0.0% | 66.7% | 62.8% | calibration |
-| CALIBRATE | Circle Health % 16% | Health | 6A | 15 | 100.0% | 68.3% | 44.1% | 0.0% | 100.0% | 68.3% | calibration |
-| CALIBRATE | Diamond Defense % 20% | Defense | 6A | 15 | 100.0% | 80.0% | 43.7% | 0.0% | 66.7% | 80.0% | calibration |
 
 ## Jar Jar Binks — kandydaci
 
