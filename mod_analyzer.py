@@ -324,6 +324,34 @@ def character_fit(row, targets, profiles, aliases):
     best["characterFit"] = "CANDIDATE"
     return best
 
+def apply_replacements(rows, target_base_ids):
+    equipped_by_target_slot = {}
+    for row in rows:
+        if not row.get("equipped"):
+            continue
+        target = row.get("fitTarget", "")
+        if target in target_base_ids:
+            key = (target, row.get("slot", ""))
+            current = equipped_by_target_slot.get(key)
+            if current is None or float(row.get("fitScore", 0)) > float(current.get("fitScore", 0)):
+                equipped_by_target_slot[key] = row
+
+    for row in rows:
+        if row.get("characterFit") != "CANDIDATE":
+            continue
+        if integer(row.get("level")) < 15 or integer(row.get("dots")) < 5:
+            continue
+        target = row.get("fitTarget", "")
+        current = equipped_by_target_slot.get((target, row.get("slot", "")))
+        if current is None:
+            continue
+        gain = float(row.get("fitScore", 0)) - float(current.get("fitScore", 0))
+        row["replacementGain"] = round(gain, 1)
+        row["replacesModId"] = current.get("id", "")
+        if gain >= 8.0:
+            row["recommendedAction"] = "REPLACE"
+            row["reason"] = "kandydat jest wyraźnie lepszy od obecnego moda na tym samym slocie"
+
 def main():
     if not os.path.exists(INPUT_FILE):
         raise FileNotFoundError(INPUT_FILE)
@@ -348,6 +376,10 @@ def main():
         )
         row["recommendedAction"] = action
         row["reason"] = reason
+        row["replacementGain"] = 0.0
+        row["replacesModId"] = ""
+
+    apply_replacements(rows, {t.get("baseId") for t in targets})
 
     with open(OUTPUT_CSV, "w", newline="", encoding="utf-8-sig") as f:
         fields = list(rows[0].keys())
@@ -355,7 +387,7 @@ def main():
         writer.writeheader()
         writer.writerows(rows)
 
-    order = {"CALIBRATE":0,"SLICE_6E":1,"SLICE":2,"UPGRADE":3,"KEEP":4}
+    order = {"REPLACE":0,"CALIBRATE":1,"SLICE_6E":2,"SLICE":3,"UPGRADE":4,"KEEP":5}
     rows.sort(key=lambda r: (
         order.get(r["recommendedAction"], 9),
         -float(r.get("fitScore", 0)),
@@ -376,6 +408,7 @@ def main():
         "- SLICE: **{}**".format(counts.get("SLICE",0)),
         "- SLICE_6E: **{}**".format(counts.get("SLICE_6E",0)),
         "- CALIBRATE: **{}**".format(counts.get("CALIBRATE",0)),
+        "- REPLACE: **{}**".format(counts.get("REPLACE",0)),
         "- KEEP: **{}**".format(counts.get("KEEP",0)), "",
         "## Najważniejsi kandydaci", "",
         "| Akcja | Mod | Set | Tier | Lvl | Quality | Value | Fit | 6E proj. | Speed | Potencjał | Inwestycja |",
@@ -399,6 +432,7 @@ def main():
         "- **Value** — jakość rolla pomnożona przez ogólną, niezależną od postaci użyteczność statystyki.",
         "- **Fit** — dopasowanie moda do profilu konkretnej postaci; dla nieprzypisanych modów pokazuje najlepszego aktywnego kandydata.",
         "- **Potential** — sufit wartości przy idealnych przyszłych rollach; nie jest prognozą RNG.",
+        "- **REPLACE** — niezałożony mod jest wyraźnie lepszy od obecnego moda tej samej postaci i slotu.",
         "- **UPGRADE** — mod nie jest jeszcze na 15.",
         "- **SLICE** — kolejny tier ma uzasadnienie jakościowe lub profilowe.",
         "- **SLICE_6E** — 5A jest oceniane również przez projekcję jakości po wzroście statystyk do 6E.",
