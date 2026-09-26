@@ -2,6 +2,12 @@ name: Update SWGOH data
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - "mod_analyzer.py"
+      - "mod_profiles.json"
+      - "generate_mods.py"
+      - "targets.json"
   schedule:
     - cron: "0 6 * * *"
 
