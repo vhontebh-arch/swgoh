@@ -153,14 +153,14 @@ PATCH-y używają tego samego slotu i setu co mod zabrany ze źródła, więc li
 
 Analiza porównuje mody wyposażone z kandydatami z inventory dla każdego slotu.
 
-| Akcja | Mod | Źródło | Slot | Set | Tier | Lvl | Fit | Set Δ | Fit po secie | Zysk celu | Bilans konta | Łańcuch |
+| Akcja | Mod | Źródło | Slot | Set | Tier | Lvl | Fit | Set Δ | Fit po secie | Wkład moda | Pełny build Δ | Łańcuch |
 |---|---|---|---|---|---|---|---:|---:|---:|---:|---:|---:|
-| REPLACE | Circle Protection % 23.5% | POSTAĆ: COLONELSTARCK | Circle | Speed | 5A | 15 | 59.0% | 0.00 | 59.0 | 0.0 | 0.0 | MOD: COLONELSTARCK -> JARJARBINKS; PATCH: YODACHEWBACCA -> COLONELSTARCK; PATCH: MAGAZYN -> YODACHEWBACCA |
-| REPLACE | Triangle Critical Chance % 12% | POSTAĆ: 4LOM | Triangle | Speed | 5B | 15 | 58.4% | 0.00 | 58.4 | 0.0 | 0.0 | MOD: 4LOM -> JARJARBINKS; PATCH: KUIIL -> 4LOM; PATCH: MAGAZYN -> KUIIL |
-| REPLACE | Arrow Speed 30 | POSTAĆ: 4LOM | Arrow | Speed | 5A | 15 | 54.0% | 0.00 | 54.0 | 0.0 | 0.0 | MOD: 4LOM -> JARJARBINKS; PATCH: MAGAZYN -> 4LOM |
-| REPLACE | Square Offense % 8.5% | POSTAĆ: ADMIRALPIETT | Square | Speed | 6A | 15 | 52.9% | 0.00 | 52.9 | 0.0 | 0.0 | MOD: ADMIRALPIETT -> JARJARBINKS; PATCH: ARMORER -> ADMIRALPIETT; PATCH: MAGAZYN -> ARMORER |
-| REPLACE | Cross Potency % 24% | POSTAĆ: AAYLASECURA | Cross | Potency | 5A | 15 | 48.8% | 0.00 | 48.8 | 0.0 | 0.0 | MOD: AAYLASECURA -> JARJARBINKS; PATCH: MAGAZYN -> AAYLASECURA |
-| REPLACE | Diamond Defense % 20% | POSTAĆ: EPIXPOE | Diamond | Potency | 6D | 15 | 47.1% | 0.00 | 47.1 | 0.0 | 0.0 | MOD: EPIXPOE -> JARJARBINKS; PATCH: MAGAZYN -> EPIXPOE |
+| REPLACE | Circle Protection % 23.5% | POSTAĆ: COLONELSTARCK | Circle | Speed | 5A | 15 | 59.0% | 0.00 | 59.0 | 59.0 | 160.4 | MOD: COLONELSTARCK -> JARJARBINKS; PATCH: YODACHEWBACCA -> COLONELSTARCK; PATCH: MAGAZYN -> YODACHEWBACCA |
+| REPLACE | Triangle Critical Chance % 12% | POSTAĆ: 4LOM | Triangle | Speed | 5B | 15 | 58.4% | 0.00 | 58.4 | 58.4 | 160.4 | MOD: 4LOM -> JARJARBINKS; PATCH: KUIIL -> 4LOM; PATCH: MAGAZYN -> KUIIL |
+| REPLACE | Arrow Speed 30 | POSTAĆ: 4LOM | Arrow | Speed | 5A | 15 | 54.0% | 0.00 | 54.0 | 54.0 | 160.4 | MOD: 4LOM -> JARJARBINKS; PATCH: MAGAZYN -> 4LOM |
+| REPLACE | Square Offense % 8.5% | POSTAĆ: ADMIRALPIETT | Square | Speed | 6A | 15 | 52.9% | 0.00 | 52.9 | 52.9 | 160.4 | MOD: ADMIRALPIETT -> JARJARBINKS; PATCH: ARMORER -> ADMIRALPIETT; PATCH: MAGAZYN -> ARMORER |
+| REPLACE | Cross Potency % 24% | POSTAĆ: AAYLASECURA | Cross | Potency | 5A | 15 | 48.8% | 0.00 | 48.8 | 48.8 | 160.4 | MOD: AAYLASECURA -> JARJARBINKS; PATCH: MAGAZYN -> AAYLASECURA |
+| REPLACE | Diamond Defense % 20% | POSTAĆ: EPIXPOE | Diamond | Potency | 6D | 15 | 47.1% | 0.00 | 47.1 | 47.1 | 160.4 | MOD: EPIXPOE -> JARJARBINKS; PATCH: MAGAZYN -> EPIXPOE |
 | PATCH | Arrow Protection % 23.5% | MAGAZYN | Arrow | Speed | 5E | 15 | 36.5% | 0.00 | 36.5 | 23.2 | 23.2 | MOD: 4LOM -> JARJARBINKS; PATCH: MAGAZYN -> 4LOM |
 | PATCH | Circle Health % 5.88% | MAGAZYN | Circle | Critical Chance | 5A | 15 | 27.0% | 0.00 | 27.0 | 14.2 | 14.2 | MOD: COLONELSTARCK -> JARJARBINKS; PATCH: YODACHEWBACCA -> COLONELSTARCK; PATCH: MAGAZYN -> YODACHEWBACCA |
 | PATCH | Square Offense % 5.88% | POSTAĆ: ARMORER | Square | Speed | 5E | 15 | 42.1% | 0.00 | 42.1 | 12.0 | 12.0 | MOD: ADMIRALPIETT -> JARJARBINKS; PATCH: ARMORER -> ADMIRALPIETT; PATCH: MAGAZYN -> ARMORER |
