@@ -552,7 +552,7 @@ def apply_replacements(rows, target_base_ids):
                 "mod z {} daje +{:.1f} Fit dla celu; zabranie kosztuje "
                 "{:.1f} wartości rosteru, a bilans całej operacji wynosi "
                 "+{:.1f}".format(
-                    source_label(candidate, {}, {}) if False else p["sourceOwner"],
+                    p["sourceOwner"],
                     p["targetGain"], p["sourceLoss"], p["accountGain"]
                 )
             )
@@ -646,6 +646,7 @@ def main():
         "- CALIBRATE: **{}**".format(counts.get("CALIBRATE",0)),
         "- EQUIP: **{}**".format(counts.get("EQUIP",0)),
         "- REPLACE: **{}**".format(counts.get("REPLACE",0)),
+        "- PATCH: **{}**".format(counts.get("PATCH",0)),
         "- KEEP: **{}**".format(counts.get("KEEP",0)), "",
         "## Najważniejsi kandydaci", "",
         "| Akcja | Mod | Źródło | Set | Tier | Lvl | Quality | Value | Fit | 6E proj. | Speed | Potencjał | Inwestycja |",
@@ -694,14 +695,14 @@ def main():
         "- **Quality** — jakość wykonanych rolli względem zakresu dla 5-dot/6-dot.",
         "- **Value** — jakość rolla pomnożona przez ogólną, niezależną od postaci użyteczność statystyki.",
         "- **Fit** — dopasowanie moda do aktywnego profilu celu; obecnie szczegółowy profil ma Jar Jar Binks.",
-        "- **AccountGain** — bilans całej operacji przeniesienia i wszystkich PATCH-y w łańcuchu; dla źródeł bez profilu używany jest globalny ModValue.",
+        "- **AccountGain** — bilans całej operacji przeniesienia i PATCH-a dla źródła; dla źródeł bez profilu używany jest globalny ModValue.",
         "- **Potential** — sufit wartości przy idealnych przyszłych rollach; nie jest prognozą RNG.",
         "- **Źródło MAGAZYN** — mod nie jest obecnie założony na żadnej postaci.",
         "- **Źródło POSTAĆ: [nazwa]** — mod jest obecnie założony na wskazanej postaci.",
-        "- **EQUIP** — slot docelowej postaci jest pusty; wskazany mod jest najlepszym dostępnym modem, także jeśli jest obecnie na innej postaci.
-        "- **PATCH** — mod z magazynu przeznaczony do załatania slotu postaci, z którego zabrano mod do celu.",",
-        "- **REPLACE** — mod jest przenoszony do celu tylko wtedy, gdy poprawa celu i cały łańcuch zmian dają dodatni bilans dla konta.",
-        "- **PATCH** — element łańcucha zastępstw; każdy zabrany mod ma policzoną ścieżkę uzupełnienia slotu, aż do magazynu.",
+        "- **EQUIP** — pusty slot celu; mod jest przydzielany tylko wtedy, gdy bilans całej operacji dla konta jest dodatni.",
+        "- **PATCH** — mod z magazynu, który bezpośrednio zastępuje mod zabrany z innej postaci.",
+        "- **REPLACE** — mod jest przenoszony do celu tylko wtedy, gdy poprawa celu i uwzględniona strata źródłowej postaci dają dodatni bilans dla konta.",
+        "- **AccountGain** — zysk celu minus strata wartości źródłowej postaci; dzięki temu mod nie jest zabierany, jeśli operacja pogarsza cały roster. Dla postaci bez profilu strata jest liczona przez globalny ModValue.",
         "- **UPGRADE** — mod nie jest jeszcze na 15.",
         "- **SLICE** — kolejny tier ma uzasadnienie jakościowe lub profilowe.",
         "- **SLICE_6E** — 5A jest oceniane również przez projekcję jakości po wzroście statystyk do 6E.",
