@@ -564,7 +564,7 @@ def apply_replacements(rows, target_base_ids, profiles=None, aliases=None, names
         current_score = score(current, who)
         best = None
 
-        for replacement in ranked_candidates(owner, slot, forbidden):
+        for replacement in ranked_candidates(owner, slot, forbidden)[:4]:
             replacement_id = rid(replacement)
             direct_gain = (
                 score(replacement, who)
@@ -792,7 +792,7 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
         if not src: return None
 
         def search(hole_owner, depth, forbidden, seen):
-            if depth > 10: return None
+            if depth > 5: return None
             current = eq.get((hole_owner, slot))
             if current is None: return {"moves": [], "gain": 0.0}
 
