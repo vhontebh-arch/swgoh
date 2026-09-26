@@ -47,6 +47,9 @@ CAL_COST = {1:15,2:25,3:40,4:75,5:100,6:150}
 def is_true(value):
     return str(value).strip().lower() in {"1", "true", "yes", "y"}
 
+def is_true(value):
+    return str(value).strip().lower() in {"1", "true", "yes", "y"}
+
 def integer(value, default=0):
     try:
         return int(value)
