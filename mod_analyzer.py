@@ -753,6 +753,172 @@ def apply_replacements(rows, target_base_ids, profiles=None, aliases=None, names
 
 
 
+
+def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, names=None):
+    """Global virtual optimizer: all mature mods are treated as available.
+    Optimizes the complete six-slot build, including set bonuses, then leaves
+    physical ownership/chain execution to apply_replacements().
+    """
+    profiles = profiles or {}
+    aliases = aliases or {}
+    names = names or {}
+    slots = ("Square", "Diamond", "Circle", "Arrow", "Triangle", "Cross")
+    SET_REFERENCE_BASE_SPEED = 150.0
+    SET_BONUS_MAX_SECONDARY = {
+        "Critical Chance %": 2.25,
+        "Defense %": 1.70,
+        "Health %": 1.125,
+        "Offense %": 0.563,
+        "Potency %": 2.25,
+        "Tenacity %": 2.25,
+        "Critical Damage %": 36.0,
+    }
+
+    def rid(r):
+        return str(r.get("id", "") or "")
+
+    def score(r, who):
+        profile = profiles.get(who)
+        if profile:
+            return float(score_profile(r, profile)["fitScore"])
+        return float(r.get("modValue", 0) or 0)
+
+    def set_bonus_score(mods):
+        total = 0.0
+        grouped = {}
+        for mod in mods:
+            set_name = str(mod.get("set", "") or "")
+            if set_name in SET_RULES:
+                grouped.setdefault(set_name, []).append(mod)
+        for set_name, members in grouped.items():
+            stat, required, minimum, maximum = SET_RULES[set_name]
+            members = sorted(members, key=lambda m: integer(m.get("level")), reverse=True)
+            complete_groups = len(members) // required
+            for group_index in range(complete_groups):
+                group = members[group_index * required:(group_index + 1) * required]
+                bonus = maximum if all(integer(m.get("level")) >= 15 for m in group) else minimum
+                if stat == "Speed":
+                    effective_units = (bonus / 100.0) * SET_REFERENCE_BASE_SPEED
+                    reference_units = 6.0
+                else:
+                    reference_units = SET_BONUS_MAX_SECONDARY.get(stat)
+                    if not reference_units:
+                        continue
+                    effective_units = bonus / reference_units
+                total += effective_units * STAT_VALUE.get(stat, 0.10)
+        return total
+
+    target_ids = set(target_base_ids)
+    results = {}
+
+    # One character at a time. If a target has a known profile, use it.
+    for target_id in target_ids:
+        profile = profiles.get(target_id)
+        if not profile:
+            continue
+
+        # The same mod can only occupy one slot, so uniqueness across slots is
+        # automatic. Keep a bounded pool per (slot,set): set bonus is identical
+        # for all members of a set, therefore only the strongest candidates need
+        # to enter the global search.
+        pools = {}
+        for slot in slots:
+            candidates = [r for r in rows
+                          if str(r.get("slot", "")) == slot
+                          and integer(r.get("level")) >= 15
+                          and integer(r.get("dots")) >= 5]
+            by_set = {}
+            for r in candidates:
+                by_set.setdefault(str(r.get("set", "")), []).append(r)
+
+            selected = []
+            for set_name, members in by_set.items():
+                members.sort(key=lambda r: score(r, target_id), reverse=True)
+                selected.extend(members[:24])
+            selected.sort(key=lambda r: score(r, target_id), reverse=True)
+            pools[slot] = selected[:96]
+
+        # DP state: (counts of each set, number of chosen slots) -> best path.
+        # Counts are capped at the set's required size because additional
+        # incomplete members do not change the set bonus.
+        set_names = tuple(SET_RULES.keys())
+        requirements = {name: SET_RULES[name][1] for name in set_names}
+        initial = (0,) * len(set_names)
+        states = {initial: (0.0, [])}
+
+        for slot in slots:
+            next_states = {}
+            for counts, (base_score, chosen) in states.items():
+                for mod in pools[slot]:
+                    set_name = str(mod.get("set", "") or "")
+                    idx = set_names.index(set_name) if set_name in requirements else None
+                    new_counts = list(counts)
+                    if idx is not None:
+                        new_counts[idx] = min(requirements[set_name], new_counts[idx] + 1)
+                    new_counts = tuple(new_counts)
+
+                    new_score = base_score + score(mod, target_id)
+                    candidate = (new_score, chosen + [mod])
+
+                    # For identical capped set-count state at this point,
+                    # retain the higher raw profile score. Set bonuses are
+                    # applied after all six slots have been selected.
+                    old = next_states.get(new_counts)
+                    if old is None or candidate[0] > old[0]:
+                        next_states[new_counts] = candidate
+            states = next_states
+
+        best = None
+        for counts, (base_score, chosen) in states.items():
+            total_score = base_score + set_bonus_score(chosen)
+            if best is None or total_score > best["totalScore"]:
+                best = {
+                    "totalScore": total_score,
+                    "baseScore": base_score,
+                    "setBonusScore": total_score - base_score,
+                    "mods": chosen,
+                }
+
+        if not best:
+            continue
+
+        # Current six-mod state for comparison.
+        current = []
+        for r in rows:
+            if not is_true(r.get("equipped")):
+                continue
+            owner = str(r.get("assignedTo", "") or "")
+            if aliases.get(owner, owner) == target_id:
+                current.append(r)
+        current_by_slot = {str(r.get("slot", "")): r for r in current}
+        current_score = sum(score(current_by_slot[s], target_id) for s in slots
+                            if s in current_by_slot)
+        current_set_score = set_bonus_score(current)
+        current_total = current_score + current_set_score
+
+        # Build readable target-optimized recommendation rows.
+        for mod in best["mods"]:
+            mod["optimizerTarget"] = target_id
+            mod["optimizerScore"] = round(score(mod, target_id), 1)
+            mod["optimizerTotalScore"] = round(best["totalScore"], 1)
+            mod["optimizerBaseScore"] = round(best["baseScore"], 1)
+            mod["optimizerSetBonusScore"] = round(best["setBonusScore"], 2)
+            mod["optimizerCurrentScore"] = round(current_total, 1)
+            mod["optimizerGain"] = round(best["totalScore"] - current_total, 1)
+            mod["optimizerSource"] = source_label(mod, aliases, names)
+
+        results[target_id] = {
+            "mods": best["mods"],
+            "totalScore": best["totalScore"],
+            "baseScore": best["baseScore"],
+            "setBonusScore": best["setBonusScore"],
+            "currentScore": current_total,
+            "gain": best["totalScore"] - current_total,
+        }
+
+    return results
+
+
 def main():
     if not os.path.exists(INPUT_FILE):
         raise FileNotFoundError(INPUT_FILE)
@@ -782,6 +948,7 @@ def main():
         row["replacesModId"] = ""
         row["source"] = source_label(row, aliases, names)
 
+    optimizer = optimize_target_build(rows, {t.get("baseId") for t in targets}, profiles, aliases, names)
     apply_replacements(rows, {t.get("baseId") for t in targets}, profiles, aliases, names)
 
     with open(OUTPUT_CSV, "w", newline="", encoding="utf-8-sig") as f:
@@ -819,6 +986,7 @@ def main():
         "- REPLACE: **{}**".format(counts.get("REPLACE",0)),
         "- PATCH: **{}**".format(counts.get("PATCH",0)),
         "- KEEP: **{}**".format(counts.get("KEEP",0)), "",
+        "## Globalny optimizer 6-slotowy", "",
         "## Najważniejsi kandydaci", "",
         "| Akcja | Mod | Źródło | Set | Tier | Lvl | Quality | Value | Fit | 6E proj. | Speed | Potencjał | Inwestycja |",
         "|---|---|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---|"
@@ -836,6 +1004,20 @@ def main():
         )
 
     jar_rows = [r for r in rows if r.get("fitTarget") == "JARJARBINKS"]
+    for target_id, opt in optimizer.items():
+        lines += [
+            "", "### {} — najlepszy wirtualny build 6/6".format(target_id), "",
+            "- Wynik optymalny: **{:.1f}** (profil + bonusy setów)".format(opt["totalScore"]),
+            "- Aktualny wynik: **{:.1f}**".format(opt["currentScore"]),
+            "- Zmiana: **{:+.1f}**".format(opt["gain"]),
+            "- Bonus setów w ocenie: **{:.2f}**".format(opt["setBonusScore"]), "",
+            "| Slot | Set | Primary | Mod ID | Źródło | Fit |",
+            "|---|---|---|---|---|---:|"
+        ]
+        for m in opt["mods"]:
+            lines.append("| {} | {} | {} {} | {} | {} | {:.1f} |".format(
+                m.get("slot",""), m.get("set",""), m.get("primaryStat",""), m.get("primaryValue",""),
+                m.get("id",""), source_label(m, aliases, names), score_profile(m, profiles[target_id])["fitScore"]))
     jar_order = {
         "REPLACE": 0,
         "EQUIP": 1,
