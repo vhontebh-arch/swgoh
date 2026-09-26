@@ -1265,7 +1265,7 @@ def main():
             step_no += 1
             for move in p.get("moves", []):
                 replacement = move["replacement"]
-                src_name = display_name(owner(replacement)) if is_true(replacement.get("equipped")) else "MAGAZYN"
+                src_name = display_name(str(replacement.get("assignedTo", "") or "")) if is_true(replacement.get("equipped")) else "MAGAZYN"
                 lines.append("| {} | PATCH | {} → {} | {} | SAFE |".format(
                     step_no, src_name, move["name"], mod_description(replacement)))
                 step_no += 1
