@@ -412,18 +412,25 @@ def apply_replacements(rows, target_base_ids, profiles=None, aliases=None, names
     inventory = {}
     byslot = {}
     for r in rows:
-        if integer(r.get("level")) < 15 or integer(r.get("dots")) < 5:
-            continue
         slot = str(r.get("slot", "") or "")
         if not slot:
             continue
+
+        # Occupancy must include every equipped mod, even an unfinished
+        # low-level mod. Otherwise a partially equipped target is incorrectly
+        # reported as having an empty slot and gets an EQUIP instead of a
+        # replacement recommendation.
         if is_true(r.get("equipped")):
             owner = str(r.get("assignedTo", "") or "")
             eq[(owner, slot)] = r
-            byslot.setdefault(slot, []).append(r)
             if base(r) in targets:
                 target[(base(r), slot)] = r
-        else:
+
+            # Only mature mods are eligible to be used as replacement/source
+            # candidates in the account optimizer.
+            if integer(r.get("level")) >= 15 and integer(r.get("dots")) >= 5:
+                byslot.setdefault(slot, []).append(r)
+        elif integer(r.get("level")) >= 15 and integer(r.get("dots")) >= 5:
             inventory.setdefault(slot, []).append(r)
 
     # Rank candidates once per owner/slot. A bounded top-K keeps the recursive
