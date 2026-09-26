@@ -1195,6 +1195,7 @@ def main():
         "# Analiza modów", "",
         "Model rozdziela **jakość obecnych rolli**, **potencjał dalszego rozwoju**, "
         "**dopasowanie do postaci** i **rodzaj następnej inwestycji**.", "",
+        "W raportach przeznaczonych do ręcznego wykonania mod identyfikowany jest wyłącznie przez slot, set, primary, secondary, gwiazdki, tier i poziom; wewnętrzne ID nie są pokazywane.", "",
         "- Modów: **{}**".format(len(rows)),
         "- UPGRADE: **{}**".format(counts.get("UPGRADE",0)),
         "- SLICE: **{}**".format(counts.get("SLICE",0)),
@@ -1229,12 +1230,12 @@ def main():
             "- Aktualny wynik: **{:.1f}**".format(opt["currentScore"]),
             "- Zmiana: **{:+.1f}**".format(opt["gain"]),
             "- Bonus setów w ocenie: **{:.2f}**".format(opt["setBonusScore"]),
-            "| Slot | Set | Primary | Źródło | Fit |",
-            "|---|---|---|---|---|---:|"
+            "| Slot | Mod — parametry wyszukiwalne | Źródło | Fit |",
+            "|---|---|---|---:|"
         ]
         for m in opt["mods"]:
-            lines.append("| {} | {} | {} {} | {} | {:.1f} |".format(
-                m.get("slot",""), m.get("set",""), m.get("primaryStat",""), m.get("primaryValue",""),
+            lines.append("| {} | {} | {} | {:.1f} |".format(
+                m.get("slot",""), mod_description(m),
                 source_label(m, aliases, names), score_profile(m, profiles[target_id])["fitScore"]))
     lines += ["", "## BEZPIECZNY ŁAŃCUCH — walidacja globalna", ""]
     if chain_result.get("safe"):
