@@ -1,0 +1,85 @@
+name: Refresh SWGOH mod profiles
+
+on:
+  workflow_dispatch:
+  schedule:
+    # 05:15 UTC = 07:15 CEST / 06:15 CET.
+    # Kept separate from the main 06:00 UTC account-data workflow.
+    - cron: "15 5 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Refresh profiles
+        run: |
+          set -e
+          cp mod_profiles.json mod_profiles.previous.json
+
+          python update_mod_profiles.py
+
+          test -s mod_profiles.json
+          python -m json.tool mod_profiles.json >/dev/null
+
+          # Basic sanity check: a valid refresh must contain profiles and
+          # non-empty primary/secondary preferences.
+          python - <<'PY'
+          import json
+
+          with open("mod_profiles.json", encoding="utf-8") as f:
+              data = json.load(f)
+
+          profiles = data.get("profiles", {})
+          if not profiles:
+              raise SystemExit("ERROR: brak profili")
+
+          for base_id, profile in profiles.items():
+              if not profile.get("primary_preferences"):
+                  raise SystemExit(f"ERROR: {base_id}: brak primary_preferences")
+              if not profile.get("secondary_preferences"):
+                  raise SystemExit(f"ERROR: {base_id}: brak secondary_preferences")
+
+          print(f"OK: zweryfikowano {len(profiles)} profili")
+          PY
+
+      - name: Show profile changes
+        run: |
+          echo "=============================================="
+          echo "MOD PROFILE DIFF"
+          echo "=============================================="
+          git diff -- mod_profiles.json || true
+
+      - name: Commit changed profiles
+        run: |
+          set -e
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add mod_profiles.json
+
+          if git diff --cached --quiet; then
+            echo "Brak zmian w profilu."
+            exit 0
+          fi
+
+          git commit -m "Refresh SWGOH mod profiles"
+          git push
+
+      - name: Cleanup
+        if: always()
+        run: |
+          rm -f mod_profiles.previous.json
