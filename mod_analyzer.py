@@ -678,7 +678,11 @@ def main():
 
     with open(OUTPUT_CSV, "w", newline="", encoding="utf-8-sig") as f:
         fields = list(rows[0].keys())
-        writer = csv.DictWriter(f, fieldnames=fields)
+        for row in rows[1:]:
+            for key in row.keys():
+                if key not in fields:
+                    fields.append(key)
+        writer = csv.DictWriter(f, fieldnames=fields, extrasaction="ignore")
         writer.writeheader()
         writer.writerows(rows)
 
