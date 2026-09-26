@@ -1,27 +1,24 @@
 #!/usr/bin/env python3
 """
-Refresh character mod profiles from the live SWGOH.GG Best Mods pages.
+Refresh mod_profiles.json from the live SWGOH.GG Best Mods pages.
 
-The file keeps the source URLs and a normalized snapshot so the analyzer never
-depends on manually-entered SWGOH.GG numbers. The workflow refreshes this file
-before every mod analysis run.
+GitHub Actions runners receive HTTP 403 from SWGOH.GG/Cloudflare. The updater
+therefore uses Jina Reader as a fetch proxy and parses the resulting text.
+Nothing is written until every configured profile and both source slices pass
+validation, so a failed refresh leaves the last known-good profile untouched.
 """
 
 import json
 import re
 import sys
-from html import unescape
+from datetime import datetime, timezone
 from pathlib import Path
+from urllib.parse import quote
 from urllib.request import Request, urlopen
 
 PROFILE_FILE = Path("mod_profiles.json")
+TIMEOUT = 45
 USER_AGENT = "Mozilla/5.0 (compatible; Vhonte-SWGOH-Mod-Analyzer/1.0)"
-
-STAT_NAMES = [
-    "Speed", "Potency", "Protection", "Protection %", "Health", "Health %",
-    "Offense", "Offense %", "Defense", "Defense %", "Tenacity %",
-    "Critical Chance %", "Critical Damage %", "Critical Avoidance %", "Speed %",
-]
 
 SLOTS = {
     "Arrow": "Best Arrow Mod",
@@ -30,55 +27,64 @@ SLOTS = {
     "Cross": "Best Cross Mod",
 }
 
+STAT_NAMES = [
+    "Speed", "Potency", "Protection", "Protection %", "Health", "Health %",
+    "Offense", "Offense %", "Defense", "Defense %", "Tenacity %",
+    "Critical Chance %", "Critical Damage %", "Critical Avoidance %", "Accuracy",
+]
+
+KNOWN_SETS = [
+    "Critical Chance", "Critical Damage", "Defense", "Health", "Offense",
+    "Potency", "Speed", "Tenacity",
+]
+
 
 def fetch(url):
-    req = Request(url, headers={"User-Agent": USER_AGENT})
-    with urlopen(req, timeout=30) as response:
-        raw = response.read().decode("utf-8", errors="replace")
-    # Strip scripts/styles before extracting visible text.
-    raw = re.sub(r"<script\\b[^>]*>.*?</script>", " ", raw, flags=re.I | re.S)
-    raw = re.sub(r"<style\\b[^>]*>.*?</style>", " ", raw, flags=re.I | re.S)
-    text = re.sub(r"<[^>]+>", " ", raw)
-    text = unescape(text)
-    return re.sub(r"\\s+", " ", text).strip()
+    # Jina Reader has a simple public URL interface for converting public web
+    # pages to readable text/markdown. Try HTTPS first, then HTTP as a fallback.
+    candidates = [
+        "https://r.jina.ai/" + url,
+        "https://r.jina.ai/http://" + url.split("://", 1)[1],
+    ]
+    last_error = None
+
+    for endpoint in candidates:
+        try:
+            req = Request(endpoint, headers={"User-Agent": USER_AGENT})
+            with urlopen(req, timeout=TIMEOUT) as response:
+                raw = response.read().decode("utf-8", errors="replace")
+
+            if len(raw) < 2000:
+                raise RuntimeError(f"odpowiedź zbyt krótka ({len(raw)} B)")
+
+            return raw
+        except Exception as exc:
+            last_error = exc
+
+    raise RuntimeError(f"nie udało się pobrać {url}: {last_error}")
+
+
+def clean(text):
+    text = re.sub(r"\r", "", text)
+    text = re.sub(r"\n{3,}", "\n\n", text)
+    return text
 
 
 def pct(value):
-    try:
-        return float(value)
-    except ValueError:
-        return 0.0
+    return float(str(value).replace(",", "."))
 
 
-def section(text, heading, next_headings):
-    start = text.find(heading)
+def extract_between(text, start_marker, end_markers):
+    start = text.find(start_marker)
     if start < 0:
         return ""
-    start += len(heading)
+    start += len(start_marker)
     end = len(text)
-    for h in next_headings:
-        pos = text.find(h, start)
+    for marker in end_markers:
+        pos = text.find(marker, start)
         if pos >= 0:
             end = min(end, pos)
     return text[start:end]
-
-
-def parse_pairs(text, names):
-    escaped = "|".join(re.escape(x) for x in sorted(names, key=len, reverse=True))
-    pattern = re.compile(r"(" + escaped + r")\\s+([0-9]+(?:\\.[0-9]+)?)%")
-    result = {}
-    for match in pattern.finditer(text):
-        result[match.group(1)] = pct(match.group(2))
-    return result
-
-
-def parse_primary(text, slot):
-    headings = list(SLOTS.values())
-    current = SLOTS[slot]
-    window = section(text, current, [h for h in headings if h != current])
-    # The heading is followed by the explanatory sentence and then the table.
-    pairs = parse_pairs(window, STAT_NAMES)
-    return pairs
 
 
 def parse_set_combinations(text):
@@ -86,135 +92,180 @@ def parse_set_combinations(text):
     if start < 0:
         start = text.find("Best Mod Set")
     if start < 0:
-        return {}
+        raise RuntimeError("brak sekcji Specific Mod Sets")
 
-    end = text.find("Arrow", start)
-    if end < 0:
-        end = min(len(text), start + 7000)
-    window = text[start:end]
+    window = text[start:]
+    # The primary-stat section starts at the first slot heading.
+    positions = [window.find("\nArrow"), window.find("\n### Arrow"), window.find("\n## Arrow")]
+    positions = [p for p in positions if p >= 0]
+    if positions:
+        window = window[:min(positions)]
 
-    # Set names can contain '+'. Restrict to the set names currently present
-    # in the game and retain the first occurrence of each combination.
-    known = [
-        "Speed", "Potency", "Health", "Protection", "Offense", "Defense",
-        "Tenacity", "Critical Chance", "Critical Damage"
-    ]
-    name = r"(?:" + "|".join(re.escape(x) for x in known) + r")"
-    combo = re.compile(r"((?:" + name + r")(?:\\s*\\+\\s*(?:" + name + r")){1,2})\\s+([0-9]+(?:\\.[0-9]+)?)%")
+    set_name = r"(?:" + "|".join(re.escape(x) for x in KNOWN_SETS) + r")"
+    pattern = re.compile(
+        r"((?:" + set_name + r")(?:\s*\+\s*(?:" + set_name + r")){1,2})"
+        r"\s+(\d+(?:\.\d+)?)%"
+    )
+
     result = {}
-    for match in combo.finditer(window):
-        key = re.sub(r"\\s*\\+\\s*", " + ", match.group(1))
-        if key not in result:
-            result[key] = pct(match.group(2))
+    for match in pattern.finditer(window):
+        key = re.sub(r"\s*\+\s*", " + ", match.group(1)).strip()
+        result[key] = pct(match.group(2))
+
+    if not result:
+        raise RuntimeError("nie odczytano kombinacji setów")
+    return result
+
+
+def parse_slot(text, slot):
+    heading = SLOTS[slot]
+    start = text.find(heading)
+    if start < 0:
+        # Jina may omit the exact heading prefix.
+        start = text.find("### " + heading)
+    if start < 0:
+        raise RuntimeError(f"brak sekcji {heading}")
+
+    end_markers = []
+    for other in SLOTS:
+        if other == slot:
+            continue
+        end_markers.extend([SLOTS[other], "### " + SLOTS[other]])
+
+    window = extract_between(text, heading, end_markers)
+
+    result = {}
+    # Tables are normally rendered as:
+    # Speed | 890 | 96.31%
+    # Also accept plain text lines.
+    for stat in STAT_NAMES:
+        pattern = re.compile(
+            r"\b" + re.escape(stat) +
+            r"\s*(?:\||\s+)\s*(?:\d[\d,]*\s*(?:\||\s+))?"
+            r"(\d+(?:\.\d+)?)%"
+        )
+        m = pattern.search(window)
+        if m:
+            result[stat] = pct(m.group(1))
+
+    if not result:
+        raise RuntimeError(f"{slot}: brak primary stats")
     return result
 
 
 def parse_secondary(text):
     start = text.find("Secondary Stat Focus")
     if start < 0:
-        return {}
+        raise RuntimeError("brak Secondary Stat Focus")
+
     end = text.find("Average Stats", start)
     if end < 0:
-        end = min(len(text), start + 6000)
+        end = len(text)
     window = text[start:end]
+
     result = {}
     for stat in STAT_NAMES:
-        # SWGOH.GG presents e.g. 'Speed +20.1 avg 20.9%' or
-        # 'Potency +5.64% avg 10.72%'.
-        pat = re.compile(
-            re.escape(stat) +
-            r"\\s+\\+?([0-9]+(?:\\.[0-9]+)?)%?\\s+avg\\s+([0-9]+(?:\\.[0-9]+)?)%"
-        )
-        m = pat.search(window)
-        if m:
-            result[stat] = {"average": pct(m.group(1)), "focus_pct": pct(m.group(2))}
-            continue
-        pat2 = re.compile(
-            re.escape(stat) +
-            r"\\s+\\+?([0-9]+(?:\\.[0-9]+)?)\\s+avg\\s+([0-9]+(?:\\.[0-9]+)?)%"
-        )
-        m = pat2.search(window)
-        if m:
-            result[stat] = {"average": pct(m.group(1)), "focus_pct": pct(m.group(2))}
+        patterns = [
+            re.compile(
+                re.escape(stat) +
+                r"\s*\+\s*(\d+(?:\.\d+)?)%?\s+avg\s+(\d+(?:\.\d+)?)%"
+            ),
+            re.compile(
+                re.escape(stat) +
+                r"\s*\|\s*\+?(\d+(?:\.\d+)?)%?\s*\|\s*(\d+(?:\.\d+)?)%"
+            ),
+        ]
+        for pattern in patterns:
+            m = pattern.search(window)
+            if m:
+                result[stat] = {
+                    "average": pct(m.group(1)),
+                    "focus_pct": pct(m.group(2)),
+                }
+                break
+
+    if not result:
+        raise RuntimeError("brak danych secondary")
     return result
 
 
 def normalize_source(url, label):
-    text = fetch(url)
-    if "Best Mods" not in text and "Player Data" not in text:
-        raise RuntimeError(f"{label}: nie rozpoznano strony SWGOH.GG")
+    text = clean(fetch(url))
+
+    if "Best Mods" not in text:
+        raise RuntimeError(f"{label}: odpowiedź nie wygląda na stronę Best Mods")
 
     sets = parse_set_combinations(text)
-    primaries = {slot: parse_primary(text, slot) for slot in SLOTS}
+    primary = {slot: parse_slot(text, slot) for slot in SLOTS}
     secondary = parse_secondary(text)
-
-    if not sets:
-        raise RuntimeError(f"{label}: nie odczytano żadnych kombinacji setów")
-    if not all(primaries.values()):
-        missing = [k for k, v in primaries.items() if not v]
-        raise RuntimeError(f"{label}: brak primary dla {missing}")
-    if not secondary:
-        raise RuntimeError(f"{label}: brak Secondary Stat Focus")
 
     return {
         "name": label,
         "url": url,
         "set_combinations": sets,
-        "primary_pct": primaries,
+        "primary_pct": primary,
         "secondary_focus_avg": secondary,
     }
 
 
-def average_dict(a, b):
+def average_maps(a, b):
     keys = set(a) | set(b)
-    return {k: round((float(a.get(k, 0)) + float(b.get(k, 0))) / 2.0, 4) for k in keys}
+    return {
+        key: round((float(a.get(key, 0)) + float(b.get(key, 0))) / 2.0, 4)
+        for key in keys
+    }
 
 
 def build_profile(existing, sources):
-    set_combinations = average_dict(
-        sources[0]["set_combinations"], sources[1]["set_combinations"]
+    sets = average_maps(
+        sources[0]["set_combinations"],
+        sources[1]["set_combinations"],
     )
 
     primary = {}
     for slot in SLOTS:
-        primary[slot] = average_dict(
+        primary[slot] = average_maps(
             sources[0]["primary_pct"].get(slot, {}),
             sources[1]["primary_pct"].get(slot, {}),
         )
 
-    secondary_raw = {}
+    secondary = {}
     for stat in set(sources[0]["secondary_focus_avg"]) | set(sources[1]["secondary_focus_avg"]):
         a = sources[0]["secondary_focus_avg"].get(stat, {})
         b = sources[1]["secondary_focus_avg"].get(stat, {})
-        secondary_raw[stat] = {
+        secondary[stat] = {
             "average": round((a.get("average", 0) + b.get("average", 0)) / 2.0, 4),
             "focus_pct": round((a.get("focus_pct", 0) + b.get("focus_pct", 0)) / 2.0, 4),
         }
 
-    # Keep the analyzer weights normalized to the observed prevalence. This
-    # makes the values comparable between refreshes instead of hard-coding
-    # subjective weights.
-    set_preferences = {}
-    for combo, prevalence in set_combinations.items():
+    set_preference_raw = {}
+    for combo, prevalence in sets.items():
         for set_name in combo.split(" + "):
-            set_preferences[set_name] = set_preferences.get(set_name, 0.0) + prevalence
-    max_set = max(set_preferences.values(), default=1.0)
-    set_preferences = {k: round(v / max_set, 4) for k, v in set_preferences.items()}
+            set_preference_raw[set_name] = (
+                set_preference_raw.get(set_name, 0.0) + prevalence
+            )
+    max_set = max(set_preference_raw.values(), default=1.0)
+    set_preferences = {
+        key: round(value / max_set, 4)
+        for key, value in set_preference_raw.items()
+    }
 
     primary_preferences = {}
     for slot, values in primary.items():
         total = sum(values.values()) or 1.0
         primary_preferences[slot] = {
-            k: round(v / total, 4) for k, v in values.items()
+            key: round(value / total, 4)
+            for key, value in values.items()
         }
 
-    focus_values = {k: v["focus_pct"] for k, v in secondary_raw.items()}
+    focus_values = {
+        key: value["focus_pct"] for key, value in secondary.items()
+    }
     max_focus = max(focus_values.values(), default=1.0)
     secondary_preferences = {
-        k: round(v / max_focus, 4) for k, v in focus_values.items()
+        key: round(value / max_focus, 4)
+        for key, value in focus_values.items()
     }
-
-    # Preserve zero entries for known stats so analyzer output stays stable.
     for stat in STAT_NAMES:
         secondary_preferences.setdefault(stat, 0.0)
 
@@ -222,15 +273,30 @@ def build_profile(existing, sources):
         "name": existing.get("name", "Unknown"),
         "role": existing.get("role", ""),
         "source_model": {
-            "method": "live SWGOH.GG Best Mods pages; equal-weight average of the two configured slices",
-            "refreshed_at_utc": __import__("datetime").datetime.now(__import__("datetime").timezone.utc).isoformat(),
+            "method": "live SWGOH.GG Best Mods pages via Jina Reader; equal-weight average of configured slices",
+            "refreshed_at_utc": datetime.now(timezone.utc).isoformat(),
             "sources": sources,
         },
-        "set_combinations": set_combinations,
+        "set_combinations": sets,
         "set_preferences": set_preferences,
         "primary_preferences": primary_preferences,
         "secondary_preferences": secondary_preferences,
     }
+
+
+def validate_profile(profile):
+    required_sets = {"Speed", "Potency"}
+    if not required_sets.intersection(profile.get("set_preferences", {})):
+        raise RuntimeError("profil nie zawiera oczekiwanych setów Speed/Potency")
+
+    for slot in SLOTS:
+        values = profile.get("primary_preferences", {}).get(slot, {})
+        if not values or max(values.values()) <= 0:
+            raise RuntimeError(f"profil: brak użytecznych primary dla {slot}")
+
+    secondary = profile.get("secondary_preferences", {})
+    if secondary.get("Speed", 0) <= 0:
+        raise RuntimeError("profil: brak preferencji Speed")
 
 
 def main():
@@ -242,23 +308,38 @@ def main():
     if not profiles:
         raise RuntimeError("Brak profili")
 
-    for base_id, profile in profiles.items():
-        source_cfg = profile.get("source_model", {}).get("sources", [])
+    new_profiles = {}
+
+    for base_id, existing in profiles.items():
+        source_cfg = existing.get("source_model", {}).get("sources", [])
         if len(source_cfg) < 2:
-            raise RuntimeError(f"{base_id}: profil nie ma dwóch źródeł SWGOH.GG")
+            raise RuntimeError(f"{base_id}: profil wymaga dwóch źródeł SWGOH.GG")
 
-        urls = [s["url"] for s in source_cfg[:2]]
-        labels = [s.get("name", f"source-{i+1}") for i, s in enumerate(source_cfg[:2])]
-        print(f"Odświeżanie profilu {base_id}...")
-        sources = [normalize_source(url, label) for url, label in zip(urls, labels)]
-        profiles[base_id] = build_profile(profile, sources)
+        sources = []
+        for source in source_cfg[:2]:
+            url = source["url"]
+            label = source.get("name", url)
+            print(f"Pobieranie {base_id}: {label}")
+            parsed = normalize_source(url, label)
+            sources.append(parsed)
+            print(
+                f"  sety={len(parsed['set_combinations'])}, "
+                f"primary={sum(len(v) for v in parsed['primary_pct'].values())}, "
+                f"secondary={len(parsed['secondary_focus_avg'])}"
+            )
 
-    data["profiles"] = profiles
-    PROFILE_FILE.write_text(
-        json.dumps(data, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
-    print("OK: mod_profiles.json odświeżony z live SWGOH.GG")
+        profile = build_profile(existing, sources)
+        validate_profile(profile)
+        new_profiles[base_id] = profile
+
+    # Atomic write only after ALL profiles pass. A failed refresh therefore
+    # leaves the previous file exactly as it was.
+    new_data = dict(data)
+    new_data["profiles"] = new_profiles
+    rendered = json.dumps(new_data, ensure_ascii=False, indent=2) + "\n"
+
+    PROFILE_FILE.write_text(rendered, encoding="utf-8")
+    print("OK: mod_profiles.json odświeżony")
 
 
 if __name__ == "__main__":
