@@ -4,7 +4,11 @@
 
 ## Łączne braki
 
-Brak braków.
+| ID | Przedmiot | Wymagane | Posiadane | Brakuje |
+|---|---|---:|---:|---:|
+| `172Salvage` | Mk 7 Kyrotech Shock Prod Prototype Salvage | 100 | 22 | **78** |
+| `123Component` | Mk 8 Neuro-Saav Electrobinoculars Component | 50 | 4 | **46** |
+| `170PrototypeSalvage` | Mk 12 ArmaTek Holo Lens Prototype Salvage | 50 | 11 | **39** |
 
 ## Szczegóły
 
@@ -14,6 +18,7 @@ Gear: **G12 → G13** Relic: **R1 → R5**
 
 #### Bezpośredni wymagany gear
 
+- `G12Finisher_JARJARBINKS_C` × 1 — Power Cell Injector (Ionic) - Jar Jar Binks
 
 #### Materiały relic
 
@@ -27,7 +32,11 @@ Gear: **G12 → G13** Relic: **R1 → R5**
 
 #### Braki
 
-Brak braków.
+| ID | Przedmiot | Brakuje |
+|---|---|---:|
+| `172Salvage` | Mk 7 Kyrotech Shock Prod Prototype Salvage | **78** |
+| `123Component` | Mk 8 Neuro-Saav Electrobinoculars Component | **46** |
+| `170PrototypeSalvage` | Mk 12 ArmaTek Holo Lens Prototype Salvage | **39** |
 
 ## Informacje techniczne
 
