@@ -12,7 +12,7 @@ INPUT_FILE = "mods.csv"
 OUTPUT_CSV = "mod_analysis.csv"
 OUTPUT_MD = "mod_analysis.md"
 PROFILE_FILE = "mod_profiles.json"
-ANALYZER_VERSION = "2026-09-26-source-labels"
+ANALYZER_VERSION = "2026-09-26-chain-replacements"
 
 R5 = {
     "Critical Chance %": (1.125, 2.25), "Defense": (4.9, 9.8),
@@ -382,6 +382,13 @@ def character_fit(row, targets, profiles, aliases):
     return best
 
 def apply_replacements(rows, target_base_ids):
+    """Build target replacements while preserving a recovery path for the source character.
+
+    A strong mod on another character is a valid candidate for the target. When such
+    a mod is moved, the analyzer also marks the best currently unassigned mod for the
+    vacated source slot as PATCH. This prevents the old hole-filling behavior from
+    being lost when we distinguish MAGAZYN from POSTAĆ sources.
+    """
     equipped_by_target_slot = {}
     for row in rows:
         if not is_true(row.get("equipped")):
@@ -395,52 +402,144 @@ def apply_replacements(rows, target_base_ids):
             if current is None or float(row.get("fitScore", 0)) > float(current.get("fitScore", 0)):
                 equipped_by_target_slot[key] = row
 
-    # A target character may have fewer than six mods. Empty slots are
-    # therefore actionable and must not be silently skipped.
-    best_candidate_by_slot = {}
+    # Candidate pool: inventory AND mods equipped on other characters.
+    # Mods already on the target itself are not movable candidates.
+    candidates = []
     for row in rows:
         if row.get("characterFit") != "CANDIDATE":
             continue
-        if is_true(row.get("equipped")):
-            continue
         if integer(row.get("level")) < 15 or integer(row.get("dots")) < 5:
             continue
-        target = row.get("fitTarget", "")
-        if target not in target_base_ids:
+        if is_true(row.get("equipped")) and row.get("characterFit") == "TARGET":
             continue
-        key = (target, row.get("slot", ""))
-        current = best_candidate_by_slot.get(key)
-        if current is None or float(row.get("fitScore", 0)) > float(current.get("fitScore", 0)):
-            best_candidate_by_slot[key] = row
+        candidates.append(row)
 
-    for (target, slot), candidate in best_candidate_by_slot.items():
-        if (target, slot) in equipped_by_target_slot:
-            continue
+    # First allocate the best unique candidate to each empty target slot.
+    # This deliberately allows a mod currently on another character to fill
+    # the hole: the source hole is patched below.
+    used_candidate_ids = set()
+    target_allocations = {}
+    for target in sorted(target_base_ids):
+        for slot in ("Square", "Diamond", "Circle", "Arrow", "Triangle", "Cross"):
+            key = (target, slot)
+            if key in equipped_by_target_slot:
+                continue
+            pool = [
+                r for r in candidates
+                if r.get("fitTarget") == target
+                and r.get("slot") == slot
+                and str(r.get("id", "")) not in used_candidate_ids
+            ]
+            if not pool:
+                continue
+            candidate = max(
+                pool,
+                key=lambda r: (
+                    float(r.get("fitScore", 0)),
+                    float(r.get("modValue", 0)),
+                    float(r.get("modQuality", 0))
+                )
+            )
+            target_allocations[key] = candidate
+            used_candidate_ids.add(str(candidate.get("id", "")))
+
+    # Empty target slots are EQUIP. If the source is another character, the
+    # source slot is remembered so we can generate a PATCH recommendation.
+    source_holes = []
+    for (target, slot), candidate in target_allocations.items():
         candidate["replacementGain"] = 0.0
         candidate["replacesModId"] = ""
-        candidate["recommendedAction"] = "EQUIP"
-        candidate["reason"] = "slot postaci jest pusty; to najlepszy dostępny niezałożony mod dla tego slotu"
+        if is_true(candidate.get("equipped")):
+            candidate["recommendedAction"] = "EQUIP"
+            candidate["reason"] = (
+                "slot docelowej postaci jest pusty; najlepszy dostępny mod "
+                "jest obecnie założony na innej postaci"
+            )
+            source_holes.append(candidate)
+        else:
+            candidate["recommendedAction"] = "EQUIP"
+            candidate["reason"] = (
+                "slot docelowej postaci jest pusty; to najlepszy dostępny "
+                "niezałożony mod dla tego slotu"
+            )
 
-    # Compare candidates against occupied target slots.
-    for row in rows:
-        if row.get("characterFit") != "CANDIDATE":
+    # Occupied target slots: allow inventory and other-character candidates.
+    # A candidate already allocated to an empty slot cannot be reused.
+    for target in sorted(target_base_ids):
+        for slot in ("Square", "Diamond", "Circle", "Arrow", "Triangle", "Cross"):
+            current = equipped_by_target_slot.get((target, slot))
+            if current is None:
+                continue
+            pool = [
+                r for r in candidates
+                if r.get("fitTarget") == target
+                and r.get("slot") == slot
+                and str(r.get("id", "")) not in used_candidate_ids
+            ]
+            for candidate in sorted(
+                pool,
+                key=lambda r: (
+                    float(r.get("fitScore", 0)),
+                    float(r.get("modValue", 0)),
+                    float(r.get("modQuality", 0))
+                ),
+                reverse=True
+            ):
+                gain = float(candidate.get("fitScore", 0)) - float(current.get("fitScore", 0))
+                candidate["replacementGain"] = round(gain, 1)
+                candidate["replacesModId"] = current.get("id", "")
+                if gain >= 8.0:
+                    candidate["recommendedAction"] = "REPLACE"
+                    if is_true(candidate.get("equipped")):
+                        candidate["reason"] = (
+                            "mod z innej postaci jest wyraźnie lepszy; po przeniesieniu "
+                            "należy załatać zwolniony slot źródłowej postaci"
+                        )
+                        source_holes.append(candidate)
+                    else:
+                        candidate["reason"] = (
+                            "kandydat jest wyraźnie lepszy od obecnego moda "
+                            "na tym samym slocie"
+                        )
+                    used_candidate_ids.add(str(candidate.get("id", "")))
+                    break
+
+    # Patch every source hole with the best still-unassigned inventory mod
+    # of the same slot. We use global mod value as the safe fallback because
+    # only the target character currently has a detailed profile.
+    for moved in source_holes:
+        source_owner = str(moved.get("assignedTo", "") or "")
+        source_slot = str(moved.get("slot", "") or "")
+        if not source_owner or not source_slot:
             continue
-        if row.get("recommendedAction") == "EQUIP":
+
+        patch_pool = [
+            r for r in rows
+            if not is_true(r.get("equipped"))
+            and str(r.get("id", "")) not in used_candidate_ids
+            and r.get("slot") == source_slot
+            and integer(r.get("level")) >= 15
+            and integer(r.get("dots")) >= 5
+        ]
+        if not patch_pool:
             continue
-        if is_true(row.get("equipped")):
-            continue
-        if integer(row.get("level")) < 15 or integer(row.get("dots")) < 5:
-            continue
-        target = row.get("fitTarget", "")
-        current = equipped_by_target_slot.get((target, row.get("slot", "")))
-        if current is None:
-            continue
-        gain = float(row.get("fitScore", 0)) - float(current.get("fitScore", 0))
-        row["replacementGain"] = round(gain, 1)
-        row["replacesModId"] = current.get("id", "")
-        if gain >= 8.0:
-            row["recommendedAction"] = "REPLACE"
-            row["reason"] = "kandydat jest wyraźnie lepszy od obecnego moda na tym samym slocie"
+
+        patch = max(
+            patch_pool,
+            key=lambda r: (
+                float(r.get("modValue", 0)),
+                float(r.get("modQuality", 0)),
+                float(r.get("fitScore", 0))
+            )
+        )
+        patch["recommendedAction"] = "PATCH"
+        patch["patchOwner"] = source_owner
+        patch["patchSlot"] = source_slot
+        patch["reason"] = (
+            "mod z tej postaci został wskazany do przeniesienia; "
+            "ten mod z magazynu najlepiej łata zwolniony slot"
+        )
+        used_candidate_ids.add(str(patch.get("id", "")))
 
 def main():
     if not os.path.exists(INPUT_FILE):
@@ -479,7 +578,7 @@ def main():
         writer.writeheader()
         writer.writerows(rows)
 
-    order = {"EQUIP":0,"REPLACE":1,"CALIBRATE":2,"SLICE_6E":3,"SLICE":4,"UPGRADE":5,"KEEP":6}
+    order = {"EQUIP":0,"REPLACE":1,"PATCH":2,"CALIBRATE":3,"SLICE_6E":4,"SLICE":5,"UPGRADE":6,"KEEP":7}
     rows.sort(key=lambda r: (
         order.get(r["recommendedAction"], 9),
         -float(r.get("fitScore", 0)),
@@ -551,8 +650,9 @@ def main():
         "- **Potential** — sufit wartości przy idealnych przyszłych rollach; nie jest prognozą RNG.",
         "- **Źródło MAGAZYN** — mod nie jest obecnie założony na żadnej postaci.",
         "- **Źródło POSTAĆ: [nazwa]** — mod jest obecnie założony na wskazanej postaci.",
-        "- **EQUIP** — slot docelowej postaci jest pusty; wskazany mod jest najlepszym dostępnym niezałożonym modem dla tego slotu.",
-        "- **REPLACE** — niezałożony mod jest wyraźnie lepszy od obecnego moda tej samej postaci i slotu.",
+        "- **EQUIP** — slot docelowej postaci jest pusty; wskazany mod jest najlepszym dostępnym modem, także jeśli jest obecnie na innej postaci.
+        "- **PATCH** — mod z magazynu przeznaczony do załatania slotu postaci, z którego zabrano mod do celu.",",
+        "- **REPLACE** — mod z magazynu lub innej postaci jest wyraźnie lepszy od obecnego moda celu; jeśli pochodzi z innej postaci, analyzer tworzy również **PATCH** dla zwolnionego slotu.",
         "- **UPGRADE** — mod nie jest jeszcze na 15.",
         "- **SLICE** — kolejny tier ma uzasadnienie jakościowe lub profilowe.",
         "- **SLICE_6E** — 5A jest oceniane również przez projekcję jakości po wzroście statystyk do 6E.",
@@ -570,7 +670,7 @@ def main():
     print("SWGOH MOD ANALYZER")
     print("="*80)
     print("Modów:", len(rows))
-    for action in ("EQUIP","REPLACE","UPGRADE","SLICE","SLICE_6E","CALIBRATE","KEEP"):
+    for action in ("EQUIP","REPLACE","PATCH","UPGRADE","SLICE","SLICE_6E","CALIBRATE","KEEP"):
         print("{:<12}: {}".format(action, counts.get(action,0)))
     print("CSV:", OUTPUT_CSV)
     print("REPORT:", OUTPUT_MD)
