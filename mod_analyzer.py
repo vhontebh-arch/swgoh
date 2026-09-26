@@ -435,6 +435,10 @@ def apply_replacements(rows, target_base_ids, profiles=None, aliases=None, names
     }
 
     def set_bonus_score(mods):
+        # A set bonus is earned by complete groups of the required size.
+        # If there are more mods of the same set than one group needs, the
+        # strongest (highest-level) mods are the ones that form the complete
+        # groups. An extra incomplete mod does not downgrade a complete group.
         total = 0.0
         grouped = {}
         for mod in mods:
@@ -444,11 +448,24 @@ def apply_replacements(rows, target_base_ids, profiles=None, aliases=None, names
 
         for set_name, members in grouped.items():
             stat, required, minimum, maximum = SET_RULES[set_name]
-            members.sort(key=lambda m: integer(m.get("level")), reverse=True)
+            members = sorted(
+                members,
+                key=lambda m: integer(m.get("level")),
+                reverse=True,
+            )
 
-            for start in range(0, len(members) - required + 1, required):
+            complete_groups = len(members) // required
+            for group_index in range(complete_groups):
+                start = group_index * required
                 group = members[start:start + required]
-                bonus = maximum if all(integer(m.get("level")) >= 15 for m in group) else minimum
+
+                # SWGOH.GG's current mod calculator documents that a set with
+                # any mod short of max level receives half the set bonus.
+                bonus = (
+                    maximum
+                    if all(integer(m.get("level")) >= 15 for m in group)
+                    else minimum
+                )
 
                 if stat == "Speed":
                     effective_units = (bonus / 100.0) * SET_REFERENCE_BASE_SPEED
@@ -462,7 +479,6 @@ def apply_replacements(rows, target_base_ids, profiles=None, aliases=None, names
                 total += effective_units * STAT_VALUE.get(stat, 0.10)
 
         return total
-
     def owner_mods(owner):
         return [r for (o, _slot), r in eq.items() if o == owner]
 
@@ -854,7 +870,7 @@ def main():
                 float(r.get("targetFitAfterSet", r.get("fitScore", 0))),
                 float(r.get("replacementGain", 0)),
                 float(r.get("accountGain", 0)),
-                r.get("chainLength", 0)
+                r.get("chainPath", "—")
             )
         )
 
