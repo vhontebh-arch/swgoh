@@ -1233,7 +1233,7 @@ def main():
             "|---|---|---|---|---|---:|"
         ]
         for m in opt["mods"]:
-            lines.append("| {} | {} | {} {} | {} | {} | {:.1f} |".format(
+            lines.append("| {} | {} | {} {} | {} | {:.1f} |".format(
                 m.get("slot",""), m.get("set",""), m.get("primaryStat",""), m.get("primaryValue",""),
                 source_label(m, aliases, names), score_profile(m, profiles[target_id])["fitScore"]))
     lines += ["", "## BEZPIECZNY ŁAŃCUCH — walidacja globalna", ""]
