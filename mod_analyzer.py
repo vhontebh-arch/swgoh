@@ -252,26 +252,10 @@ def load_profiles():
 
 
 def load_player_aliases():
-    path = "swgoh_972824625.json"
-    if not os.path.exists(path):
-        return {}
-    try:
-        with open(path, encoding="utf-8") as f:
-            player = json.load(f)
-    except Exception:
-        return {}
-
     aliases = {}
-    for unit in player.get("rosterUnit", []):
-        definition = str(unit.get("definitionId", "") or "")
-        base_id = definition.split(":", 1)[0]
-        unit_id = str(unit.get("id", "") or "")
-        for value in (base_id, unit_id, definition):
-            if value:
-                aliases[value] = base_id
 
-    # The generated roster.csv is a reliable flat fallback for owner mapping.
-    # Some current SWGOH snapshots do not expose rosterUnit at the JSON root.
+    # Prefer the generated roster.csv because it is built directly from
+    # player rosterUnit and is guaranteed to contain unit-id -> baseId mapping.
     roster_path = "roster.csv"
     if os.path.exists(roster_path):
         try:
@@ -286,6 +270,23 @@ def load_player_aliases():
                         for value in (base_id, unit_id, definition):
                             if value:
                                 aliases[value] = base_id
+        except Exception:
+            pass
+
+    # Also accept the raw player snapshot when available.
+    path = "swgoh_972824625.json"
+    if os.path.exists(path):
+        try:
+            with open(path, encoding="utf-8") as f:
+                player = json.load(f)
+            for unit in player.get("rosterUnit", []):
+                definition = str(unit.get("definitionId", "") or "")
+                base_id = definition.split(":", 1)[0]
+                unit_id = str(unit.get("id", "") or "")
+                if base_id:
+                    for value in (base_id, unit_id, definition):
+                        if value:
+                            aliases[value] = base_id
         except Exception:
             pass
 
