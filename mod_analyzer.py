@@ -249,6 +249,27 @@ def load_profiles():
     except Exception:
         return {}
 
+
+def load_player_aliases():
+    path = "swgoh_972824625.json"
+    if not os.path.exists(path):
+        return {}
+    try:
+        with open(path, encoding="utf-8") as f:
+            player = json.load(f)
+    except Exception:
+        return {}
+
+    aliases = {}
+    for unit in player.get("rosterUnit", []):
+        definition = str(unit.get("definitionId", "") or "")
+        base_id = definition.split(":", 1)[0]
+        unit_id = str(unit.get("id", "") or "")
+        for value in (base_id, unit_id, definition):
+            if value:
+                aliases[value] = base_id
+    return aliases
+
 def score_profile(row, profile):
     primary = row.get("primaryStat", "")
     slot = row.get("slot", "")
@@ -278,14 +299,15 @@ def score_profile(row, profile):
         "setFit": round(set_fit, 1)
     }
 
-def character_fit(row, targets, profiles):
+def character_fit(row, targets, profiles, aliases):
     assigned = row.get("assignedTo", "")
     target_ids = {t.get("baseId") for t in targets}
+    assigned_base = aliases.get(assigned, assigned)
 
-    if assigned in profiles:
-        result = score_profile(row, profiles[assigned])
-        result["characterFit"] = "TARGET" if assigned in target_ids else "PROFILED"
-        result["fitTarget"] = assigned
+    if assigned_base in profiles:
+        result = score_profile(row, profiles[assigned_base])
+        result["characterFit"] = "TARGET" if assigned_base in target_ids else "PROFILED"
+        result["fitTarget"] = assigned_base
         return result
 
     candidates = [(tid, profiles.get(tid)) for tid in target_ids if profiles.get(tid)]
@@ -313,10 +335,11 @@ def main():
 
     targets = load_targets()
     profiles = load_profiles()
+    aliases = load_player_aliases()
     rows = [analyze(row) for row in source]
 
     for row in rows:
-        fit = character_fit(row, targets, profiles)
+        fit = character_fit(row, targets, profiles, aliases)
         row.update(fit)
         secs = [x for i in range(1, 5) if (x := rolls(row, i)) is not None]
         action, reason = next_action(
