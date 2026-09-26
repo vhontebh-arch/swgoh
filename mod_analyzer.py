@@ -44,6 +44,9 @@ STAT_VALUE = {
 CAL_ATTEMPTS = {(6,1):1,(6,2):2,(6,3):3,(6,4):4,(6,5):6}
 CAL_COST = {1:15,2:25,3:40,4:75,5:100,6:150}
 
+def is_true(value):
+    return str(value).strip().lower() in {"1", "true", "yes", "y"}
+
 def integer(value, default=0):
     try:
         return int(value)
@@ -200,8 +203,6 @@ def analyze(row):
     calibration_max = CAL_ATTEMPTS.get((dots, tier), 0)
     calibration_used = integer(row.get("rerolledCount"))
     calibration_remaining = max(0, calibration_max-calibration_used)
-    five_roll_stats = sum(1 for x in secs if x[2] >= 5)
-    calibration_hit_chance = 33.3 if five_roll_stats else 25.0
     calibration_next_cost = CAL_COST.get(calibration_used+1, 0) if calibration_remaining else 0
 
     six_e_quality = projected_6e_quality(secs) if dots == 5 and tier == 5 else 0.0
@@ -226,7 +227,6 @@ def analyze(row):
         "calibrationAttemptsMax": calibration_max,
         "calibrationAttemptsUsed": calibration_used,
         "calibrationAttemptsRemaining": calibration_remaining,
-        "calibrationHitChancePct": calibration_hit_chance if calibration_max else 0.0,
         "calibrationNextCost": calibration_next_cost,
     })
     return out
@@ -327,7 +327,7 @@ def character_fit(row, targets, profiles, aliases):
 def apply_replacements(rows, target_base_ids):
     equipped_by_target_slot = {}
     for row in rows:
-        if not row.get("equipped"):
+        if not is_true(row.get("equipped")):
             continue
         target = row.get("fitTarget", "")
         if target in target_base_ids:
@@ -461,7 +461,6 @@ def main():
         "- **SLICE** — kolejny tier ma uzasadnienie jakościowe lub profilowe.",
         "- **SLICE_6E** — 5A jest oceniane również przez projekcję jakości po wzroście statystyk do 6E.",
         "- **CALIBRATE** — 6A jest na końcu slicing i może korzystać z calibration.",
-        "- **Calibration hit chance** — model pomocniczy; nie oznacza gwarancji konkretnego wyniku.",
         "",
         "Calibration pozostaje losowe: wybrany roll jest usuwany z wybranego secondary, "
         "a nowy roll trafia losowo do dostępnych secondary. Analyzer wskazuje kandydatów, "
@@ -475,7 +474,7 @@ def main():
     print("SWGOH MOD ANALYZER")
     print("="*80)
     print("Modów:", len(rows))
-    for action in ("UPGRADE","SLICE","SLICE_6E","CALIBRATE","KEEP"):
+    for action in ("UPGRADE","SLICE","SLICE_6E","CALIBRATE","REPLACE","KEEP"):
         print("{:<12}: {}".format(action, counts.get(action,0)))
     print("CSV:", OUTPUT_CSV)
     print("REPORT:", OUTPUT_MD)
