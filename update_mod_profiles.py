@@ -3,9 +3,8 @@
 Refresh mod_profiles.json from the live SWGOH.GG Best Mods pages.
 
 GitHub Actions runners receive HTTP 403 from SWGOH.GG/Cloudflare. The updater
-therefore uses Jina Reader as a fetch proxy and parses the resulting text.
-Nothing is written until every configured profile and both source slices pass
-validation, so a failed refresh leaves the last known-good profile untouched.
+therefore uses proxy readers and parses the resulting text. Nothing is written
+until every configured profile and both source slices pass validation.
 """
 
 import json
@@ -13,7 +12,7 @@ import re
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
-from urllib.parse import quote
+from urllib.parse import quote, urlsplit, urlunsplit
 from urllib.request import Request, urlopen
 
 PROFILE_FILE = Path("mod_profiles.json")
@@ -40,10 +39,22 @@ KNOWN_SETS = [
 
 
 def fetch(url):
+    parsed = urlsplit(url)
+    target_path = parsed.path.lstrip("/")
+    translate_query = (
+        ("?" + parsed.query if parsed.query else "")
+        + ("&" if parsed.query else "?")
+        + "_x_tr_sl=auto&_x_tr_tl=en&_x_tr_hl=en"
+    )
+    translate_endpoint = (
+        "https://swgoh-gg.translate.goog/"
+        + target_path
+        + translate_query
+    )
+
     encoded = quote(url, safe="")
     candidates = [
-        "https://swgoh-gg.translate.goog/" + url.split("swgoh.gg/", 1)[1]
-        + "?_x_tr_sl=auto&_x_tr_tl=en&_x_tr_hl=en",
+        translate_endpoint,
         "https://api.allorigins.win/raw?url=" + encoded,
         "https://corsproxy.io/?url=" + encoded,
         "https://r.jina.ai/" + url,
@@ -149,14 +160,10 @@ def parse_slot(text, slot):
     window = extract_between(text, heading, end_markers)
 
     result = {}
-    # Jina/markdown formatting varies between table, prose and HTML-derived
-    # text. Accept separators such as |, :, dash and arbitrary whitespace,
-    # including line breaks. Also accept an optional raw count before the
-    # percentage (for example "890 | 96.31%").
     for stat in STAT_NAMES:
         pattern = re.compile(
             r"\b" + re.escape(stat) +
-            r"\b\s*(?:\||:|–|—|-)?\s*" 
+            r"\b\s*(?:\||:|–|—|-)?\s*"
             r"(?:\d[\d,]*\s*(?:\||:|–|—|-)?\s*)?"
             r"(\d+(?:\.\d+)?)\s*%"
         )
@@ -233,10 +240,7 @@ def average_maps(a, b):
 
 
 def build_profile(existing, sources):
-    sets = average_maps(
-        sources[0]["set_combinations"],
-        sources[1]["set_combinations"],
-    )
+    sets = average_maps(sources[0]["set_combinations"], sources[1]["set_combinations"])
 
     primary = {}
     for slot in SLOTS:
@@ -257,31 +261,18 @@ def build_profile(existing, sources):
     set_preference_raw = {}
     for combo, prevalence in sets.items():
         for set_name in combo.split(" + "):
-            set_preference_raw[set_name] = (
-                set_preference_raw.get(set_name, 0.0) + prevalence
-            )
+            set_preference_raw[set_name] = set_preference_raw.get(set_name, 0.0) + prevalence
     max_set = max(set_preference_raw.values(), default=1.0)
-    set_preferences = {
-        key: round(value / max_set, 4)
-        for key, value in set_preference_raw.items()
-    }
+    set_preferences = {key: round(value / max_set, 4) for key, value in set_preference_raw.items()}
 
     primary_preferences = {}
     for slot, values in primary.items():
         total = sum(values.values()) or 1.0
-        primary_preferences[slot] = {
-            key: round(value / total, 4)
-            for key, value in values.items()
-        }
+        primary_preferences[slot] = {key: round(value / total, 4) for key, value in values.items()}
 
-    focus_values = {
-        key: value["focus_pct"] for key, value in secondary.items()
-    }
+    focus_values = {key: value["focus_pct"] for key, value in secondary.items()}
     max_focus = max(focus_values.values(), default=1.0)
-    secondary_preferences = {
-        key: round(value / max_focus, 4)
-        for key, value in focus_values.items()
-    }
+    secondary_preferences = {key: round(value / max_focus, 4) for key, value in focus_values.items()}
     for stat in STAT_NAMES:
         secondary_preferences.setdefault(stat, 0.0)
 
@@ -289,7 +280,7 @@ def build_profile(existing, sources):
         "name": existing.get("name", "Unknown"),
         "role": existing.get("role", ""),
         "source_model": {
-            "method": "live SWGOH.GG Best Mods pages via Jina Reader; equal-weight average of configured slices",
+            "method": "live SWGOH.GG Best Mods pages via proxy readers; equal-weight average of configured slices",
             "refreshed_at_utc": datetime.now(timezone.utc).isoformat(),
             "sources": sources,
         },
@@ -301,8 +292,7 @@ def build_profile(existing, sources):
 
 
 def validate_profile(profile):
-    required_sets = {"Speed", "Potency"}
-    if not required_sets.intersection(profile.get("set_preferences", {})):
+    if not {"Speed", "Potency"}.intersection(profile.get("set_preferences", {})):
         raise RuntimeError("profil nie zawiera oczekiwanych setów Speed/Potency")
 
     for slot in SLOTS:
@@ -310,8 +300,7 @@ def validate_profile(profile):
         if not values or max(values.values()) <= 0:
             raise RuntimeError(f"profil: brak użytecznych primary dla {slot}")
 
-    secondary = profile.get("secondary_preferences", {})
-    if secondary.get("Speed", 0) <= 0:
+    if profile.get("secondary_preferences", {}).get("Speed", 0) <= 0:
         raise RuntimeError("profil: brak preferencji Speed")
 
 
@@ -325,7 +314,6 @@ def main():
         raise RuntimeError("Brak profili")
 
     new_profiles = {}
-
     for base_id, existing in profiles.items():
         source_cfg = existing.get("source_model", {}).get("sources", [])
         if len(source_cfg) < 2:
@@ -350,9 +338,10 @@ def main():
 
     new_data = dict(data)
     new_data["profiles"] = new_profiles
-    rendered = json.dumps(new_data, ensure_ascii=False, indent=2) + "\n"
-
-    PROFILE_FILE.write_text(rendered, encoding="utf-8")
+    PROFILE_FILE.write_text(
+        json.dumps(new_data, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
     print("OK: mod_profiles.json odświeżony")
 
 
