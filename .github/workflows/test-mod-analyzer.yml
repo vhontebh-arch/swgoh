@@ -1,0 +1,29 @@
+name: Test mod analyzer
+
+on:
+  push:
+    paths:
+      - "mod_analyzer.py"
+      - "generate_mods.py"
+      - "mods.csv"
+      - ".github/workflows/test-mod-analyzer.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile
+        run: python -m py_compile mod_analyzer.py generate_mods.py
+      - name: Run analyzer against current repo data
+        run: |
+          python mod_analyzer.py
+          test -s mod_analysis.csv
+          test -s mod_analysis.md
+          head -n 20 mod_analysis.md
