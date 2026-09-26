@@ -1122,6 +1122,8 @@ jobs:
             roster.csv \
             ships.csv \
             mods.csv \
+            mod_analysis.csv \
+            mod_analysis.md \
             account_farming_report.md \
             ship_analysis.md \
             fleet_analysis.md
@@ -1156,9 +1158,11 @@ jobs:
             roster.csv \
             ships.csv \
             mods.csv \
+            mod_analysis.csv \
+            mod_analysis.md \
             account_farming_report.md \
             ship_analysis.md \
-            fleet_analysis.md             mod_analysis.csv             mod_analysis.md
+            fleet_analysis.md
 
           if git diff --cached --quiet; then
 
