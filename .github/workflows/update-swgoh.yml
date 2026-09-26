@@ -1037,6 +1037,26 @@ jobs:
           head -n 6 mods.csv
 
       # ============================================================
+      # MOD ANALYSIS
+      # ============================================================
+
+      - name: Generate mod analysis
+        run: |
+          set -e
+
+          python mod_analyzer.py
+
+          test -s mod_analysis.csv
+          test -s mod_analysis.md
+
+          echo ""
+          echo "=============================================="
+          echo "MOD ANALYSIS"
+          echo "=============================================="
+
+          head -n 15 mod_analysis.md
+
+      # ============================================================
       # SHIP ANALYSIS
       # ============================================================
 
@@ -1087,6 +1107,8 @@ jobs:
           test -s roster.csv
           test -s ships.csv
           test -s mods.csv
+          test -s mod_analysis.csv
+          test -s mod_analysis.md
           test -s account_farming_report.md
           test -s ship_analysis.md
           test -s fleet_analysis.md
@@ -1136,7 +1158,7 @@ jobs:
             mods.csv \
             account_farming_report.md \
             ship_analysis.md \
-            fleet_analysis.md
+            fleet_analysis.md             mod_analysis.csv             mod_analysis.md
 
           if git diff --cached --quiet; then
 
