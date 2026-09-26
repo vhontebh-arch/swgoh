@@ -112,21 +112,25 @@ Model rozdziela **jakość obecnych rolli**, **potencjał dalszego rozwoju**, **
 ## BEZPIECZNY ŁAŃCUCH — walidacja globalna
 
 **STATUS: BLOKADA — nie wygenerowano bezpiecznej listy ruchów.**
-- JARJARBINKS: konflikt modów dla Square / Speed
-- JARJARBINKS: konflikt modów dla Diamond / Potency
 - JARJARBINKS: brak bezpiecznego łańcucha dla Circle / Speed
-- JARJARBINKS: konflikt modów dla Arrow / Speed
-- JARJARBINKS: konflikt modów dla Triangle / Speed
-- JARJARBINKS: konflikt modów dla Cross / Potency
-- JARJARBINKS: optimizer mod nie trafił na miejsce: Square
-- JARJARBINKS: optimizer mod nie trafił na miejsce: Diamond
 - JARJARBINKS: optimizer mod nie trafił na miejsce: Circle
-- JARJARBINKS: optimizer mod nie trafił na miejsce: Arrow
-- JARJARBINKS: optimizer mod nie trafił na miejsce: Triangle
-- JARJARBINKS: optimizer mod nie trafił na miejsce: Cross
 
 | Postać | Sety przed | Sety po | Status |
 |---|---|---|---|
+| TUSKENSHAMAN | Potency=2, Speed=4 | Potency=2, Speed=4 | OK |
+| COLONELSTARCK | Health=2, Speed=4 | Health=2, Speed=4 | OK |
+| B1BATTLEDROIDV2 | Offense=2, Potency=3 | Health=1, Offense=2, Potency=2 | BŁĄD |
+| VANGUARDTEMPLEGUARD | Potency=2, Speed=4 | Potency=2, Speed=4 | OK |
+| OLDBENKENOBI | Potency=2, Speed=4 | Potency=2, Speed=4 | OK |
+| ADMIRALPIETT | Health=2, Speed=4 | Health=2, Speed=4 | OK |
+| ARMORER | Health=3, Speed=3 | Critical Damage=1, Health=3, Speed=2 | BŁĄD |
+| DARTHSION | Health=2, Speed=4 | Health=2, Speed=4 | OK |
+| ZORIIBLISS_V2 | Health=2, Speed=4 | Health=2, Speed=4 | OK |
+| AAYLASECURA | Critical Chance=4, Potency=2 | Critical Chance=4, Potency=2 | OK |
+| KUIIL | Health=3, Speed=3 | Defense=1, Health=3, Speed=2 | BŁĄD |
+| HUNTERS3 | Potency=2, Speed=4 | Potency=2, Speed=4 | OK |
+| EPIXPOE | Offense=4, Potency=2 | Offense=4, Potency=2 | OK |
+| 4LOM | Speed=4, Tenacity=2 | Speed=4, Tenacity=2 | OK |
 
 ### Ruchy
 
