@@ -778,6 +778,7 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
         return out
 
     eq = {}
+    working_eq = {}
     inventory = []
     for r in rows:
         slot = str(r.get("slot", "") or "")
@@ -785,6 +786,7 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
         if is_true(r.get("equipped")): eq[(owner(r), slot)] = r
         elif mature(r): inventory.append(r)
 
+    working_eq = dict(eq)
     selected_ids = {rid(m) for opt in optimizer.values() for m in opt.get("mods", [])}
     def set_groups(mods):
         counts={}
@@ -864,17 +866,17 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
             plans.append({"target":target_id,"target_owner":target_owner,"mod":mod,
                           "moves":plan["moves"],"chain_gain":plan["gain"]})
 
-    final_eq = dict(eq)
-    for plan in plans:
-        mod, slot = plan["mod"], str(plan["mod"].get("slot",""))
-        old_owner = owner(mod)
-        if old_owner and (old_owner,slot) in final_eq and rid(final_eq[(old_owner,slot)]) == rid(mod):
-            final_eq.pop((old_owner,slot),None)
-        for move in plan["moves"]:
-            key=(move["owner"],slot)
-            if key in final_eq and rid(final_eq[key]) == rid(move["removed"]): final_eq.pop(key,None)
-            final_eq[key]=move["replacement"]
-        final_eq[(plan["target_owner"],slot)] = mod
+            old_owner = owner(mod)
+            if old_owner and (old_owner,slot) in working_eq and rid(working_eq[(old_owner,slot)]) == rid(mod):
+                working_eq.pop((old_owner,slot),None)
+            for move in plan["moves"]:
+                key=(move["owner"],slot)
+                if key in working_eq and rid(working_eq[key]) == rid(move["removed"]):
+                    working_eq.pop(key,None)
+                working_eq[key]=move["replacement"]
+            working_eq[(target_owner,slot)]=mod
+
+    final_eq = dict(working_eq)
 
     affected={m["owner"] for p in plans for m in p["moves"]}
     validation=[]; safe=not failed
