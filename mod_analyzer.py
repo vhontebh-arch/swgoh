@@ -1012,6 +1012,16 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
                     if old is None or candidate[0] > old[0]:
                         next_states[new_counts] = candidate
             states = next_states
+            # Beam limit keeps the global six-slot search bounded. Set-count
+            # state is retained, and within that state only the strongest
+            # profile-score path is needed.
+            if len(states) > 2000:
+                ranked_states = sorted(
+                    states.items(),
+                    key=lambda item: item[1][0],
+                    reverse=True
+                )[:2000]
+                states = dict(ranked_states)
 
         best = None
         for counts, (base_score, chosen) in states.items():
