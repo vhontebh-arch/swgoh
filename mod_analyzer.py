@@ -228,6 +228,29 @@ def analyze(row):
     })
     return out
 
+def load_targets():
+    path = "targets.json"
+    if not os.path.exists(path):
+        return []
+    try:
+        with open(path, encoding="utf-8") as f:
+            data = __import__("json").load(f)
+        return data.get("targets", [])
+    except Exception:
+        return []
+
+
+def character_fit(row, targets):
+    # targets.json currently identifies development targets, but does not yet
+    # contain stat profiles. Keep this layer explicit and neutral until such
+    # profiles exist rather than guessing a character's desired stats.
+    assigned = row.get("assignedTo", "")
+    for target in targets:
+        if target.get("baseId") == assigned:
+            return "TARGET"
+    return "GENERAL"
+
+
 def main():
     if not os.path.exists(INPUT_FILE):
         raise FileNotFoundError(INPUT_FILE)
@@ -235,7 +258,10 @@ def main():
         source = list(csv.DictReader(f))
     if not source: raise RuntimeError("mods.csv jest pusty.")
 
+    targets = load_targets()
     rows = [analyze(row) for row in source]
+    for row in rows:
+        row["characterFit"] = character_fit(row, targets)
 
     with open(OUTPUT_CSV,"w",newline="",encoding="utf-8-sig") as f:
         fields = list(rows[0].keys())
