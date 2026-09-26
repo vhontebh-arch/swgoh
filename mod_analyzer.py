@@ -1167,6 +1167,28 @@ def main():
         return names.get(owner_id) or names.get(base_id) or base_id or "nieznana"
 
     optimizer = optimize_target_build(rows, {t.get("baseId") for t in targets}, profiles, aliases, names)
+    # Mark the physical mods selected by the complete six-slot optimizer.
+    # These values describe the full-build result, not a single-slot swap;
+    # keeping that distinction prevents the Jar Jar candidate table from
+    # displaying misleading zero gains for optimizer-selected mods.
+    optimizer_selected = {}
+    for target_id, opt in optimizer.items():
+        for mod in opt.get("mods", []):
+            optimizer_selected[str(mod.get("id", "") or "")] = {
+                "target": target_id,
+                "gain": float(opt.get("gain", 0.0)),
+                "set_bonus": float(opt.get("setBonusScore", 0.0)),
+                "mod_score": float(mod.get("optimizerScore", 0.0)),
+            }
+    for row in rows:
+        selected = optimizer_selected.get(str(row.get("id", "") or ""))
+        if selected:
+            row["optimizerCandidate"] = True
+            row["optimizerTarget"] = selected["target"]
+            row["optimizerModScore"] = round(selected["mod_score"], 1)
+            row["optimizerFullBuildGain"] = round(selected["gain"], 1)
+            row["optimizerFullBuildSetBonus"] = round(selected["set_bonus"], 2)
+
     chain_result = apply_optimizer_replacements(rows, optimizer, {t.get("baseId") for t in targets}, profiles, aliases, names)
 
     with open(OUTPUT_CSV, "w", newline="", encoding="utf-8-sig") as f:
@@ -1293,7 +1315,7 @@ def main():
         "", "## Jar Jar Binks — kandydaci", "",
         "Analiza porównuje mody wyposażone z kandydatami z inventory dla każdego slotu.",
         "",
-        "| Akcja | Mod | Źródło | Slot | Set | Tier | Lvl | Fit | Set Δ | Fit po secie | Zysk celu | Bilans konta | Łańcuch |",
+        "| Akcja | Mod | Źródło | Slot | Set | Tier | Lvl | Fit | Set Δ | Fit po secie | Wkład moda | Pełny build Δ | Łańcuch |",
         "|---|---|---|---|---|---|---|---:|---:|---:|---:|---:|---:|"
     ]
     for r in jar_rows[:18]:
@@ -1305,8 +1327,8 @@ def main():
                 float(r.get("fitScore", 0)),
                 float(r.get("setBonusDelta", 0)),
                 float(r.get("targetFitAfterSet", r.get("fitScore", 0))),
-                float(r.get("replacementGain", 0)),
-                float(r.get("accountGain", 0)),
+                float(r.get("optimizerModScore", r.get("replacementGain", 0))),
+                float(r.get("optimizerFullBuildGain", r.get("accountGain", 0))),
                 r.get("chainPath", "—")
             )
         )
