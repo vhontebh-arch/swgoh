@@ -104,12 +104,12 @@ W raportach przeznaczonych do ręcznego wykonania mod identyfikowany jest wyłą
 - Bonus setów w ocenie: **37.64**
 | Slot | Mod — parametry wyszukiwalne | Źródło | Fit |
 |---|---|---|---:|
-| Square | Square | Speed | Offense % 8.5% | secondary: Protection 1774, Tenacity % 2.52%, Defense 38, Speed 26 | 6★ A lvl15 | POSTAĆ: ADMIRALPIETT | 52.9 |
-| Diamond | Diamond | Potency | Defense % 20% | secondary: Speed 14, Defense 24, Health % 1.72%, Protection % 6.04% | 6★ D lvl15 | POSTAĆ: EPIXPOE | 47.1 |
-| Circle | Circle | Speed | Protection % 23.5% | secondary: Health 225, Protection 1199, Speed 17, Offense 30 | 5★ A lvl15 | POSTAĆ: COLONELSTARCK | 59.0 |
-| Arrow | Arrow | Speed | Speed 30 | secondary: Protection 1703, Potency % 2.1%, Health 723, Offense 54 | 5★ A lvl15 | POSTAĆ: 4LOM | 54.0 |
-| Triangle | Triangle | Speed | Critical Chance % 12% | secondary: Health 334, Protection % 1.14%, Potency % 2.22%, Speed 20 | 5★ B lvl15 | POSTAĆ: 4LOM | 58.4 |
-| Cross | Cross | Potency | Potency % 24% | secondary: Protection % 4.87%, Critical Chance % 1.24%, Health 235, Speed 15 | 5★ A lvl15 | POSTAĆ: AAYLASECURA | 48.8 |
+| Square | Square / Speed / Offense % 8.5% / secondary: Protection 1774, Tenacity % 2.52%, Defense 38, Speed 26 / 6★ A lvl15 | POSTAĆ: ADMIRALPIETT | 52.9 |
+| Diamond | Diamond / Potency / Defense % 20% / secondary: Speed 14, Defense 24, Health % 1.72%, Protection % 6.04% / 6★ D lvl15 | POSTAĆ: EPIXPOE | 47.1 |
+| Circle | Circle / Speed / Protection % 23.5% / secondary: Health 225, Protection 1199, Speed 17, Offense 30 / 5★ A lvl15 | POSTAĆ: COLONELSTARCK | 59.0 |
+| Arrow | Arrow / Speed / Speed 30 / secondary: Protection 1703, Potency % 2.1%, Health 723, Offense 54 / 5★ A lvl15 | POSTAĆ: 4LOM | 54.0 |
+| Triangle | Triangle / Speed / Critical Chance % 12% / secondary: Health 334, Protection % 1.14%, Potency % 2.22%, Speed 20 / 5★ B lvl15 | POSTAĆ: 4LOM | 58.4 |
+| Cross | Cross / Potency / Potency % 24% / secondary: Protection % 4.87%, Critical Chance % 1.24%, Health 235, Speed 15 / 5★ A lvl15 | POSTAĆ: AAYLASECURA | 48.8 |
 
 ## BEZPIECZNY ŁAŃCUCH — walidacja globalna
 
@@ -133,21 +133,21 @@ PATCH-y używają tego samego slotu i setu co mod zabrany ze źródła, więc li
 
 | Krok | Typ | Operacja | Mod — parametry wyszukiwalne | Status |
 |---:|---|---|---|---|
-| 1 | MOD | ADMIRALPIETT → JARJARBINKS | Square | Speed | Offense % 8.5% | secondary: Protection 1774, Tenacity % 2.52%, Defense 38, Speed 26 | 6★ A lvl15 | SAFE |
-| 2 | PATCH | ARMORER → ADMIRALPIETT | Square | Speed | Offense % 5.88% | secondary: Offense 33, Speed 5, Health 350, Health % 1.01% | 5★ E lvl15 | SAFE |
-| 3 | PATCH | MAGAZYN → ARMORER | Square | Critical Damage | Offense % 5.88% | secondary: Protection % 1.9%, Protection 555, Offense 29, Speed 5 | 5★ E lvl15 | SAFE |
-| 4 | MOD | EPIXPOE → JARJARBINKS | Diamond | Potency | Defense % 20% | secondary: Speed 14, Defense 24, Health % 1.72%, Protection % 6.04% | 6★ D lvl15 | SAFE |
-| 5 | PATCH | MAGAZYN → EPIXPOE | Diamond | Potency | Defense % 11.75% | secondary: Defense 8, Speed 5, Health % 1.12%, Offense % 0.44% | 5★ E lvl15 | SAFE |
-| 6 | MOD | COLONELSTARCK → JARJARBINKS | Circle | Speed | Protection % 23.5% | secondary: Health 225, Protection 1199, Speed 17, Offense 30 | 5★ A lvl15 | SAFE |
-| 7 | PATCH | YODACHEWBACCA → COLONELSTARCK | Circle | Speed | Protection % 2.5% | secondary: Defense % 1.32%, Offense 24, Protection 728, Speed 4 | 5★ A lvl1 | SAFE |
-| 8 | PATCH | MAGAZYN → YODACHEWBACCA | Circle | Critical Chance | Health % 5.88% | secondary: Potency % 1.68%, Offense % 1.26%, Speed 15, Health 321 | 5★ A lvl15 | SAFE |
-| 9 | MOD | 4LOM → JARJARBINKS | Arrow | Speed | Speed 30 | secondary: Protection 1703, Potency % 2.1%, Health 723, Offense 54 | 5★ A lvl15 | SAFE |
-| 10 | PATCH | MAGAZYN → 4LOM | Arrow | Speed | Protection % 23.5% | secondary: Offense % 0.52%, Health 229, Health % 0.57%, Speed 5 | 5★ E lvl15 | SAFE |
-| 11 | MOD | 4LOM → JARJARBINKS | Triangle | Speed | Critical Chance % 12% | secondary: Health 334, Protection % 1.14%, Potency % 2.22%, Speed 20 | 5★ B lvl15 | SAFE |
-| 12 | PATCH | KUIIL → 4LOM | Triangle | Speed | Defense % 7.25% | secondary: Offense 41, Offense % 0.33%, Protection % 1.73%, Speed 5 | 5★ D lvl9 | SAFE |
-| 13 | PATCH | MAGAZYN → KUIIL | Triangle | Defense | Critical Damage % 36% | secondary: Defense % 1.49%, Speed 5, Offense % 0.55%, Protection % 1.49% | 5★ E lvl15 | SAFE |
-| 14 | MOD | AAYLASECURA → JARJARBINKS | Cross | Potency | Potency % 24% | secondary: Protection % 4.87%, Critical Chance % 1.24%, Health 235, Speed 15 | 5★ A lvl15 | SAFE |
-| 15 | PATCH | MAGAZYN → AAYLASECURA | Cross | Potency | Health % 5.88% | secondary: Speed 5, Offense % 0.32%, Offense 32, Health 223 | 5★ E lvl15 | SAFE |
+| 1 | MOD | ADMIRALPIETT → JARJARBINKS | Square / Speed / Offense % 8.5% / secondary: Protection 1774, Tenacity % 2.52%, Defense 38, Speed 26 / 6★ A lvl15 | SAFE |
+| 2 | PATCH | ARMORER → ADMIRALPIETT | Square / Speed / Offense % 5.88% / secondary: Offense 33, Speed 5, Health 350, Health % 1.01% / 5★ E lvl15 | SAFE |
+| 3 | PATCH | MAGAZYN → ARMORER | Square / Critical Damage / Offense % 5.88% / secondary: Protection % 1.9%, Protection 555, Offense 29, Speed 5 / 5★ E lvl15 | SAFE |
+| 4 | MOD | EPIXPOE → JARJARBINKS | Diamond / Potency / Defense % 20% / secondary: Speed 14, Defense 24, Health % 1.72%, Protection % 6.04% / 6★ D lvl15 | SAFE |
+| 5 | PATCH | MAGAZYN → EPIXPOE | Diamond / Potency / Defense % 11.75% / secondary: Defense 8, Speed 5, Health % 1.12%, Offense % 0.44% / 5★ E lvl15 | SAFE |
+| 6 | MOD | COLONELSTARCK → JARJARBINKS | Circle / Speed / Protection % 23.5% / secondary: Health 225, Protection 1199, Speed 17, Offense 30 / 5★ A lvl15 | SAFE |
+| 7 | PATCH | YODACHEWBACCA → COLONELSTARCK | Circle / Speed / Protection % 2.5% / secondary: Defense % 1.32%, Offense 24, Protection 728, Speed 4 / 5★ A lvl1 | SAFE |
+| 8 | PATCH | MAGAZYN → YODACHEWBACCA | Circle / Critical Chance / Health % 5.88% / secondary: Potency % 1.68%, Offense % 1.26%, Speed 15, Health 321 / 5★ A lvl15 | SAFE |
+| 9 | MOD | 4LOM → JARJARBINKS | Arrow / Speed / Speed 30 / secondary: Protection 1703, Potency % 2.1%, Health 723, Offense 54 / 5★ A lvl15 | SAFE |
+| 10 | PATCH | MAGAZYN → 4LOM | Arrow / Speed / Protection % 23.5% / secondary: Offense % 0.52%, Health 229, Health % 0.57%, Speed 5 / 5★ E lvl15 | SAFE |
+| 11 | MOD | 4LOM → JARJARBINKS | Triangle / Speed / Critical Chance % 12% / secondary: Health 334, Protection % 1.14%, Potency % 2.22%, Speed 20 / 5★ B lvl15 | SAFE |
+| 12 | PATCH | KUIIL → 4LOM | Triangle / Speed / Defense % 7.25% / secondary: Offense 41, Offense % 0.33%, Protection % 1.73%, Speed 5 / 5★ D lvl9 | SAFE |
+| 13 | PATCH | MAGAZYN → KUIIL | Triangle / Defense / Critical Damage % 36% / secondary: Defense % 1.49%, Speed 5, Offense % 0.55%, Protection % 1.49% / 5★ E lvl15 | SAFE |
+| 14 | MOD | AAYLASECURA → JARJARBINKS | Cross / Potency / Potency % 24% / secondary: Protection % 4.87%, Critical Chance % 1.24%, Health 235, Speed 15 / 5★ A lvl15 | SAFE |
+| 15 | PATCH | MAGAZYN → AAYLASECURA | Cross / Potency / Health % 5.88% / secondary: Speed 5, Offense % 0.32%, Offense 32, Health 223 / 5★ E lvl15 | SAFE |
 
 ## Jar Jar Binks — kandydaci
 
