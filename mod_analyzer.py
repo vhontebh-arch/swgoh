@@ -886,8 +886,9 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
         after=[r for (oo,_s),r in final_eq.items() if oo==o]
         if not before and not after: continue
         bc,ac=set_counts(before),set_counts(after)
-        ok = not (o in affected and base(before[0]) not in targets) or bc==ac
-        validation.append({"owner":o,"name":pname(o),"before":bc,"after":ac,"ok":ok})
+        bg=set_groups(before); ag=set_groups(after)
+        ok = not (o in affected and base(before[0]) not in targets) or all(ag[s] >= bg[s] for s in SET_RULES)
+        validation.append({"owner":o,"name":pname(o),"before":bc,"after":ac,"beforeGroups":bg,"afterGroups":ag,"ok":ok})
         if not ok: safe=False
 
     for target_id,opt in optimizer.items():
