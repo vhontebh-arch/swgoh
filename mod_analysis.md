@@ -98,24 +98,24 @@ Analiza porównuje mody wyposażone z kandydatami z inventory dla każdego slotu
 
 | Akcja | Mod | Źródło | Slot | Set | Tier | Lvl | Fit | Zysk celu | Bilans konta | Łańcuch |
 |---|---|---|---|---|---|---:|---:|---:|---:|---:|
-| UPGRADE | Circle Protection % 2.5% | POSTAĆ: DISGUISEDCLONETROOPER | Circle | Speed | 5D | 1 | 100.0% | 0.0 | 0.0 | 0 |
-| UPGRADE | Circle Protection % 2.5% | POSTAĆ: OMEGAS3 | Circle | Speed | 5D | 1 | 100.0% | 0.0 | 0.0 | 0 |
-| UPGRADE | Circle Protection % 2.5% | POSTAĆ: DIRECTORKRENNIC | Circle | Speed | 5D | 1 | 100.0% | 0.0 | 0.0 | 0 |
-| UPGRADE | Triangle Protection % 2.5% | POSTAĆ: DARTHSION | Triangle | Speed | 5D | 1 | 100.0% | 0.0 | 0.0 | 0 |
-| UPGRADE | Circle Protection % 2.5% | POSTAĆ: JAWAENGINEER | Circle | Speed | 5C | 1 | 97.4% | 0.0 | 0.0 | 0 |
-| UPGRADE | Arrow Speed 4 | POSTAĆ: LOBOT | Arrow | Speed | 5D | 1 | 94.8% | 0.0 | 0.0 | 0 |
-| UPGRADE | Circle Health % 0.63% | POSTAĆ: ADMIRALRADDUS | Circle | Speed | 5D | 1 | 91.0% | 0.0 | 0.0 | 0 |
-| UPGRADE | Circle Protection % 2.5% | MAGAZYN | Circle | Health | 5C | 1 | 90.7% | 0.0 | 0.0 | 0 |
-| UPGRADE | Circle Protection % 2.5% | MAGAZYN | Circle | Health | 5C | 1 | 90.7% | 0.0 | 0.0 | 0 |
-| UPGRADE | Circle Protection % 2.5% | MAGAZYN | Circle | Health | 5C | 1 | 90.7% | 0.0 | 0.0 | 0 |
-| UPGRADE | Circle Health % 0.63% | MAGAZYN | Circle | Potency | 5D | 1 | 90.2% | 0.0 | 0.0 | 0 |
-| UPGRADE | Circle Health % 0.63% | MAGAZYN | Circle | Potency | 5D | 1 | 90.2% | 0.0 | 0.0 | 0 |
-| UPGRADE | Circle Health % 0.63% | MAGAZYN | Circle | Potency | 5D | 1 | 90.2% | 0.0 | 0.0 | 0 |
-| UPGRADE | Triangle Health % 0.63% | POSTAĆ: BADBATCHECHO | Triangle | Potency | 5D | 1 | 90.2% | 0.0 | 0.0 | 0 |
-| UPGRADE | Arrow Speed 4 | POSTAĆ: SITHASSASSIN | Arrow | Speed | 5D | 1 | 88.3% | 0.0 | 0.0 | 0 |
-| SLICE_6E | Circle Protection % 23.5% | POSTAĆ: JARJARBINKS | Circle | Potency | 5A | 15 | 87.6% | 0.0 | 0.0 | 0 |
-| UPGRADE | Cross Potency % 3% | MAGAZYN | Cross | Health | 5C | 1 | 87.4% | 0.0 | 0.0 | 0 |
-| UPGRADE | Cross Potency % 3% | POSTAĆ: WATTAMBOR | Cross | Health | 5C | 1 | 87.4% | 0.0 | 0.0 | 0 |
+| EQUIP | Arrow Speed 32 | POSTAĆ: BASTILASHAN | Arrow | Speed | 6E | 15 | 85.2% | 85.2 | 113.5 | 3 |
+| EQUIP | Diamond Defense % 11.75% | POSTAĆ: GEONOSIANBROODALPHA | Diamond | Speed | 5C | 15 | 71.0% | 71.0 | 86.3 | 5 |
+| EQUIP | Square Offense % 5.88% | MAGAZYN | Square | Health | 5A | 15 | 67.3% | 67.3 | 67.3 | 1 |
+| PATCH | Arrow Health % 5.88% | POSTAĆ: ADMINISTRATORLANDO | Arrow | Critical Damage | 5A | 15 | 27.1% | 29.3 | 113.5 | 3 |
+| PATCH | Arrow Protection % 23.5% | MAGAZYN | Arrow | Speed | 5E | 15 | 59.6% | -1.0 | 113.5 | 3 |
+| PATCH | Diamond Defense % 11.75% | POSTAĆ: GREEDO | Diamond | Critical Chance | 5E | 15 | 33.2% | 23.5 | 86.3 | 5 |
+| PATCH | Diamond Defense % 11.75% | MAGAZYN | Diamond | Health | 5E | 15 | 53.1% | -2.2 | 86.3 | 5 |
+| PATCH | Diamond Defense % 11.75% | POSTAĆ: B2SUPERBATTLEDROID | Diamond | Potency | 5C | 15 | 48.8% | -3.0 | 86.3 | 5 |
+| PATCH | Diamond Defense % 11.75% | POSTAĆ: TUSKENHUNTRESS | Diamond | Critical Damage | 5E | 15 | 33.2% | -3.0 | 86.3 | 5 |
+| CALIBRATE | Circle Protection % 24% | POSTAĆ: GRANDMOFFTARKIN | Circle | Potency | 6A | 15 | 83.5% | 0.0 | 0.0 | 0 |
+| CALIBRATE | Cross Potency % 30% | POSTAĆ: MARAJADE | Cross | Speed | 6A | 15 | 81.9% | 0.0 | 0.0 | 0 |
+| CALIBRATE | Circle Protection % 24% | POSTAĆ: FIFTHBROTHER | Circle | Speed | 6A | 15 | 78.0% | 0.0 | 0.0 | 0 |
+| CALIBRATE | Circle Protection % 24% | POSTAĆ: EMPERORPALPATINE | Circle | Potency | 6A | 15 | 77.7% | 0.0 | 0.0 | 0 |
+| CALIBRATE | Circle Protection % 24% | POSTAĆ: VANGUARDTEMPLEGUARD | Circle | Speed | 6A | 15 | 76.7% | 0.0 | 0.0 | 0 |
+| CALIBRATE | Arrow Speed 32 | POSTAĆ: FIFTHBROTHER | Arrow | Speed | 6A | 15 | 76.3% | 0.0 | 0.0 | 0 |
+| CALIBRATE | Arrow Speed 32 | POSTAĆ: MARAJADE | Arrow | Potency | 6A | 15 | 75.6% | 0.0 | 0.0 | 0 |
+| CALIBRATE | Cross Potency % 30% | MAGAZYN | Cross | Health | 6A | 15 | 75.0% | 0.0 | 0.0 | 0 |
+| CALIBRATE | Diamond Defense % 20% | POSTAĆ: GRANDMOFFTARKIN | Diamond | Speed | 6A | 15 | 72.6% | 0.0 | 0.0 | 0 |
 
 ## Definicje
 
