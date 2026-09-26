@@ -811,7 +811,7 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
             who = base(current) or hole_owner
             candidates.sort(key=lambda x: (x[0], -fit(x[1], who), -float(x[1].get("modValue",0) or 0)))
             best = None
-            for kind, replacement in candidates[:16]:
+            for kind, replacement in candidates[:4]:
                 replacement_id = rid(replacement)
                 local_gain = fit(replacement, who) - fit(current, who)
                 move = {"owner": hole_owner, "name": pname(hole_owner),
