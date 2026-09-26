@@ -754,6 +754,155 @@ def apply_replacements(rows, target_base_ids, profiles=None, aliases=None, names
 
 
 
+
+def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None, aliases=None, names=None):
+    """Realize optimizer mods with same-slot/same-set repair chains and full validation."""
+    profiles = profiles or {}
+    aliases = aliases or {}
+    names = names or {}
+    targets = set(target_base_ids)
+
+    def rid(r): return str(r.get("id", "") or "")
+    def owner(r): return str(r.get("assignedTo", "") or "")
+    def base(r): return aliases.get(owner(r), owner(r))
+    def pname(o): return names.get(o) or names.get(aliases.get(o, o)) or aliases.get(o, o) or "nieznana"
+    def fit(r, who):
+        profile = profiles.get(who)
+        return float(score_profile(r, profile)["fitScore"]) if profile else float(r.get("modValue", 0) or 0)
+    def mature(r): return integer(r.get("level")) >= 15 and integer(r.get("dots")) >= 5
+    def set_counts(mods):
+        out = {}
+        for m in mods:
+            s = str(m.get("set", "") or "")
+            if s in SET_RULES: out[s] = out.get(s, 0) + 1
+        return out
+
+    eq = {}
+    inventory = []
+    for r in rows:
+        slot = str(r.get("slot", "") or "")
+        if not slot: continue
+        if is_true(r.get("equipped")): eq[(owner(r), slot)] = r
+        elif mature(r): inventory.append(r)
+
+    selected_ids = {rid(m) for opt in optimizer.values() for m in opt.get("mods", [])}
+    def find_chain(selected_mod, target_id, used_ids):
+        slot = str(selected_mod.get("slot", "") or "")
+        src = owner(selected_mod)
+        if not src: return None
+
+        def search(hole_owner, depth, forbidden, seen):
+            if depth > 10: return None
+            current = eq.get((hole_owner, slot))
+            if current is None: return {"moves": [], "gain": 0.0}
+
+            current_set = str(current.get("set", "") or "")
+            candidates = []
+            for r in inventory:
+                if rid(r) in forbidden or rid(r) in selected_ids: continue
+                if str(r.get("slot","")) == slot and str(r.get("set","")) == current_set:
+                    candidates.append((0, r))
+            for (other_owner, other_slot), r in eq.items():
+                if other_slot != slot or other_owner == hole_owner or other_owner in seen: continue
+                if rid(r) in forbidden or rid(r) in selected_ids: continue
+                if str(r.get("set","")) == current_set:
+                    candidates.append((1, r))
+
+            who = base(current) or hole_owner
+            candidates.sort(key=lambda x: (x[0], -fit(x[1], who), -float(x[1].get("modValue",0) or 0)))
+            best = None
+            for kind, replacement in candidates[:16]:
+                replacement_id = rid(replacement)
+                local_gain = fit(replacement, who) - fit(current, who)
+                move = {"owner": hole_owner, "name": pname(hole_owner),
+                        "removed": current, "replacement": replacement, "gain": local_gain}
+                if kind == 0:
+                    candidate = {"moves":[move], "gain":local_gain}
+                else:
+                    next_owner = owner(replacement)
+                    sub = search(next_owner, depth+1,
+                                 forbidden | {replacement_id, rid(current)},
+                                 seen | {next_owner})
+                    if sub is None: continue
+                    candidate = {"moves":[move]+sub["moves"], "gain":local_gain+sub["gain"]}
+                if best is None or candidate["gain"] > best["gain"]: best = candidate
+            return best
+
+        return search(src, 0, set(used_ids) | {rid(selected_mod)}, {src})
+
+    plans, failed, used_ids = [], [], set(selected_ids)
+    for target_id, opt in optimizer.items():
+        target_owner = next((o for (o,_s),r in eq.items() if base(r) == target_id), None)
+        if not target_owner:
+            failed.append((target_id, "brak ownera celu")); continue
+        for mod in opt.get("mods", []):
+            slot = str(mod.get("slot",""))
+            current = eq.get((target_owner, slot))
+            if current is not None and rid(current) == rid(mod): continue
+            plan = find_chain(mod, target_id, used_ids)
+            if plan is None:
+                failed.append((target_id, "brak bezpiecznego łańcucha dla {} / {}".format(slot,mod.get("set","")))); continue
+            physical = {rid(mod)}
+            for move in plan["moves"]: physical.update((rid(move["removed"]),rid(move["replacement"])))
+            if physical & used_ids:
+                failed.append((target_id, "konflikt modów dla {} / {}".format(slot,mod.get("set","")))); continue
+            used_ids.update(physical)
+            plans.append({"target":target_id,"target_owner":target_owner,"mod":mod,
+                          "moves":plan["moves"],"chain_gain":plan["gain"]})
+
+    final_eq = dict(eq)
+    for plan in plans:
+        mod, slot = plan["mod"], str(plan["mod"].get("slot",""))
+        old_owner = owner(mod)
+        if old_owner and (old_owner,slot) in final_eq and rid(final_eq[(old_owner,slot)]) == rid(mod):
+            final_eq.pop((old_owner,slot),None)
+        for move in plan["moves"]:
+            key=(move["owner"],slot)
+            if key in final_eq and rid(final_eq[key]) == rid(move["removed"]): final_eq.pop(key,None)
+            final_eq[key]=move["replacement"]
+        final_eq[(plan["target_owner"],slot)] = mod
+
+    affected={m["owner"] for p in plans for m in p["moves"]}
+    validation=[]; safe=not failed
+    all_owners={o for o,_s in eq}|{o for o,_s in final_eq}
+    for o in sorted(all_owners):
+        before=[r for (oo,_s),r in eq.items() if oo==o]
+        after=[r for (oo,_s),r in final_eq.items() if oo==o]
+        if not before and not after: continue
+        bc,ac=set_counts(before),set_counts(after)
+        ok = not (o in affected and base(before[0]) not in targets) or bc==ac
+        validation.append({"owner":o,"name":pname(o),"before":bc,"after":ac,"ok":ok})
+        if not ok: safe=False
+
+    for target_id,opt in optimizer.items():
+        target_owner=next((o for (o,_s),r in eq.items() if base(r)==target_id),None)
+        for mod in opt.get("mods",[]):
+            placed=final_eq.get((target_owner,str(mod.get("slot","")))) if target_owner else None
+            if not placed or rid(placed)!=rid(mod):
+                safe=False; failed.append((target_id,"optimizer mod nie trafił na miejsce: {}".format(mod.get("slot",""))))
+
+    if safe:
+        for plan in plans:
+            mod=plan["mod"]; slot=str(mod.get("slot",""))
+            mod["recommendedAction"]="REPLACE"; mod["chainStatus"]="SAFE"
+            mod["chainId"]="{}:{}".format(plan["target"],slot)
+            mod["chainLength"]=1+len(plan["moves"]); mod["chainGain"]=round(plan["chain_gain"],1)
+            mod["chainPath"]=" -> ".join([pname(owner(mod))]+[m["name"] for m in plan["moves"]]+[pname(plan["target_owner"])])
+            mod["reason"]="BEZPIECZNY ŁAŃCUCH; set źródła zachowane"
+            for idx,move in enumerate(plan["moves"],1):
+                patch=move["replacement"]; patch["recommendedAction"]="PATCH"; patch["chainStatus"]="SAFE"
+                patch["patchOwner"]=move["owner"]; patch["patchOwnerName"]=move["name"]; patch["patchSlot"]=slot
+                patch["chainId"]=mod["chainId"]; patch["chainStep"]=idx; patch["chainLength"]=mod["chainLength"]
+                patch["chainPath"]=mod["chainPath"]; patch["replacesModId"]=rid(move["removed"])
+                patch["replacementGain"]=round(move["gain"],1); patch["accountGain"]=round(move["gain"],1)
+                patch["reason"]="PATCH {}; zachowanie setu {}".format(move["name"],move["removed"].get("set",""))
+    else:
+        for r in rows:
+            if r.get("optimizerTarget"): r["chainStatus"]="BLOCKED"
+
+    return {"safe":safe,"plans":plans,"validation":validation,"failed":failed}
+
+
 def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, names=None):
     """Global virtual optimizer: all mature mods are treated as available.
     Optimizes the complete six-slot build, including set bonuses, then leaves
@@ -945,7 +1094,7 @@ def main():
         row["source"] = source_label(row, aliases, names)
 
     optimizer = optimize_target_build(rows, {t.get("baseId") for t in targets}, profiles, aliases, names)
-    apply_replacements(rows, {t.get("baseId") for t in targets}, profiles, aliases, names)
+    chain_result = apply_optimizer_replacements(rows, optimizer, {t.get("baseId") for t in targets}, profiles, aliases, names)
 
     with open(OUTPUT_CSV, "w", newline="", encoding="utf-8-sig") as f:
         fields = list(rows[0].keys())
@@ -1014,6 +1163,32 @@ def main():
             lines.append("| {} | {} | {} {} | {} | {} | {:.1f} |".format(
                 m.get("slot",""), m.get("set",""), m.get("primaryStat",""), m.get("primaryValue",""),
                 m.get("id",""), source_label(m, aliases, names), score_profile(m, profiles[target_id])["fitScore"]))
+    lines += ["", "## BEZPIECZNY ŁAŃCUCH — walidacja globalna", ""]
+    if chain_result.get("safe"):
+        lines.append("**STATUS: OK — łańcuchy zostały zweryfikowane na pełnym stanie rosteru.**")
+        lines.append("PATCH-y używają tego samego slotu i setu co mod zabrany ze źródła, więc liczności setów postaci poza celem pozostają bez zmian.")
+    else:
+        lines.append("**STATUS: BLOKADA — nie wygenerowano bezpiecznej listy ruchów.**")
+        for target_id, reason in chain_result.get("failed", []):
+            lines.append("- {}: {}".format(target_id, reason))
+    lines += ["", "| Postać | Sety przed | Sety po | Status |", "|---|---|---|---|"]
+    affected_owners={m.get("owner") for p in chain_result.get("plans",[]) for m in p.get("moves",[])}
+    for item in chain_result.get("validation",[]):
+        if item.get("owner") in affected_owners:
+            lines.append("| {} | {} | {} | {} |".format(item["name"],
+                ", ".join("{}={}".format(k,v) for k,v in sorted(item["before"].items())) or "—",
+                ", ".join("{}={}".format(k,v) for k,v in sorted(item["after"].items())) or "—",
+                "OK" if item["ok"] else "BŁĄD"))
+    lines += ["", "### Ruchy", "", "| Cel | Mod | Źródło | PATCH | Status |", "|---|---|---|---|---|"]
+    if chain_result.get("safe"):
+        for p in chain_result.get("plans",[]):
+            m=p["mod"]; patch_text="MAGAZYN" if not p.get("moves") else " → ".join("{} / {}".format(x["name"],x["replacement"].get("id","")) for x in p["moves"])
+            lines.append("| {} / {} | {} {} {} | {} | {} | SAFE |".format(
+                p["target"],m.get("slot",""),m.get("set",""),m.get("primaryStat",""),m.get("primaryValue",""),
+                source_label(m,aliases,names),patch_text))
+    else:
+        lines.append("| — | — | — | — | BLOCKED |")
+    
     jar_order = {
         "REPLACE": 0,
         "EQUIP": 1,
