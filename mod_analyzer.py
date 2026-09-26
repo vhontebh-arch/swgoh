@@ -12,7 +12,7 @@ INPUT_FILE = "mods.csv"
 OUTPUT_CSV = "mod_analysis.csv"
 OUTPUT_MD = "mod_analysis.md"
 PROFILE_FILE = "mod_profiles.json"
-ANALYZER_VERSION = "2026-09-26-equip-empty-slots"
+ANALYZER_VERSION = "2026-09-26-equip-empty-slots-fix-target-occupancy"
 
 R5 = {
     "Critical Chance %": (1.125, 2.25), "Defense": (4.9, 9.8),
@@ -352,6 +352,8 @@ def apply_replacements(rows, target_base_ids):
     equipped_by_target_slot = {}
     for row in rows:
         if not is_true(row.get("equipped")):
+            continue
+        if row.get("characterFit") != "TARGET":
             continue
         target = row.get("fitTarget", "")
         if target in target_base_ids:
