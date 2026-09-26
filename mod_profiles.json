@@ -3,57 +3,82 @@
     "JARJARBINKS": {
       "name": "Jar Jar Binks",
       "role": "support",
+      "source_model": {
+        "method": "equal-weight average of two SWGOH.GG live data slices",
+        "sources": [
+          {
+            "name": "Top 1000 Kyber GAC",
+            "url": "https://swgoh.gg/units/jar-jar-binks/best-mods/",
+            "set_speed_potency_pct": 73.83,
+            "set_speed_health_pct": 11.64,
+            "primary_pct": {
+              "Arrow Speed": 96.45,
+              "Triangle Protection": 56.09,
+              "Circle Protection": 88.58,
+              "Cross Potency": 77.60
+            },
+            "secondary_focus_avg": {
+              "Speed": 20.90,
+              "Potency %": 10.72,
+              "Protection": 7.77,
+              "Protection %": 7.48
+            }
+          },
+          {
+            "name": "Top 100 Guilds",
+            "url": "https://swgoh.gg/units/jar-jar-binks/best-mods/?s=GUILDTOP100",
+            "set_speed_potency_pct": 61.74,
+            "set_speed_health_pct": 9.38,
+            "primary_pct": {
+              "Arrow Speed": 93.27,
+              "Triangle Protection": 52.55,
+              "Circle Protection": 78.22,
+              "Cross Potency": 68.63
+            },
+            "secondary_focus_avg": {
+              "Speed": 20.90,
+              "Potency %": 10.33,
+              "Protection": 7.82,
+              "Protection %": 7.28
+            }
+          }
+        ]
+      },
+      "set_combinations": {
+        "Speed + Potency": 67.785,
+        "Speed + Health": 10.51,
+        "Triple Potency": 6.425
+      },
       "set_preferences": {
-        "Speed": 1.0,
-        "Potency": 0.95,
-        "Health": 0.55,
-        "Protection": 0.45
+        "Speed": 0.8105,
+        "Potency": 0.6775,
+        "Health": 0.1045,
+        "Protection": 0.0
       },
       "primary_preferences": {
-        "Arrow": {
-          "Speed": 1.0,
-          "Protection %": 0.25,
-          "Health %": 0.15
-        },
-        "Triangle": {
-          "Protection %": 1.0,
-          "Health %": 0.55,
-          "Offense %": 0.15,
-          "Critical Damage %": 0.05
-        },
-        "Circle": {
-          "Protection %": 1.0,
-          "Health %": 0.55
-        },
-        "Cross": {
-          "Potency %": 1.0,
-          "Protection %": 0.35,
-          "Health %": 0.20,
-          "Tenacity %": 0.10
-        },
-        "Square": {
-          "Offense %": 0.10
-        },
-        "Diamond": {
-          "Defense %": 0.10
-        }
+        "Arrow": {"Speed": 0.9486, "Protection": 0.02345, "Health": 0.00425},
+        "Triangle": {"Protection": 0.542, "Offense": 0.15965, "Critical Damage": 0.1529, "Health": 0.0768},
+        "Circle": {"Protection": 0.834, "Health": 0.1658},
+        "Cross": {"Potency": 0.73115, "Protection": 0.13265, "Offense": 0.05225, "Health": 0.0351, "Defense": 0.0238, "Tenacity": 0.0184},
+        "Square": {"Offense": 0.0},
+        "Diamond": {"Defense": 0.0}
       },
       "secondary_preferences": {
-        "Speed": 1.00,
-        "Potency %": 0.92,
-        "Protection": 0.78,
-        "Protection %": 0.82,
-        "Health": 0.62,
-        "Health %": 0.68,
-        "Tenacity %": 0.34,
-        "Defense %": 0.24,
-        "Defense": 0.20,
-        "Offense %": 0.14,
-        "Offense": 0.10,
-        "Critical Chance %": 0.05,
-        "Critical Damage %": 0.05,
-        "Critical Avoidance %": 0.05,
-        "Speed %": 0.02
+        "Speed": 1.0,
+        "Potency %": 0.504,
+        "Protection": 0.373,
+        "Protection %": 0.352,
+        "Health": 0.0,
+        "Health %": 0.0,
+        "Tenacity %": 0.0,
+        "Defense %": 0.0,
+        "Defense": 0.0,
+        "Offense %": 0.0,
+        "Offense": 0.0,
+        "Critical Chance %": 0.0,
+        "Critical Damage %": 0.0,
+        "Critical Avoidance %": 0.0,
+        "Speed %": 0.0
       }
     }
   }
