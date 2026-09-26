@@ -40,8 +40,6 @@ KNOWN_SETS = [
 
 
 def fetch(url):
-    # SWGOH.GG blocks GitHub-hosted runners directly. Use several public
-    # read-through proxies; the first working response wins.
     encoded = quote(url, safe="")
     candidates = [
         "https://swgoh-gg.translate.goog/" + url.split("swgoh.gg/", 1)[1]
@@ -62,7 +60,6 @@ def fetch(url):
             if len(raw) < 2000:
                 raise RuntimeError(f"odpowiedź zbyt krótka ({len(raw)} B)")
 
-            # Proxies may return HTML instead of Jina markdown.
             if "<html" in raw.lower() or "<body" in raw.lower():
                 raw = re.sub(r"(?is)<script.*?</script>", " ", raw)
                 raw = re.sub(r"(?is)<style.*?</style>", " ", raw)
@@ -84,8 +81,8 @@ def fetch(url):
 
 
 def clean(text):
-    text = re.sub(r"\\r", "", text)
-    text = re.sub(r"\\n{3,}", "\\n\\n", text)
+    text = re.sub(r"\r", "", text)
+    text = re.sub(r"\n{3,}", "\n\n", text)
     return text
 
 
@@ -114,13 +111,12 @@ def parse_set_combinations(text):
         raise RuntimeError("brak sekcji Specific Mod Sets")
 
     window = text[start:]
-    # The primary-stat section starts at the first slot heading.
     positions = [window.find("\nArrow"), window.find("\n### Arrow"), window.find("\n## Arrow")]
     positions = [p for p in positions if p >= 0]
     if positions:
         window = window[:min(positions)]
 
-    set_name = r"(?:" + "|".join(re.escape(x) for x in KNOWN_SETS) + r")"
+    set_name = r"(?: " + "|".join(re.escape(x) for x in KNOWN_SETS) + r")".replace(" ", "")
     pattern = re.compile(
         r"((?:" + set_name + r")(?:\s*\+\s*(?:" + set_name + r")){1,2})"
         r"\s+(\d+(?:\.\d+)?)%"
@@ -140,7 +136,6 @@ def parse_slot(text, slot):
     heading = SLOTS[slot]
     start = text.find(heading)
     if start < 0:
-        # Jina may omit the exact heading prefix.
         start = text.find("### " + heading)
     if start < 0:
         raise RuntimeError(f"brak sekcji {heading}")
@@ -154,14 +149,16 @@ def parse_slot(text, slot):
     window = extract_between(text, heading, end_markers)
 
     result = {}
-    # Tables are normally rendered as:
-    # Speed | 890 | 96.31%
-    # Also accept plain text lines.
+    # Jina/markdown formatting varies between table, prose and HTML-derived
+    # text. Accept separators such as |, :, dash and arbitrary whitespace,
+    # including line breaks. Also accept an optional raw count before the
+    # percentage (for example "890 | 96.31%").
     for stat in STAT_NAMES:
         pattern = re.compile(
             r"\b" + re.escape(stat) +
-            r"\s*(?:\||\s+)\s*(?:\d[\d,]*\s*(?:\||\s+))?"
-            r"(\d+(?:\.\d+)?)%"
+            r"\b\s*(?:\||:|–|—|-)?\s*" 
+            r"(?:\d[\d,]*\s*(?:\||:|–|—|-)?\s*)?"
+            r"(\d+(?:\.\d+)?)\s*%"
         )
         m = pattern.search(window)
         if m:
@@ -351,8 +348,6 @@ def main():
         validate_profile(profile)
         new_profiles[base_id] = profile
 
-    # Atomic write only after ALL profiles pass. A failed refresh therefore
-    # leaves the previous file exactly as it was.
     new_data = dict(data)
     new_data["profiles"] = new_profiles
     rendered = json.dumps(new_data, ensure_ascii=False, indent=2) + "\n"
