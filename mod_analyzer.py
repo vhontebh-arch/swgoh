@@ -12,7 +12,7 @@ INPUT_FILE = "mods.csv"
 OUTPUT_CSV = "mod_analysis.csv"
 OUTPUT_MD = "mod_analysis.md"
 PROFILE_FILE = "mod_profiles.json"
-ANALYZER_VERSION = "2026-09-26-set-bonus-normalized-scoring"
+ANALYZER_VERSION = "2026-09-26-set-bonus-aware-reporting"
 
 R5 = {
     "Critical Chance %": (1.125, 2.25), "Defense": (4.9, 9.8),
@@ -636,10 +636,17 @@ def apply_replacements(rows, target_base_ids, profiles=None, aliases=None, names
                 if current is None and target_gain <= 0:
                     continue
 
+                set_bonus_delta = set_delta(
+                    target_owner.get(target_id, ""), slot, replacement
+                )
+                target_fit_after_set = score(replacement, target_id) + set_bonus_delta
+
                 if not is_true(replacement.get("equipped")):
                     proposals.append({
                         "t": target_id, "s": slot, "r": replacement, "cur": current,
-                        "tg": target_gain, "ag": target_gain, "steps": []
+                        "tg": target_gain, "ag": target_gain, "steps": [],
+                        "set_bonus_delta": set_bonus_delta,
+                        "target_fit_after_set": target_fit_after_set
                     })
                     continue
 
@@ -661,7 +668,9 @@ def apply_replacements(rows, target_base_ids, profiles=None, aliases=None, names
                     continue
                 proposals.append({
                     "t": target_id, "s": slot, "r": replacement, "cur": current,
-                    "tg": target_gain, "ag": account_gain, "steps": steps
+                    "tg": target_gain, "ag": account_gain, "steps": steps,
+                    "set_bonus_delta": set_bonus_delta,
+                    "target_fit_after_set": target_fit_after_set
                 })
 
     proposals.sort(key=lambda p: (p["ag"], p["tg"]), reverse=True)
@@ -687,6 +696,8 @@ def apply_replacements(rows, target_base_ids, profiles=None, aliases=None, names
         replacement = proposal["r"]
         replacement["replacementGain"] = round(proposal["tg"], 1)
         replacement["accountGain"] = round(proposal["ag"], 1)
+        replacement["setBonusDelta"] = round(proposal.get("set_bonus_delta", 0.0), 2)
+        replacement["targetFitAfterSet"] = round(proposal.get("target_fit_after_set", score(replacement, proposal["t"])), 1)
         replacement["sourceLoss"] = round(proposal["tg"] - proposal["ag"], 1)
         replacement["chainLength"] = 1 + len(proposal["steps"])
         replacement["chainId"] = "{}:{}".format(proposal["t"], proposal["s"])
@@ -829,8 +840,8 @@ def main():
         "", "## Jar Jar Binks — kandydaci", "",
         "Analiza porównuje mody wyposażone z kandydatami z inventory dla każdego slotu.",
         "",
-        "| Akcja | Mod | Źródło | Slot | Set | Tier | Lvl | Fit | Zysk celu | Bilans konta | Łańcuch |",
-        "|---|---|---|---|---|---|---:|---:|---:|---:|---:|"
+        "| Akcja | Mod | Źródło | Slot | Set | Tier | Lvl | Fit | Set Δ | Fit po secie | Zysk celu | Bilans konta | Łańcuch |",
+        "|---|---|---|---|---|---|---|---:|---:|---:|---:|---:|---:|"
     ]
     for r in jar_rows[:18]:
         mod = "{} {} {}".format(r["slot"], r["primaryStat"], r["primaryValue"])
@@ -839,6 +850,8 @@ def main():
                 r["recommendedAction"], mod, r["source"], r["slot"], r["set"],
                 r["dots"], r["tierName"], r["level"],
                 float(r.get("fitScore", 0)),
+                float(r.get("setBonusDelta", 0)),
+                float(r.get("targetFitAfterSet", r.get("fitScore", 0))),
                 float(r.get("replacementGain", 0)),
                 float(r.get("accountGain", 0)),
                 r.get("chainLength", 0)
@@ -849,7 +862,9 @@ def main():
         "", "## Definicje", "",
         "- **Quality** — jakość wykonanych rolli względem zakresu dla 5-dot/6-dot.",
         "- **Value** — jakość rolla pomnożona przez ogólną, niezależną od postaci użyteczność statystyki.",
-        "- **Fit** — dopasowanie moda do aktywnego profilu celu; obecnie szczegółowy profil ma Jar Jar Binks.",
+        "- **Fit** — dopasowanie pojedynczego moda do aktywnego profilu celu; nie zawiera bonusu całego kompletu.",
+        "- **SetBonusDelta** — zmiana rzeczywistego bonusu zestawów 6 modów celu po założeniu proponowanego moda.",
+        "- **FitAfterSet** — Fit moda powiększony o SetBonusDelta; pokazuje wpływ kompletu bez mieszania go z jakością secondary.",
         "- **AccountGain** — bilans całej operacji przeniesienia i PATCH-a dla źródła; dla źródeł bez profilu używany jest globalny ModValue.",
         "- **Potential** — sufit wartości przy idealnych przyszłych rollach; nie jest prognozą RNG.",
         "- **Źródło MAGAZYN** — mod nie jest obecnie założony na żadnej postaci.",
