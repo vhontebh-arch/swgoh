@@ -7,6 +7,7 @@ Model rozdziela **jakość obecnych rolli**, **potencjał dalszego rozwoju**, **
 - SLICE: **720**
 - SLICE_6E: **137**
 - CALIBRATE: **95**
+- EQUIP: **0**
 - REPLACE: **0**
 - KEEP: **377**
 
@@ -121,6 +122,7 @@ Analiza porównuje mody wyposażone z kandydatami z inventory dla każdego slotu
 - **Value** — jakość rolla pomnożona przez ogólną, niezależną od postaci użyteczność statystyki.
 - **Fit** — dopasowanie moda do profilu konkretnej postaci; dla nieprzypisanych modów pokazuje najlepszego aktywnego kandydata.
 - **Potential** — sufit wartości przy idealnych przyszłych rollach; nie jest prognozą RNG.
+- **EQUIP** — slot docelowej postaci jest pusty; wskazany mod jest najlepszym dostępnym niezałożonym modem dla tego slotu.
 - **REPLACE** — niezałożony mod jest wyraźnie lepszy od obecnego moda tej samej postaci i slotu.
 - **UPGRADE** — mod nie jest jeszcze na 15.
 - **SLICE** — kolejny tier ma uzasadnienie jakościowe lub profilowe.
