@@ -5,53 +5,59 @@
       "role": "support",
       "source_model": {
         "method": "live SWGOH.GG Best Mods pages via proxy readers; equal-weight average of configured slices",
-        "refreshed_at_utc": "2026-09-26T15:00:00Z",
+        "refreshed_at_utc": "2026-09-26T14:59:09.447521+00:00",
         "sources": [
           {
             "name": "Top 1000 Kyber GAC",
             "url": "https://swgoh.gg/units/jar-jar-binks/best-mods/",
             "set_combinations": {
-              "Speed + Potency": 74.4,
-              "Speed + Health": 11,
-              "Triple Potency": 3.1,
-              "Speed": 1.6,
-              "Double Health + Potency": 1.3
+              "Speed + Potency": 73.9,
+              "Speed + Health": 11.0,
+              "Speed + Defense": 1.2
             },
             "primary_pct": {
               "Arrow": {
-                "Speed": 96.31,
-                "Protection": 1.45,
-                "Health": 0.29,
-                "Offense": 0.29,
-                "Critical Avoidance": 0.1,
-                "Accuracy": 0.1,
-                "Defense": 0.1
+                "Speed": 96.42,
+                "Protection": 2.16,
+                "Health": 0.75,
+                "Offense": 0.32,
+                "Defense": 0.1,
+                "Accuracy": 0.1
               },
               "Triangle": {
-                "Protection": 55.85,
-                "Offense": 16.7,
-                "Critical Damage": 16.7,
-                "Health": 5.53,
-                "Critical Chance": 2.6,
-                "Defense": 2.6
+                "Protection": 55.41,
+                "Health": 5.3,
+                "Offense": 16.88,
+                "Defense": 3.24
               },
               "Circle": {
-                "Protection": 88.28,
-                "Health": 11.71
+                "Protection": 87.77,
+                "Health": 12.22
               },
               "Cross": {
-                "Potency": 77.65,
-                "Protection": 14.31,
-                "Offense": 3.36,
-                "Health": 1.84,
-                "Defense": 1.73,
-                "Tenacity": 1.08
+                "Potency": 77.05,
+                "Protection": 14.17,
+                "Health": 1.94,
+                "Offense": 4.0,
+                "Defense": 1.73
               }
             },
             "secondary_focus_avg": {
               "Speed": {
                 "average": 20.1,
-                "focus_pct": 20.92
+                "focus_pct": 20.93
+              },
+              "Health": {
+                "average": 803.4,
+                "focus_pct": 6.71
+              },
+              "Offense": {
+                "average": 78.7,
+                "focus_pct": 7.31
+              },
+              "Defense": {
+                "average": 21.6,
+                "focus_pct": 6.35
               },
               "Potency": {
                 "average": 5.6,
@@ -71,28 +77,23 @@
             "name": "Top 100 Guilds",
             "url": "https://swgoh.gg/units/jar-jar-binks/best-mods/?s=GUILDTOP100",
             "set_combinations": {
-              "Speed + Potency": 61.74,
-              "Triple Potency": 10.15,
-              "Speed + Health": 9.38,
-              "Double Potency + Health": 3.04,
-              "Speed": 2.47
+              "Speed + Potency": 61.7,
+              "Speed + Health": 9.3,
+              "Potency + Health": 3.0
             },
             "primary_pct": {
               "Arrow": {
                 "Speed": 93.27,
-                "Health": 2.9,
                 "Protection": 2.37,
+                "Health": 2.9,
                 "Offense": 0.71,
-                "Critical Avoidance": 0.42,
                 "Defense": 0.2,
                 "Accuracy": 0.1
               },
               "Triangle": {
                 "Protection": 52.55,
-                "Offense": 13.97,
-                "Critical Damage": 13.38,
                 "Health": 10.54,
-                "Critical Chance": 4.97,
+                "Offense": 13.97,
                 "Defense": 4.55
               },
               "Circle": {
@@ -102,16 +103,27 @@
               "Cross": {
                 "Potency": 68.63,
                 "Protection": 14.72,
-                "Offense": 6.01,
                 "Health": 5.16,
-                "Defense": 3.08,
-                "Tenacity": 2.37
+                "Offense": 6.01,
+                "Defense": 3.08
               }
             },
             "secondary_focus_avg": {
               "Speed": {
-                "average": 18,
+                "average": 18.0,
                 "focus_pct": 20.9
+              },
+              "Health": {
+                "average": 809.3,
+                "focus_pct": 6.71
+              },
+              "Offense": {
+                "average": 80.7,
+                "focus_pct": 7.22
+              },
+              "Defense": {
+                "average": 21.5,
+                "focus_pct": 6.76
               },
               "Potency": {
                 "average": 5.46,
@@ -130,68 +142,60 @@
         ]
       },
       "set_combinations": {
-        "Speed + Potency": 68.07,
-        "Speed + Health": 10.19,
-        "Triple Potency": 6.625,
-        "Speed": 2.035,
-        "Double Health + Potency": 0.65,
-        "Double Potency + Health": 1.52
+        "Speed + Defense": 0.6,
+        "Speed + Health": 10.15,
+        "Potency + Health": 1.5,
+        "Speed + Potency": 67.8
       },
       "set_preferences": {
-        "Speed": 1,
-        "Potency": 0.8558,
-        "Health": 0.1458,
-        "Triple Potency": 0.0825,
-        "Double Health": 0.0081,
-        "Double Potency": 0.0189
+        "Speed": 1.0,
+        "Defense": 0.0076,
+        "Health": 0.1483,
+        "Potency": 0.8822
       },
       "primary_preferences": {
         "Arrow": {
-          "Speed": 0.9545,
-          "Protection": 0.0192,
-          "Health": 0.0161,
-          "Offense": 0.005,
-          "Critical Avoidance": 0.0026,
+          "Health": 0.0183,
+          "Defense": 0.0015,
           "Accuracy": 0.001,
-          "Defense": 0.0015
+          "Protection": 0.0227,
+          "Speed": 0.9513,
+          "Offense": 0.0052
         },
         "Triangle": {
-          "Protection": 0.5422,
-          "Offense": 0.1534,
-          "Critical Damage": 0.1504,
-          "Health": 0.0804,
-          "Critical Chance": 0.0379,
-          "Defense": 0.0358
+          "Health": 0.0975,
+          "Defense": 0.048,
+          "Protection": 0.6646,
+          "Offense": 0.1899
         },
         "Circle": {
-          "Protection": 0.8326,
-          "Health": 0.1674
+          "Health": 0.17,
+          "Protection": 0.83
         },
         "Cross": {
-          "Potency": 0.7316,
-          "Protection": 0.1452,
-          "Offense": 0.0469,
-          "Health": 0.035,
-          "Defense": 0.0241,
-          "Tenacity": 0.0173
+          "Health": 0.0361,
+          "Defense": 0.0245,
+          "Protection": 0.147,
+          "Potency": 0.7414,
+          "Offense": 0.0509
         }
       },
       "secondary_preferences": {
-        "Speed": 1,
-        "Potency": 0.5053,
+        "Health": 0.3208,
+        "Defense": 0.3134,
         "Protection": 0.3737,
-        "Protection %": 0.3522,
-        "Health": 0,
-        "Health %": 0,
-        "Offense": 0,
-        "Offense %": 0,
-        "Defense": 0,
-        "Defense %": 0,
-        "Tenacity %": 0,
-        "Critical Chance %": 0,
-        "Critical Damage %": 0,
-        "Critical Avoidance %": 0,
-        "Accuracy": 0
+        "Protection %": 0.3521,
+        "Speed": 1.0,
+        "Potency": 0.5051,
+        "Offense": 0.3474,
+        "Health %": 0.0,
+        "Offense %": 0.0,
+        "Defense %": 0.0,
+        "Tenacity %": 0.0,
+        "Critical Chance %": 0.0,
+        "Critical Damage %": 0.0,
+        "Critical Avoidance %": 0.0,
+        "Accuracy": 0.0
       }
     }
   }
