@@ -40,9 +40,14 @@ KNOWN_SETS = [
 
 
 def fetch(url):
-    # Jina Reader has a simple public URL interface for converting public web
-    # pages to readable text/markdown. Try HTTPS first, then HTTP as a fallback.
+    # SWGOH.GG blocks GitHub-hosted runners directly. Use several public
+    # read-through proxies; the first working response wins.
+    encoded = quote(url, safe="")
     candidates = [
+        "https://swgoh-gg.translate.goog/" + url.split("swgoh.gg/", 1)[1]
+        + "?_x_tr_sl=auto&_x_tr_tl=en&_x_tr_hl=en",
+        "https://api.allorigins.win/raw?url=" + encoded,
+        "https://corsproxy.io/?url=" + encoded,
         "https://r.jina.ai/" + url,
         "https://r.jina.ai/http://" + url.split("://", 1)[1],
     ]
@@ -57,17 +62,25 @@ def fetch(url):
             if len(raw) < 2000:
                 raise RuntimeError(f"odpowiedź zbyt krótka ({len(raw)} B)")
 
+            # Proxies may return HTML instead of Jina markdown.
+            if "<html" in raw.lower() or "<body" in raw.lower():
+                raw = re.sub(r"(?is)<script.*?</script>", " ", raw)
+                raw = re.sub(r"(?is)<style.*?</style>", " ", raw)
+                raw = re.sub(r"(?s)<[^>]+>", " ", raw)
+                raw = re.sub(r"&nbsp;", " ", raw)
+                raw = re.sub(r"&amp;", "&", raw)
+
+            if "Best Mods" not in raw and "Specific Mod Sets" not in raw:
+                raise RuntimeError("odpowiedź nie zawiera danych Best Mods")
+
+            print(f"  źródło pobrania: {endpoint.split('/')[2]}")
             return raw
+
         except Exception as exc:
             last_error = exc
+            print(f"  próba nieudana: {endpoint.split('/')[2]}: {exc}")
 
     raise RuntimeError(f"nie udało się pobrać {url}: {last_error}")
-
-
-def clean(text):
-    text = re.sub(r"\r", "", text)
-    text = re.sub(r"\n{3,}", "\n\n", text)
-    return text
 
 
 def pct(value):
