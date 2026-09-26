@@ -110,7 +110,7 @@ def find_mod_lists(obj, path="root", owner_id=""):
     if isinstance(obj, dict):
         # equippedStatMod lives inside rosterUnit. Preserve the unit id so
         # the analyzer can distinguish a target's equipped mod from inventory.
-        if "id" in obj and "definitionId" in obj and path.endswith("rosterUnit"):
+        if "id" in obj and "definitionId" in obj and owner_id:
             owner_id = str(obj.get("id") or owner_id)
 
         for key, value in obj.items():
