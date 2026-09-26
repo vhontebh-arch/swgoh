@@ -7,8 +7,6 @@ Output: mod_analysis.csv and mod_analysis.md
 import csv
 import json
 import os
-import subprocess
-import sys
 
 INPUT_FILE = "mods.csv"
 OUTPUT_CSV = "mod_analysis.csv"
@@ -754,14 +752,6 @@ def apply_replacements(rows, target_base_ids, profiles=None, aliases=None, names
             ).format(step["name"], replacement["chainPath"], step["gain"], proposal["ag"])
 
 
-def refresh_live_profiles():
-    updater = "update_mod_profiles.py"
-    if not os.path.exists(updater):
-        raise FileNotFoundError(updater)
-    print("Odświeżanie profili modów z live SWGOH.GG...")
-    subprocess.run([sys.executable, updater], check=True)
-    print("Profile modów odświeżone.")
-
 
 def main():
     if not os.path.exists(INPUT_FILE):
@@ -773,7 +763,6 @@ def main():
         raise RuntimeError("mods.csv jest pusty.")
 
     targets = load_targets()
-    refresh_live_profiles()
     profiles = load_profiles()
     aliases = load_player_aliases()
     names = load_player_names()
