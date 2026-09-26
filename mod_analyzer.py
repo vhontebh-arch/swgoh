@@ -110,8 +110,7 @@ def mod_description(row):
         ", ".join(secondary) if secondary else "brak",
         row.get("dots",""),
         row.get("tierName",""),
-        row.get("level",""),
-        row.get("id","")
+        row.get("level","")
     )
 
 def quality(stat, value, count, values, dots):
