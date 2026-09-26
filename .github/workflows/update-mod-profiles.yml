@@ -2,6 +2,10 @@ name: Refresh SWGOH mod profiles
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - "update_mod_profiles.py"
+      - ".github/workflows/update-mod-profiles.yml"
   schedule:
     # 05:15 UTC = 07:15 CEST / 06:15 CET.
     # Kept separate from the main 06:00 UTC account-data workflow.
