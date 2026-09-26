@@ -83,6 +83,12 @@ def fetch(url):
     raise RuntimeError(f"nie udało się pobrać {url}: {last_error}")
 
 
+def clean(text):
+    text = re.sub(r"\\r", "", text)
+    text = re.sub(r"\\n{3,}", "\\n\\n", text)
+    return text
+
+
 def pct(value):
     return float(str(value).replace(",", "."))
 
