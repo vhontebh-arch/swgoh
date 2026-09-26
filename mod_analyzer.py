@@ -805,46 +805,60 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
     def find_chain(selected_mod, target_id, used_ids):
         slot = str(selected_mod.get("slot", "") or "")
         src = owner(selected_mod)
-        if not src: return None
+        if not src:
+            return None
 
-        def search(hole_owner, depth, forbidden, seen):
-            if depth > 5: return None
-            current = working_eq.get((hole_owner, slot))
-            if current is None: return {"moves": [], "gain": 0.0}
+        # Breadth-first search: find the shortest physically valid chain first.
+        # Candidate quality is only a tie-breaker; never hide a valid chain
+        # behind a small arbitrary top-K slice.
+        queue=[(src,{src},set(selected_ids)|set(used_ids)|{rid(selected_mod)},[])]
+        depth=0
+        while queue and depth <= 10:
+            next_queue=[]
+            for hole_owner,seen,forbidden,moves in queue:
+                current=working_eq.get((hole_owner,slot))
+                if current is None:
+                    return {"moves":moves,"gain":sum(x["gain"] for x in moves)}
 
-            current_set = str(current.get("set", "") or "")
-            candidates = []
-            for r in inventory:
-                if rid(r) in forbidden or rid(r) in selected_ids: continue
-                if str(r.get("slot","")) == slot and preserves_completed_sets(hole_owner,current,r):
-                    candidates.append((0, r))
-            for (other_owner, other_slot), r in working_eq.items():
-                if other_slot != slot or other_owner == hole_owner or other_owner in seen: continue
-                if rid(r) in forbidden or rid(r) in selected_ids: continue
-                if preserves_completed_sets(hole_owner,current,r):
-                    candidates.append((1, r))
+                who=base(current) or hole_owner
+                candidates=[]
+                for r in inventory:
+                    if rid(r) in forbidden or rid(r) in selected_ids:
+                        continue
+                    if str(r.get("slot","")) == slot and preserves_completed_sets(hole_owner,current,r):
+                        candidates.append((0,r))
+                for (other_owner,other_slot),r in working_eq.items():
+                    if other_slot != slot or other_owner == hole_owner or other_owner in seen:
+                        continue
+                    if rid(r) in forbidden or rid(r) in selected_ids:
+                        continue
+                    if preserves_completed_sets(hole_owner,current,r):
+                        candidates.append((1,r))
 
-            who = base(current) or hole_owner
-            candidates.sort(key=lambda x: (x[0], -fit(x[1], who), -float(x[1].get("modValue",0) or 0)))
-            best = None
-            for kind, replacement in candidates[:4]:
-                replacement_id = rid(replacement)
-                local_gain = fit(replacement, who) - fit(current, who)
-                move = {"owner": hole_owner, "name": pname(hole_owner),
-                        "removed": current, "replacement": replacement, "gain": local_gain}
-                if kind == 0:
-                    candidate = {"moves":[move], "gain":local_gain}
-                else:
-                    next_owner = owner(replacement)
-                    sub = search(next_owner, depth+1,
-                                 forbidden | {replacement_id, rid(current)},
-                                 seen | {next_owner})
-                    if sub is None: continue
-                    candidate = {"moves":[move]+sub["moves"], "gain":local_gain+sub["gain"]}
-                if best is None or candidate["gain"] > best["gain"]: best = candidate
-            return best
-
-        return search(src, 0, set(selected_ids) | set(used_ids) | {rid(selected_mod)}, {src})
+                candidates.sort(key=lambda x: (
+                    x[0],
+                    -fit(x[1],who),
+                    -float(x[1].get("modValue",0) or 0)
+                ))
+                for kind,replacement in candidates[:50]:
+                    replacement_id=rid(replacement)
+                    local_gain=fit(replacement,who)-fit(current,who)
+                    move={"owner":hole_owner,"name":pname(hole_owner),
+                          "removed":current,"replacement":replacement,"gain":local_gain}
+                    new_moves=moves+[move]
+                    if kind==0:
+                        return {"moves":new_moves,"gain":sum(x["gain"] for x in new_moves)}
+                    next_owner=owner(replacement)
+                    if next_owner not in seen:
+                        next_queue.append((
+                            next_owner,
+                            seen|{next_owner},
+                            forbidden|{rid(current),replacement_id},
+                            new_moves
+                        ))
+            queue=next_queue
+            depth+=1
+        return None
 
     plans, failed, used_ids = [], [], set()
     for target_id, opt in optimizer.items():
