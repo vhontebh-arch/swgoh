@@ -4,9 +4,9 @@ Model rozdziela **jakość obecnych rolli**, **potencjał dalszego rozwoju**, **
 
 - Modów: **2163**
 - UPGRADE: **834**
-- SLICE: **714**
+- SLICE: **713**
 - SLICE_6E: **135**
-- CALIBRATE: **94**
+- CALIBRATE: **95**
 - EQUIP: **3**
 - REPLACE: **0**
 - PATCH: **6**
@@ -16,8 +16,8 @@ Model rozdziela **jakość obecnych rolli**, **potencjał dalszego rozwoju**, **
 
 | Akcja | Mod | Źródło | Set | Tier | Lvl | Quality | Value | Fit | 6E proj. | Speed | Potencjał | Inwestycja |
 |---|---|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---|
-| EQUIP | Arrow Speed 30 | POSTAĆ: COLONELSTARCK | Speed | 5E | 15 | 100.0% | 50.0% | 86.0% | 0.0% | 0.0% | 50.0% | slice |
-| EQUIP | Diamond Defense % 20% | POSTAĆ: GRANDMOFFTARKIN | Speed | 6A | 15 | 100.0% | 69.0% | 72.6% | 0.0% | 88.9% | 69.0% | calibration |
+| EQUIP | Arrow Speed 32 | POSTAĆ: BASTILASHAN | Speed | 6E | 15 | 100.0% | 48.7% | 85.2% | 0.0% | 0.0% | 48.7% | slice |
+| EQUIP | Diamond Defense % 11.75% | POSTAĆ: GEONOSIANBROODALPHA | Speed | 5C | 15 | 100.0% | 60.0% | 71.0% | 0.0% | 83.3% | 60.0% | slice |
 | EQUIP | Square Offense % 5.88% | MAGAZYN | Health | 5A | 15 | 100.0% | 64.0% | 67.3% | 54.5% | 88.9% | 64.0% | 6-dot |
 | PATCH | Arrow Protection % 23.5% | MAGAZYN | Speed | 5E | 15 | 100.0% | 78.0% | 59.6% | 0.0% | 83.3% | 78.0% | slice |
 | PATCH | Diamond Defense % 11.75% | MAGAZYN | Health | 5E | 15 | 100.0% | 83.5% | 53.1% | 0.0% | 83.3% | 83.5% | slice |
@@ -33,6 +33,7 @@ Model rozdziela **jakość obecnych rolli**, **potencjał dalszego rozwoju**, **
 | CALIBRATE | Arrow Speed 32 | POSTAĆ: FIFTHBROTHER | Speed | 6A | 15 | 100.0% | 46.3% | 76.3% | 0.0% | 0.0% | 46.3% | calibration |
 | CALIBRATE | Arrow Speed 32 | POSTAĆ: MARAJADE | Potency | 6A | 15 | 100.0% | 49.0% | 75.6% | 0.0% | 0.0% | 49.0% | calibration |
 | CALIBRATE | Cross Potency % 30% | MAGAZYN | Health | 6A | 15 | 100.0% | 62.8% | 75.0% | 0.0% | 83.3% | 62.8% | calibration |
+| CALIBRATE | Diamond Defense % 20% | POSTAĆ: GRANDMOFFTARKIN | Speed | 6A | 15 | 100.0% | 69.0% | 72.6% | 0.0% | 88.9% | 69.0% | calibration |
 | CALIBRATE | Diamond Defense % 20% | POSTAĆ: VANGUARDTEMPLEGUARD | Speed | 6A | 15 | 100.0% | 64.3% | 70.4% | 0.0% | 70.0% | 64.3% | calibration |
 | CALIBRATE | Square Offense % 8.5% | POSTAĆ: EMPERORPALPATINE | Potency | 6A | 15 | 100.0% | 60.3% | 69.9% | 0.0% | 88.9% | 60.3% | calibration |
 | CALIBRATE | Square Offense % 8.5% | POSTAĆ: MARAJADE | Speed | 6A | 15 | 100.0% | 57.7% | 69.0% | 0.0% | 70.8% | 57.7% | calibration |
@@ -90,7 +91,6 @@ Model rozdziela **jakość obecnych rolli**, **potencjał dalszego rozwoju**, **
 | CALIBRATE | Cross Tenacity % 35% | POSTAĆ: REY | Critical Damage | 6A | 15 | 100.0% | 63.0% | 47.5% | 0.0% | 83.3% | 63.0% | calibration |
 | CALIBRATE | Circle Protection % 24% | POSTAĆ: REY | Critical Damage | 6A | 15 | 100.0% | 73.8% | 47.4% | 0.0% | 87.5% | 73.8% | calibration |
 | CALIBRATE | Cross Offense % 8.5% | POSTAĆ: KYLEKATARN | Health | 6A | 15 | 100.0% | 48.2% | 47.4% | 0.0% | 94.4% | 48.2% | calibration |
-| CALIBRATE | Square Offense % 8.5% | POSTAĆ: NINTHSISTER | Tenacity | 6A | 15 | 100.0% | 68.0% | 47.1% | 0.0% | 77.8% | 68.0% | calibration |
 
 ## Jar Jar Binks — kandydaci
 
