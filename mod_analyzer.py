@@ -70,6 +70,29 @@ def quality(stat, value, count, values, dots):
     per = value/count
     return max(0.0,min(1.0,(per-low)/(high-low)))
 
+def projected_6e_quality(secs):
+    if not secs:
+        return 0.0
+    weighted = 0.0
+    total = 0
+    for stat, value, count, values in secs:
+        if count <= 0:
+            continue
+        r5 = R5.get(stat)
+        r6 = R6.get(stat)
+        if not r5 or not r6:
+            continue
+        # 5A -> 6E increases the secondary values. Use the documented
+        # 5-dot/6-dot max-stat ratio as a transparent projection.
+        projected_value = value * (r6[1] / r5[1])
+        low6, high6 = r6
+        per_roll = projected_value / count
+        q = max(0.0, min(1.0, (per_roll-low6)/(high6-low6)))
+        weighted += q * count
+        total += count
+    return 100.0 * weighted / total if total else 0.0
+
+
 def investment(row):
     dots,tier,level = integer(row.get("dots")),integer(row.get("tier")),integer(row.get("level"))
     if level < 15: return "level {}->15".format(level)
@@ -100,6 +123,8 @@ def analyze(row):
     calibration_hit_chance = 33.3 if five_roll_stats else 25.0
     calibration_next_cost = CAL_COST.get(calibration_used+1, 0) if calibration_remaining else 0
 
+    six_e_quality = projected_6e_quality(secs) if dots == 5 and tier == 5 else 0.0
+
     speed = next((x for x in secs if x[0]=="Speed"), None)
     speed_value = speed[1] if speed else 0.0
     speed_rolls = speed[2] if speed else 0
@@ -123,7 +148,7 @@ def analyze(row):
         else:
             action, reason = "KEEP", "potencjał zbyt niski na kolejny slice"
     elif dots == 5 and tier == 5:
-        if current >= 58 or speed_rolls >= 2:
+        if six_e_quality >= 55 or speed_rolls >= 2:
             action, reason = "SLICE_6E", "5A warte podbicia do 6E"
         else:
             action, reason = "KEEP", "5A bez wystarczającej jakości do 6E"
@@ -150,6 +175,7 @@ def analyze(row):
         "speedQuality": round(speed_quality,1),
         "potentialCeiling": round(potential,1),
         "potentialGain": round(max(0,potential-current),1),
+        "projected6EQuality": round(six_e_quality,1),
         "recommendedAction": action,
         "reason": reason,
         "nextInvestment": investment(row),
@@ -194,22 +220,22 @@ def main():
         "- CALIBRATE: **{}**".format(counts.get("CALIBRATE",0)),
         "- KEEP: **{}**".format(counts.get("KEEP",0)),"",
         "## Najważniejsi kandydaci","",
-        "| Akcja | Mod | Set | Tier | Lvl | Quality | Speed | Potencjał | Inwestycja |",
+        "| Akcja | Mod | Set | Tier | Lvl | Quality | 6E proj. | Speed | Potencjał | Inwestycja |",
         "|---|---|---|---|---:|---:|---:|---:|---|"
     ]
     for r in rows[:75]:
         mod = "{} {} {}".format(r["slot"],r["primaryStat"],r["primaryValue"])
         lines.append("| {} | {} | {} | {}{} | {} | {:.1f}% | {:.1f}% | {:.1f}% | {} |".format(
             r["recommendedAction"],mod,r["set"],r["dots"],r["tierName"],
-            r["level"],float(r["modQuality"]),float(r["speedQuality"]),
-            float(r["potentialCeiling"]),r["nextInvestment"]))
+            r["level"],float(r["modQuality"]),float(r["projected6EQuality"]),
+            float(r["speedQuality"]),float(r["potentialCeiling"]),r["nextInvestment"]))
     lines += [
         "","## Definicje","",
         "- **Quality** — jakość wykonanych rolli względem zakresu dla 5-dot/6-dot.",
         "- **Potential** — sufit przy idealnych przyszłych rollach; nie jest prognozą RNG.",
         "- **UPGRADE** — mod nie jest jeszcze na 15.",
         "- **SLICE** — kolejny tier ma uzasadnienie jakościowe.",
-        "- **SLICE_6E** — 5A ma sens do podbicia do 6E.",
+        "- **SLICE_6E** — 5A jest oceniane również przez projekcję jakości po wzroście statystyk do 6E.",
         "- **CALIBRATE** — 6A jest na końcu slicing i może korzystać z calibration.",
         "- **Calibration hit chance** — 25% normalnie; 33,3%, gdy jeden secondary ma już 5 rolli i nie może dostać kolejnego.",
         "",
