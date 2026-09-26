@@ -112,11 +112,11 @@ Model rozdziela **jakość obecnych rolli**, **potencjał dalszego rozwoju**, **
 ## BEZPIECZNY ŁAŃCUCH — walidacja globalna
 
 **STATUS: BLOKADA — nie wygenerowano bezpiecznej listy ruchów.**
-- JARJARBINKS: brak bezpiecznego łańcucha dla Square / Speed
+- JARJARBINKS: konflikt modów dla Square / Speed
 - JARJARBINKS: konflikt modów dla Diamond / Potency
 - JARJARBINKS: brak bezpiecznego łańcucha dla Circle / Speed
 - JARJARBINKS: konflikt modów dla Arrow / Speed
-- JARJARBINKS: brak bezpiecznego łańcucha dla Triangle / Speed
+- JARJARBINKS: konflikt modów dla Triangle / Speed
 - JARJARBINKS: konflikt modów dla Cross / Potency
 - JARJARBINKS: optimizer mod nie trafił na miejsce: Square
 - JARJARBINKS: optimizer mod nie trafił na miejsce: Diamond
