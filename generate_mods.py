@@ -104,10 +104,15 @@ def load_json(path):
         return json.load(f, strict=False)
 
 
-def find_mod_lists(obj, path="root"):
+def find_mod_lists(obj, path="root", owner_id=""):
     found = []
 
     if isinstance(obj, dict):
+        # equippedStatMod lives inside rosterUnit. Preserve the unit id so
+        # the analyzer can distinguish a target's equipped mod from inventory.
+        if "id" in obj and "definitionId" in obj and path.endswith("rosterUnit"):
+            owner_id = str(obj.get("id") or owner_id)
+
         for key, value in obj.items():
             if key in {
                 "unequippedMod",
@@ -120,13 +125,31 @@ def find_mod_lists(obj, path="root"):
                             f"{path}.{key}",
                             value,
                             key,
+                            owner_id if key != "unequippedMod" else "",
                         )
                     )
+                    continue
+
+            next_owner = owner_id
+            if key == "rosterUnit" and isinstance(value, list):
+                for index, unit in enumerate(value):
+                    unit_owner = ""
+                    if isinstance(unit, dict):
+                        unit_owner = str(unit.get("id") or "")
+                    found.extend(
+                        find_mod_lists(
+                            unit,
+                            f"{path}.{key}[{index}]",
+                            unit_owner or owner_id,
+                        )
+                    )
+                continue
 
             found.extend(
                 find_mod_lists(
                     value,
                     f"{path}.{key}",
+                    next_owner,
                 )
             )
 
@@ -136,6 +159,7 @@ def find_mod_lists(obj, path="root"):
                 find_mod_lists(
                     value,
                     f"{path}[{index}]",
+                    owner_id,
                 )
             )
 
@@ -441,7 +465,7 @@ def extract_mods_from_file(path):
 
     locations = find_mod_lists(data)
 
-    for location, mods, source_type in locations:
+    for location, mods, source_type, owner_id in locations:
         print(
             f"Znaleziono {len(mods)} modów: {location}"
         )
@@ -451,6 +475,8 @@ def extract_mods_from_file(path):
                 mod,
                 source_type,
             )
+            if normalized and owner_id and source_type != "unequippedMod":
+                normalized["assignedTo"] = owner_id
 
             if normalized:
                 result.append(normalized)
