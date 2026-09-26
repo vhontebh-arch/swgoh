@@ -1,0 +1,37 @@
+{
+  "profiles": {
+    "JARJARBINKS": {
+      "name": "Jar Jar Binks",
+      "role": "support",
+      "set_preferences": {
+        "Speed": 1.0,
+        "Potency": 0.95,
+        "Health": 0.55,
+        "Protection": 0.45
+      },
+      "primary_preferences": {
+        "Arrow": {"Speed": 1.0, "Protection": 0.25, "Health": 0.15},
+        "Triangle": {"Protection": 1.0, "Health": 0.55, "Offense": 0.15, "Critical Damage": 0.05},
+        "Circle": {"Protection": 1.0, "Health": 0.55},
+        "Cross": {"Potency": 1.0, "Protection": 0.35, "Health": 0.2, "Tenacity": 0.1},
+        "Square": {"Offense": 0.1}
+      },
+      "secondary_preferences": {
+        "Speed": 1.0,
+        "Potency %": 0.92,
+        "Protection": 0.78,
+        "Protection %": 0.82,
+        "Health": 0.62,
+        "Health %": 0.68,
+        "Tenacity %": 0.34,
+        "Defense %": 0.24,
+        "Defense": 0.20,
+        "Offense %": 0.14,
+        "Offense": 0.10,
+        "Critical Chance %": 0.05,
+        "Critical Damage %": 0.05,
+        "Critical Avoidance %": 0.05
+      }
+    }
+  }
+}
