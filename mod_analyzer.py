@@ -944,7 +944,7 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
             repair_path = []
             for move in plan["moves"]:
                 replacement = move["replacement"]
-                replacement_source = pname(owner(replacement)) if is_true(replacement.get("equipped")) else "MAGAZYN"
+                replacement_source = display_name(str(replacement.get("assignedTo", "") or "")) if is_true(replacement.get("equipped")) else "MAGAZYN"
                 repair_path.append("PATCH: {} -> {}".format(replacement_source, move["name"]))
             mod["chainPath"] = "MOD: " + selected_path + (("; " + "; ".join(repair_path)) if repair_path else "")
             mod["reason"]="BEZPIECZNY ŁAŃCUCH; najpierw MOD bezpośrednio do celu, potem PATCH-y w kolejności zależności"
@@ -1260,7 +1260,7 @@ def main():
         for p in chain_result.get("plans",[]):
             m=p["mod"]
             lines.append("| {} | MOD | {} → {} | {} | SAFE |".format(
-                step_no, display_name(owner(m)), display_name(p["target_owner"]), mod_description(m)))
+                step_no, display_name(str(m.get("assignedTo", "") or "")), display_name(p["target_owner"]), mod_description(m)))
             step_no += 1
             for move in p.get("moves", []):
                 replacement = move["replacement"]
