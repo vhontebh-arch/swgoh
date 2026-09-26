@@ -1,1 +1,1 @@
-connector trigger 7
+connector trigger 8
