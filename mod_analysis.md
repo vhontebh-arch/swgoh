@@ -7,8 +7,8 @@ Model rozdziela **jakość obecnych rolli**, **potencjał dalszego rozwoju**, **
 - SLICE: **713**
 - SLICE_6E: **135**
 - CALIBRATE: **95**
-- EQUIP: **3**
-- REPLACE: **0**
+- EQUIP: **2**
+- REPLACE: **1**
 - PATCH: **6**
 - KEEP: **377**
 
@@ -16,7 +16,7 @@ Model rozdziela **jakość obecnych rolli**, **potencjał dalszego rozwoju**, **
 
 | Akcja | Mod | Źródło | Set | Tier | Lvl | Quality | Value | Fit | 6E proj. | Speed | Potencjał | Inwestycja |
 |---|---|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---|
-| EQUIP | Arrow Speed 32 | POSTAĆ: BASTILASHAN | Speed | 6E | 15 | 100.0% | 48.7% | 85.2% | 0.0% | 0.0% | 48.7% | slice |
+| REPLACE | Arrow Speed 32 | POSTAĆ: BASTILASHAN | Speed | 6E | 15 | 100.0% | 48.7% | 85.2% | 0.0% | 0.0% | 48.7% | slice |
 | EQUIP | Diamond Defense % 11.75% | POSTAĆ: GEONOSIANBROODALPHA | Speed | 5C | 15 | 100.0% | 60.0% | 71.0% | 0.0% | 83.3% | 60.0% | slice |
 | EQUIP | Square Offense % 5.88% | MAGAZYN | Health | 5A | 15 | 100.0% | 64.0% | 67.3% | 54.5% | 88.9% | 64.0% | 6-dot |
 | PATCH | Arrow Protection % 23.5% | MAGAZYN | Speed | 5E | 15 | 100.0% | 78.0% | 59.6% | 0.0% | 83.3% | 78.0% | slice |
@@ -98,15 +98,15 @@ Analiza porównuje mody wyposażone z kandydatami z inventory dla każdego slotu
 
 | Akcja | Mod | Źródło | Slot | Set | Tier | Lvl | Fit | Zysk celu | Bilans konta | Łańcuch |
 |---|---|---|---|---|---|---:|---:|---:|---:|---:|
-| EQUIP | Arrow Speed 32 | POSTAĆ: BASTILASHAN | Arrow | Speed | 6E | 15 | 85.2% | 85.2 | 113.5 | 3 |
+| REPLACE | Arrow Speed 32 | POSTAĆ: BASTILASHAN | Arrow | Speed | 6E | 15 | 85.2% | 19.7 | 48.0 | 3 |
 | EQUIP | Diamond Defense % 11.75% | POSTAĆ: GEONOSIANBROODALPHA | Diamond | Speed | 5C | 15 | 71.0% | 71.0 | 86.3 | 5 |
 | EQUIP | Square Offense % 5.88% | MAGAZYN | Square | Health | 5A | 15 | 67.3% | 67.3 | 67.3 | 1 |
-| PATCH | Arrow Health % 5.88% | POSTAĆ: ADMINISTRATORLANDO | Arrow | Critical Damage | 5A | 15 | 27.1% | 29.3 | 113.5 | 3 |
-| PATCH | Arrow Protection % 23.5% | MAGAZYN | Arrow | Speed | 5E | 15 | 59.6% | -1.0 | 113.5 | 3 |
 | PATCH | Diamond Defense % 11.75% | POSTAĆ: GREEDO | Diamond | Critical Chance | 5E | 15 | 33.2% | 23.5 | 86.3 | 5 |
 | PATCH | Diamond Defense % 11.75% | MAGAZYN | Diamond | Health | 5E | 15 | 53.1% | -2.2 | 86.3 | 5 |
 | PATCH | Diamond Defense % 11.75% | POSTAĆ: B2SUPERBATTLEDROID | Diamond | Potency | 5C | 15 | 48.8% | -3.0 | 86.3 | 5 |
 | PATCH | Diamond Defense % 11.75% | POSTAĆ: TUSKENHUNTRESS | Diamond | Critical Damage | 5E | 15 | 33.2% | -3.0 | 86.3 | 5 |
+| PATCH | Arrow Health % 5.88% | POSTAĆ: ADMINISTRATORLANDO | Arrow | Critical Damage | 5A | 15 | 27.1% | 29.3 | 48.0 | 3 |
+| PATCH | Arrow Protection % 23.5% | MAGAZYN | Arrow | Speed | 5E | 15 | 59.6% | -1.0 | 48.0 | 3 |
 | CALIBRATE | Circle Protection % 24% | POSTAĆ: GRANDMOFFTARKIN | Circle | Potency | 6A | 15 | 83.5% | 0.0 | 0.0 | 0 |
 | CALIBRATE | Cross Potency % 30% | POSTAĆ: MARAJADE | Cross | Speed | 6A | 15 | 81.9% | 0.0 | 0.0 | 0 |
 | CALIBRATE | Circle Protection % 24% | POSTAĆ: FIFTHBROTHER | Circle | Speed | 6A | 15 | 78.0% | 0.0 | 0.0 | 0 |
