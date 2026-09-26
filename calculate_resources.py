@@ -926,9 +926,11 @@ def get_gear_requirements(
         1
     )
 
+    # G13 is a real gear tier for farming purposes: its equipmentSet contains the G12 finisher pieces.
+    # The previous cap at 12 silently skipped every G12 -> G13 finisher requirement.
     end = min(
         target_gear,
-        12
+        13
     )
 
     for tier in range(
