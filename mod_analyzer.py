@@ -979,9 +979,9 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
             selected = []
             for set_name, members in by_set.items():
                 members.sort(key=lambda r: score(r, target_id), reverse=True)
-                selected.extend(members[:24])
+                selected.extend(members[:12])
             selected.sort(key=lambda r: score(r, target_id), reverse=True)
-            pools[slot] = selected[:96]
+            pools[slot] = selected[:48]
 
         # DP state: (counts of each set, number of chosen slots) -> best path.
         # Counts are capped at the set's required size because additional
