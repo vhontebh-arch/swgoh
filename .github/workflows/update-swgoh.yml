@@ -8,6 +8,7 @@ on:
       - "mod_profiles.json"
       - "generate_mods.py"
       - "targets.json"
+      - ".github/workflows/update-trigger.txt"
   schedule:
     - cron: "0 6 * * *"
 
