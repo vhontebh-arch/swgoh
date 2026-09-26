@@ -325,6 +325,15 @@ def main():
             label = source.get("name", url)
             print(f"Pobieranie {base_id}: {label}")
             parsed = normalize_source(url, label)
+
+            # Some SWGOH.GG secondary rows are hidden behind "Show all 12
+            # stats" and are not exposed by proxy text readers. Preserve
+            # previously verified values for those missing rows instead of
+            # silently turning them into zero-weight stats.
+            previous_secondary = source.get("secondary_focus_avg", {})
+            for stat, value in previous_secondary.items():
+                parsed["secondary_focus_avg"].setdefault(stat, value)
+
             sources.append(parsed)
             print(
                 f"  sety={len(parsed['set_combinations'])}, "
