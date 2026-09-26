@@ -4,12 +4,12 @@ Model rozdziela **jakość obecnych rolli**, **potencjał dalszego rozwoju**, **
 
 - Modów: **2163**
 - UPGRADE: **834**
-- SLICE: **713**
+- SLICE: **718**
 - SLICE_6E: **135**
 - CALIBRATE: **95**
-- EQUIP: **2**
+- EQUIP: **1**
 - REPLACE: **1**
-- PATCH: **6**
+- PATCH: **2**
 - KEEP: **377**
 
 ## Najważniejsi kandydaci
@@ -17,13 +17,8 @@ Model rozdziela **jakość obecnych rolli**, **potencjał dalszego rozwoju**, **
 | Akcja | Mod | Źródło | Set | Tier | Lvl | Quality | Value | Fit | 6E proj. | Speed | Potencjał | Inwestycja |
 |---|---|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---|
 | REPLACE | Arrow Speed 32 | POSTAĆ: BASTILASHAN | Speed | 6E | 15 | 100.0% | 48.7% | 85.2% | 0.0% | 0.0% | 48.7% | slice |
-| EQUIP | Diamond Defense % 11.75% | POSTAĆ: GEONOSIANBROODALPHA | Speed | 5C | 15 | 100.0% | 60.0% | 71.0% | 0.0% | 83.3% | 60.0% | slice |
 | EQUIP | Square Offense % 5.88% | MAGAZYN | Health | 5A | 15 | 100.0% | 64.0% | 67.3% | 54.5% | 88.9% | 64.0% | 6-dot |
 | PATCH | Arrow Protection % 23.5% | MAGAZYN | Speed | 5E | 15 | 100.0% | 78.0% | 59.6% | 0.0% | 83.3% | 78.0% | slice |
-| PATCH | Diamond Defense % 11.75% | MAGAZYN | Health | 5E | 15 | 100.0% | 83.5% | 53.1% | 0.0% | 83.3% | 83.5% | slice |
-| PATCH | Diamond Defense % 11.75% | POSTAĆ: B2SUPERBATTLEDROID | Potency | 5C | 15 | 100.0% | 85.7% | 48.8% | 0.0% | 75.0% | 85.7% | slice |
-| PATCH | Diamond Defense % 11.75% | POSTAĆ: GREEDO | Critical Chance | 5E | 15 | 100.0% | 86.5% | 33.2% | 0.0% | 83.3% | 86.5% | slice |
-| PATCH | Diamond Defense % 11.75% | POSTAĆ: TUSKENHUNTRESS | Critical Damage | 5E | 15 | 100.0% | 86.5% | 33.2% | 0.0% | 83.3% | 86.5% | slice |
 | PATCH | Arrow Health % 5.88% | POSTAĆ: ADMINISTRATORLANDO | Critical Damage | 5A | 15 | 100.0% | 79.0% | 27.1% | 31.6% | 75.0% | 79.0% | 6-dot |
 | CALIBRATE | Circle Protection % 24% | POSTAĆ: GRANDMOFFTARKIN | Potency | 6A | 15 | 100.0% | 64.3% | 83.5% | 0.0% | 75.0% | 64.3% | calibration |
 | CALIBRATE | Cross Potency % 30% | POSTAĆ: MARAJADE | Speed | 6A | 15 | 100.0% | 68.2% | 81.9% | 0.0% | 79.2% | 68.2% | calibration |
@@ -91,6 +86,11 @@ Model rozdziela **jakość obecnych rolli**, **potencjał dalszego rozwoju**, **
 | CALIBRATE | Cross Tenacity % 35% | POSTAĆ: REY | Critical Damage | 6A | 15 | 100.0% | 63.0% | 47.5% | 0.0% | 83.3% | 63.0% | calibration |
 | CALIBRATE | Circle Protection % 24% | POSTAĆ: REY | Critical Damage | 6A | 15 | 100.0% | 73.8% | 47.4% | 0.0% | 87.5% | 73.8% | calibration |
 | CALIBRATE | Cross Offense % 8.5% | POSTAĆ: KYLEKATARN | Health | 6A | 15 | 100.0% | 48.2% | 47.4% | 0.0% | 94.4% | 48.2% | calibration |
+| CALIBRATE | Square Offense % 8.5% | POSTAĆ: NINTHSISTER | Tenacity | 6A | 15 | 100.0% | 68.0% | 47.1% | 0.0% | 77.8% | 68.0% | calibration |
+| CALIBRATE | Diamond Defense % 20% | POSTAĆ: EPIXFINN | Speed | 6A | 15 | 100.0% | 68.8% | 46.6% | 0.0% | 77.8% | 68.8% | calibration |
+| CALIBRATE | Square Offense % 8.5% | POSTAĆ: REYJEDITRAINING | Health | 6A | 15 | 100.0% | 52.7% | 46.1% | 0.0% | 77.8% | 52.7% | calibration |
+| CALIBRATE | Diamond Defense % 20% | POSTAĆ: JEDIKNIGHTREVAN | Speed | 6A | 15 | 100.0% | 56.8% | 45.7% | 0.0% | 72.2% | 56.8% | calibration |
+| CALIBRATE | Circle Health % 16% | POSTAĆ: HERMITYODA | Speed | 6A | 15 | 100.0% | 78.3% | 45.4% | 0.0% | 91.7% | 78.3% | calibration |
 
 ## Jar Jar Binks — kandydaci
 
@@ -99,12 +99,7 @@ Analiza porównuje mody wyposażone z kandydatami z inventory dla każdego slotu
 | Akcja | Mod | Źródło | Slot | Set | Tier | Lvl | Fit | Zysk celu | Bilans konta | Łańcuch |
 |---|---|---|---|---|---|---:|---:|---:|---:|---:|
 | REPLACE | Arrow Speed 32 | POSTAĆ: BASTILASHAN | Arrow | Speed | 6E | 15 | 85.2% | 19.7 | 49.0 | 3 |
-| EQUIP | Diamond Defense % 11.75% | POSTAĆ: GEONOSIANBROODALPHA | Diamond | Speed | 5C | 15 | 71.0% | 71.0 | 94.5 | 5 |
 | EQUIP | Square Offense % 5.88% | MAGAZYN | Square | Health | 5A | 15 | 67.3% | 67.3 | 67.3 | 1 |
-| PATCH | Diamond Defense % 11.75% | POSTAĆ: GREEDO | Diamond | Critical Chance | 5E | 15 | 33.2% | 26.5 | 94.5 | 5 |
-| PATCH | Diamond Defense % 11.75% | POSTAĆ: TUSKENHUNTRESS | Diamond | Critical Damage | 5E | 15 | 33.2% | 0.0 | 94.5 | 5 |
-| PATCH | Diamond Defense % 11.75% | POSTAĆ: B2SUPERBATTLEDROID | Diamond | Potency | 5C | 15 | 48.8% | -0.8 | 94.5 | 5 |
-| PATCH | Diamond Defense % 11.75% | MAGAZYN | Diamond | Health | 5E | 15 | 53.1% | -2.2 | 94.5 | 5 |
 | PATCH | Arrow Health % 5.88% | POSTAĆ: ADMINISTRATORLANDO | Arrow | Critical Damage | 5A | 15 | 27.1% | 30.3 | 49.0 | 3 |
 | PATCH | Arrow Protection % 23.5% | MAGAZYN | Arrow | Speed | 5E | 15 | 59.6% | -1.0 | 49.0 | 3 |
 | CALIBRATE | Circle Protection % 24% | POSTAĆ: GRANDMOFFTARKIN | Circle | Potency | 6A | 15 | 83.5% | 0.0 | 0.0 | 0 |
@@ -116,6 +111,11 @@ Analiza porównuje mody wyposażone z kandydatami z inventory dla każdego slotu
 | CALIBRATE | Arrow Speed 32 | POSTAĆ: MARAJADE | Arrow | Potency | 6A | 15 | 75.6% | 0.0 | 0.0 | 0 |
 | CALIBRATE | Cross Potency % 30% | MAGAZYN | Cross | Health | 6A | 15 | 75.0% | 0.0 | 0.0 | 0 |
 | CALIBRATE | Diamond Defense % 20% | POSTAĆ: GRANDMOFFTARKIN | Diamond | Speed | 6A | 15 | 72.6% | 0.0 | 0.0 | 0 |
+| CALIBRATE | Diamond Defense % 20% | POSTAĆ: VANGUARDTEMPLEGUARD | Diamond | Speed | 6A | 15 | 70.4% | 0.0 | 0.0 | 0 |
+| CALIBRATE | Square Offense % 8.5% | POSTAĆ: EMPERORPALPATINE | Square | Potency | 6A | 15 | 69.9% | 0.0 | 0.0 | 0 |
+| CALIBRATE | Square Offense % 8.5% | POSTAĆ: MARAJADE | Square | Speed | 6A | 15 | 69.0% | 0.0 | 0.0 | 0 |
+| CALIBRATE | Triangle Health % 16% | MAGAZYN | Triangle | Potency | 6A | 15 | 68.5% | 0.0 | 0.0 | 0 |
+| CALIBRATE | Circle Protection % 24% | POSTAĆ: MARAJADE | Circle | Speed | 6A | 15 | 67.1% | 0.0 | 0.0 | 0 |
 
 ## Definicje
 
