@@ -426,6 +426,30 @@ def main():
             )
         )
 
+    jar_rows = [r for r in rows if r.get("fitTarget") == "JARJARBINKS"]
+    jar_rows.sort(key=lambda r: (
+        0 if r.get("recommendedAction") == "REPLACE" else 1,
+        -float(r.get("fitScore", 0)),
+        -float(r.get("modValue", 0))
+    ))
+    lines += [
+        "", "## Jar Jar Binks — kandydaci", "",
+        "Analiza porównuje mody wyposażone z kandydatami z inventory dla każdego slotu.",
+        "",
+        "| Akcja | Mod | Slot | Set | Tier | Lvl | Fit | Zysk vs obecny |",
+        "|---|---|---|---|---|---:|---:|---:|"
+    ]
+    for r in jar_rows[:18]:
+        mod = "{} {} {}".format(r["slot"], r["primaryStat"], r["primaryValue"])
+        lines.append(
+            "| {} | {} | {} | {}{} | {} | {} | {:.1f}% | {:.1f} |".format(
+                r["recommendedAction"], mod, r["slot"], r["set"],
+                r["dots"], r["tierName"], r["level"],
+                float(r.get("fitScore", 0)),
+                float(r.get("replacementGain", 0))
+            )
+        )
+
     lines += [
         "", "## Definicje", "",
         "- **Quality** — jakość wykonanych rolli względem zakresu dla 5-dot/6-dot.",
