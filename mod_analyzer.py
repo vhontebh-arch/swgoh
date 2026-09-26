@@ -467,18 +467,9 @@ def apply_replacements(rows, target_base_ids, profiles=None, aliases=None, names
     def repair(owner, slot, forbidden, seen, depth):
         if depth >= MAX_DEPTH:
             return None
-        state = (owner, slot, tuple(sorted(seen)))
+        state = (owner, slot, tuple(sorted(seen)), tuple(sorted(forbidden)))
         if state in memo:
-            cached = memo[state]
-            if cached is None:
-                return None
-            used = {rid(cached["replacement"]), rid(cached["removed"])}
-            for step in cached.get("steps", []):
-                used.add(rid(step["replacement"]))
-                used.add(rid(step["removed"]))
-            if used & forbidden:
-                return None
-            return cached
+            return memo[state]
 
         current = eq.get((owner, slot))
         if current is None:
@@ -500,6 +491,7 @@ def apply_replacements(rows, target_base_ids, profiles=None, aliases=None, names
                 "removed": current,
                 "replacement": replacement,
                 "gain": direct_gain,
+                "total_gain": direct_gain,
                 "steps": []
             }
 
@@ -512,10 +504,10 @@ def apply_replacements(rows, target_base_ids, profiles=None, aliases=None, names
                 sub = repair(next_owner, slot, next_forbidden, seen | {next_owner}, depth + 1)
                 if sub is None:
                     continue
-                step["steps"] = [sub] + sub.get("steps", [])
-                step["gain"] = direct_gain + sub["gain"]
+                step["steps"] = [sub]
+                step["total_gain"] = direct_gain + sub["total_gain"]
 
-            if best is None or step["gain"] > best["gain"]:
+            if best is None or step["total_gain"] > best["total_gain"]:
                 best = step
 
         memo[state] = best
@@ -529,6 +521,8 @@ def apply_replacements(rows, target_base_ids, profiles=None, aliases=None, names
             "name": step["name"],
             "removed": step["removed"],
             "replacement": step["replacement"],
+            # gain is deliberately LOCAL to this PATCH step. total_gain
+            # belongs to the nested chain and must not be summed again.
             "gain": step["gain"]
         }]
         child = step.get("steps", [])
@@ -579,6 +573,8 @@ def apply_replacements(rows, target_base_ids, profiles=None, aliases=None, names
                 if chain is None:
                     continue
                 steps = flatten(chain)
+                # Target gain plus each PATCH's LOCAL gain. Do not use the
+                # nested total_gain here: that would double-count deeper steps.
                 account_gain = target_gain + sum(
                     float(step["gain"]) for step in steps
                 )
