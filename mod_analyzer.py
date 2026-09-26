@@ -842,9 +842,9 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                 if best is None or candidate["gain"] > best["gain"]: best = candidate
             return best
 
-        return search(src, 0, set(used_ids) | {rid(selected_mod)}, {src})
+        return search(src, 0, set(selected_ids) | set(used_ids) | {rid(selected_mod)}, {src})
 
-    plans, failed, used_ids = [], [], set(selected_ids)
+    plans, failed, used_ids = [], [], set()
     for target_id, opt in optimizer.items():
         target_owner = next((o for (o,_s),r in eq.items() if base(r) == target_id), None)
         if not target_owner:
