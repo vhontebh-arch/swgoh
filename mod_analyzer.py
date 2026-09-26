@@ -12,7 +12,7 @@ INPUT_FILE = "mods.csv"
 OUTPUT_CSV = "mod_analysis.csv"
 OUTPUT_MD = "mod_analysis.md"
 PROFILE_FILE = "mod_profiles.json"
-ANALYZER_VERSION = "2026-09-26-chain-replacements"
+ANALYZER_VERSION = "2026-09-26-global-roster-optimization"
 
 R5 = {
     "Critical Chance %": (1.125, 2.25), "Defense": (4.9, 9.8),
@@ -382,164 +382,236 @@ def character_fit(row, targets, profiles, aliases):
     return best
 
 def apply_replacements(rows, target_base_ids):
-    """Build target replacements while preserving a recovery path for the source character.
+    """Perform account-aware mod allocation for the active targets.
 
-    A strong mod on another character is a valid candidate for the target. When such
-    a mod is moved, the analyzer also marks the best currently unassigned mod for the
-    vacated source slot as PATCH. This prevents the old hole-filling behavior from
-    being lost when we distinguish MAGAZYN from POSTAĆ sources.
+    A replacement is treated as a chain, not as an isolated move:
+        target <- character A <- character B <- ... <- inventory
+
+    Every step keeps the same mod slot. Target gain uses the active target
+    profile. Source-character impact uses global ModValue when no source-specific
+    profile exists. A chain is accepted only when its net account gain is positive.
     """
+    SLOT_ORDER = ("Square", "Diamond", "Circle", "Arrow", "Triangle", "Cross")
+    target_base_ids = set(target_base_ids)
+
     equipped_by_target_slot = {}
     for row in rows:
         if not is_true(row.get("equipped")):
             continue
         if row.get("characterFit") != "TARGET":
             continue
-        target = row.get("fitTarget", "")
+        target = str(row.get("fitTarget", "") or "")
         if target in target_base_ids:
-            key = (target, row.get("slot", ""))
-            current = equipped_by_target_slot.get(key)
-            if current is None or float(row.get("fitScore", 0)) > float(current.get("fitScore", 0)):
-                equipped_by_target_slot[key] = row
+            equipped_by_target_slot[(target, row.get("slot", ""))] = row
 
-    # Candidate pool: inventory AND mods equipped on other characters.
-    # Mods already on the target itself are not movable candidates.
+    equipped_by_owner_slot = {}
+    for row in rows:
+        if not is_true(row.get("equipped")):
+            continue
+        owner = str(row.get("assignedTo", "") or "")
+        slot = str(row.get("slot", "") or "")
+        if owner and slot:
+            equipped_by_owner_slot[(owner, slot)] = row
+
     candidates = []
     for row in rows:
         if row.get("characterFit") != "CANDIDATE":
             continue
         if integer(row.get("level")) < 15 or integer(row.get("dots")) < 5:
             continue
-        if is_true(row.get("equipped")) and row.get("characterFit") == "TARGET":
-            continue
         candidates.append(row)
 
-    # First allocate the best unique candidate to each empty target slot.
-    # This deliberately allows a mod currently on another character to fill
-    # the hole: the source hole is patched below.
-    used_candidate_ids = set()
-    target_allocations = {}
-    for target in sorted(target_base_ids):
-        for slot in ("Square", "Diamond", "Circle", "Arrow", "Triangle", "Cross"):
-            key = (target, slot)
-            if key in equipped_by_target_slot:
-                continue
-            pool = [
-                r for r in candidates
-                if r.get("fitTarget") == target
-                and r.get("slot") == slot
-                and str(r.get("id", "")) not in used_candidate_ids
-            ]
-            if not pool:
-                continue
-            candidate = max(
-                pool,
-                key=lambda r: (
-                    float(r.get("fitScore", 0)),
-                    float(r.get("modValue", 0)),
-                    float(r.get("modQuality", 0))
-                )
-            )
-            target_allocations[key] = candidate
-            used_candidate_ids.add(str(candidate.get("id", "")))
+    candidate_by_slot = {}
+    for row in candidates:
+        candidate_by_slot.setdefault(row.get("slot", ""), []).append(row)
 
-    # Empty target slots are EQUIP. If the source is another character, the
-    # source slot is remembered so we can generate a PATCH recommendation.
-    source_holes = []
-    for (target, slot), candidate in target_allocations.items():
-        candidate["replacementGain"] = 0.0
-        candidate["replacesModId"] = ""
-        if is_true(candidate.get("equipped")):
-            candidate["recommendedAction"] = "EQUIP"
-            candidate["reason"] = (
-                "slot docelowej postaci jest pusty; najlepszy dostępny mod "
-                "jest obecnie założony na innej postaci"
-            )
-            source_holes.append(candidate)
-        else:
-            candidate["recommendedAction"] = "EQUIP"
-            candidate["reason"] = (
-                "slot docelowej postaci jest pusty; to najlepszy dostępny "
-                "niezałożony mod dla tego slotu"
-            )
+    def rid(row):
+        return str(row.get("id", "") or "")
 
-    # Occupied target slots: allow inventory and other-character candidates.
-    # A candidate already allocated to an empty slot cannot be reused.
-    for target in sorted(target_base_ids):
-        for slot in ("Square", "Diamond", "Circle", "Arrow", "Triangle", "Cross"):
-            current = equipped_by_target_slot.get((target, slot))
-            if current is None:
-                continue
-            pool = [
-                r for r in candidates
-                if r.get("fitTarget") == target
-                and r.get("slot") == slot
-                and str(r.get("id", "")) not in used_candidate_ids
-            ]
-            for candidate in sorted(
-                pool,
-                key=lambda r: (
-                    float(r.get("fitScore", 0)),
-                    float(r.get("modValue", 0)),
-                    float(r.get("modQuality", 0))
-                ),
-                reverse=True
-            ):
-                gain = float(candidate.get("fitScore", 0)) - float(current.get("fitScore", 0))
-                candidate["replacementGain"] = round(gain, 1)
-                candidate["replacesModId"] = current.get("id", "")
-                if gain >= 8.0:
-                    candidate["recommendedAction"] = "REPLACE"
-                    if is_true(candidate.get("equipped")):
-                        candidate["reason"] = (
-                            "mod z innej postaci jest wyraźnie lepszy; po przeniesieniu "
-                            "należy załatać zwolniony slot źródłowej postaci"
-                        )
-                        source_holes.append(candidate)
-                    else:
-                        candidate["reason"] = (
-                            "kandydat jest wyraźnie lepszy od obecnego moda "
-                            "na tym samym slocie"
-                        )
-                    used_candidate_ids.add(str(candidate.get("id", "")))
-                    break
+    def generic_score(row):
+        return float(row.get("modValue", 0.0))
 
-    # Patch every source hole with the best still-unassigned inventory mod
-    # of the same slot. We use global mod value as the safe fallback because
-    # only the target character currently has a detailed profile.
-    for moved in source_holes:
-        source_owner = str(moved.get("assignedTo", "") or "")
-        source_slot = str(moved.get("slot", "") or "")
-        if not source_owner or not source_slot:
-            continue
+    def target_score(row):
+        return float(row.get("fitScore", 0.0))
 
-        patch_pool = [
+    def owner_of(row):
+        return str(row.get("assignedTo", "") or "")
+
+    def build_chain(target, slot, candidate, visited, depth=0):
+        cid = rid(candidate)
+        if not cid or cid in visited:
+            return None
+
+        current = equipped_by_target_slot.get((target, slot))
+        current_target_score = target_score(current) if current else 0.0
+        target_gain = target_score(candidate) - current_target_score
+
+        if is_true(candidate.get("equipped")) and owner_of(candidate) in target_base_ids:
+            return None
+
+        if not is_true(candidate.get("equipped")):
+            return {
+                "moves": [{
+                    "target": target,
+                    "slot": slot,
+                    "candidate": candidate,
+                    "sourceOwner": "",
+                    "sourceSlot": "",
+                    "sourceLoss": 0.0,
+                    "targetGain": target_gain
+                }],
+                "netGain": target_gain,
+                "targetGain": target_gain,
+                "sourceLoss": 0.0
+            }
+
+        source_owner = owner_of(candidate)
+        if not source_owner or depth >= 6:
+            return None
+
+        source_current = equipped_by_owner_slot.get((source_owner, slot))
+        if source_current is None:
+            return None
+
+        source_current_value = generic_score(source_current)
+        best = None
+
+        next_pool = [
             r for r in rows
-            if not is_true(r.get("equipped"))
-            and str(r.get("id", "")) not in used_candidate_ids
-            and r.get("slot") == source_slot
+            if r.get("slot") == slot
             and integer(r.get("level")) >= 15
             and integer(r.get("dots")) >= 5
+            and rid(r) not in visited
+            and rid(r) != cid
         ]
-        if not patch_pool:
-            continue
 
-        patch = max(
-            patch_pool,
-            key=lambda r: (
-                float(r.get("modValue", 0)),
-                float(r.get("modQuality", 0)),
-                float(r.get("fitScore", 0))
+        for replacement in next_pool:
+            if is_true(replacement.get("equipped")) and owner_of(replacement) == source_owner:
+                continue
+
+            sub = build_chain(
+                source_owner, slot, replacement, visited | {cid}, depth + 1
             )
-        )
-        patch["recommendedAction"] = "PATCH"
-        patch["patchOwner"] = source_owner
-        patch["patchSlot"] = source_slot
-        patch["reason"] = (
-            "mod z tej postaci został wskazany do przeniesienia; "
-            "ten mod z magazynu najlepiej łata zwolniony slot"
-        )
-        used_candidate_ids.add(str(patch.get("id", "")))
+            if sub is None:
+                continue
+
+            source_loss = source_current_value - generic_score(replacement)
+            total_source_loss = source_loss + float(sub.get("sourceLoss", 0.0))
+            net_gain = target_gain - total_source_loss
+
+            chain = {
+                "moves": [{
+                    "target": target,
+                    "slot": slot,
+                    "candidate": candidate,
+                    "sourceOwner": source_owner,
+                    "sourceSlot": slot,
+                    "sourceLoss": source_loss,
+                    "targetGain": target_gain
+                }] + sub["moves"],
+                "netGain": net_gain,
+                "targetGain": target_gain,
+                "sourceLoss": total_source_loss
+            }
+            if best is None or chain["netGain"] > best["netGain"]:
+                best = chain
+
+        return best
+
+    proposals = []
+    for target in sorted(target_base_ids):
+        for slot in SLOT_ORDER:
+            current = equipped_by_target_slot.get((target, slot))
+            for candidate in candidate_by_slot.get(slot, []):
+                if current is not None and rid(candidate) == rid(current):
+                    continue
+
+                chain = build_chain(target, slot, candidate, set())
+                if chain is None:
+                    continue
+
+                min_target_gain = 0.0 if current is None else 8.0
+                if chain["targetGain"] < min_target_gain:
+                    continue
+                if chain["netGain"] <= 0.0:
+                    continue
+
+                chain["target"] = target
+                chain["slot"] = slot
+                proposals.append(chain)
+
+    proposals.sort(
+        key=lambda c: (
+            float(c["netGain"]),
+            float(c["targetGain"]),
+            -float(c["sourceLoss"])
+        ),
+        reverse=True
+    )
+
+    used_ids = set()
+    used_slots = set()
+    selected = []
+
+    for chain in proposals:
+        if (chain["target"], chain["slot"]) in used_slots:
+            continue
+        chain_ids = {rid(m["candidate"]) for m in chain["moves"]}
+        if not chain_ids.isdisjoint(used_ids):
+            continue
+        selected.append(chain)
+        used_slots.add((chain["target"], chain["slot"]))
+        used_ids.update(chain_ids)
+
+    for chain in selected:
+        moves = chain["moves"]
+        first = moves[0]
+        candidate = first["candidate"]
+        current = equipped_by_target_slot.get((first["target"], first["slot"]))
+
+        candidate["replacementGain"] = round(first["targetGain"], 1)
+        candidate["accountGain"] = round(chain["netGain"], 1)
+        candidate["sourceLoss"] = round(chain["sourceLoss"], 1)
+        candidate["chainLength"] = len(moves)
+        candidate["chainId"] = "{}:{}".format(first["target"], first["slot"])
+        candidate["replacesModId"] = rid(current) if current else ""
+        candidate["recommendedAction"] = "EQUIP" if current is None else "REPLACE"
+
+        if is_true(candidate.get("equipped")):
+            candidate["reason"] = (
+                "mod z innej postaci daje +{:.1f} Fit dla celu; "
+                "cały łańcuch daje +{:.1f} netto dla konta".format(
+                    first["targetGain"], chain["netGain"]
+                )
+            )
+        else:
+            candidate["reason"] = (
+                "mod z magazynu daje +{:.1f} Fit dla celu; "
+                "cały przydział daje +{:.1f} netto dla konta".format(
+                    first["targetGain"], chain["netGain"]
+                )
+            )
+
+        for move in moves[1:]:
+            patch = move["candidate"]
+            patch["recommendedAction"] = "PATCH"
+            patch["patchOwner"] = move["target"]
+            patch["patchSlot"] = move["slot"]
+            patch["accountGain"] = round(chain["netGain"], 1)
+            patch["sourceLoss"] = round(chain["sourceLoss"], 1)
+            patch["chainLength"] = len(moves)
+            patch["chainId"] = "{}:{}".format(first["target"], first["slot"])
+            patch["replacementGain"] = 0.0
+            patch["replacesModId"] = rid(
+                equipped_by_owner_slot.get((move["target"], move["slot"]))
+            )
+            patch["reason"] = (
+                "PATCH w łańcuchu: ten mod trafia na {} / {}; "
+                "cały łańcuch jest liczony jako jedna operacja dla rosteru"
+            ).format(move["target"], move["slot"])
+
+    return selected
+
 
 def main():
     if not os.path.exists(INPUT_FILE):
@@ -578,7 +650,7 @@ def main():
         writer.writeheader()
         writer.writerows(rows)
 
-    order = {"EQUIP":0,"REPLACE":1,"PATCH":2,"CALIBRATE":3,"SLICE_6E":4,"SLICE":5,"UPGRADE":6,"KEEP":7}
+    order = {"REPLACE":0,"EQUIP":1,"PATCH":2,"CALIBRATE":3,"SLICE_6E":4,"SLICE":5,"UPGRADE":6,"KEEP":7}
     rows.sort(key=lambda r: (
         order.get(r["recommendedAction"], 9),
         -float(r.get("fitScore", 0)),
@@ -628,8 +700,8 @@ def main():
         "", "## Jar Jar Binks — kandydaci", "",
         "Analiza porównuje mody wyposażone z kandydatami z inventory dla każdego slotu.",
         "",
-        "| Akcja | Mod | Slot | Set | Tier | Lvl | Fit | Zysk vs obecny |",
-        "|---|---|---|---|---|---:|---:|---:|"
+        "| Akcja | Mod | Źródło | Slot | Set | Tier | Lvl | Fit | Zysk celu | Bilans konta | Łańcuch |",
+        "|---|---|---|---|---|---|---:|---:|---:|---:|---:|"
     ]
     for r in jar_rows[:18]:
         mod = "{} {} {}".format(r["slot"], r["primaryStat"], r["primaryValue"])
@@ -638,7 +710,9 @@ def main():
                 r["recommendedAction"], mod, r["source"], r["slot"], r["set"],
                 r["dots"], r["tierName"], r["level"],
                 float(r.get("fitScore", 0)),
-                float(r.get("replacementGain", 0))
+                float(r.get("replacementGain", 0)),
+                float(r.get("accountGain", 0)),
+                r.get("chainLength", 0)
             )
         )
 
@@ -646,13 +720,15 @@ def main():
         "", "## Definicje", "",
         "- **Quality** — jakość wykonanych rolli względem zakresu dla 5-dot/6-dot.",
         "- **Value** — jakość rolla pomnożona przez ogólną, niezależną od postaci użyteczność statystyki.",
-        "- **Fit** — dopasowanie moda do profilu konkretnej postaci; dla nieprzypisanych modów pokazuje najlepszego aktywnego kandydata.",
+        "- **Fit** — dopasowanie moda do aktywnego profilu celu; obecnie szczegółowy profil ma Jar Jar Binks.",
+        "- **AccountGain** — bilans całej operacji przeniesienia i wszystkich PATCH-y w łańcuchu; dla źródeł bez profilu używany jest globalny ModValue.",
         "- **Potential** — sufit wartości przy idealnych przyszłych rollach; nie jest prognozą RNG.",
         "- **Źródło MAGAZYN** — mod nie jest obecnie założony na żadnej postaci.",
         "- **Źródło POSTAĆ: [nazwa]** — mod jest obecnie założony na wskazanej postaci.",
         "- **EQUIP** — slot docelowej postaci jest pusty; wskazany mod jest najlepszym dostępnym modem, także jeśli jest obecnie na innej postaci.
         "- **PATCH** — mod z magazynu przeznaczony do załatania slotu postaci, z którego zabrano mod do celu.",",
-        "- **REPLACE** — mod z magazynu lub innej postaci jest wyraźnie lepszy od obecnego moda celu; jeśli pochodzi z innej postaci, analyzer tworzy również **PATCH** dla zwolnionego slotu.",
+        "- **REPLACE** — mod jest przenoszony do celu tylko wtedy, gdy poprawa celu i cały łańcuch zmian dają dodatni bilans dla konta.",
+        "- **PATCH** — element łańcucha zastępstw; każdy zabrany mod ma policzoną ścieżkę uzupełnienia slotu, aż do magazynu.",
         "- **UPGRADE** — mod nie jest jeszcze na 15.",
         "- **SLICE** — kolejny tier ma uzasadnienie jakościowe lub profilowe.",
         "- **SLICE_6E** — 5A jest oceniane również przez projekcję jakości po wzroście statystyk do 6E.",
