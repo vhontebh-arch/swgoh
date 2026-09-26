@@ -12,7 +12,7 @@ INPUT_FILE = "mods.csv"
 OUTPUT_CSV = "mod_analysis.csv"
 OUTPUT_MD = "mod_analysis.md"
 PROFILE_FILE = "mod_profiles.json"
-ANALYZER_VERSION = "2026-09-26-replacement-safe"
+ANALYZER_VERSION = "2026-09-26-replacement-fit-fix"
 
 R5 = {
     "Critical Chance %": (1.125, 2.25), "Defense": (4.9, 9.8),
@@ -44,9 +44,6 @@ STAT_VALUE = {
 }
 CAL_ATTEMPTS = {(6,1):1,(6,2):2,(6,3):3,(6,4):4,(6,5):6}
 CAL_COST = {1:15,2:25,3:40,4:75,5:100,6:150}
-
-def is_true(value):
-    return str(value).strip().lower() in {"1", "true", "yes", "y"}
 
 def is_true(value):
     return str(value).strip().lower() in {"1", "true", "yes", "y"}
@@ -289,6 +286,8 @@ def score_profile(row, profile):
             pref = float(profile.get("secondary_preferences", {}).get(stat, 0.0))
             secs.append((q * 100.0, pref, count))
 
+    # q is already normalized to 0..1. Convert to 0..100 only once
+    # after weighting; the previous version multiplied by 100 twice.
     weighted = sum(q * pref * max(1, count) for q, pref, count in secs)
     max_weight = sum(max(1, count) for q, pref, count in secs) or 1
     secondary_fit = 100.0 * weighted / max_weight
