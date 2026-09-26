@@ -96,32 +96,34 @@ Model rozdziela **jakość obecnych rolli**, **potencjał dalszego rozwoju**, **
 
 Analiza porównuje mody wyposażone z kandydatami z inventory dla każdego slotu.
 
-| Akcja | Mod | Źródło | Slot | Set | Tier | Lvl | Fit | Zysk celu | Bilans konta | Łańcuch |
-|---|---|---|---|---|---|---:|---:|---:|---:|---:|
-| REPLACE | Arrow Speed 32 | POSTAĆ: BASTILASHAN | Arrow | Speed | 6E | 15 | 85.2% | 19.7 | 49.0 | 2 |
-| EQUIP | Square Offense % 5.88% | MAGAZYN | Square | Health | 5A | 15 | 67.3% | 67.3 | 67.3 | 1 |
-| PATCH | Arrow Protection % 23.5% | MAGAZYN | Arrow | Speed | 5E | 15 | 59.6% | 29.3 | 49.0 | 2 |
-| CALIBRATE | Circle Protection % 24% | POSTAĆ: GRANDMOFFTARKIN | Circle | Potency | 6A | 15 | 83.5% | 0.0 | 0.0 | 0 |
-| CALIBRATE | Cross Potency % 30% | POSTAĆ: MARAJADE | Cross | Speed | 6A | 15 | 81.9% | 0.0 | 0.0 | 0 |
-| CALIBRATE | Circle Protection % 24% | POSTAĆ: FIFTHBROTHER | Circle | Speed | 6A | 15 | 78.0% | 0.0 | 0.0 | 0 |
-| CALIBRATE | Circle Protection % 24% | POSTAĆ: EMPERORPALPATINE | Circle | Potency | 6A | 15 | 77.7% | 0.0 | 0.0 | 0 |
-| CALIBRATE | Circle Protection % 24% | POSTAĆ: VANGUARDTEMPLEGUARD | Circle | Speed | 6A | 15 | 76.7% | 0.0 | 0.0 | 0 |
-| CALIBRATE | Arrow Speed 32 | POSTAĆ: FIFTHBROTHER | Arrow | Speed | 6A | 15 | 76.3% | 0.0 | 0.0 | 0 |
-| CALIBRATE | Arrow Speed 32 | POSTAĆ: MARAJADE | Arrow | Potency | 6A | 15 | 75.6% | 0.0 | 0.0 | 0 |
-| CALIBRATE | Cross Potency % 30% | MAGAZYN | Cross | Health | 6A | 15 | 75.0% | 0.0 | 0.0 | 0 |
-| CALIBRATE | Diamond Defense % 20% | POSTAĆ: GRANDMOFFTARKIN | Diamond | Speed | 6A | 15 | 72.6% | 0.0 | 0.0 | 0 |
-| CALIBRATE | Diamond Defense % 20% | POSTAĆ: VANGUARDTEMPLEGUARD | Diamond | Speed | 6A | 15 | 70.4% | 0.0 | 0.0 | 0 |
-| CALIBRATE | Square Offense % 8.5% | POSTAĆ: EMPERORPALPATINE | Square | Potency | 6A | 15 | 69.9% | 0.0 | 0.0 | 0 |
-| CALIBRATE | Square Offense % 8.5% | POSTAĆ: MARAJADE | Square | Speed | 6A | 15 | 69.0% | 0.0 | 0.0 | 0 |
-| CALIBRATE | Triangle Health % 16% | MAGAZYN | Triangle | Potency | 6A | 15 | 68.5% | 0.0 | 0.0 | 0 |
-| CALIBRATE | Circle Protection % 24% | POSTAĆ: MARAJADE | Circle | Speed | 6A | 15 | 67.1% | 0.0 | 0.0 | 0 |
-| CALIBRATE | Circle Health % 16% | POSTAĆ: ENFYSNEST | Circle | Tenacity | 6A | 15 | 67.0% | 0.0 | 0.0 | 0 |
+| Akcja | Mod | Źródło | Slot | Set | Tier | Lvl | Fit | Set Δ | Fit po secie | Zysk celu | Bilans konta | Łańcuch |
+|---|---|---|---|---|---|---|---:|---:|---:|---:|---:|---:|
+| REPLACE | Arrow Speed 32 | POSTAĆ: BASTILASHAN | Arrow | Speed | 6E | 15 | 85.2% | 0.00 | 85.2 | 19.7 | 49.0 | 2 |
+| EQUIP | Square Offense % 5.88% | MAGAZYN | Square | Health | 5A | 15 | 67.3% | 0.00 | 67.3 | 67.3 | 67.3 | 1 |
+| PATCH | Arrow Protection % 23.5% | MAGAZYN | Arrow | Speed | 5E | 15 | 59.6% | 0.00 | 59.6 | 29.3 | 49.0 | 2 |
+| CALIBRATE | Circle Protection % 24% | POSTAĆ: GRANDMOFFTARKIN | Circle | Potency | 6A | 15 | 83.5% | 0.00 | 83.5 | 0.0 | 0.0 | 0 |
+| CALIBRATE | Cross Potency % 30% | POSTAĆ: MARAJADE | Cross | Speed | 6A | 15 | 81.9% | 0.00 | 81.9 | 0.0 | 0.0 | 0 |
+| CALIBRATE | Circle Protection % 24% | POSTAĆ: FIFTHBROTHER | Circle | Speed | 6A | 15 | 78.0% | 0.00 | 78.0 | 0.0 | 0.0 | 0 |
+| CALIBRATE | Circle Protection % 24% | POSTAĆ: EMPERORPALPATINE | Circle | Potency | 6A | 15 | 77.7% | 0.00 | 77.7 | 0.0 | 0.0 | 0 |
+| CALIBRATE | Circle Protection % 24% | POSTAĆ: VANGUARDTEMPLEGUARD | Circle | Speed | 6A | 15 | 76.7% | 0.00 | 76.7 | 0.0 | 0.0 | 0 |
+| CALIBRATE | Arrow Speed 32 | POSTAĆ: FIFTHBROTHER | Arrow | Speed | 6A | 15 | 76.3% | 0.00 | 76.3 | 0.0 | 0.0 | 0 |
+| CALIBRATE | Arrow Speed 32 | POSTAĆ: MARAJADE | Arrow | Potency | 6A | 15 | 75.6% | 0.00 | 75.6 | 0.0 | 0.0 | 0 |
+| CALIBRATE | Cross Potency % 30% | MAGAZYN | Cross | Health | 6A | 15 | 75.0% | 0.00 | 75.0 | 0.0 | 0.0 | 0 |
+| CALIBRATE | Diamond Defense % 20% | POSTAĆ: GRANDMOFFTARKIN | Diamond | Speed | 6A | 15 | 72.6% | 0.00 | 72.6 | 0.0 | 0.0 | 0 |
+| CALIBRATE | Diamond Defense % 20% | POSTAĆ: VANGUARDTEMPLEGUARD | Diamond | Speed | 6A | 15 | 70.4% | 0.00 | 70.4 | 0.0 | 0.0 | 0 |
+| CALIBRATE | Square Offense % 8.5% | POSTAĆ: EMPERORPALPATINE | Square | Potency | 6A | 15 | 69.9% | 0.00 | 69.9 | 0.0 | 0.0 | 0 |
+| CALIBRATE | Square Offense % 8.5% | POSTAĆ: MARAJADE | Square | Speed | 6A | 15 | 69.0% | 0.00 | 69.0 | 0.0 | 0.0 | 0 |
+| CALIBRATE | Triangle Health % 16% | MAGAZYN | Triangle | Potency | 6A | 15 | 68.5% | 0.00 | 68.5 | 0.0 | 0.0 | 0 |
+| CALIBRATE | Circle Protection % 24% | POSTAĆ: MARAJADE | Circle | Speed | 6A | 15 | 67.1% | 0.00 | 67.1 | 0.0 | 0.0 | 0 |
+| CALIBRATE | Circle Health % 16% | POSTAĆ: ENFYSNEST | Circle | Tenacity | 6A | 15 | 67.0% | 0.00 | 67.0 | 0.0 | 0.0 | 0 |
 
 ## Definicje
 
 - **Quality** — jakość wykonanych rolli względem zakresu dla 5-dot/6-dot.
 - **Value** — jakość rolla pomnożona przez ogólną, niezależną od postaci użyteczność statystyki.
-- **Fit** — dopasowanie moda do aktywnego profilu celu; obecnie szczegółowy profil ma Jar Jar Binks.
+- **Fit** — dopasowanie pojedynczego moda do aktywnego profilu celu; nie zawiera bonusu całego kompletu.
+- **SetBonusDelta** — zmiana rzeczywistego bonusu zestawów 6 modów celu po założeniu proponowanego moda.
+- **FitAfterSet** — Fit moda powiększony o SetBonusDelta; pokazuje wpływ kompletu bez mieszania go z jakością secondary.
 - **AccountGain** — bilans całej operacji przeniesienia i PATCH-a dla źródła; dla źródeł bez profilu używany jest globalny ModValue.
 - **Potential** — sufit wartości przy idealnych przyszłych rollach; nie jest prognozą RNG.
 - **Źródło MAGAZYN** — mod nie jest obecnie założony na żadnej postaci.
