@@ -4,12 +4,12 @@ Model rozdziela **jakość obecnych rolli**, **potencjał dalszego rozwoju**, **
 
 - Modów: **2163**
 - UPGRADE: **834**
-- SLICE: **695**
-- SLICE_6E: **132**
+- SLICE: **698**
+- SLICE_6E: **137**
 - CALIBRATE: **93**
 - EQUIP: **0**
-- REPLACE: **3**
-- PATCH: **5**
+- REPLACE: **0**
+- PATCH: **0**
 - KEEP: **401**
 
 ## Globalny optimizer 6-slotowy
@@ -18,14 +18,6 @@ Model rozdziela **jakość obecnych rolli**, **potencjał dalszego rozwoju**, **
 
 | Akcja | Mod | Źródło | Set | Tier | Lvl | Quality | Value | Fit | 6E proj. | Speed | Potencjał | Inwestycja |
 |---|---|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---|
-| REPLACE | Circle Protection % 23.5% | POSTAĆ: COLONELSTARCK | Speed | 5A | 15 | 100.0% | 78.2% | 59.0% | 36.5% | 70.8% | 78.2% | 6-dot |
-| REPLACE | Arrow Speed 30 | POSTAĆ: 4LOM | Speed | 5A | 15 | 100.0% | 54.8% | 54.0% | 46.4% | 0.0% | 54.8% | 6-dot |
-| REPLACE | Cross Potency % 24% | POSTAĆ: AAYLASECURA | Potency | 5A | 15 | 100.0% | 72.9% | 48.8% | 44.1% | 83.3% | 72.9% | 6-dot |
-| PATCH | Arrow Protection % 23.5% | MAGAZYN | Speed | 5E | 15 | 100.0% | 78.0% | 36.5% | 0.0% | 83.3% | 78.0% | slice |
-| PATCH | Circle Health % 5.88% | POSTAĆ: ASAJJDARKDISCIPLE | Offense | 5A | 15 | 100.0% | 87.0% | 33.1% | 53.6% | 83.3% | 87.0% | 6-dot |
-| PATCH | Cross Defense % 11.75% | POSTAĆ: KYLORENUNMASKED | Health | 5C | 15 | 100.0% | 84.0% | 27.4% | 0.0% | 75.0% | 84.0% | slice |
-| PATCH | Circle Health % 5.88% | MAGAZYN | Critical Chance | 5A | 15 | 100.0% | 82.2% | 27.0% | 55.8% | 83.3% | 82.2% | 6-dot |
-| PATCH | Cross Tenacity % 24% | MAGAZYN | Health | 5E | 15 | 100.0% | 83.5% | 24.2% | 0.0% | 83.3% | 83.5% | slice |
 | CALIBRATE | Diamond Defense % 20% | POSTAĆ: SEVENTHSISTER | Speed | 6A | 15 | 100.0% | 63.8% | 52.9% | 0.0% | 76.7% | 63.8% | calibration |
 | CALIBRATE | Square Offense % 8.5% | POSTAĆ: ADMIRALPIETT | Speed | 6A | 15 | 100.0% | 63.5% | 52.9% | 0.0% | 86.7% | 63.5% | calibration |
 | CALIBRATE | Arrow Protection % 24% | POSTAĆ: JEDIKNIGHTREVAN | Speed | 6A | 15 | 100.0% | 68.2% | 49.6% | 0.0% | 80.0% | 68.2% | calibration |
@@ -93,6 +85,14 @@ Model rozdziela **jakość obecnych rolli**, **potencjał dalszego rozwoju**, **
 | CALIBRATE | Arrow Offense % 8.5% | POSTAĆ: GLREY | Offense | 6A | 15 | 100.0% | 59.5% | 27.2% | 0.0% | 77.8% | 59.5% | calibration |
 | CALIBRATE | Diamond Defense % 20% | POSTAĆ: HOTHLEIA | Critical Damage | 6A | 15 | 100.0% | 63.8% | 27.1% | 0.0% | 88.9% | 63.8% | calibration |
 | CALIBRATE | Square Offense % 8.5% | POSTAĆ: REYJEDITRAINING | Health | 6A | 15 | 100.0% | 52.7% | 27.1% | 0.0% | 77.8% | 52.7% | calibration |
+| CALIBRATE | Triangle Critical Chance % 20% | POSTAĆ: COMMANDERLUKESKYWALKER | Tenacity | 6A | 15 | 100.0% | 63.2% | 27.0% | 0.0% | 94.4% | 63.2% | calibration |
+| CALIBRATE | Square Offense % 8.5% | POSTAĆ: VADER | Critical Damage | 6A | 15 | 100.0% | 61.3% | 26.8% | 0.0% | 83.3% | 61.3% | calibration |
+| CALIBRATE | Circle Protection % 24% | POSTAĆ: BOOMADIER | Critical Chance | 6A | 15 | 100.0% | 55.3% | 26.8% | 0.0% | 87.5% | 55.3% | calibration |
+| CALIBRATE | Cross Potency % 30% | POSTAĆ: GRANDMOFFTARKIN | Speed | 6A | 15 | 100.0% | 73.3% | 25.8% | 0.0% | 100.0% | 73.3% | calibration |
+| CALIBRATE | Circle Protection % 24% | POSTAĆ: BB8 | Health | 6A | 15 | 100.0% | 66.5% | 25.5% | 0.0% | 91.7% | 66.5% | calibration |
+| CALIBRATE | Triangle Protection % 24% | POSTAĆ: GRANDADMIRALTHRAWN | Health | 6A | 15 | 100.0% | 77.0% | 25.3% | 0.0% | 72.2% | 77.0% | calibration |
+| CALIBRATE | Diamond Defense % 20% | POSTAĆ: COMMANDERLUKESKYWALKER | Offense | 6A | 15 | 100.0% | 79.4% | 25.1% | 0.0% | 87.5% | 79.4% | calibration |
+| CALIBRATE | Circle Protection % 24% | POSTAĆ: REY | Critical Damage | 6A | 15 | 100.0% | 73.8% | 25.1% | 0.0% | 87.5% | 73.8% | calibration |
 
 ### JARJARBINKS — najlepszy wirtualny build 6/6
 
@@ -109,20 +109,37 @@ Model rozdziela **jakość obecnych rolli**, **potencjał dalszego rozwoju**, **
 | Triangle | Speed | Critical Chance % 12% | 4usuu6ZZT4uCc72IUSIZ4w | POSTAĆ: 4LOM | 58.4 |
 | Cross | Potency | Potency % 24% | HwXF5YR4QKatx2787JKZvQ | POSTAĆ: AAYLASECURA | 48.8 |
 
+## BEZPIECZNY ŁAŃCUCH — walidacja globalna
+
+**STATUS: BLOKADA — nie wygenerowano bezpiecznej listy ruchów.**
+- JARJARBINKS: brak bezpiecznego łańcucha dla Square / Speed
+- JARJARBINKS: konflikt modów dla Diamond / Potency
+- JARJARBINKS: brak bezpiecznego łańcucha dla Circle / Speed
+- JARJARBINKS: konflikt modów dla Arrow / Speed
+- JARJARBINKS: brak bezpiecznego łańcucha dla Triangle / Speed
+- JARJARBINKS: konflikt modów dla Cross / Potency
+- JARJARBINKS: optimizer mod nie trafił na miejsce: Square
+- JARJARBINKS: optimizer mod nie trafił na miejsce: Diamond
+- JARJARBINKS: optimizer mod nie trafił na miejsce: Circle
+- JARJARBINKS: optimizer mod nie trafił na miejsce: Arrow
+- JARJARBINKS: optimizer mod nie trafił na miejsce: Triangle
+- JARJARBINKS: optimizer mod nie trafił na miejsce: Cross
+
+| Postać | Sety przed | Sety po | Status |
+|---|---|---|---|
+
+### Ruchy
+
+| Cel | Mod | Źródło | PATCH | Status |
+|---|---|---|---|---|
+| — | — | — | — | BLOCKED |
+
 ## Jar Jar Binks — kandydaci
 
 Analiza porównuje mody wyposażone z kandydatami z inventory dla każdego slotu.
 
 | Akcja | Mod | Źródło | Slot | Set | Tier | Lvl | Fit | Set Δ | Fit po secie | Zysk celu | Bilans konta | Łańcuch |
 |---|---|---|---|---|---|---|---:|---:|---:|---:|---:|---:|
-| REPLACE | Arrow Speed 30 | POSTAĆ: 4LOM | Arrow | Speed | 5A | 15 | 54.0% | 0.00 | 54.0 | 8.7 | 31.9 | JARJARBINKS <- 4LOM <- MAGAZYN |
-| REPLACE | Cross Potency % 24% | POSTAĆ: AAYLASECURA | Cross | Potency | 5A | 15 | 48.8% | 0.00 | 48.8 | 8.2 | 16.5 | JARJARBINKS <- AAYLASECURA <- KYLORENUNMASKED <- MAGAZYN |
-| REPLACE | Circle Protection % 23.5% | POSTAĆ: COLONELSTARCK | Circle | Speed | 5A | 15 | 59.0% | -2.27 | 56.7 | 11.0 | 7.5 | JARJARBINKS <- COLONELSTARCK <- ASAJJDARKDISCIPLE <- MAGAZYN |
-| PATCH | Arrow Protection % 23.5% | MAGAZYN | Arrow | Speed | 5E | 15 | 36.5% | 0.00 | 36.5 | 23.2 | 31.9 | JARJARBINKS <- 4LOM <- MAGAZYN |
-| PATCH | Cross Defense % 11.75% | POSTAĆ: KYLORENUNMASKED | Cross | Health | 5C | 15 | 27.4% | 0.00 | 27.4 | 8.8 | 16.5 | JARJARBINKS <- AAYLASECURA <- KYLORENUNMASKED <- MAGAZYN |
-| PATCH | Cross Tenacity % 24% | MAGAZYN | Cross | Health | 5E | 15 | 24.2% | 0.00 | 24.2 | -0.5 | 16.5 | JARJARBINKS <- AAYLASECURA <- KYLORENUNMASKED <- MAGAZYN |
-| PATCH | Circle Health % 5.88% | POSTAĆ: ASAJJDARKDISCIPLE | Circle | Offense | 5A | 15 | 33.1% | 0.00 | 33.1 | 1.3 | 7.5 | JARJARBINKS <- COLONELSTARCK <- ASAJJDARKDISCIPLE <- MAGAZYN |
-| PATCH | Circle Health % 5.88% | MAGAZYN | Circle | Critical Chance | 5A | 15 | 27.0% | 0.00 | 27.0 | -4.8 | 7.5 | JARJARBINKS <- COLONELSTARCK <- ASAJJDARKDISCIPLE <- MAGAZYN |
 | CALIBRATE | Diamond Defense % 20% | POSTAĆ: SEVENTHSISTER | Diamond | Speed | 6A | 15 | 52.9% | 0.00 | 52.9 | 0.0 | 0.0 | — |
 | CALIBRATE | Square Offense % 8.5% | POSTAĆ: ADMIRALPIETT | Square | Speed | 6A | 15 | 52.9% | 0.00 | 52.9 | 0.0 | 0.0 | — |
 | CALIBRATE | Arrow Protection % 24% | POSTAĆ: JEDIKNIGHTREVAN | Arrow | Speed | 6A | 15 | 49.6% | 0.00 | 49.6 | 0.0 | 0.0 | — |
@@ -133,6 +150,14 @@ Analiza porównuje mody wyposażone z kandydatami z inventory dla każdego slotu
 | CALIBRATE | Triangle Health % 16% | POSTAĆ: JEDIKNIGHTREVAN | Triangle | Speed | 6A | 15 | 47.0% | 0.00 | 47.0 | 0.0 | 0.0 | — |
 | CALIBRATE | Circle Protection % 24% | POSTAĆ: FIFTHBROTHER | Circle | Speed | 6A | 15 | 46.6% | 0.00 | 46.6 | 0.0 | 0.0 | — |
 | CALIBRATE | Square Offense % 8.5% | POSTAĆ: VANGUARDTEMPLEGUARD | Square | Speed | 6A | 15 | 46.4% | 0.00 | 46.4 | 0.0 | 0.0 | — |
+| CALIBRATE | Circle Health % 16% | POSTAĆ: EPIXFINN | Circle | Speed | 6A | 15 | 45.6% | 0.00 | 45.6 | 0.0 | 0.0 | — |
+| CALIBRATE | Triangle Critical Damage % 42% | POSTAĆ: MARAJADE | Triangle | Potency | 6A | 15 | 44.1% | 0.00 | 44.1 | 0.0 | 0.0 | — |
+| CALIBRATE | Diamond Defense % 20% | POSTAĆ: EPIXFINN | Diamond | Speed | 6A | 15 | 43.7% | 0.00 | 43.7 | 0.0 | 0.0 | — |
+| CALIBRATE | Diamond Defense % 20% | POSTAĆ: EMPERORPALPATINE | Diamond | Speed | 6A | 15 | 43.6% | 0.00 | 43.6 | 0.0 | 0.0 | — |
+| CALIBRATE | Diamond Defense % 20% | POSTAĆ: MARAJADE | Diamond | Speed | 6A | 15 | 42.6% | 0.00 | 42.6 | 0.0 | 0.0 | — |
+| CALIBRATE | Cross Health % 16% | POSTAĆ: JEDIKNIGHTREVAN | Cross | Health | 6A | 15 | 42.5% | 0.00 | 42.5 | 0.0 | 0.0 | — |
+| CALIBRATE | Cross Tenacity % 35% | POSTAĆ: SEVENTHSISTER | Cross | Speed | 6A | 15 | 41.9% | 0.00 | 41.9 | 0.0 | 0.0 | — |
+| CALIBRATE | Cross Potency % 30% | POSTAĆ: EMPERORPALPATINE | Cross | Speed | 6A | 15 | 41.3% | 0.00 | 41.3 | 0.0 | 0.0 | — |
 
 ## Definicje
 
