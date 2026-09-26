@@ -728,8 +728,20 @@ def main():
         )
 
     jar_rows = [r for r in rows if r.get("fitTarget") == "JARJARBINKS"]
+    jar_order = {
+        "REPLACE": 0,
+        "EQUIP": 1,
+        "PATCH": 2,
+        "CALIBRATE": 3,
+        "SLICE_6E": 4,
+        "SLICE": 5,
+        "UPGRADE": 6,
+        "KEEP": 7
+    }
     jar_rows.sort(key=lambda r: (
-        0 if r.get("recommendedAction") == "REPLACE" else 1,
+        jar_order.get(r.get("recommendedAction"), 9),
+        -float(r.get("accountGain", 0)),
+        -float(r.get("replacementGain", 0)),
         -float(r.get("fitScore", 0)),
         -float(r.get("modValue", 0))
     ))
