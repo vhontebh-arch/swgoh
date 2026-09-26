@@ -59,16 +59,42 @@ def rolls(row, i):
         values = [value / count] * count
     return stat, value, count, values
 
+# Secondary-stat value weights are deliberately generic. Character-specific
+# profiles are layered on top when targets/profiles are available.
+STAT_VALUE = {
+    "Speed": 1.00,
+    "Offense %": 0.92,
+    "Offense": 0.82,
+    "Health %": 0.72,
+    "Protection %": 0.70,
+    "Health": 0.48,
+    "Protection": 0.48,
+    "Defense %": 0.42,
+    "Defense": 0.34,
+    "Potency %": 0.34,
+    "Tenacity %": 0.30,
+    "Critical Chance %": 0.25,
+    "Critical Damage %": 0.25,
+    "Critical Avoidance %": 0.20,
+    "Speed %": 0.15,
+}
+
 def quality(stat, value, count, values, dots):
-    if not count: return 0.0
+    if not count:
+        return 0.0
     low_high = (R6 if dots >= 6 else R5).get(stat)
-    if not low_high: return 0.0
+    if not low_high:
+        return 0.0
     low, high = low_high
     if values:
-        q = [max(0.0,min(1.0,(v-low)/(high-low))) for v in values]
-        return sum(q)/len(q)
-    per = value/count
-    return max(0.0,min(1.0,(per-low)/(high-low)))
+        q = [max(0.0, min(1.0, (v-low)/(high-low))) for v in values]
+        return sum(q) / len(q)
+    per = value / count
+    return max(0.0, min(1.0, (per-low)/(high-low)))
+
+def roll_value(stat, value, count, values, dots):
+    q = quality(stat, value, count, values, dots)
+    return q * STAT_VALUE.get(stat, 0.10)
 
 def projected_6e_quality(secs):
     if not secs:
@@ -82,8 +108,6 @@ def projected_6e_quality(secs):
         r6 = R6.get(stat)
         if not r5 or not r6:
             continue
-        # 5A -> 6E increases the secondary values. Use the documented
-        # 5-dot/6-dot max-stat ratio as a transparent projection.
         projected_value = value * (r6[1] / r5[1])
         low6, high6 = r6
         per_roll = projected_value / count
@@ -92,31 +116,79 @@ def projected_6e_quality(secs):
         total += count
     return 100.0 * weighted / total if total else 0.0
 
+def quality_metrics(secs, dots):
+    total = sum(x[2] for x in secs)
+    if not total:
+        return 0.0, 0.0
+    quality_pct = 100.0 * sum(quality(*x, dots) * x[2] for x in secs) / total
+    value_pct = 100.0 * sum(roll_value(*x, dots) * x[2] for x in secs) / total
+    return quality_pct, value_pct
 
-def investment(row):
-    dots,tier,level = integer(row.get("dots")),integer(row.get("tier")),integer(row.get("level"))
-    if level < 15: return "level {}->15".format(level)
-    if dots == 5 and tier < 5: return "5{}->5{}".format(TIER.get(tier,"?"),TIER.get(tier+1,"?"))
-    if dots == 5 and tier == 5: return "5A->6E"
-    if dots == 6 and tier < 5: return "6{}->6{}".format(TIER.get(tier,"?"),TIER.get(tier+1,"?"))
-    return "calibration"
+def best_future_roll(sec_stats, dots):
+    # For the generic model, future rolls go to the most valuable existing
+    # secondary. Character-specific optimization can override this later.
+    if not sec_stats:
+        return 0.0
+    return max(STAT_VALUE.get(x[0], 0.10) for x in sec_stats)
 
-CAL_ATTEMPTS = {(6,1):1,(6,2):2,(6,3):3,(6,4):4,(6,5):6}
-CAL_COST = {1:15,2:25,3:40,4:75,5:100,6:150}
+def next_action(row, secs, current_quality, current_value, potential):
+    dots = integer(row.get("dots"))
+    tier = integer(row.get("tier"))
+    level = integer(row.get("level"))
+    speed = next((x for x in secs if x[0] == "Speed"), None)
+    speed_rolls = speed[2] if speed else 0
 
+    if level < 12:
+        return ("UPGRADE", "nieujawnione wszystkie secondary")
+
+    if level < 15:
+        if current_value >= 35 or speed:
+            return ("UPGRADE", "dokończenie do 15 ma dodatnią wartość oczekiwaną")
+        return ("KEEP", "zbyt słaby profil przed 15")
+
+    if dots == 5 and tier < 5:
+        if speed_rolls >= 2 or (current_value >= 43 and potential >= 58):
+            return ("SLICE", "wartość secondary uzasadnia kolejny roll")
+        if current_value >= 35 and potential >= 52:
+            return ("KEEP", "obserwuj przed wydaniem materiałów")
+        return ("KEEP", "wartość secondary zbyt niska")
+
+    if dots == 5 and tier == 5:
+        six_e = projected_6e_quality(secs)
+        if speed_rolls >= 2 or six_e >= 50 or (current_value >= 45 and len(secs) >= 3):
+            return ("SLICE_6E", "5A ma wystarczającą wartość do 6E")
+        return ("KEEP", "5A nie uzasadnia kosztu 6E")
+
+    if dots == 6 and tier < 5:
+        if speed_rolls >= 3 or (current_value >= 52 and potential >= 65):
+            return ("SLICE", "6-dot ma dobry profil do kolejnego rolla")
+        return ("KEEP", "brak wystarczającej wartości do kolejnego slice")
+
+    if dots == 6 and tier == 5:
+        if speed_rolls >= 3 or current_value >= 58:
+            return ("CALIBRATE", "6A ma wartość uzasadniającą calibration")
+        return ("KEEP", "6A nie wymaga obecnie inwestycji")
+
+    return ("KEEP", "brak dalszej inwestycji")
 
 def analyze(row):
     dots = integer(row.get("dots"))
     tier = integer(row.get("tier"))
     level = integer(row.get("level"))
-    secs = [x for i in range(1,5) if (x := rolls(row,i)) is not None]
-    total = sum(x[2] for x in secs)
-    current = 100.0 * sum(quality(*x,dots)*x[2] for x in secs)/total if total else 0.0
-    target_total = TOTAL.get((dots,tier), total)
-    remaining = max(0, target_total-total)
-    potential = 100.0 * (current*total/100.0 + remaining) / max(1,total+remaining)
+    secs = [x for i in range(1, 5) if (x := rolls(row, i)) is not None]
 
-    calibration_max = CAL_ATTEMPTS.get((dots,tier), 0)
+    total = sum(x[2] for x in secs)
+    current_quality, current_value = quality_metrics(secs, dots)
+    target_total = TOTAL.get((dots, tier), total)
+    remaining = max(0, target_total-total)
+
+    # Potential ceiling is now value-aware: perfect future rolls are assigned
+    # to the strongest currently present secondary.
+    best_weight = best_future_roll(secs, dots)
+    future_value = (current_value / 100.0) * total + remaining * best_weight
+    potential_value = 100.0 * future_value / max(1, total + remaining)
+
+    calibration_max = CAL_ATTEMPTS.get((dots, tier), 0)
     calibration_used = integer(row.get("rerolledCount"))
     calibration_remaining = max(0, calibration_max-calibration_used)
     five_roll_stats = sum(1 for x in secs if x[2] >= 5)
@@ -124,46 +196,14 @@ def analyze(row):
     calibration_next_cost = CAL_COST.get(calibration_used+1, 0) if calibration_remaining else 0
 
     six_e_quality = projected_6e_quality(secs) if dots == 5 and tier == 5 else 0.0
-
-    speed = next((x for x in secs if x[0]=="Speed"), None)
+    speed = next((x for x in secs if x[0] == "Speed"), None)
     speed_value = speed[1] if speed else 0.0
     speed_rolls = speed[2] if speed else 0
-    speed_quality = min(100.0,100.0*speed_value/(6.0*speed_rolls)) if speed_rolls else 0.0
-    useful = {"Speed","Offense","Offense %","Health %","Protection %",
-              "Potency %","Tenacity %","Defense","Defense %","Health",
-              "Protection","Critical Chance %"}
-    useful_count = sum(1 for x in secs if x[0] in useful)
+    speed_quality = min(100.0, 100.0*speed_value/(6.0*speed_rolls)) if speed_rolls else 0.0
 
-    if level < 12:
-        action = "UPGRADE" if speed or current >= 55 else "KEEP"
-        reason = "ujawnij wszystkie secondary przed oceną"
-    elif level < 15:
-        action = "UPGRADE" if speed or current >= 52 else "KEEP"
-        reason = "warto dokończyć do 15" if action=="UPGRADE" else "brak jakości do dalszej inwestycji"
-    elif dots == 5 and tier < 5:
-        if speed_rolls >= 2 or (current >= 58 and potential >= 72):
-            action, reason = "SLICE", "sensowny kolejny slice"
-        elif current >= 48 and potential >= 65 and useful_count >= 2:
-            action, reason = "SLICE", "co najmniej dwa użyteczne secondary i dobry potencjał"
-        else:
-            action, reason = "KEEP", "potencjał zbyt niski na kolejny slice"
-    elif dots == 5 and tier == 5:
-        if six_e_quality >= 55 or speed_rolls >= 2:
-            action, reason = "SLICE_6E", "5A warte podbicia do 6E"
-        else:
-            action, reason = "KEEP", "5A bez wystarczającej jakości do 6E"
-    elif dots == 6 and tier < 5:
-        if speed_rolls >= 3 or (current >= 62 and potential >= 78):
-            action, reason = "SLICE", "dobry kandydat do kolejnego 6-dot slice"
-        else:
-            action, reason = "KEEP", "brak jakości do kolejnego slice"
-    elif dots == 6 and tier == 5:
-        if speed_rolls >= 3 or (current >= 70 and len(secs) >= 3):
-            action, reason = "CALIBRATE", "6A nadaje się do przenoszenia rolli"
-        else:
-            action, reason = "KEEP", "6A bez wystarczającej jakości do calibration"
-    else:
-        action, reason = "KEEP", "brak dalszej inwestycji"
+    action, reason = next_action(
+        row, secs, current_quality, current_value, potential_value
+    )
 
     out = dict(row)
     out.update({
@@ -171,11 +211,12 @@ def analyze(row):
         "secondaryRollsTotal": total,
         "secondaryRollsMaxAtTier": target_total,
         "secondaryRollsRemainingAtTier": remaining,
-        "modQuality": round(current,1),
-        "speedQuality": round(speed_quality,1),
-        "potentialCeiling": round(potential,1),
-        "potentialGain": round(max(0,potential-current),1),
-        "projected6EQuality": round(six_e_quality,1),
+        "modQuality": round(current_quality, 1),
+        "modValue": round(current_value, 1),
+        "speedQuality": round(speed_quality, 1),
+        "potentialCeiling": round(potential_value, 1),
+        "potentialGain": round(max(0, potential_value-current_value), 1),
+        "projected6EQuality": round(six_e_quality, 1),
         "recommendedAction": action,
         "reason": reason,
         "nextInvestment": investment(row),
@@ -220,19 +261,20 @@ def main():
         "- CALIBRATE: **{}**".format(counts.get("CALIBRATE",0)),
         "- KEEP: **{}**".format(counts.get("KEEP",0)),"",
         "## Najważniejsi kandydaci","",
-        "| Akcja | Mod | Set | Tier | Lvl | Quality | 6E proj. | Speed | Potencjał | Inwestycja |",
+        "| Akcja | Mod | Set | Tier | Lvl | Quality | Value | 6E proj. | Speed | Potencjał | Inwestycja |",
         "|---|---|---|---|---:|---:|---:|---:|---|"
     ]
     for r in rows[:75]:
         mod = "{} {} {}".format(r["slot"],r["primaryStat"],r["primaryValue"])
         lines.append("| {} | {} | {} | {}{} | {} | {:.1f}% | {:.1f}% | {:.1f}% | {} |".format(
             r["recommendedAction"],mod,r["set"],r["dots"],r["tierName"],
-            r["level"],float(r["modQuality"]),float(r["projected6EQuality"]),
+            r["level"],float(r["modQuality"]),float(r["modValue"]),float(r["projected6EQuality"]),
             float(r["speedQuality"]),float(r["potentialCeiling"]),r["nextInvestment"]))
     lines += [
         "","## Definicje","",
         "- **Quality** — jakość wykonanych rolli względem zakresu dla 5-dot/6-dot.",
-        "- **Potential** — sufit przy idealnych przyszłych rollach; nie jest prognozą RNG.",
+        "- **Value** — jakość rolla pomnożona przez ogólną użyteczność statystyki; oddziela „dobry roll” od „dobrego secondary”.",
+        "- **Potential** — sufit wartości przy idealnych przyszłych rollach; nie jest prognozą RNG.",
         "- **UPGRADE** — mod nie jest jeszcze na 15.",
         "- **SLICE** — kolejny tier ma uzasadnienie jakościowe.",
         "- **SLICE_6E** — 5A jest oceniane również przez projekcję jakości po wzroście statystyk do 6E.",
