@@ -2,9 +2,9 @@
 
 Model rozdziela **jakość obecnych rolli**, **potencjał dalszego rozwoju**, **dopasowanie do postaci** i **rodzaj następnej inwestycji**.
 
-- Modów: **2162**
+- Modów: **2163**
 - UPGRADE: **834**
-- SLICE: **694**
+- SLICE: **695**
 - SLICE_6E: **132**
 - CALIBRATE: **93**
 - EQUIP: **0**
