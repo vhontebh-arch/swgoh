@@ -78,6 +78,10 @@ def investment(row):
     if dots == 6 and tier < 5: return "6{}->6{}".format(TIER.get(tier,"?"),TIER.get(tier+1,"?"))
     return "calibration"
 
+CAL_ATTEMPTS = {(6,1):1,(6,2):2,(6,3):3,(6,4):4,(6,5):6}
+CAL_COST = {1:15,2:25,3:40,4:75,5:100,6:150}
+
+
 def analyze(row):
     dots = integer(row.get("dots"))
     tier = integer(row.get("tier"))
@@ -88,6 +92,13 @@ def analyze(row):
     target_total = TOTAL.get((dots,tier), total)
     remaining = max(0, target_total-total)
     potential = 100.0 * (current*total/100.0 + remaining) / max(1,total+remaining)
+
+    calibration_max = CAL_ATTEMPTS.get((dots,tier), 0)
+    calibration_used = integer(row.get("rerolledCount"))
+    calibration_remaining = max(0, calibration_max-calibration_used)
+    five_roll_stats = sum(1 for x in secs if x[2] >= 5)
+    calibration_hit_chance = 33.3 if five_roll_stats else 25.0
+    calibration_next_cost = CAL_COST.get(calibration_used+1, 0) if calibration_remaining else 0
 
     speed = next((x for x in secs if x[0]=="Speed"), None)
     speed_value = speed[1] if speed else 0.0
@@ -142,6 +153,11 @@ def analyze(row):
         "recommendedAction": action,
         "reason": reason,
         "nextInvestment": investment(row),
+        "calibrationAttemptsMax": calibration_max,
+        "calibrationAttemptsUsed": calibration_used,
+        "calibrationAttemptsRemaining": calibration_remaining,
+        "calibrationHitChancePct": calibration_hit_chance if calibration_max else 0.0,
+        "calibrationNextCost": calibration_next_cost,
     })
     return out
 
@@ -195,6 +211,7 @@ def main():
         "- **SLICE** — kolejny tier ma uzasadnienie jakościowe.",
         "- **SLICE_6E** — 5A ma sens do podbicia do 6E.",
         "- **CALIBRATE** — 6A jest na końcu slicing i może korzystać z calibration.",
+        "- **Calibration hit chance** — 25% normalnie; 33,3%, gdy jeden secondary ma już 5 rolli i nie może dostać kolejnego.",
         "",
         "Calibration pozostaje losowe: wybrany roll jest usuwany z wybranego secondary, "
         "a nowy roll trafia losowo do dostępnych secondary. Analyzer wskazuje "
