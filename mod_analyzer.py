@@ -944,7 +944,7 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
             repair_path = []
             for move in plan["moves"]:
                 replacement = move["replacement"]
-                replacement_source = pname(owner(replacement)) if is_true(replacement.get("equipped")) else "MAGAZYN"
+                replacement_source = display_name(owner(replacement)) if is_true(replacement.get("equipped")) else "MAGAZYN"
                 repair_path.append("PATCH: {} -> {}".format(replacement_source, move["name"]))
             mod["chainPath"] = "MOD: " + selected_path + (("; " + "; ".join(repair_path)) if repair_path else "")
             mod["reason"]="BEZPIECZNY ŁAŃCUCH; najpierw MOD bezpośrednio do celu, potem PATCH-y w kolejności zależności"
@@ -1229,13 +1229,13 @@ def main():
             "- Aktualny wynik: **{:.1f}**".format(opt["currentScore"]),
             "- Zmiana: **{:+.1f}**".format(opt["gain"]),
             "- Bonus setów w ocenie: **{:.2f}**".format(opt["setBonusScore"]),
-            "| Slot | Set | Primary | Mod ID | Źródło | Fit |",
+            "| Slot | Set | Primary | Źródło | Fit |",
             "|---|---|---|---|---|---:|"
         ]
         for m in opt["mods"]:
             lines.append("| {} | {} | {} {} | {} | {} | {:.1f} |".format(
                 m.get("slot",""), m.get("set",""), m.get("primaryStat",""), m.get("primaryValue",""),
-                m.get("id",""), source_label(m, aliases, names), score_profile(m, profiles[target_id])["fitScore"]))
+                source_label(m, aliases, names), score_profile(m, profiles[target_id])["fitScore"]))
     lines += ["", "## BEZPIECZNY ŁAŃCUCH — walidacja globalna", ""]
     if chain_result.get("safe"):
         lines.append("**STATUS: OK — łańcuchy zostały zweryfikowane na pełnym stanie rosteru.**")
@@ -1253,7 +1253,7 @@ def main():
                 ", ".join("{}={}".format(k,v) for k,v in sorted(item["after"].items())) or "—",
                 "OK" if item["ok"] else "BŁĄD"))
     lines += ["", "### Ruchy — kolejność fizyczna", "",
-              "**Ważne:** każdy mod jest przenoszony tylko raz. Najpierw właściwy mod z `Źródło` trafia **bezpośrednio** do celu. Dopiero potem wykonujemy PATCH-y. Ponieważ wyszukiwanie po postaci nie jest dostępne, każda operacja zawiera slot, set, primary, wszystkie dostępne secondary, liczbę gwiazdek, tier, poziom i ID moda.", "",
+              "**Ważne:** każdy mod jest przenoszony tylko raz. Najpierw właściwy mod z `Źródło` trafia **bezpośrednio** do celu. Dopiero potem wykonujemy PATCH-y. Ponieważ wyszukiwanie po postaci nie jest dostępne, każda operacja zawiera slot, set, primary, wszystkie dostępne secondary, liczbę gwiazdek, tier i poziom.", "",
               "| Krok | Typ | Operacja | Mod — parametry wyszukiwalne | Status |", "|---:|---|---|---|---|"]
     if (chain_result.get("safe")):
         step_no = 1
