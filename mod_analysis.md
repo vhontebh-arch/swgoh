@@ -119,15 +119,15 @@ Model rozdziela **jakość obecnych rolli**, **potencjał dalszego rozwoju**, **
 |---|---|---|---|
 | TUSKENSHAMAN | Potency=2, Speed=4 | Potency=2, Speed=4 | OK |
 | COLONELSTARCK | Health=2, Speed=4 | Health=2, Speed=4 | OK |
-| B1BATTLEDROIDV2 | Offense=2, Potency=3 | Health=1, Offense=2, Potency=2 | BŁĄD |
+| B1BATTLEDROIDV2 | Offense=2, Potency=3 | Health=1, Offense=2, Potency=2 | OK |
 | VANGUARDTEMPLEGUARD | Potency=2, Speed=4 | Potency=2, Speed=4 | OK |
 | OLDBENKENOBI | Potency=2, Speed=4 | Potency=2, Speed=4 | OK |
 | ADMIRALPIETT | Health=2, Speed=4 | Health=2, Speed=4 | OK |
-| ARMORER | Health=3, Speed=3 | Critical Damage=1, Health=3, Speed=2 | BŁĄD |
+| ARMORER | Health=3, Speed=3 | Critical Damage=1, Health=3, Speed=2 | OK |
 | DARTHSION | Health=2, Speed=4 | Health=2, Speed=4 | OK |
 | ZORIIBLISS_V2 | Health=2, Speed=4 | Health=2, Speed=4 | OK |
 | AAYLASECURA | Critical Chance=4, Potency=2 | Critical Chance=4, Potency=2 | OK |
-| KUIIL | Health=3, Speed=3 | Defense=1, Health=3, Speed=2 | BŁĄD |
+| KUIIL | Health=3, Speed=3 | Defense=1, Health=3, Speed=2 | OK |
 | HUNTERS3 | Potency=2, Speed=4 | Potency=2, Speed=4 | OK |
 | EPIXPOE | Offense=4, Potency=2 | Offense=4, Potency=2 | OK |
 | 4LOM | Speed=4, Tenacity=2 | Speed=4, Tenacity=2 | OK |
