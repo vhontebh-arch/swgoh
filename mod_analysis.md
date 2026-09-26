@@ -5,11 +5,11 @@ Model rozdziela **jakość obecnych rolli**, **potencjał dalszego rozwoju**, **
 - Modów: **2163**
 - UPGRADE: **834**
 - SLICE: **718**
-- SLICE_6E: **135**
+- SLICE_6E: **136**
 - CALIBRATE: **95**
 - EQUIP: **1**
 - REPLACE: **1**
-- PATCH: **2**
+- PATCH: **1**
 - KEEP: **377**
 
 ## Najważniejsi kandydaci
@@ -19,7 +19,6 @@ Model rozdziela **jakość obecnych rolli**, **potencjał dalszego rozwoju**, **
 | REPLACE | Arrow Speed 32 | POSTAĆ: BASTILASHAN | Speed | 6E | 15 | 100.0% | 48.7% | 85.2% | 0.0% | 0.0% | 48.7% | slice |
 | EQUIP | Square Offense % 5.88% | MAGAZYN | Health | 5A | 15 | 100.0% | 64.0% | 67.3% | 54.5% | 88.9% | 64.0% | 6-dot |
 | PATCH | Arrow Protection % 23.5% | MAGAZYN | Speed | 5E | 15 | 100.0% | 78.0% | 59.6% | 0.0% | 83.3% | 78.0% | slice |
-| PATCH | Arrow Health % 5.88% | POSTAĆ: ADMINISTRATORLANDO | Critical Damage | 5A | 15 | 100.0% | 79.0% | 27.1% | 31.6% | 75.0% | 79.0% | 6-dot |
 | CALIBRATE | Circle Protection % 24% | POSTAĆ: GRANDMOFFTARKIN | Potency | 6A | 15 | 100.0% | 64.3% | 83.5% | 0.0% | 75.0% | 64.3% | calibration |
 | CALIBRATE | Cross Potency % 30% | POSTAĆ: MARAJADE | Speed | 6A | 15 | 100.0% | 68.2% | 81.9% | 0.0% | 79.2% | 68.2% | calibration |
 | CALIBRATE | Circle Protection % 24% | POSTAĆ: FIFTHBROTHER | Speed | 6A | 15 | 100.0% | 66.7% | 78.0% | 0.0% | 70.8% | 66.7% | calibration |
@@ -91,6 +90,7 @@ Model rozdziela **jakość obecnych rolli**, **potencjał dalszego rozwoju**, **
 | CALIBRATE | Square Offense % 8.5% | POSTAĆ: REYJEDITRAINING | Health | 6A | 15 | 100.0% | 52.7% | 46.1% | 0.0% | 77.8% | 52.7% | calibration |
 | CALIBRATE | Diamond Defense % 20% | POSTAĆ: JEDIKNIGHTREVAN | Speed | 6A | 15 | 100.0% | 56.8% | 45.7% | 0.0% | 72.2% | 56.8% | calibration |
 | CALIBRATE | Circle Health % 16% | POSTAĆ: HERMITYODA | Speed | 6A | 15 | 100.0% | 78.3% | 45.4% | 0.0% | 91.7% | 78.3% | calibration |
+| CALIBRATE | Square Offense % 8.5% | POSTAĆ: ENFYSNEST | Tenacity | 6A | 15 | 100.0% | 68.3% | 44.9% | 0.0% | 88.9% | 68.3% | calibration |
 
 ## Jar Jar Binks — kandydaci
 
@@ -98,10 +98,9 @@ Analiza porównuje mody wyposażone z kandydatami z inventory dla każdego slotu
 
 | Akcja | Mod | Źródło | Slot | Set | Tier | Lvl | Fit | Zysk celu | Bilans konta | Łańcuch |
 |---|---|---|---|---|---|---:|---:|---:|---:|---:|
-| REPLACE | Arrow Speed 32 | POSTAĆ: BASTILASHAN | Arrow | Speed | 6E | 15 | 85.2% | 19.7 | 49.0 | 3 |
+| REPLACE | Arrow Speed 32 | POSTAĆ: BASTILASHAN | Arrow | Speed | 6E | 15 | 85.2% | 19.7 | 49.0 | 2 |
 | EQUIP | Square Offense % 5.88% | MAGAZYN | Square | Health | 5A | 15 | 67.3% | 67.3 | 67.3 | 1 |
-| PATCH | Arrow Health % 5.88% | POSTAĆ: ADMINISTRATORLANDO | Arrow | Critical Damage | 5A | 15 | 27.1% | 30.3 | 49.0 | 3 |
-| PATCH | Arrow Protection % 23.5% | MAGAZYN | Arrow | Speed | 5E | 15 | 59.6% | -1.0 | 49.0 | 3 |
+| PATCH | Arrow Protection % 23.5% | MAGAZYN | Arrow | Speed | 5E | 15 | 59.6% | 29.3 | 49.0 | 2 |
 | CALIBRATE | Circle Protection % 24% | POSTAĆ: GRANDMOFFTARKIN | Circle | Potency | 6A | 15 | 83.5% | 0.0 | 0.0 | 0 |
 | CALIBRATE | Cross Potency % 30% | POSTAĆ: MARAJADE | Cross | Speed | 6A | 15 | 81.9% | 0.0 | 0.0 | 0 |
 | CALIBRATE | Circle Protection % 24% | POSTAĆ: FIFTHBROTHER | Circle | Speed | 6A | 15 | 78.0% | 0.0 | 0.0 | 0 |
@@ -116,6 +115,7 @@ Analiza porównuje mody wyposażone z kandydatami z inventory dla każdego slotu
 | CALIBRATE | Square Offense % 8.5% | POSTAĆ: MARAJADE | Square | Speed | 6A | 15 | 69.0% | 0.0 | 0.0 | 0 |
 | CALIBRATE | Triangle Health % 16% | MAGAZYN | Triangle | Potency | 6A | 15 | 68.5% | 0.0 | 0.0 | 0 |
 | CALIBRATE | Circle Protection % 24% | POSTAĆ: MARAJADE | Circle | Speed | 6A | 15 | 67.1% | 0.0 | 0.0 | 0 |
+| CALIBRATE | Circle Health % 16% | POSTAĆ: ENFYSNEST | Circle | Tenacity | 6A | 15 | 67.0% | 0.0 | 0.0 | 0 |
 
 ## Definicje
 
