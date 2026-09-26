@@ -797,7 +797,7 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
         return {s: counts.get(s,0)//SET_RULES[s][1] for s in SET_RULES}
 
     def preserves_completed_sets(hole_owner, current, replacement):
-        before=[r for (o,_s),r in eq.items() if o==hole_owner]
+        before=[r for (o,_s),r in working_eq.items() if o==hole_owner]
         after=[r for r in before if rid(r)!=rid(current)] + [replacement]
         bg=set_groups(before); ag=set_groups(after)
         return all(ag[s] >= bg[s] for s in SET_RULES)
@@ -809,7 +809,7 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
 
         def search(hole_owner, depth, forbidden, seen):
             if depth > 5: return None
-            current = eq.get((hole_owner, slot))
+            current = working_eq.get((hole_owner, slot))
             if current is None: return {"moves": [], "gain": 0.0}
 
             current_set = str(current.get("set", "") or "")
@@ -818,7 +818,7 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                 if rid(r) in forbidden or rid(r) in selected_ids: continue
                 if str(r.get("slot","")) == slot and preserves_completed_sets(hole_owner,current,r):
                     candidates.append((0, r))
-            for (other_owner, other_slot), r in eq.items():
+            for (other_owner, other_slot), r in working_eq.items():
                 if other_slot != slot or other_owner == hole_owner or other_owner in seen: continue
                 if rid(r) in forbidden or rid(r) in selected_ids: continue
                 if preserves_completed_sets(hole_owner,current,r):
