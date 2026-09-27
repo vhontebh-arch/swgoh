@@ -6,7 +6,7 @@
 
 | ID | Przedmiot | Wymagane | Posiadane | Brakuje |
 |---|---|---:|---:|---:|
-| `172Salvage` | Mk 7 Kyrotech Shock Prod Prototype Salvage | 100 | 44 | **56** |
+| `172Salvage` | Mk 7 Kyrotech Shock Prod Prototype Salvage | 100 | 49 | **51** |
 | `123Component` | Mk 8 Neuro-Saav Electrobinoculars Component | 50 | 4 | **46** |
 | `170PrototypeSalvage` | Mk 12 ArmaTek Holo Lens Prototype Salvage | 50 | 11 | **39** |
 
@@ -34,7 +34,7 @@ Gear: **G12 → G13** Relic: **R1 → R5**
 
 | ID | Przedmiot | Brakuje |
 |---|---|---:|
-| `172Salvage` | Mk 7 Kyrotech Shock Prod Prototype Salvage | **56** |
+| `172Salvage` | Mk 7 Kyrotech Shock Prod Prototype Salvage | **51** |
 | `123Component` | Mk 8 Neuro-Saav Electrobinoculars Component | **46** |
 | `170PrototypeSalvage` | Mk 12 ArmaTek Holo Lens Prototype Salvage | **39** |
 
