@@ -271,6 +271,18 @@ def load_targets():
     except Exception:
         return []
 
+PROTECTED_OWNERS_FILE = "protected_owners.json"
+
+def load_protected_owners():
+    if not os.path.exists(PROTECTED_OWNERS_FILE):
+        return set()
+    try:
+        with open(PROTECTED_OWNERS_FILE, encoding="utf-8") as f:
+            data = json.load(f)
+        return {str(x).strip() for x in data.get("protectedOwners", []) if str(x).strip()}
+    except Exception:
+        return set()
+
 def load_profiles():
     if not os.path.exists(PROFILE_FILE):
         return {}
@@ -774,12 +786,13 @@ def apply_replacements(rows, target_base_ids, profiles=None, aliases=None, names
 
 
 
-def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None, aliases=None, names=None):
+def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None, aliases=None, names=None, protected_owners=None):
     """Realize optimizer mods with same-slot/same-set repair chains and full validation."""
     profiles = profiles or {}
     aliases = aliases or {}
     names = names or {}
     targets = set(target_base_ids)
+    protected_owners = set(protected_owners or set())
 
     def rid(r): return str(r.get("id", "") or "")
     def owner(r): return str(r.get("assignedTo", "") or "")
@@ -848,6 +861,8 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                         candidates.append((0,r))
                 for (other_owner,other_slot),r in working_eq.items():
                     if other_slot != slot or other_owner == hole_owner or other_owner in seen:
+                        continue
+                    if base(r) in protected_owners:
                         continue
                     if rid(r) in forbidden or rid(r) in selected_ids:
                         continue
@@ -962,7 +977,7 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
     return {"safe":safe,"plans":plans,"validation":validation,"failed":failed}
 
 
-def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, names=None):
+def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, names=None, protected_owners=None):
     """Global virtual optimizer: all mature mods are treated as available.
     Optimizes the complete six-slot build, including set bonuses, then leaves
     physical ownership/chain execution to apply_replacements().
@@ -970,6 +985,7 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
     profiles = profiles or {}
     aliases = aliases or {}
     names = names or {}
+    protected_owners = set(protected_owners or set())
     slots = ("Square", "Diamond", "Circle", "Arrow", "Triangle", "Cross")
     SET_REFERENCE_BASE_SPEED = 150.0
     SET_BONUS_MAX_SECONDARY = {
@@ -1030,7 +1046,8 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
             candidates = [r for r in rows
                           if str(r.get("slot", "")) == slot
                           and integer(r.get("level")) >= 15
-                          and integer(r.get("dots")) >= 5]
+                          and integer(r.get("dots")) >= 5
+                          and (not is_true(r.get("equipped")) or aliases.get(str(r.get("assignedTo", "") or ""), str(r.get("assignedTo", "") or "")) not in protected_owners)]
             by_set = {}
             for r in candidates:
                 by_set.setdefault(str(r.get("set", "")), []).append(r)
@@ -1146,6 +1163,8 @@ def main():
     profiles = load_profiles()
     aliases = load_player_aliases()
     names = load_player_names()
+    protected_owners = load_protected_owners()
+    protected_owners = {aliases.get(owner_id, owner_id) for owner_id in protected_owners}
     rows = [analyze(row) for row in source]
 
     for row in rows:
@@ -1166,7 +1185,7 @@ def main():
         base_id = aliases.get(owner_id, owner_id)
         return names.get(owner_id) or names.get(base_id) or base_id or "nieznana"
 
-    optimizer = optimize_target_build(rows, {t.get("baseId") for t in targets}, profiles, aliases, names)
+    optimizer = optimize_target_build(rows, {t.get("baseId") for t in targets}, profiles, aliases, names, protected_owners)
     # Mark the physical mods selected by the complete six-slot optimizer.
     # These values describe the full-build result, not a single-slot swap;
     # keeping that distinction prevents the Jar Jar candidate table from
@@ -1189,7 +1208,7 @@ def main():
             row["optimizerFullBuildGain"] = round(selected["gain"], 1)
             row["optimizerFullBuildSetBonus"] = round(selected["set_bonus"], 2)
 
-    chain_result = apply_optimizer_replacements(rows, optimizer, {t.get("baseId") for t in targets}, profiles, aliases, names)
+    chain_result = apply_optimizer_replacements(rows, optimizer, {t.get("baseId") for t in targets}, profiles, aliases, names, protected_owners)
 
     with open(OUTPUT_CSV, "w", newline="", encoding="utf-8-sig") as f:
         fields = list(rows[0].keys())
