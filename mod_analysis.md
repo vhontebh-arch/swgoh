@@ -5,13 +5,13 @@ Model rozdziela **jakość obecnych rolli**, **potencjał dalszego rozwoju**, **
 W raportach przeznaczonych do ręcznego wykonania mod identyfikowany jest wyłącznie przez slot, set, primary, secondary, gwiazdki, tier i poziom; wewnętrzne ID nie są pokazywane.
 
 - Modów: **2165**
-- UPGRADE: **834**
-- SLICE: **694**
-- SLICE_6E: **133**
+- UPGRADE: **836**
+- SLICE: **698**
+- SLICE_6E: **137**
 - CALIBRATE: **93**
 - EQUIP: **0**
-- REPLACE: **4**
-- PATCH: **6**
+- REPLACE: **0**
+- PATCH: **0**
 - KEEP: **401**
 
 ## Globalny optimizer 6-slotowy
@@ -20,16 +20,6 @@ W raportach przeznaczonych do ręcznego wykonania mod identyfikowany jest wyłą
 
 | Akcja | Mod | Źródło | Set | Tier | Lvl | Quality | Value | Fit | 6E proj. | Speed | Potencjał | Inwestycja |
 |---|---|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---|
-| REPLACE | Circle Protection % 23.5% | POSTAĆ: COLONELSTARCK | Speed | 5A | 15 | 100.0% | 78.2% | 59.0% | 36.5% | 70.8% | 78.2% | 6-dot |
-| REPLACE | Triangle Critical Chance % 12% | POSTAĆ: 4LOM | Speed | 5B | 15 | 100.0% | 78.9% | 58.4% | 0.0% | 83.3% | 78.9% | slice |
-| REPLACE | Arrow Speed 30 | POSTAĆ: 4LOM | Speed | 5A | 15 | 100.0% | 54.8% | 54.0% | 46.4% | 0.0% | 54.8% | 6-dot |
-| REPLACE | Cross Potency % 24% | POSTAĆ: AAYLASECURA | Potency | 5A | 15 | 100.0% | 72.9% | 48.7% | 44.1% | 83.3% | 72.9% | 6-dot |
-| PATCH | Circle Protection % 2.5% | POSTAĆ: YODACHEWBACCA | Speed | 5A | 1 | 100.0% | 68.0% | 43.0% | 42.3% | 66.7% | 84.0% | upgrade |
-| PATCH | Triangle Defense % 7.25% | POSTAĆ: KUIIL | Speed | 5D | 9 | 100.0% | 86.0% | 42.6% | 0.0% | 83.3% | 88.8% | upgrade |
-| PATCH | Cross Health % 5.88% | MAGAZYN | Potency | 5E | 15 | 100.0% | 80.5% | 40.3% | 0.0% | 83.3% | 80.5% | slice |
-| PATCH | Arrow Protection % 23.5% | MAGAZYN | Speed | 5E | 15 | 100.0% | 78.0% | 36.4% | 0.0% | 83.3% | 78.0% | slice |
-| PATCH | Circle Health % 5.88% | MAGAZYN | Critical Chance | 5A | 15 | 100.0% | 82.2% | 27.0% | 55.8% | 83.3% | 82.2% | 6-dot |
-| PATCH | Triangle Critical Damage % 36% | MAGAZYN | Defense | 5E | 15 | 100.0% | 76.0% | 22.1% | 0.0% | 83.3% | 76.0% | slice |
 | CALIBRATE | Diamond Defense % 20% | POSTAĆ: SEVENTHSISTER | Speed | 6A | 15 | 100.0% | 63.8% | 52.9% | 0.0% | 76.7% | 63.8% | calibration |
 | CALIBRATE | Square Offense % 8.5% | POSTAĆ: JARJARBINKS | Speed | 6A | 15 | 100.0% | 63.5% | 52.9% | 0.0% | 86.7% | 63.5% | calibration |
 | CALIBRATE | Arrow Protection % 24% | POSTAĆ: JEDIKNIGHTREVAN | Speed | 6A | 15 | 100.0% | 68.2% | 49.6% | 0.0% | 80.0% | 68.2% | calibration |
@@ -95,21 +85,31 @@ W raportach przeznaczonych do ręcznego wykonania mod identyfikowany jest wyłą
 | CALIBRATE | Cross Potency % 30% | MAGAZYN | Health | 6A | 15 | 100.0% | 62.8% | 27.8% | 0.0% | 83.3% | 62.8% | calibration |
 | CALIBRATE | Square Offense % 8.5% | POSTAĆ: COMMANDERLUKESKYWALKER | Offense | 6A | 15 | 100.0% | 57.0% | 27.7% | 0.0% | 83.3% | 57.0% | calibration |
 | CALIBRATE | Arrow Offense % 8.5% | POSTAĆ: GLREY | Offense | 6A | 15 | 100.0% | 59.5% | 27.2% | 0.0% | 77.8% | 59.5% | calibration |
+| CALIBRATE | Diamond Defense % 20% | POSTAĆ: HOTHLEIA | Critical Damage | 6A | 15 | 100.0% | 63.8% | 27.1% | 0.0% | 88.9% | 63.8% | calibration |
+| CALIBRATE | Square Offense % 8.5% | POSTAĆ: REYJEDITRAINING | Health | 6A | 15 | 100.0% | 52.7% | 27.1% | 0.0% | 77.8% | 52.7% | calibration |
+| CALIBRATE | Triangle Critical Chance % 20% | POSTAĆ: COMMANDERLUKESKYWALKER | Tenacity | 6A | 15 | 100.0% | 63.2% | 27.0% | 0.0% | 94.4% | 63.2% | calibration |
+| CALIBRATE | Square Offense % 8.5% | POSTAĆ: VADER | Critical Damage | 6A | 15 | 100.0% | 61.3% | 26.8% | 0.0% | 83.3% | 61.3% | calibration |
+| CALIBRATE | Circle Protection % 24% | POSTAĆ: BOOMADIER | Critical Chance | 6A | 15 | 100.0% | 55.3% | 26.8% | 0.0% | 87.5% | 55.3% | calibration |
+| CALIBRATE | Cross Potency % 30% | POSTAĆ: GRANDMOFFTARKIN | Speed | 6A | 15 | 100.0% | 73.3% | 25.8% | 0.0% | 100.0% | 73.3% | calibration |
+| CALIBRATE | Circle Protection % 24% | POSTAĆ: BB8 | Health | 6A | 15 | 100.0% | 66.5% | 25.6% | 0.0% | 91.7% | 66.5% | calibration |
+| CALIBRATE | Triangle Protection % 24% | POSTAĆ: GRANDADMIRALTHRAWN | Health | 6A | 15 | 100.0% | 77.0% | 25.4% | 0.0% | 72.2% | 77.0% | calibration |
+| CALIBRATE | Diamond Defense % 20% | POSTAĆ: COMMANDERLUKESKYWALKER | Offense | 6A | 15 | 100.0% | 79.4% | 25.1% | 0.0% | 87.5% | 79.4% | calibration |
+| CALIBRATE | Circle Protection % 24% | POSTAĆ: REY | Critical Damage | 6A | 15 | 100.0% | 73.8% | 25.1% | 0.0% | 87.5% | 73.8% | calibration |
 
 ### JARJARBINKS — najlepszy wirtualny build 6/6
 
 - Wynik optymalny: **357.6** (profil + bonusy setów)
-- Aktualny wynik: **249.1**
-- Zmiana: **+108.5**
+- Aktualny wynik: **357.6**
+- Zmiana: **+0.0**
 - Bonus setów w ocenie: **37.59**
 | Slot | Mod — parametry wyszukiwalne | Źródło | Fit |
 |---|---|---|---:|
 | Square | Square / Speed / Offense % 8.5% / secondary: Protection 1774, Tenacity % 2.52%, Defense 38, Speed 26 / 6★ A lvl15 | POSTAĆ: JARJARBINKS | 52.9 |
 | Diamond | Diamond / Potency / Defense % 20% / secondary: Speed 14, Defense 24, Health % 1.72%, Protection % 6.04% / 6★ D lvl15 | POSTAĆ: JARJARBINKS | 47.0 |
-| Circle | Circle / Speed / Protection % 23.5% / secondary: Health 225, Protection 1199, Speed 17, Offense 30 / 5★ A lvl15 | POSTAĆ: COLONELSTARCK | 59.0 |
-| Arrow | Arrow / Speed / Speed 30 / secondary: Protection 1703, Potency % 2.1%, Health 723, Offense 54 / 5★ A lvl15 | POSTAĆ: 4LOM | 54.0 |
-| Triangle | Triangle / Speed / Critical Chance % 12% / secondary: Health 334, Protection % 1.14%, Potency % 2.22%, Speed 20 / 5★ B lvl15 | POSTAĆ: 4LOM | 58.4 |
-| Cross | Cross / Potency / Potency % 24% / secondary: Protection % 4.87%, Critical Chance % 1.24%, Health 235, Speed 15 / 5★ A lvl15 | POSTAĆ: AAYLASECURA | 48.7 |
+| Circle | Circle / Speed / Protection % 23.5% / secondary: Health 225, Protection 1199, Speed 17, Offense 30 / 5★ A lvl15 | POSTAĆ: JARJARBINKS | 59.0 |
+| Arrow | Arrow / Speed / Speed 30 / secondary: Protection 1703, Potency % 2.1%, Health 723, Offense 54 / 5★ A lvl15 | POSTAĆ: JARJARBINKS | 54.0 |
+| Triangle | Triangle / Speed / Critical Chance % 12% / secondary: Health 334, Protection % 1.14%, Potency % 2.22%, Speed 20 / 5★ B lvl15 | POSTAĆ: JARJARBINKS | 58.4 |
+| Cross | Cross / Potency / Potency % 24% / secondary: Protection % 4.87%, Critical Chance % 1.24%, Health 235, Speed 15 / 5★ A lvl15 | POSTAĆ: JARJARBINKS | 48.7 |
 
 ## BEZPIECZNY ŁAŃCUCH — walidacja globalna
 
@@ -118,11 +118,6 @@ PATCH-y używają tego samego slotu i setu co mod zabrany ze źródła, więc li
 
 | Postać | Sety przed | Sety po | Status |
 |---|---|---|---|
-| COLONELSTARCK | Health=2, Speed=4 | Health=2, Speed=4 | OK |
-| AAYLASECURA | Critical Chance=4, Potency=2 | Critical Chance=4, Potency=2 | OK |
-| YODACHEWBACCA | Defense=2, Speed=3 | Critical Chance=1, Defense=2, Speed=2 | OK |
-| KUIIL | Health=3, Speed=3 | Defense=1, Health=3, Speed=2 | OK |
-| 4LOM | Speed=4, Tenacity=2 | Speed=4, Tenacity=2 | OK |
 
 ### Ruchy — kolejność fizyczna
 
@@ -130,16 +125,6 @@ PATCH-y używają tego samego slotu i setu co mod zabrany ze źródła, więc li
 
 | Krok | Typ | Operacja | Mod — parametry wyszukiwalne | Status |
 |---:|---|---|---|---|
-| 1 | MOD | COLONELSTARCK → JARJARBINKS | Circle / Speed / Protection % 23.5% / secondary: Health 225, Protection 1199, Speed 17, Offense 30 / 5★ A lvl15 | SAFE |
-| 2 | PATCH | YODACHEWBACCA → COLONELSTARCK | Circle / Speed / Protection % 2.5% / secondary: Defense % 1.32%, Offense 24, Protection 728, Speed 4 / 5★ A lvl1 | SAFE |
-| 3 | PATCH | MAGAZYN → YODACHEWBACCA | Circle / Critical Chance / Health % 5.88% / secondary: Potency % 1.68%, Offense % 1.26%, Speed 15, Health 321 / 5★ A lvl15 | SAFE |
-| 4 | MOD | 4LOM → JARJARBINKS | Arrow / Speed / Speed 30 / secondary: Protection 1703, Potency % 2.1%, Health 723, Offense 54 / 5★ A lvl15 | SAFE |
-| 5 | PATCH | MAGAZYN → 4LOM | Arrow / Speed / Protection % 23.5% / secondary: Offense % 0.52%, Health 229, Health % 0.57%, Speed 5 / 5★ E lvl15 | SAFE |
-| 6 | MOD | 4LOM → JARJARBINKS | Triangle / Speed / Critical Chance % 12% / secondary: Health 334, Protection % 1.14%, Potency % 2.22%, Speed 20 / 5★ B lvl15 | SAFE |
-| 7 | PATCH | KUIIL → 4LOM | Triangle / Speed / Defense % 7.25% / secondary: Offense 41, Offense % 0.33%, Protection % 1.73%, Speed 5 / 5★ D lvl9 | SAFE |
-| 8 | PATCH | MAGAZYN → KUIIL | Triangle / Defense / Critical Damage % 36% / secondary: Defense % 1.49%, Speed 5, Offense % 0.55%, Protection % 1.49% / 5★ E lvl15 | SAFE |
-| 9 | MOD | AAYLASECURA → JARJARBINKS | Cross / Potency / Potency % 24% / secondary: Protection % 4.87%, Critical Chance % 1.24%, Health 235, Speed 15 / 5★ A lvl15 | SAFE |
-| 10 | PATCH | MAGAZYN → AAYLASECURA | Cross / Potency / Health % 5.88% / secondary: Speed 5, Offense % 0.32%, Offense 32, Health 223 / 5★ E lvl15 | SAFE |
 
 ## Jar Jar Binks — kandydaci
 
@@ -147,24 +132,24 @@ Analiza porównuje mody wyposażone z kandydatami z inventory dla każdego slotu
 
 | Akcja | Mod | Źródło | Slot | Set | Tier | Lvl | Fit | Set Δ | Fit po secie | Wkład moda | Pełny build Δ | Łańcuch |
 |---|---|---|---|---|---|---|---:|---:|---:|---:|---:|---:|
-| REPLACE | Circle Protection % 23.5% | POSTAĆ: COLONELSTARCK | Circle | Speed | 5A | 15 | 59.0% | 0.00 | 59.0 | 59.0 | 108.5 | MOD: COLONELSTARCK -> JARJARBINKS; PATCH: YODACHEWBACCA -> COLONELSTARCK; PATCH: MAGAZYN -> YODACHEWBACCA |
-| REPLACE | Triangle Critical Chance % 12% | POSTAĆ: 4LOM | Triangle | Speed | 5B | 15 | 58.4% | 0.00 | 58.4 | 58.4 | 108.5 | MOD: 4LOM -> JARJARBINKS; PATCH: KUIIL -> 4LOM; PATCH: MAGAZYN -> KUIIL |
-| REPLACE | Arrow Speed 30 | POSTAĆ: 4LOM | Arrow | Speed | 5A | 15 | 54.0% | 0.00 | 54.0 | 54.0 | 108.5 | MOD: 4LOM -> JARJARBINKS; PATCH: MAGAZYN -> 4LOM |
-| REPLACE | Cross Potency % 24% | POSTAĆ: AAYLASECURA | Cross | Potency | 5A | 15 | 48.7% | 0.00 | 48.7 | 48.7 | 108.5 | MOD: AAYLASECURA -> JARJARBINKS; PATCH: MAGAZYN -> AAYLASECURA |
-| PATCH | Arrow Protection % 23.5% | MAGAZYN | Arrow | Speed | 5E | 15 | 36.4% | 0.00 | 36.4 | 23.2 | 23.2 | MOD: 4LOM -> JARJARBINKS; PATCH: MAGAZYN -> 4LOM |
-| PATCH | Circle Health % 5.88% | MAGAZYN | Circle | Critical Chance | 5A | 15 | 27.0% | 0.00 | 27.0 | 14.2 | 14.2 | MOD: COLONELSTARCK -> JARJARBINKS; PATCH: YODACHEWBACCA -> COLONELSTARCK; PATCH: MAGAZYN -> YODACHEWBACCA |
-| PATCH | Cross Health % 5.88% | MAGAZYN | Cross | Potency | 5E | 15 | 40.3% | 0.00 | 40.3 | 7.6 | 7.6 | MOD: AAYLASECURA -> JARJARBINKS; PATCH: MAGAZYN -> AAYLASECURA |
-| PATCH | Triangle Defense % 7.25% | POSTAĆ: KUIIL | Triangle | Speed | 5D | 9 | 42.6% | 0.00 | 42.6 | 7.1 | 7.1 | MOD: 4LOM -> JARJARBINKS; PATCH: KUIIL -> 4LOM; PATCH: MAGAZYN -> KUIIL |
-| PATCH | Triangle Critical Damage % 36% | MAGAZYN | Triangle | Defense | 5E | 15 | 22.1% | 0.00 | 22.1 | -10.0 | -10.0 | MOD: 4LOM -> JARJARBINKS; PATCH: KUIIL -> 4LOM; PATCH: MAGAZYN -> KUIIL |
-| PATCH | Circle Protection % 2.5% | POSTAĆ: YODACHEWBACCA | Circle | Speed | 5A | 1 | 43.0% | 0.00 | 43.0 | -10.2 | -10.2 | MOD: COLONELSTARCK -> JARJARBINKS; PATCH: YODACHEWBACCA -> COLONELSTARCK; PATCH: MAGAZYN -> YODACHEWBACCA |
 | CALIBRATE | Diamond Defense % 20% | POSTAĆ: SEVENTHSISTER | Diamond | Speed | 6A | 15 | 52.9% | 0.00 | 52.9 | 0.0 | 0.0 | — |
-| CALIBRATE | Square Offense % 8.5% | POSTAĆ: JARJARBINKS | Square | Speed | 6A | 15 | 52.9% | 0.00 | 52.9 | 52.9 | 108.5 | — |
+| CALIBRATE | Square Offense % 8.5% | POSTAĆ: JARJARBINKS | Square | Speed | 6A | 15 | 52.9% | 0.00 | 52.9 | 52.9 | 0.0 | — |
 | CALIBRATE | Arrow Protection % 24% | POSTAĆ: JEDIKNIGHTREVAN | Arrow | Speed | 6A | 15 | 49.6% | 0.00 | 49.6 | 0.0 | 0.0 | — |
 | CALIBRATE | Diamond Defense % 20% | POSTAĆ: GRANDADMIRALTHRAWN | Diamond | Speed | 6A | 15 | 48.3% | 0.00 | 48.3 | 0.0 | 0.0 | — |
 | CALIBRATE | Diamond Defense % 20% | MAGAZYN | Diamond | Speed | 6A | 15 | 48.2% | 0.00 | 48.2 | 0.0 | 0.0 | — |
 | CALIBRATE | Diamond Defense % 20% | POSTAĆ: HERMITYODA | Diamond | Speed | 6A | 15 | 47.5% | 0.00 | 47.5 | 0.0 | 0.0 | — |
 | CALIBRATE | Cross Potency % 30% | POSTAĆ: MARAJADE | Cross | Speed | 6A | 15 | 47.0% | 0.00 | 47.0 | 0.0 | 0.0 | — |
 | CALIBRATE | Triangle Health % 16% | POSTAĆ: JEDIKNIGHTREVAN | Triangle | Speed | 6A | 15 | 47.0% | 0.00 | 47.0 | 0.0 | 0.0 | — |
+| CALIBRATE | Circle Protection % 24% | POSTAĆ: FIFTHBROTHER | Circle | Speed | 6A | 15 | 46.7% | 0.00 | 46.7 | 0.0 | 0.0 | — |
+| CALIBRATE | Square Offense % 8.5% | POSTAĆ: VANGUARDTEMPLEGUARD | Square | Speed | 6A | 15 | 46.4% | 0.00 | 46.4 | 0.0 | 0.0 | — |
+| CALIBRATE | Circle Health % 16% | POSTAĆ: EPIXFINN | Circle | Speed | 6A | 15 | 45.6% | 0.00 | 45.6 | 0.0 | 0.0 | — |
+| CALIBRATE | Triangle Critical Damage % 42% | POSTAĆ: MARAJADE | Triangle | Potency | 6A | 15 | 44.1% | 0.00 | 44.1 | 0.0 | 0.0 | — |
+| CALIBRATE | Diamond Defense % 20% | POSTAĆ: EPIXFINN | Diamond | Speed | 6A | 15 | 43.7% | 0.00 | 43.7 | 0.0 | 0.0 | — |
+| CALIBRATE | Diamond Defense % 20% | POSTAĆ: EMPERORPALPATINE | Diamond | Speed | 6A | 15 | 43.6% | 0.00 | 43.6 | 0.0 | 0.0 | — |
+| CALIBRATE | Diamond Defense % 20% | POSTAĆ: MARAJADE | Diamond | Speed | 6A | 15 | 42.6% | 0.00 | 42.6 | 0.0 | 0.0 | — |
+| CALIBRATE | Cross Health % 16% | POSTAĆ: JEDIKNIGHTREVAN | Cross | Health | 6A | 15 | 42.5% | 0.00 | 42.5 | 0.0 | 0.0 | — |
+| CALIBRATE | Cross Tenacity % 35% | POSTAĆ: SEVENTHSISTER | Cross | Speed | 6A | 15 | 41.9% | 0.00 | 41.9 | 0.0 | 0.0 | — |
+| CALIBRATE | Cross Potency % 30% | POSTAĆ: EMPERORPALPATINE | Cross | Speed | 6A | 15 | 41.4% | 0.00 | 41.4 | 0.0 | 0.0 | — |
 
 ## Definicje
 
