@@ -4,8 +4,8 @@ Model rozdziela **jakość obecnych rolli**, **potencjał dalszego rozwoju**, **
 
 W raportach przeznaczonych do ręcznego wykonania mod identyfikowany jest wyłącznie przez slot, set, primary, secondary, gwiazdki, tier i poziom; wewnętrzne ID nie są pokazywane.
 
-- Modów: **2165**
-- UPGRADE: **834**
+- Modów: **2164**
+- UPGRADE: **833**
 - SLICE: **697**
 - SLICE_6E: **138**
 - CALIBRATE: **94**
