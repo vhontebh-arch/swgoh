@@ -4,11 +4,11 @@ Model rozdziela **jakość obecnych rolli**, **potencjał dalszego rozwoju**, **
 
 W raportach przeznaczonych do ręcznego wykonania mod identyfikowany jest wyłącznie przez slot, set, primary, secondary, gwiazdki, tier i poziom; wewnętrzne ID nie są pokazywane.
 
-- Modów: **2164**
-- UPGRADE: **833**
-- SLICE: **696**
+- Modów: **2166**
+- UPGRADE: **835**
+- SLICE: **695**
 - SLICE_6E: **139**
-- CALIBRATE: **94**
+- CALIBRATE: **95**
 - EQUIP: **0**
 - REPLACE: **0**
 - PATCH: **0**
@@ -67,6 +67,7 @@ W raportach przeznaczonych do ręcznego wykonania mod identyfikowany jest wyłą
 | CALIBRATE | Square Offense % 8.5% | POSTAĆ: EMPERORPALPATINE | Potency | 6A | 15 | 100.0% | 60.3% | 35.0% | 0.0% | 88.9% | 60.3% | calibration |
 | CALIBRATE | Square Offense % 8.5% | POSTAĆ: GLREY | Offense | 6A | 15 | 100.0% | 76.7% | 34.8% | 0.0% | 80.0% | 76.7% | calibration |
 | CALIBRATE | Cross Tenacity % 35% | POSTAĆ: REY | Critical Damage | 6A | 15 | 100.0% | 63.0% | 33.1% | 0.0% | 83.3% | 63.0% | calibration |
+| CALIBRATE | Cross Protection % 24% | POSTAĆ: SCORCH | Health | 6A | 15 | 100.0% | 69.5% | 32.8% | 0.0% | 73.3% | 69.5% | calibration |
 | CALIBRATE | Triangle Health % 16% | POSTAĆ: OPERATIVE | Speed | 6A | 15 | 100.0% | 62.8% | 32.6% | 0.0% | 66.7% | 62.8% | calibration |
 | CALIBRATE | Triangle Critical Damage % 42% | POSTAĆ: VADER | Critical Damage | 6A | 15 | 100.0% | 82.0% | 32.5% | 0.0% | 76.7% | 82.0% | calibration |
 | CALIBRATE | Circle Protection % 24% | POSTAĆ: COMMANDERLUKESKYWALKER | Offense | 6A | 15 | 100.0% | 76.0% | 32.3% | 0.0% | 80.0% | 76.0% | calibration |
@@ -94,7 +95,6 @@ W raportach przeznaczonych do ręcznego wykonania mod identyfikowany jest wyłą
 | CALIBRATE | Cross Potency % 30% | POSTAĆ: GRANDMOFFTARKIN | Speed | 6A | 15 | 100.0% | 73.3% | 25.8% | 0.0% | 100.0% | 73.3% | calibration |
 | CALIBRATE | Circle Protection % 24% | POSTAĆ: BB8 | Health | 6A | 15 | 100.0% | 66.5% | 25.6% | 0.0% | 91.7% | 66.5% | calibration |
 | CALIBRATE | Triangle Protection % 24% | POSTAĆ: GRANDADMIRALTHRAWN | Health | 6A | 15 | 100.0% | 77.0% | 25.4% | 0.0% | 72.2% | 77.0% | calibration |
-| CALIBRATE | Diamond Defense % 20% | POSTAĆ: COMMANDERLUKESKYWALKER | Offense | 6A | 15 | 100.0% | 79.4% | 25.1% | 0.0% | 87.5% | 79.4% | calibration |
 
 ### JARJARBINKS — najlepszy wirtualny build 6/6
 
