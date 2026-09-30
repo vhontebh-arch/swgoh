@@ -20,12 +20,12 @@ W raportach przeznaczonych do ręcznego wykonania mod identyfikowany jest wyłą
 
 | Akcja | Mod | Źródło | Set | Tier | Lvl | Quality | Value | Fit | 6E proj. | Speed | Potencjał | Inwestycja |
 |---|---|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---|
-| CALIBRATE | Diamond Defense % 20% | POSTAĆ: SEVENTHSISTER | Speed | 6A | 15 | 100.0% | 63.8% | 53.0% | 0.0% | 76.7% | 63.8% | calibration |
-| CALIBRATE | Square Offense % 8.5% | POSTAĆ: JARJARBINKS | Speed | 6A | 15 | 100.0% | 63.5% | 53.0% | 0.0% | 86.7% | 63.5% | calibration |
+| CALIBRATE | Diamond Defense % 20% | POSTAĆ: SEVENTHSISTER | Speed | 6A | 15 | 100.0% | 63.8% | 52.9% | 0.0% | 76.7% | 63.8% | calibration |
+| CALIBRATE | Square Offense % 8.5% | POSTAĆ: JARJARBINKS | Speed | 6A | 15 | 100.0% | 63.5% | 52.9% | 0.0% | 86.7% | 63.5% | calibration |
 | CALIBRATE | Arrow Protection % 24% | POSTAĆ: JEDIKNIGHTREVAN | Speed | 6A | 15 | 100.0% | 68.2% | 49.6% | 0.0% | 80.0% | 68.2% | calibration |
 | CALIBRATE | Diamond Defense % 20% | POSTAĆ: GRANDADMIRALTHRAWN | Speed | 6A | 15 | 100.0% | 70.0% | 48.3% | 0.0% | 83.3% | 70.0% | calibration |
 | CALIBRATE | Diamond Defense % 20% | MAGAZYN | Speed | 6A | 15 | 100.0% | 64.3% | 48.2% | 0.0% | 80.0% | 64.3% | calibration |
-| CALIBRATE | Diamond Defense % 20% | POSTAĆ: HERMITYODA | Speed | 6A | 15 | 100.0% | 71.5% | 47.5% | 0.0% | 79.2% | 71.5% | calibration |
+| CALIBRATE | Diamond Defense % 20% | POSTAĆ: HERMITYODA | Speed | 6A | 15 | 100.0% | 71.5% | 47.6% | 0.0% | 79.2% | 71.5% | calibration |
 | CALIBRATE | Cross Potency % 30% | POSTAĆ: MARAJADE | Speed | 6A | 15 | 100.0% | 68.2% | 47.0% | 0.0% | 79.2% | 68.2% | calibration |
 | CALIBRATE | Triangle Health % 16% | POSTAĆ: JEDIKNIGHTREVAN | Speed | 6A | 15 | 100.0% | 58.0% | 47.0% | 0.0% | 79.2% | 58.0% | calibration |
 | CALIBRATE | Circle Protection % 24% | POSTAĆ: FIFTHBROTHER | Speed | 6A | 15 | 100.0% | 66.7% | 46.7% | 0.0% | 70.8% | 66.7% | calibration |
@@ -33,13 +33,13 @@ W raportach przeznaczonych do ręcznego wykonania mod identyfikowany jest wyłą
 | CALIBRATE | Circle Health % 16% | POSTAĆ: EPIXFINN | Speed | 6A | 15 | 100.0% | 65.8% | 45.6% | 0.0% | 88.9% | 65.8% | calibration |
 | CALIBRATE | Triangle Health % 16% | MAGAZYN | Potency | 6A | 15 | 100.0% | 65.1% | 45.0% | 0.0% | 83.3% | 65.1% | calibration |
 | CALIBRATE | Triangle Critical Damage % 42% | POSTAĆ: MARAJADE | Potency | 6A | 15 | 100.0% | 78.3% | 44.4% | 0.0% | 70.0% | 78.3% | calibration |
-| CALIBRATE | Diamond Defense % 20% | POSTAĆ: EPIXFINN | Speed | 6A | 15 | 100.0% | 68.8% | 43.8% | 0.0% | 77.8% | 68.8% | calibration |
+| CALIBRATE | Diamond Defense % 20% | POSTAĆ: EPIXFINN | Speed | 6A | 15 | 100.0% | 68.8% | 43.7% | 0.0% | 77.8% | 68.8% | calibration |
 | CALIBRATE | Diamond Defense % 20% | POSTAĆ: EMPERORPALPATINE | Speed | 6A | 15 | 100.0% | 64.5% | 43.6% | 0.0% | 79.2% | 64.5% | calibration |
 | CALIBRATE | Diamond Defense % 20% | POSTAĆ: MARAJADE | Speed | 6A | 15 | 100.0% | 81.0% | 42.7% | 0.0% | 88.9% | 81.0% | calibration |
-| CALIBRATE | Cross Health % 16% | POSTAĆ: JEDIKNIGHTREVAN | Health | 6A | 15 | 100.0% | 78.2% | 42.5% | 0.0% | 66.7% | 78.2% | calibration |
-| CALIBRATE | Cross Tenacity % 35% | POSTAĆ: SEVENTHSISTER | Speed | 6A | 15 | 100.0% | 74.0% | 41.8% | 0.0% | 83.3% | 74.0% | calibration |
+| CALIBRATE | Cross Health % 16% | POSTAĆ: JEDIKNIGHTREVAN | Health | 6A | 15 | 100.0% | 78.2% | 42.6% | 0.0% | 66.7% | 78.2% | calibration |
+| CALIBRATE | Cross Tenacity % 35% | POSTAĆ: SEVENTHSISTER | Speed | 6A | 15 | 100.0% | 74.0% | 41.9% | 0.0% | 83.3% | 74.0% | calibration |
 | CALIBRATE | Cross Potency % 30% | POSTAĆ: EMPERORPALPATINE | Speed | 6A | 15 | 100.0% | 69.8% | 41.4% | 0.0% | 83.3% | 69.8% | calibration |
-| CALIBRATE | Square Offense % 8.5% | POSTAĆ: BOSSNASS | Potency | 6A | 15 | 100.0% | 65.2% | 40.9% | 0.0% | 79.2% | 65.2% | calibration |
+| CALIBRATE | Square Offense % 8.5% | POSTAĆ: BOSSNASS | Potency | 6A | 15 | 100.0% | 65.2% | 41.0% | 0.0% | 79.2% | 65.2% | calibration |
 | CALIBRATE | Arrow Protection % 24% | POSTAĆ: VANGUARDTEMPLEGUARD | Speed | 6A | 15 | 100.0% | 66.0% | 40.5% | 0.0% | 70.8% | 66.0% | calibration |
 | CALIBRATE | Triangle Critical Damage % 42% | POSTAĆ: GRANDMOFFTARKIN | Speed | 6A | 15 | 100.0% | 64.0% | 40.5% | 0.0% | 79.2% | 64.0% | calibration |
 | CALIBRATE | Circle Protection % 24% | POSTAĆ: VANGUARDTEMPLEGUARD | Speed | 6A | 15 | 100.0% | 82.3% | 40.1% | 0.0% | 75.0% | 82.3% | calibration |
@@ -47,10 +47,10 @@ W raportach przeznaczonych do ręcznego wykonania mod identyfikowany jest wyłą
 | CALIBRATE | Diamond Defense % 20% | POSTAĆ: BB8 | Speed | 6A | 15 | 100.0% | 63.7% | 38.7% | 0.0% | 77.8% | 63.7% | calibration |
 | CALIBRATE | Diamond Defense % 20% | POSTAĆ: JEDIKNIGHTREVAN | Speed | 6A | 15 | 100.0% | 56.8% | 38.4% | 0.0% | 72.2% | 56.8% | calibration |
 | CALIBRATE | Diamond Defense % 20% | POSTAĆ: GRANDMOFFTARKIN | Speed | 6A | 15 | 100.0% | 69.0% | 37.0% | 0.0% | 88.9% | 69.0% | calibration |
+| CALIBRATE | Circle Protection % 24% | POSTAĆ: EMPERORPALPATINE | Potency | 6A | 15 | 100.0% | 65.3% | 37.0% | 0.0% | 70.8% | 65.3% | calibration |
 | CALIBRATE | Cross Defense % 20% | POSTAĆ: BB8 | Speed | 6A | 15 | 100.0% | 61.2% | 37.0% | 0.0% | 83.3% | 61.2% | calibration |
 | CALIBRATE | Square Offense % 8.5% | POSTAĆ: GRANDMOFFTARKIN | Potency | 6A | 15 | 100.0% | 51.4% | 37.0% | 0.0% | 77.8% | 51.4% | calibration |
 | CALIBRATE | Triangle Protection % 24% | POSTAĆ: FIFTHBROTHER | Speed | 6A | 15 | 100.0% | 76.0% | 36.9% | 0.0% | 94.4% | 76.0% | calibration |
-| CALIBRATE | Circle Protection % 24% | POSTAĆ: EMPERORPALPATINE | Potency | 6A | 15 | 100.0% | 65.3% | 36.9% | 0.0% | 70.8% | 65.3% | calibration |
 | CALIBRATE | Diamond Defense % 20% | POSTAĆ: OPERATIVE | Speed | 6A | 15 | 100.0% | 78.5% | 36.7% | 0.0% | 79.2% | 78.5% | calibration |
 | CALIBRATE | Circle Protection % 24% | POSTAĆ: VADER | Critical Chance | 6A | 15 | 100.0% | 74.3% | 36.7% | 0.0% | 70.8% | 74.3% | calibration |
 | CALIBRATE | Square Offense % 8.5% | POSTAĆ: SEVENTHSISTER | Speed | 6A | 15 | 100.0% | 63.0% | 36.7% | 0.0% | 91.7% | 63.0% | calibration |
@@ -66,24 +66,24 @@ W raportach przeznaczonych do ręcznego wykonania mod identyfikowany jest wyłą
 | CALIBRATE | Triangle Critical Damage % 42% | POSTAĆ: SANASTARROS | Health | 6A | 15 | 100.0% | 71.3% | 35.2% | 0.0% | 76.7% | 71.3% | calibration |
 | CALIBRATE | Square Offense % 8.5% | POSTAĆ: EMPERORPALPATINE | Potency | 6A | 15 | 100.0% | 60.3% | 35.0% | 0.0% | 88.9% | 60.3% | calibration |
 | CALIBRATE | Square Offense % 8.5% | POSTAĆ: GLREY | Offense | 6A | 15 | 100.0% | 76.7% | 34.8% | 0.0% | 80.0% | 76.7% | calibration |
-| CALIBRATE | Cross Tenacity % 35% | POSTAĆ: REY | Critical Damage | 6A | 15 | 100.0% | 63.0% | 33.2% | 0.0% | 83.3% | 63.0% | calibration |
-| CALIBRATE | Triangle Health % 16% | POSTAĆ: OPERATIVE | Speed | 6A | 15 | 100.0% | 62.8% | 32.7% | 0.0% | 66.7% | 62.8% | calibration |
+| CALIBRATE | Cross Tenacity % 35% | POSTAĆ: REY | Critical Damage | 6A | 15 | 100.0% | 63.0% | 33.1% | 0.0% | 83.3% | 63.0% | calibration |
+| CALIBRATE | Triangle Health % 16% | POSTAĆ: OPERATIVE | Speed | 6A | 15 | 100.0% | 62.8% | 32.6% | 0.0% | 66.7% | 62.8% | calibration |
 | CALIBRATE | Triangle Critical Damage % 42% | POSTAĆ: VADER | Critical Damage | 6A | 15 | 100.0% | 82.0% | 32.5% | 0.0% | 76.7% | 82.0% | calibration |
 | CALIBRATE | Circle Protection % 24% | POSTAĆ: COMMANDERLUKESKYWALKER | Offense | 6A | 15 | 100.0% | 76.0% | 32.3% | 0.0% | 80.0% | 76.0% | calibration |
 | CALIBRATE | Cross Offense % 8.5% | POSTAĆ: GLREY | Health | 6A | 15 | 100.0% | 69.3% | 31.6% | 0.0% | 79.2% | 69.3% | calibration |
 | CALIBRATE | Circle Health % 16% | POSTAĆ: HERMITYODA | Speed | 6A | 15 | 100.0% | 78.3% | 31.5% | 0.0% | 91.7% | 78.3% | calibration |
 | CALIBRATE | Triangle Health % 16% | POSTAĆ: NINTHSISTER | Tenacity | 6A | 15 | 100.0% | 79.7% | 31.1% | 0.0% | 83.3% | 79.7% | calibration |
 | CALIBRATE | Circle Health % 16% | POSTAĆ: JEDIKNIGHTREVAN | Health | 6A | 15 | 100.0% | 62.5% | 31.1% | 0.0% | 80.0% | 62.5% | calibration |
-| CALIBRATE | Arrow Speed 32 | POSTAĆ: SEVENTHSISTER | Health | 6A | 15 | 100.0% | 69.0% | 30.8% | 0.0% | 0.0% | 69.0% | calibration |
-| CALIBRATE | Circle Protection % 24% | POSTAĆ: GRANDMOFFTARKIN | Potency | 6A | 15 | 100.0% | 64.3% | 29.5% | 0.0% | 75.0% | 64.3% | calibration |
+| CALIBRATE | Arrow Speed 32 | POSTAĆ: SEVENTHSISTER | Health | 6A | 15 | 100.0% | 69.0% | 30.9% | 0.0% | 0.0% | 69.0% | calibration |
+| CALIBRATE | Circle Protection % 24% | POSTAĆ: GRANDMOFFTARKIN | Potency | 6A | 15 | 100.0% | 64.3% | 29.6% | 0.0% | 75.0% | 64.3% | calibration |
 | CALIBRATE | Triangle Critical Chance % 20% | POSTAĆ: BB8 | Health | 6A | 15 | 100.0% | 67.0% | 29.2% | 0.0% | 83.3% | 67.0% | calibration |
 | CALIBRATE | Square Offense % 8.5% | POSTAĆ: SCORCH | Health | 6A | 15 | 100.0% | 65.5% | 29.1% | 0.0% | 91.7% | 65.5% | calibration |
 | CALIBRATE | Triangle Offense % 8.5% | POSTAĆ: GLREY | Offense | 6A | 15 | 100.0% | 65.8% | 28.9% | 0.0% | 83.3% | 65.8% | calibration |
 | CALIBRATE | Triangle Critical Damage % 42% | POSTAĆ: REY | Critical Chance | 6A | 15 | 100.0% | 64.5% | 28.6% | 0.0% | 79.2% | 64.5% | calibration |
 | CALIBRATE | Cross Tenacity % 35% | POSTAĆ: NINTHSISTER | Tenacity | 6A | 15 | 100.0% | 62.0% | 28.6% | 0.0% | 83.3% | 62.0% | calibration |
 | CALIBRATE | Diamond Defense % 20% | POSTAĆ: FIFTHBROTHER | Health | 6A | 15 | 100.0% | 65.0% | 28.0% | 0.0% | 75.0% | 65.0% | calibration |
-| CALIBRATE | Triangle Protection % 24% | POSTAĆ: SCORCH | Health | 6A | 15 | 100.0% | 70.3% | 27.8% | 0.0% | 61.1% | 70.3% | calibration |
-| CALIBRATE | Cross Potency % 30% | MAGAZYN | Health | 6A | 15 | 100.0% | 62.8% | 27.8% | 0.0% | 83.3% | 62.8% | calibration |
+| CALIBRATE | Triangle Protection % 24% | POSTAĆ: SCORCH | Health | 6A | 15 | 100.0% | 70.3% | 27.9% | 0.0% | 61.1% | 70.3% | calibration |
+| CALIBRATE | Cross Potency % 30% | MAGAZYN | Health | 6A | 15 | 100.0% | 62.8% | 27.9% | 0.0% | 83.3% | 62.8% | calibration |
 | CALIBRATE | Square Offense % 8.5% | POSTAĆ: COMMANDERLUKESKYWALKER | Offense | 6A | 15 | 100.0% | 57.0% | 27.7% | 0.0% | 83.3% | 57.0% | calibration |
 | CALIBRATE | Arrow Offense % 8.5% | POSTAĆ: GLREY | Offense | 6A | 15 | 100.0% | 59.5% | 27.2% | 0.0% | 77.8% | 59.5% | calibration |
 | CALIBRATE | Diamond Defense % 20% | POSTAĆ: HOTHLEIA | Critical Damage | 6A | 15 | 100.0% | 63.8% | 27.1% | 0.0% | 88.9% | 63.8% | calibration |
@@ -101,10 +101,10 @@ W raportach przeznaczonych do ręcznego wykonania mod identyfikowany jest wyłą
 - Wynik optymalny: **358.9** (profil + bonusy setów)
 - Aktualny wynik: **358.9**
 - Zmiana: **+0.0**
-- Bonus setów w ocenie: **38.05**
+- Bonus setów w ocenie: **38.08**
 | Slot | Mod — parametry wyszukiwalne | Źródło | Fit |
 |---|---|---|---:|
-| Square | Square / Speed / Offense % 8.5% / secondary: Protection 1774, Tenacity % 2.52%, Defense 38, Speed 26 / 6★ A lvl15 | POSTAĆ: JARJARBINKS | 53.0 |
+| Square | Square / Speed / Offense % 8.5% / secondary: Protection 1774, Tenacity % 2.52%, Defense 38, Speed 26 / 6★ A lvl15 | POSTAĆ: JARJARBINKS | 52.9 |
 | Diamond | Diamond / Potency / Defense % 20% / secondary: Speed 14, Defense 24, Health % 1.72%, Protection % 6.04% / 6★ D lvl15 | POSTAĆ: JARJARBINKS | 47.4 |
 | Circle | Circle / Speed / Protection % 23.5% / secondary: Health 225, Protection 1199, Speed 17, Offense 30 / 5★ A lvl15 | POSTAĆ: JARJARBINKS | 59.0 |
 | Arrow | Arrow / Speed / Speed 30 / secondary: Protection 1703, Potency % 2.1%, Health 723, Offense 54 / 5★ A lvl15 | POSTAĆ: JARJARBINKS | 54.0 |
@@ -132,12 +132,12 @@ Analiza porównuje mody wyposażone z kandydatami z inventory dla każdego slotu
 
 | Akcja | Mod | Źródło | Slot | Set | Tier | Lvl | Fit | Set Δ | Fit po secie | Wkład moda | Pełny build Δ | Łańcuch |
 |---|---|---|---|---|---|---|---:|---:|---:|---:|---:|---:|
-| CALIBRATE | Diamond Defense % 20% | POSTAĆ: SEVENTHSISTER | Diamond | Speed | 6A | 15 | 53.0% | 0.00 | 53.0 | 0.0 | 0.0 | — |
-| CALIBRATE | Square Offense % 8.5% | POSTAĆ: JARJARBINKS | Square | Speed | 6A | 15 | 53.0% | 0.00 | 53.0 | 53.0 | 0.0 | — |
+| CALIBRATE | Diamond Defense % 20% | POSTAĆ: SEVENTHSISTER | Diamond | Speed | 6A | 15 | 52.9% | 0.00 | 52.9 | 0.0 | 0.0 | — |
+| CALIBRATE | Square Offense % 8.5% | POSTAĆ: JARJARBINKS | Square | Speed | 6A | 15 | 52.9% | 0.00 | 52.9 | 52.9 | 0.0 | — |
 | CALIBRATE | Arrow Protection % 24% | POSTAĆ: JEDIKNIGHTREVAN | Arrow | Speed | 6A | 15 | 49.6% | 0.00 | 49.6 | 0.0 | 0.0 | — |
 | CALIBRATE | Diamond Defense % 20% | POSTAĆ: GRANDADMIRALTHRAWN | Diamond | Speed | 6A | 15 | 48.3% | 0.00 | 48.3 | 0.0 | 0.0 | — |
 | CALIBRATE | Diamond Defense % 20% | MAGAZYN | Diamond | Speed | 6A | 15 | 48.2% | 0.00 | 48.2 | 0.0 | 0.0 | — |
-| CALIBRATE | Diamond Defense % 20% | POSTAĆ: HERMITYODA | Diamond | Speed | 6A | 15 | 47.5% | 0.00 | 47.5 | 0.0 | 0.0 | — |
+| CALIBRATE | Diamond Defense % 20% | POSTAĆ: HERMITYODA | Diamond | Speed | 6A | 15 | 47.6% | 0.00 | 47.6 | 0.0 | 0.0 | — |
 | CALIBRATE | Cross Potency % 30% | POSTAĆ: MARAJADE | Cross | Speed | 6A | 15 | 47.0% | 0.00 | 47.0 | 0.0 | 0.0 | — |
 | CALIBRATE | Triangle Health % 16% | POSTAĆ: JEDIKNIGHTREVAN | Triangle | Speed | 6A | 15 | 47.0% | 0.00 | 47.0 | 0.0 | 0.0 | — |
 | CALIBRATE | Circle Protection % 24% | POSTAĆ: FIFTHBROTHER | Circle | Speed | 6A | 15 | 46.7% | 0.00 | 46.7 | 0.0 | 0.0 | — |
@@ -145,11 +145,11 @@ Analiza porównuje mody wyposażone z kandydatami z inventory dla każdego slotu
 | CALIBRATE | Circle Health % 16% | POSTAĆ: EPIXFINN | Circle | Speed | 6A | 15 | 45.6% | 0.00 | 45.6 | 0.0 | 0.0 | — |
 | CALIBRATE | Triangle Health % 16% | MAGAZYN | Triangle | Potency | 6A | 15 | 45.0% | 0.00 | 45.0 | 0.0 | 0.0 | — |
 | CALIBRATE | Triangle Critical Damage % 42% | POSTAĆ: MARAJADE | Triangle | Potency | 6A | 15 | 44.4% | 0.00 | 44.4 | 0.0 | 0.0 | — |
-| CALIBRATE | Diamond Defense % 20% | POSTAĆ: EPIXFINN | Diamond | Speed | 6A | 15 | 43.8% | 0.00 | 43.8 | 0.0 | 0.0 | — |
+| CALIBRATE | Diamond Defense % 20% | POSTAĆ: EPIXFINN | Diamond | Speed | 6A | 15 | 43.7% | 0.00 | 43.7 | 0.0 | 0.0 | — |
 | CALIBRATE | Diamond Defense % 20% | POSTAĆ: EMPERORPALPATINE | Diamond | Speed | 6A | 15 | 43.6% | 0.00 | 43.6 | 0.0 | 0.0 | — |
 | CALIBRATE | Diamond Defense % 20% | POSTAĆ: MARAJADE | Diamond | Speed | 6A | 15 | 42.7% | 0.00 | 42.7 | 0.0 | 0.0 | — |
-| CALIBRATE | Cross Health % 16% | POSTAĆ: JEDIKNIGHTREVAN | Cross | Health | 6A | 15 | 42.5% | 0.00 | 42.5 | 0.0 | 0.0 | — |
-| CALIBRATE | Cross Tenacity % 35% | POSTAĆ: SEVENTHSISTER | Cross | Speed | 6A | 15 | 41.8% | 0.00 | 41.8 | 0.0 | 0.0 | — |
+| CALIBRATE | Cross Health % 16% | POSTAĆ: JEDIKNIGHTREVAN | Cross | Health | 6A | 15 | 42.6% | 0.00 | 42.6 | 0.0 | 0.0 | — |
+| CALIBRATE | Cross Tenacity % 35% | POSTAĆ: SEVENTHSISTER | Cross | Speed | 6A | 15 | 41.9% | 0.00 | 41.9 | 0.0 | 0.0 | — |
 
 ## Definicje
 
