@@ -4,11 +4,11 @@ Model rozdziela **jakość obecnych rolli**, **potencjał dalszego rozwoju**, **
 
 W raportach przeznaczonych do ręcznego wykonania mod identyfikowany jest wyłącznie przez slot, set, primary, secondary, gwiazdki, tier i poziom; wewnętrzne ID nie są pokazywane.
 
-- Modów: **2166**
-- UPGRADE: **835**
-- SLICE: **694**
+- Modów: **2164**
+- UPGRADE: **833**
+- SLICE: **693**
 - SLICE_6E: **137**
-- CALIBRATE: **93**
+- CALIBRATE: **94**
 - EQUIP: **0**
 - REPLACE: **2**
 - PATCH: **2**
@@ -24,6 +24,7 @@ W raportach przeznaczonych do ręcznego wykonania mod identyfikowany jest wyłą
 | REPLACE | Triangle Protection % 23.5% | POSTAĆ: B2SUPERBATTLEDROID | Potency | 5C | 15 | 100.0% | 91.0% | 49.9% | 0.0% | 77.8% | 91.0% | slice |
 | PATCH | Diamond Defense % 20% | MAGAZYN | Speed | 6A | 15 | 100.0% | 64.3% | 48.2% | 0.0% | 80.0% | 64.3% | calibration |
 | PATCH | Triangle Critical Damage % 36% | MAGAZYN | Defense | 5E | 15 | 100.0% | 72.0% | 27.5% | 0.0% | 83.3% | 72.0% | slice |
+| CALIBRATE | Circle Protection % 24% | POSTAĆ: JARJARBINKS | Speed | 6A | 15 | 100.0% | 75.3% | 55.1% | 0.0% | 76.7% | 75.3% | calibration |
 | CALIBRATE | Square Offense % 8.5% | POSTAĆ: JARJARBINKS | Speed | 6A | 15 | 100.0% | 63.5% | 52.9% | 0.0% | 86.7% | 63.5% | calibration |
 | CALIBRATE | Arrow Protection % 24% | POSTAĆ: JEDIKNIGHTREVAN | Speed | 6A | 15 | 100.0% | 68.2% | 49.6% | 0.0% | 80.0% | 68.2% | calibration |
 | CALIBRATE | Diamond Defense % 20% | POSTAĆ: GRANDADMIRALTHRAWN | Speed | 6A | 15 | 100.0% | 70.0% | 48.3% | 0.0% | 83.3% | 70.0% | calibration |
@@ -94,19 +95,18 @@ W raportach przeznaczonych do ręcznego wykonania mod identyfikowany jest wyłą
 | CALIBRATE | Triangle Critical Chance % 20% | POSTAĆ: COMMANDERLUKESKYWALKER | Tenacity | 6A | 15 | 100.0% | 63.2% | 27.0% | 0.0% | 94.4% | 63.2% | calibration |
 | CALIBRATE | Square Offense % 8.5% | POSTAĆ: VADER | Critical Damage | 6A | 15 | 100.0% | 61.3% | 26.7% | 0.0% | 83.3% | 61.3% | calibration |
 | CALIBRATE | Circle Protection % 24% | POSTAĆ: BOOMADIER | Critical Chance | 6A | 15 | 100.0% | 55.3% | 26.7% | 0.0% | 87.5% | 55.3% | calibration |
-| CALIBRATE | Cross Potency % 30% | POSTAĆ: GRANDMOFFTARKIN | Speed | 6A | 15 | 100.0% | 73.3% | 25.8% | 0.0% | 100.0% | 73.3% | calibration |
 
 ### JARJARBINKS — najlepszy wirtualny build 6/6
 
-- Wynik optymalny: **356.5** (profil + bonusy setów)
-- Aktualny wynik: **351.2**
+- Wynik optymalny: **354.7** (profil + bonusy setów)
+- Aktualny wynik: **349.4**
 - Zmiana: **+5.3**
 - Bonus setów w ocenie: **38.08**
 | Slot | Mod — parametry wyszukiwalne | Źródło | Fit |
 |---|---|---|---:|
 | Square | Square / Speed / Offense % 8.5% / secondary: Protection 1774, Tenacity % 2.52%, Defense 38, Speed 26 / 6★ A lvl15 | POSTAĆ: JARJARBINKS | 52.9 |
 | Diamond | Diamond / Speed / Defense % 20% / secondary: Potency % 2.53%, Speed 23, Protection 1247, Defense 46 / 6★ A lvl15 | POSTAĆ: SEVENTHSISTER | 52.9 |
-| Circle | Circle / Speed / Protection % 24% / secondary: Health 584, Protection 1329, Speed 23, Offense 71 / 6★ B lvl15 | POSTAĆ: JARJARBINKS | 56.9 |
+| Circle | Circle / Speed / Protection % 24% / secondary: Health 1116, Protection 1329, Speed 23, Offense 71 / 6★ A lvl15 | POSTAĆ: JARJARBINKS | 55.1 |
 | Arrow | Arrow / Speed / Speed 32 / secondary: Protection 1887, Potency % 2.8%, Health 1200, Offense 129 / 6★ B lvl15 | POSTAĆ: JARJARBINKS | 54.6 |
 | Triangle | Triangle / Potency / Protection % 23.5% / secondary: Offense % 0.47%, Speed 14, Health % 0.87%, Offense 27 / 5★ C lvl15 | POSTAĆ: B2SUPERBATTLEDROID | 49.9 |
 | Cross | Cross / Potency / Potency % 30% / secondary: Protection % 6.49%, Critical Chance % 2.71%, Health 296, Speed 24 / 6★ B lvl15 | POSTAĆ: JARJARBINKS | 51.2 |
@@ -142,6 +142,7 @@ Analiza porównuje mody wyposażone z kandydatami z inventory dla każdego slotu
 | REPLACE | Triangle Protection % 23.5% | POSTAĆ: B2SUPERBATTLEDROID | Triangle | Potency | 5C | 15 | 49.9% | 0.00 | 49.9 | 49.9 | 5.3 | MOD: B2SUPERBATTLEDROID -> JARJARBINKS; PATCH: MAGAZYN -> B2SUPERBATTLEDROID |
 | PATCH | Diamond Defense % 20% | MAGAZYN | Diamond | Speed | 6A | 15 | 48.2% | 0.00 | 48.2 | 0.5 | 0.5 | MOD: SEVENTHSISTER -> JARJARBINKS; PATCH: MAGAZYN -> SEVENTHSISTER |
 | PATCH | Triangle Critical Damage % 36% | MAGAZYN | Triangle | Defense | 5E | 15 | 27.5% | 0.00 | 27.5 | -19.0 | -19.0 | MOD: B2SUPERBATTLEDROID -> JARJARBINKS; PATCH: MAGAZYN -> B2SUPERBATTLEDROID |
+| CALIBRATE | Circle Protection % 24% | POSTAĆ: JARJARBINKS | Circle | Speed | 6A | 15 | 55.1% | 0.00 | 55.1 | 55.1 | 5.3 | — |
 | CALIBRATE | Square Offense % 8.5% | POSTAĆ: JARJARBINKS | Square | Speed | 6A | 15 | 52.9% | 0.00 | 52.9 | 52.9 | 5.3 | — |
 | CALIBRATE | Arrow Protection % 24% | POSTAĆ: JEDIKNIGHTREVAN | Arrow | Speed | 6A | 15 | 49.6% | 0.00 | 49.6 | 0.0 | 0.0 | — |
 | CALIBRATE | Diamond Defense % 20% | POSTAĆ: GRANDADMIRALTHRAWN | Diamond | Speed | 6A | 15 | 48.3% | 0.00 | 48.3 | 0.0 | 0.0 | — |
@@ -155,7 +156,6 @@ Analiza porównuje mody wyposażone z kandydatami z inventory dla każdego slotu
 | CALIBRATE | Triangle Critical Damage % 42% | POSTAĆ: MARAJADE | Triangle | Potency | 6A | 15 | 44.4% | 0.00 | 44.4 | 0.0 | 0.0 | — |
 | CALIBRATE | Diamond Defense % 20% | POSTAĆ: EPIXFINN | Diamond | Speed | 6A | 15 | 43.7% | 0.00 | 43.7 | 0.0 | 0.0 | — |
 | CALIBRATE | Diamond Defense % 20% | POSTAĆ: EMPERORPALPATINE | Diamond | Speed | 6A | 15 | 43.6% | 0.00 | 43.6 | 0.0 | 0.0 | — |
-| CALIBRATE | Diamond Defense % 20% | POSTAĆ: MARAJADE | Diamond | Speed | 6A | 15 | 42.7% | 0.00 | 42.7 | 0.0 | 0.0 | — |
 
 ## Definicje
 
