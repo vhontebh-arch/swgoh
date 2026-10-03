@@ -1,6 +1,6 @@
 # Account Farming Report
 
-- **JARJARBINKS**: G12 → G13, R1 → R5
+- **JARJARBINKS**: G13 → G13, R7 → R5
 
 ## Łączne braki
 
@@ -13,7 +13,7 @@
 
 ### JARJARBINKS
 
-Gear: **G12 → G13** Relic: **R1 → R5**
+Gear: **G13 → G13** Relic: **R7 → R5**
 
 #### Bezpośredni wymagany gear
 
@@ -21,13 +21,6 @@ Gear: **G12 → G13** Relic: **R1 → R5**
 
 #### Materiały relic
 
-- `SCV_001` × 120 — Carbonite Circuit Board
-- `SCV_002` × 160 — Bronzium Wiring
-- `RM_001` × 75 — Fragmented Signal Data
-- `SCV_003` × 90 — Chromium Transistor
-- `RM_002` × 65 — Incomplete Signal Data
-- `SCV_004` × 20 — Aurodium Heatsink
-- `RM_003` × 15 — Flawed Signal Data
 
 #### Braki
 
