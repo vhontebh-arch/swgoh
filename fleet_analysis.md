@@ -1,12 +1,12 @@
 # Fleet Analysis
 
-Loaded **65 ships** from `ships.csv`.
+Loaded **66 ships** from `ships.csv`.
 
 ## Executor
 
 ### Capital ship
 
-- **Executor** — BRAK W CSV
+- **Executor** — 4★, Lv 85, G1
 
 ### Core fleet
 
@@ -219,6 +219,7 @@ Loaded **65 ships** from `ships.csv`.
 
 ## Ships below 7★
 
+- **Executor** — 4★, Lv 85, G1
 - **Hyena Bomber** — 4★, Lv 85, G1
 - **Rogue One** — 4★, Lv 85, G1
 - **Sith Fighter** — 4★, Lv 85, G1

@@ -4,11 +4,11 @@ Automatyczna analiza aktualnego stanu statków na podstawie `ships.csv`.
 
 ## Podsumowanie ★
 
-- Wszystkich statków: **65**
+- Wszystkich statków: **66**
 - Statków 7★: **48**
 - Statków 6★: **4**
 - Statków 5★: **5**
-- Statków 4★: **8**
+- Statków 4★: **9**
 
 ## Capital ships
 
@@ -27,6 +27,7 @@ Automatyczna analiza aktualnego stanu statków na podstawie `ships.csv`.
 
 | Statek | ★ | Level | Gear |
 |---|---:|---:|---:|
+| CAPITALEXECUTOR | 4 | 85 | G1 |
 | EMPERORSSHUTTLE | 4 | 85 | G1 |
 | HYENABOMBER | 4 | 85 | G1 |
 | ROGUEONESHIP | 4 | 85 | G1 |
@@ -51,6 +52,7 @@ To jest **lista techniczna**, a nie kolejka farmienia. Priorytet flotowy zostani
 
 | Statek | ★ | Level | Gear |
 |---|---:|---:|---:|
+| CAPITALEXECUTOR | 4 | 85 | G1 |
 | EMPERORSSHUTTLE | 4 | 85 | G1 |
 | HYENABOMBER | 4 | 85 | G1 |
 | ROGUEONESHIP | 4 | 85 | G1 |
