@@ -5,59 +5,59 @@
       "role": "support",
       "source_model": {
         "method": "live SWGOH.GG Best Mods pages via proxy readers; equal-weight average of configured slices",
-        "refreshed_at_utc": "2026-10-19T10:46:45.822433+00:00",
+        "refreshed_at_utc": "2026-10-20T10:04:13.867450+00:00",
         "sources": [
           {
             "name": "Top 1000 Kyber GAC",
             "url": "https://swgoh.gg/units/jar-jar-binks/best-mods/",
             "set_combinations": {
-              "Speed + Potency": 74.6,
-              "Speed + Health": 9.7,
+              "Speed + Potency": 74.8,
+              "Speed + Health": 9.5,
               "Potency + Health": 1.2
             },
             "primary_pct": {
               "Arrow": {
-                "Speed": 96.33,
-                "Protection": 1.77,
+                "Speed": 96.23,
+                "Protection": 1.88,
                 "Health": 0.66,
                 "Offense": 0.66,
                 "Defense": 0.22,
                 "Accuracy": 0.22
               },
               "Triangle": {
-                "Protection": 55.77,
-                "Health": 5.0,
-                "Offense": 16.33,
-                "Defense": 2.88
+                "Protection": 55.09,
+                "Health": 5.21,
+                "Offense": 16.07,
+                "Defense": 3.32
               },
               "Circle": {
-                "Protection": 86.77,
-                "Health": 13.22
+                "Protection": 87.02,
+                "Health": 12.97
               },
               "Cross": {
-                "Potency": 78.88,
-                "Protection": 12.33,
-                "Health": 1.44,
-                "Offense": 5.0,
-                "Defense": 1.22
+                "Potency": 78.38,
+                "Protection": 12.3,
+                "Health": 1.55,
+                "Offense": 4.87,
+                "Defense": 1.66
               }
             },
             "secondary_focus_avg": {
               "Speed": {
-                "average": 19.9,
-                "focus_pct": 20.94
+                "average": 20.0,
+                "focus_pct": 20.93
               },
               "Health": {
-                "average": 790.6,
-                "focus_pct": 7.08
+                "average": 787.6,
+                "focus_pct": 7.01
               },
               "Offense": {
-                "average": 78.9,
-                "focus_pct": 7.29
+                "average": 79.4,
+                "focus_pct": 7.25
               },
               "Defense": {
-                "average": 21.4,
-                "focus_pct": 6.42
+                "average": 21.5,
+                "focus_pct": 6.51
               },
               "Potency": {
                 "average": 5.6,
@@ -142,50 +142,50 @@
         ]
       },
       "set_combinations": {
-        "Potency + Health": 2.15,
-        "Speed + Potency": 68.25,
-        "Speed + Health": 9.35
+        "Speed + Health": 9.25,
+        "Speed + Potency": 68.35,
+        "Potency + Health": 2.15
       },
       "set_preferences": {
-        "Potency": 0.9072,
-        "Health": 0.1482,
-        "Speed": 1.0
+        "Speed": 1.0,
+        "Health": 0.1469,
+        "Potency": 0.9085
       },
       "primary_preferences": {
         "Arrow": {
           "Health": 0.0192,
-          "Speed": 0.95,
           "Accuracy": 0.0016,
-          "Protection": 0.0202,
           "Defense": 0.0021,
-          "Offense": 0.0069
+          "Offense": 0.0069,
+          "Protection": 0.0207,
+          "Speed": 0.9495
         },
         "Triangle": {
-          "Health": 0.0978,
-          "Protection": 0.6693,
-          "Defense": 0.0459,
-          "Offense": 0.1869
+          "Health": 0.0993,
+          "Defense": 0.0487,
+          "Offense": 0.1857,
+          "Protection": 0.6663
         },
         "Circle": {
-          "Protection": 0.8234,
-          "Health": 0.1766
+          "Protection": 0.8246,
+          "Health": 0.1754
         },
         "Cross": {
-          "Health": 0.0339,
-          "Protection": 0.1367,
-          "Potency": 0.7516,
-          "Defense": 0.0224,
-          "Offense": 0.0554
+          "Health": 0.0345,
+          "Potency": 0.7495,
+          "Defense": 0.0246,
+          "Offense": 0.0548,
+          "Protection": 0.1366
         }
       },
       "secondary_preferences": {
-        "Health": 0.331,
+        "Health": 0.3294,
+        "Potency": 0.5051,
+        "Defense": 0.3146,
+        "Offense": 0.3469,
+        "Protection": 0.3737,
         "Speed": 1.0,
         "Protection %": 0.3521,
-        "Protection": 0.3736,
-        "Potency": 0.505,
-        "Defense": 0.3124,
-        "Offense": 0.3478,
         "Health %": 0.0,
         "Offense %": 0.0,
         "Defense %": 0.0,
