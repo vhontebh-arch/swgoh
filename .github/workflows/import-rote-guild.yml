@@ -1,0 +1,69 @@
+name: Import ROTE guild rosters
+
+on:
+  workflow_dispatch:
+    inputs:
+      ally_code:
+        description: "Ally Code of any member of your guild (defaults to the account already used by this repository)"
+        required: false
+        type: string
+        default: "972824625"
+
+permissions:
+  contents: read
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/rote-guild-planner
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Start SWGOH Comlink
+        run: |
+          set -e
+          docker pull ghcr.io/swgoh-utils/swgoh-comlink:latest
+          docker run --name swgoh-comlink -d -p 3000:3000 \
+            -e APP_NAME=vhonte-rote-planner \
+            ghcr.io/swgoh-utils/swgoh-comlink:latest
+          for i in $(seq 1 45); do
+            if curl -fsS "http://127.0.0.1:3000/" >/dev/null 2>&1; then
+              echo "Comlink is ready."
+              exit 0
+            fi
+            sleep 2
+          done
+          docker logs swgoh-comlink
+          exit 1
+
+      - name: Import and validate all guild member rosters
+        env:
+          ROTE_ALLY_CODE: ${{ inputs.ally_code }}
+          COMLINK_URL: http://127.0.0.1:3000
+        run: |
+          set -e
+          python rote_planner/src/import_guild_rosters.py \
+            --output /tmp/rote_guild_rosters.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          data = json.loads(Path("/tmp/rote_guild_rosters.json").read_text(encoding="utf-8"))
+          assert data.get("import_complete") is True
+          assert data["guild"]["member_count"] == len(data["members"])
+          assert all(member.get("player_id") and member.get("units") for member in data["members"])
+          print("Import validated.")
+          print("Guild:", data["guild"]["name"])
+          print("Members:", data["guild"]["member_count"])
+          print("Total roster units:", sum(m["roster_unit_count"] for m in data["members"]))
+          print("Roster data was kept on the runner and was not committed or uploaded as an artifact.")
+          PY
+
+      - name: Stop Comlink
+        if: always()
+        run: docker rm -f swgoh-comlink 2>/dev/null || true
