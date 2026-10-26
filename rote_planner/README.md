@@ -55,3 +55,17 @@ Wyznaczać plan, który maksymalizuje łączną liczbę gwiazdek przy uwzględni
 ## Ważne ograniczenie początkowe
 
 Obecny pipeline repozytorium pobiera roster jednego konta. To nie wystarcza do wiarygodnego planowania gildii. Zanim pokażemy realne przydziały lub prognozę gwiazdek, należy wdrożyć import rosterów wszystkich członków i zweryfikować sposób uzyskania danych gildii.
+
+## Import całej gildii
+
+Workflow `.github/workflows/import-rote-guild.yml` uruchamia Comlink w GitHub Actions i pobiera:
+1. profil konta wskazanego jako Ally Code,
+2. identyfikator gildii z profilu,
+3. listę członków gildii,
+4. profile i roster każdego członka.
+
+Uruchomienie: GitHub → Actions → **Import ROTE guild rosters** → Run workflow. Domyślnie używa Ally Code już skonfigurowanego w repozytorium; można go zmienić w polu wejściowym. Nie trzeba mieć kodów pozostałych członków.
+
+Dane rosterów są tworzone wyłącznie w katalogu tymczasowym runnera i nie są commitowane ani publikowane jako artefakt. Workflow na tym etapie wypisuje w logu tylko nazwę gildii, liczbę członków i łączną liczbę jednostek. To celowe zabezpieczenie przed przypadkowym ujawnieniem rosterów całej gildii w publicznym repozytorium.
+
+Importer odrzuca niekompletny wynik zamiast generować plan na podstawie części rosterów. Zapisuje surowe pola źródłowe jednostek, ponieważ mapowanie gwiazdek, gearu i reliktów do wspólnego modelu musi być osobno zweryfikowane na rzeczywistej odpowiedzi Comlink.
