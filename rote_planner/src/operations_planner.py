@@ -34,7 +34,7 @@ def plan_operations(data: dict[str, Any]) -> dict[str, Any]:
     """Assign eligible units to platoon slots, prioritizing scarce slots.
 
     Constraints enforced:
-    - A character can only be donated once by a member to the same planet.
+    - A character can only be donated once by a member to the same planet in a phase.
     - A member can donate at most 10 units per planet in a phase.
     - Each slot receives at most one assignment.
     - Candidate choice prefers the lower relic tier, then lower unit GP.
@@ -56,7 +56,7 @@ def plan_operations(data: dict[str, Any]) -> dict[str, Any]:
     slots.sort(key=lambda s: (len(candidates[s["slot_id"]]), s.get("phase", 0),
                               s.get("planet_id", ""), s.get("platoon_id", ""), s["slot_id"]))
 
-    donated_by_member_planet: dict[tuple[str, str], set[str]] = defaultdict(set)
+    donated_by_member_planet_phase: dict[tuple[str, str, str], set[str]] = defaultdict(set)
     assignments = []
     unfilled = []
     for slot in slots:
@@ -65,9 +65,9 @@ def plan_operations(data: dict[str, Any]) -> dict[str, Any]:
         choices = []
         for member, unit in candidates[slot["slot_id"]]:
             member_id = str(member["ally_code"])
-            key = (member_id, planet_id)
+            key = (member_id, planet_id, phase)
             unit_id = str(unit["unit_base_id"])
-            if unit_id in donated_by_member_planet[key]:
+            if unit_id in donated_by_member_planet_phase[key]:
                 continue
             if len(donated_by_member_planet[key]) >= int(data.get("donation_cap_per_member_planet_phase", 10)):
                 continue
