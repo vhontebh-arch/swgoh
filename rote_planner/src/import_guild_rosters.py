@@ -96,6 +96,15 @@ def main() -> int:
         if isinstance(member, dict) and member.get("playerId")
     ))
     if not player_ids:
+        # Diagnostic only: log response structure, never player values or roster data.
+        print("DEBUG guild response top-level keys:", sorted(guild.keys()), file=sys.stderr)
+        print("DEBUG guild response member type:", type(guild.get("member")).__name__, file=sys.stderr)
+        print("DEBUG guild response member count:", len(guild.get("member") or []) if isinstance(guild.get("member"), list) else "n/a", file=sys.stderr)
+        profile = guild.get("profile")
+        print("DEBUG guild response profile keys:", sorted(profile.keys()) if isinstance(profile, dict) else type(profile).__name__, file=sys.stderr)
+        if isinstance(guild.get("member"), list) and guild["member"]:
+            first = guild["member"][0]
+            print("DEBUG first member keys:", sorted(first.keys()) if isinstance(first, dict) else type(first).__name__, file=sys.stderr)
         raise SystemExit("Guild response contains no member player IDs; refusing to create an empty import.")
 
     players: list[dict] = [normalize_player(seed)]
