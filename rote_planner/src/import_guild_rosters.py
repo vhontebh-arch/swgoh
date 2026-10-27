@@ -91,7 +91,10 @@ def main() -> int:
     if not guild_id:
         raise SystemExit("Seed profile has no guildId; confirm the account belongs to a guild.")
 
-    guild = post_json(args.comlink_url, "guild", {"guildId": guild_id, "includeRecentGuildActivityInfo": True})
+    guild_response = post_json(args.comlink_url, "guild", {"guildId": guild_id, "includeRecentGuildActivityInfo": True})
+    # Current Comlink responses may wrap the actual guild object in a top-level "guild" field.
+    # Normalize both response shapes before reading member IDs.
+    guild = guild_response.get("guild") if isinstance(guild_response.get("guild"), dict) else guild_response
     members = guild.get("member") or []
     player_ids = list(dict.fromkeys(
         str(member.get("playerId")) for member in members
