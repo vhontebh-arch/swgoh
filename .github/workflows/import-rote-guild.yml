@@ -1,12 +1,6 @@
 name: Import ROTE guild rosters
 
 on:
-  push:
-    branches:
-      - feature/rote-guild-planner
-    paths:
-      - "rote_planner/src/import_guild_rosters.py"
-      - ".github/workflows/import-rote-guild.yml"
   workflow_dispatch:
     inputs:
       ally_code:
