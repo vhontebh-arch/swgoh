@@ -1,0 +1,69 @@
+{
+  "source_version": "SYNTHETIC-EXAMPLE-NOT-GAME-DATA",
+  "donation_cap_per_member_planet_phase": 10,
+  "members": [
+    {
+      "ally_code": "111222333",
+      "name": "Example Member A",
+      "units": [
+        {
+          "unit_base_id": "UNIT_ALPHA",
+          "stars": 7,
+          "relic": 5,
+          "gp": 22000
+        },
+        {
+          "unit_base_id": "UNIT_BETA",
+          "stars": 7,
+          "relic": 7,
+          "gp": 26000
+        }
+      ]
+    },
+    {
+      "ally_code": "444555666",
+      "name": "Example Member B",
+      "units": [
+        {
+          "unit_base_id": "UNIT_ALPHA",
+          "stars": 7,
+          "relic": 6,
+          "gp": 24000
+        },
+        {
+          "unit_base_id": "UNIT_GAMMA",
+          "stars": 7,
+          "relic": 5,
+          "gp": 21000
+        }
+      ]
+    }
+  ],
+  "platoons": [
+    {
+      "platoon_id": "EXAMPLE-PLATOON-1",
+      "planet_id": "EXAMPLE-PLANET",
+      "phase": 1,
+      "slots": [
+        {
+          "slot_id": "EX-1",
+          "unit_base_id": "UNIT_ALPHA",
+          "required_stars": 7,
+          "required_relic": 5
+        },
+        {
+          "slot_id": "EX-2",
+          "unit_base_id": "UNIT_BETA",
+          "required_stars": 7,
+          "required_relic": 5
+        },
+        {
+          "slot_id": "EX-3",
+          "unit_base_id": "UNIT_GAMMA",
+          "required_stars": 7,
+          "required_relic": 5
+        }
+      ]
+    }
+  ]
+}
