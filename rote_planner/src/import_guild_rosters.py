@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""Import every public roster in the guild containing the configured seed player.
+"""Diagnostic importer: inspect Comlink guild response before normalizing roster data.
+
+Import every public roster in the guild containing the configured seed player.
 
 Requires a running SWGOH Comlink HTTP service. Writes normalized JSON locally;
 the caller should upload it as a private/short-lived CI artifact, not commit it.
