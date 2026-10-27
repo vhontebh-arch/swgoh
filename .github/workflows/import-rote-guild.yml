@@ -50,7 +50,7 @@ jobs:
 
       - name: Import and validate all guild member rosters
         env:
-          ROTE_ALLY_CODE: ${{ inputs.ally_code }}
+          ROTE_ALLY_CODE: ${{ inputs.ally_code || '972824625' }}
           COMLINK_URL: http://127.0.0.1:3000
         run: |
           set -e
