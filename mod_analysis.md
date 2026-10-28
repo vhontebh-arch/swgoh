@@ -6,9 +6,9 @@ W raportach przeznaczonych do ręcznego wykonania mod identyfikowany jest wyłą
 
 - Modów: **2164**
 - UPGRADE: **326**
-- SLICE: **981**
+- SLICE: **980**
 - SLICE_6E: **190**
-- CALIBRATE: **100**
+- CALIBRATE: **101**
 - EQUIP: **0**
 - REPLACE: **3**
 - PATCH: **4**
@@ -32,6 +32,7 @@ W raportach przeznaczonych do ręcznego wykonania mod identyfikowany jest wyłą
 | CALIBRATE | Diamond Defense % 20% | POSTAĆ: SEVENTHSISTER | Speed | 6A | 15 | 100.0% | 63.8% | 53.0% | 0.0% | 76.7% | 63.8% | calibration |
 | CALIBRATE | Square Offense % 8.5% | POSTAĆ: JARJARBINKS | Speed | 6A | 15 | 100.0% | 63.5% | 53.0% | 0.0% | 86.7% | 63.5% | calibration |
 | CALIBRATE | Triangle Critical Chance % 20% | POSTAĆ: JARJARBINKS | Speed | 6A | 15 | 100.0% | 71.0% | 51.2% | 0.0% | 86.7% | 71.0% | calibration |
+| CALIBRATE | Cross Potency % 30% | POSTAĆ: JARJARBINKS | Potency | 6A | 15 | 100.0% | 73.2% | 50.1% | 0.0% | 80.0% | 73.2% | calibration |
 | CALIBRATE | Arrow Protection % 24% | POSTAĆ: JEDIKNIGHTREVAN | Speed | 6A | 15 | 100.0% | 68.2% | 49.6% | 0.0% | 80.0% | 68.2% | calibration |
 | CALIBRATE | Diamond Defense % 20% | POSTAĆ: GRANDADMIRALTHRAWN | Speed | 6A | 15 | 100.0% | 70.0% | 48.2% | 0.0% | 83.3% | 70.0% | calibration |
 | CALIBRATE | Diamond Defense % 20% | MAGAZYN | Speed | 6A | 15 | 100.0% | 64.3% | 48.2% | 0.0% | 80.0% | 64.3% | calibration |
@@ -94,13 +95,12 @@ W raportach przeznaczonych do ręcznego wykonania mod identyfikowany jest wyłą
 | CALIBRATE | Triangle Offense % 8.5% | POSTAĆ: GLREY | Offense | 6A | 15 | 100.0% | 65.8% | 28.9% | 0.0% | 83.3% | 65.8% | calibration |
 | CALIBRATE | Triangle Critical Damage % 42% | POSTAĆ: REY | Critical Chance | 6A | 15 | 100.0% | 64.5% | 28.7% | 0.0% | 79.2% | 64.5% | calibration |
 | CALIBRATE | Cross Tenacity % 35% | POSTAĆ: NINTHSISTER | Tenacity | 6A | 15 | 100.0% | 62.0% | 28.7% | 0.0% | 83.3% | 62.0% | calibration |
-| CALIBRATE | Diamond Defense % 20% | POSTAĆ: FIFTHBROTHER | Health | 6A | 15 | 100.0% | 65.0% | 28.0% | 0.0% | 75.0% | 65.0% | calibration |
 
 ### JARJARBINKS — najlepszy wirtualny build 6/6
 
 - Wynik optymalny: **362.9** (profil + bonusy setów)
-- Aktualny wynik: **351.5**
-- Zmiana: **+11.4**
+- Aktualny wynik: **350.2**
+- Zmiana: **+12.7**
 - Bonus setów w ocenie: **38.21**
 | Slot | Mod — parametry wyszukiwalne | Źródło | Fit |
 |---|---|---|---:|
@@ -143,24 +143,24 @@ Analiza porównuje mody wyposażone z kandydatami z inventory dla każdego slotu
 
 | Akcja | Mod | Źródło | Slot | Set | Tier | Lvl | Fit | Set Δ | Fit po secie | Wkład moda | Pełny build Δ | Łańcuch |
 |---|---|---|---|---|---|---|---:|---:|---:|---:|---:|---:|
-| REPLACE | Cross Offense % 5.88% | POSTAĆ: COMMANDERAHSOKA | Cross | Speed | 5C | 15 | 58.2% | 0.00 | 58.2 | 58.2 | 11.4 | MOD: COMMANDERAHSOKA -> JARJARBINKS; PATCH: MAGAZYN -> COMMANDERAHSOKA |
-| REPLACE | Arrow Speed 30 | POSTAĆ: TEEBO | Arrow | Potency | 5B | 15 | 54.8% | 0.00 | 54.8 | 54.8 | 11.4 | MOD: TEEBO -> JARJARBINKS; PATCH: MAGAZYN -> TEEBO |
-| REPLACE | Diamond Defense % 11.75% | POSTAĆ: HUNTERS3 | Diamond | Potency | 5A | 15 | 52.4% | 0.00 | 52.4 | 52.4 | 11.4 | MOD: HUNTERS3 -> JARJARBINKS; PATCH: B1BATTLEDROIDV2 -> HUNTERS3; PATCH: MAGAZYN -> B1BATTLEDROIDV2 |
+| REPLACE | Cross Offense % 5.88% | POSTAĆ: COMMANDERAHSOKA | Cross | Speed | 5C | 15 | 58.2% | 0.00 | 58.2 | 58.2 | 12.7 | MOD: COMMANDERAHSOKA -> JARJARBINKS; PATCH: MAGAZYN -> COMMANDERAHSOKA |
+| REPLACE | Arrow Speed 30 | POSTAĆ: TEEBO | Arrow | Potency | 5B | 15 | 54.8% | 0.00 | 54.8 | 54.8 | 12.7 | MOD: TEEBO -> JARJARBINKS; PATCH: MAGAZYN -> TEEBO |
+| REPLACE | Diamond Defense % 11.75% | POSTAĆ: HUNTERS3 | Diamond | Potency | 5A | 15 | 52.4% | 0.00 | 52.4 | 52.4 | 12.7 | MOD: HUNTERS3 -> JARJARBINKS; PATCH: B1BATTLEDROIDV2 -> HUNTERS3; PATCH: MAGAZYN -> B1BATTLEDROIDV2 |
 | PATCH | Diamond Defense % 11.75% | POSTAĆ: B1BATTLEDROIDV2 | Diamond | Potency | 5C | 15 | 27.9% | 0.00 | 27.9 | 14.5 | 14.5 | MOD: HUNTERS3 -> JARJARBINKS; PATCH: B1BATTLEDROIDV2 -> HUNTERS3; PATCH: MAGAZYN -> B1BATTLEDROIDV2 |
 | PATCH | Arrow Health % 5.88% | MAGAZYN | Arrow | Potency | 5E | 15 | 47.3% | 0.00 | 47.3 | 9.6 | 9.6 | MOD: TEEBO -> JARJARBINKS; PATCH: MAGAZYN -> TEEBO |
 | PATCH | Cross Tenacity % 24% | MAGAZYN | Cross | Health | 5E | 15 | 24.2% | 0.00 | 24.2 | 6.2 | 6.2 | MOD: COMMANDERAHSOKA -> JARJARBINKS; PATCH: MAGAZYN -> COMMANDERAHSOKA |
 | PATCH | Diamond Defense % 11.75% | MAGAZYN | Diamond | Health | 5E | 15 | 24.2% | 0.00 | 24.2 | 3.2 | 3.2 | MOD: HUNTERS3 -> JARJARBINKS; PATCH: B1BATTLEDROIDV2 -> HUNTERS3; PATCH: MAGAZYN -> B1BATTLEDROIDV2 |
-| CALIBRATE | Circle Protection % 24% | POSTAĆ: JARJARBINKS | Circle | Speed | 6A | 15 | 55.1% | 0.00 | 55.1 | 55.1 | 11.4 | — |
+| CALIBRATE | Circle Protection % 24% | POSTAĆ: JARJARBINKS | Circle | Speed | 6A | 15 | 55.1% | 0.00 | 55.1 | 55.1 | 12.7 | — |
 | CALIBRATE | Arrow Speed 32 | POSTAĆ: JARJARBINKS | Arrow | Speed | 6A | 15 | 54.7% | 0.00 | 54.7 | 0.0 | 0.0 | — |
 | CALIBRATE | Diamond Defense % 20% | POSTAĆ: SEVENTHSISTER | Diamond | Speed | 6A | 15 | 53.0% | 0.00 | 53.0 | 0.0 | 0.0 | — |
-| CALIBRATE | Square Offense % 8.5% | POSTAĆ: JARJARBINKS | Square | Speed | 6A | 15 | 53.0% | 0.00 | 53.0 | 53.0 | 11.4 | — |
-| CALIBRATE | Triangle Critical Chance % 20% | POSTAĆ: JARJARBINKS | Triangle | Speed | 6A | 15 | 51.2% | 0.00 | 51.2 | 51.2 | 11.4 | — |
+| CALIBRATE | Square Offense % 8.5% | POSTAĆ: JARJARBINKS | Square | Speed | 6A | 15 | 53.0% | 0.00 | 53.0 | 53.0 | 12.7 | — |
+| CALIBRATE | Triangle Critical Chance % 20% | POSTAĆ: JARJARBINKS | Triangle | Speed | 6A | 15 | 51.2% | 0.00 | 51.2 | 51.2 | 12.7 | — |
+| CALIBRATE | Cross Potency % 30% | POSTAĆ: JARJARBINKS | Cross | Potency | 6A | 15 | 50.1% | 0.00 | 50.1 | 0.0 | 0.0 | — |
 | CALIBRATE | Arrow Protection % 24% | POSTAĆ: JEDIKNIGHTREVAN | Arrow | Speed | 6A | 15 | 49.6% | 0.00 | 49.6 | 0.0 | 0.0 | — |
 | CALIBRATE | Diamond Defense % 20% | POSTAĆ: GRANDADMIRALTHRAWN | Diamond | Speed | 6A | 15 | 48.2% | 0.00 | 48.2 | 0.0 | 0.0 | — |
 | CALIBRATE | Diamond Defense % 20% | MAGAZYN | Diamond | Speed | 6A | 15 | 48.2% | 0.00 | 48.2 | 0.0 | 0.0 | — |
 | CALIBRATE | Diamond Defense % 20% | POSTAĆ: JARJARBINKS | Diamond | Potency | 6A | 15 | 47.9% | 0.00 | 47.9 | 0.0 | 0.0 | — |
 | CALIBRATE | Diamond Defense % 20% | POSTAĆ: HERMITYODA | Diamond | Speed | 6A | 15 | 47.5% | 0.00 | 47.5 | 0.0 | 0.0 | — |
-| CALIBRATE | Cross Potency % 30% | POSTAĆ: MARAJADE | Cross | Speed | 6A | 15 | 47.2% | 0.00 | 47.2 | 0.0 | 0.0 | — |
 
 ## Definicje
 
