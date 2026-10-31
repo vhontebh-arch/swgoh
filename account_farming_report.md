@@ -1,6 +1,6 @@
 # Account Farming Report
 
-- **JARJARBINKS**: G13 → G13, R7 → R5
+- **JARJARBINKS**: G13 → G13, R5 → R5
 
 ## Łączne braki
 
@@ -13,7 +13,7 @@
 
 ### JARJARBINKS
 
-Gear: **G13 → G13** Relic: **R7 → R5**
+Gear: **G13 → G13** Relic: **R5 → R5**
 
 #### Bezpośredni wymagany gear
 
