@@ -801,13 +801,13 @@ jobs:
                       "currentTier",
                       ""
                   ),
-                  "relicTier": (
-                      unit.get(
-                          "relic"
-                      ) or {}
-                  ).get(
-                      "currentTier",
-                      ""
+                  "relicTier": max(
+                      0,
+                      int(
+                          (
+                              unit.get("relic") or {}
+                          ).get("currentTier", 2) or 2
+                      ) - 2
                   )
               })
 
@@ -953,13 +953,13 @@ jobs:
                       "currentTier",
                       ""
                   ),
-                  "relicTier": (
-                      unit.get(
-                          "relic"
-                      ) or {}
-                  ).get(
-                      "currentTier",
-                      ""
+                  "relicTier": max(
+                      0,
+                      int(
+                          (
+                              unit.get("relic") or {}
+                          ).get("currentTier", 2) or 2
+                      ) - 2
                   )
               })
 
