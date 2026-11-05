@@ -6,13 +6,13 @@ W raportach przeznaczonych do ręcznego wykonania mod identyfikowany jest wyłą
 
 - Modów: **2175**
 - UPGRADE: **11**
-- SLICE: **1153**
+- SLICE: **1154**
 - SLICE_6E: **236**
-- CALIBRATE: **103**
+- CALIBRATE: **104**
 - EQUIP: **0**
 - REPLACE: **3**
 - PATCH: **3**
-- KEEP: **666**
+- KEEP: **664**
 
 ## Globalny optimizer 6-slotowy
 
@@ -53,6 +53,7 @@ W raportach przeznaczonych do ręcznego wykonania mod identyfikowany jest wyłą
 | CALIBRATE | Cross Offense % 8.5% | POSTAĆ: BOOMADIER | Speed | 6A | 15 | 100.0% | 57.7% | 41.4% | 0.0% | 83.3% | 57.7% | calibration |
 | CALIBRATE | Cross Potency % 30% | POSTAĆ: EMPERORPALPATINE | Speed | 6A | 15 | 100.0% | 69.8% | 41.3% | 0.0% | 83.3% | 69.8% | calibration |
 | CALIBRATE | Square Offense % 8.5% | POSTAĆ: BOSSNASS | Potency | 6A | 15 | 100.0% | 65.2% | 41.0% | 0.0% | 79.2% | 65.2% | calibration |
+| CALIBRATE | Triangle Critical Damage % 42% | POSTAĆ: BOOMADIER | Speed | 6A | 15 | 100.0% | 84.2% | 40.9% | 0.0% | 83.3% | 84.2% | calibration |
 | CALIBRATE | Triangle Critical Damage % 42% | POSTAĆ: GRANDMOFFTARKIN | Speed | 6A | 15 | 100.0% | 64.0% | 40.5% | 0.0% | 79.2% | 64.0% | calibration |
 | CALIBRATE | Arrow Protection % 24% | POSTAĆ: VANGUARDTEMPLEGUARD | Speed | 6A | 15 | 100.0% | 66.0% | 40.4% | 0.0% | 70.8% | 66.0% | calibration |
 | CALIBRATE | Circle Protection % 24% | POSTAĆ: VANGUARDTEMPLEGUARD | Speed | 6A | 15 | 100.0% | 82.3% | 40.2% | 0.0% | 75.0% | 82.3% | calibration |
@@ -94,7 +95,6 @@ W raportach przeznaczonych do ręcznego wykonania mod identyfikowany jest wyłą
 | CALIBRATE | Square Offense % 8.5% | POSTAĆ: SCORCH | Health | 6A | 15 | 100.0% | 65.5% | 29.1% | 0.0% | 91.7% | 65.5% | calibration |
 | CALIBRATE | Triangle Offense % 8.5% | POSTAĆ: GLREY | Offense | 6A | 15 | 100.0% | 65.8% | 29.0% | 0.0% | 83.3% | 65.8% | calibration |
 | CALIBRATE | Triangle Critical Damage % 42% | POSTAĆ: REY | Critical Chance | 6A | 15 | 100.0% | 64.5% | 28.8% | 0.0% | 79.2% | 64.5% | calibration |
-| CALIBRATE | Cross Tenacity % 35% | POSTAĆ: NINTHSISTER | Tenacity | 6A | 15 | 100.0% | 62.0% | 28.8% | 0.0% | 83.3% | 62.0% | calibration |
 
 ### JARJARBINKS — najlepszy wirtualny build 6/6
 
