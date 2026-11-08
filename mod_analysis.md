@@ -6,8 +6,8 @@ W raportach przeznaczonych do ręcznego wykonania mod identyfikowany jest wyłą
 
 - Modów: **2180**
 - UPGRADE: **16**
-- SLICE: **1154**
-- SLICE_6E: **236**
+- SLICE: **1151**
+- SLICE_6E: **239**
 - CALIBRATE: **104**
 - EQUIP: **0**
 - REPLACE: **3**
