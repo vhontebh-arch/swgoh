@@ -73,7 +73,7 @@ Loaded **66 ships** from `ships.csv`.
 
 ### Reinforcements
 
-- **TIE/IN Interceptor Prototype** — 5★, Lv 85, G1
+- **TIE/IN Interceptor Prototype** — 6★, Lv 85, G1
 
 ## Raddus
 
@@ -227,6 +227,6 @@ Loaded **66 ships** from `ships.csv`.
 - **Vulture Droid** — 4★, Lv 85, G1
 - **TIE Dagger** — 5★, Lv 85, G1
 - **TIE Defender** — 5★, Lv 85, G1
-- **TIE/IN Interceptor Prototype** — 5★, Lv 85, G1
 - **Outrider** — 6★, Lv 85, G1
 - **TIE Echelon** — 6★, Lv 85, G1
+- **TIE/IN Interceptor Prototype** — 6★, Lv 85, G1

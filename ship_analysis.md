@@ -6,8 +6,8 @@ Automatyczna analiza aktualnego stanu statków na podstawie `ships.csv`.
 
 - Wszystkich statków: **66**
 - Statków 7★: **48**
-- Statków 6★: **4**
-- Statków 5★: **5**
+- Statków 6★: **5**
+- Statków 5★: **4**
 - Statków 4★: **9**
 
 ## Capital ships
@@ -40,11 +40,11 @@ Automatyczna analiza aktualnego stanu statków na podstawie `ships.csv`.
 | SITHSUPREMACYCLASS | 5 | 85 | G1 |
 | TIEDAGGER | 5 | 85 | G1 |
 | TIEDEFENDER | 5 | 85 | G1 |
-| TIEINTERCEPTOR | 5 | 85 | G1 |
 | BWINGREBEL | 6 | 85 | G1 |
 | FIRSTORDERTIEECHELON | 6 | 85 | G1 |
 | MARAUDER | 6 | 85 | G1 |
 | OUTRIDER | 6 | 85 | G1 |
+| TIEINTERCEPTOR | 6 | 85 | G1 |
 
 ## Kandydaci do dalszego rozwoju
 
@@ -65,11 +65,11 @@ To jest **lista techniczna**, a nie kolejka farmienia. Priorytet flotowy zostani
 | SITHSUPREMACYCLASS | 5 | 85 | G1 |
 | TIEDAGGER | 5 | 85 | G1 |
 | TIEDEFENDER | 5 | 85 | G1 |
-| TIEINTERCEPTOR | 5 | 85 | G1 |
 | BWINGREBEL | 6 | 85 | G1 |
 | FIRSTORDERTIEECHELON | 6 | 85 | G1 |
 | MARAUDER | 6 | 85 | G1 |
 | OUTRIDER | 6 | 85 | G1 |
+| TIEINTERCEPTOR | 6 | 85 | G1 |
 
 ## Statki 7★
 
