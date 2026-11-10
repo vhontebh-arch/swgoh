@@ -6,17 +6,28 @@ W raportach przeznaczonych do ręcznego wykonania mod identyfikowany jest wyłą
 
 - Modów: **2192**
 - UPGRADE: **28**
-- SLICE: **1155**
-- SLICE_6E: **240**
+- SLICE: **1156**
+- SLICE_6E: **239**
 - CALIBRATE: **103**
 - EQUIP: **0**
 - REPLACE: **1**
 - PATCH: **1**
 - KEEP: **664**
 
+## Profile SWGOH.GG — lokalna baza
+
+Profile są przechowywane lokalnie i odświeżane tylko dla celu oraz potencjalnych dawców z pasujących slotów. Cache ma ważność 90 dni. Nieudane lub niepełne pobranie nie nadpisuje poprzedniego poprawnego profilu.
+
+| Postać (baseId) | Status |
+|---|---|
+| JARJARBINKS | cached |
+| JEDIKNIGHTREVAN | unavailable |
+
+Dla dawców bez lokalnego profilu po próbie pobrania używany jest fallback modValue; nie jest to ocena dopasowania do indywidualnego profilu.
+
 ## Globalny optimizer 6-slotowy
 
-Ocena kompletnego buildu: 40 pkt za statystyki główne, 60 pkt za maksymalnie 24 rolle secondary oraz wartość bonusów setów przeliczoną na równoważniki maksymalnych rolli i ważoną profilem setu. Preferencja setu jest miękką wskazówką (25–100%), nie blokadą; przy równym wyniku preferowane są mody pozostające już na celu.
+Ocena kompletnego buildu: 40 pkt za statystyki główne, 60 pkt za maksymalnie 24 rolle secondary oraz bonusy setów ważone profilem postaci. Zgodność z profilem ma pierwszeństwo przed zachowaniem aktualnie założonych modów. Set nieobecny w profilu zachowuje 10% bazowej wagi bonusu; set z preferencją 100% otrzymuje pełną wagę. Zachowanie modów na celu jest dopiero końcowym tie-breakiem.
 
 Ranking kandydujących buildów używa oddzielnej projekcji: brakujące rolle do limitu aktualnego tieru są optymistycznie przypisywane do najwyżej preferowanej statystyki profilu; mod 5A na poziomie 15 jest dodatkowo przeliczany do 6E. To górna granica potencjału, nie prognoza RNG ani rzeczywiste statystyki moda. Primary pozostaje na wartości z eksportu, ponieważ nie mamy w danych tabeli jego przyrostu dla każdego poziomu. Raport pokazuje osobno wynik aktualny i wynik po projekcji.
 
@@ -27,7 +38,7 @@ Bonus Speed Set używa bazowej szybkości 150, jeśli profil nie zawiera pola ba
 | Akcja | Mod | Źródło | Set | Tier | Lvl | Quality | Value | Fit | 6E proj. | Speed | Potencjał | Inwestycja |
 |---|---|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---|
 | REPLACE | Arrow Protection % 24% | POSTAĆ: JEDIKNIGHTREVAN | Speed | 6A | 15 | 100.0% | 68.2% | 42.7% | 0.0% | 80.0% | 68.2% | calibration |
-| PATCH | Arrow Health % 5.88% | MAGAZYN | Speed | 5B | 15 | 100.0% | 75.7% | 43.4% | 0.0% | 75.0% | 75.7% | slice |
+| PATCH | Arrow Health % 5.88% | MAGAZYN | Critical Chance | 5A | 15 | 100.0% | 87.2% | 30.5% | 51.2% | 83.3% | 87.2% | 6-dot |
 | CALIBRATE | Cross Health % 16% | POSTAĆ: JEDIKNIGHTREVAN | Health | 6A | 15 | 100.0% | 78.2% | 49.6% | 0.0% | 66.7% | 78.2% | calibration |
 | CALIBRATE | Circle Protection % 24% | POSTAĆ: JARJARBINKS | Speed | 6A | 15 | 100.0% | 75.3% | 49.5% | 0.0% | 76.7% | 75.3% | calibration |
 | CALIBRATE | Diamond Defense % 20% | POSTAĆ: SEVENTHSISTER | Speed | 6A | 15 | 100.0% | 63.8% | 46.8% | 0.0% | 76.7% | 63.8% | calibration |
@@ -104,11 +115,11 @@ Bonus Speed Set używa bazowej szybkości 150, jeśli profil nie zawiera pola ba
 
 ### JARJARBINKS — najlepszy wirtualny build 6/6
 
-- Wynik buildu po projekcji: **115.6** (lvl 15; 5A → 6E)
-- Aktualny build bez projekcji: **115.6**
-- Aktualny build po tej samej projekcji: **115.6**
+- Wynik buildu po projekcji: **115.5** (lvl 15; 5A → 6E)
+- Aktualny build bez projekcji: **115.5**
+- Aktualny build po tej samej projekcji: **115.5**
 - Zmiana potencjału względem projekcji obecnego buildu: **+0.0**
-- Bonus setów w ocenie: **14.09**
+- Bonus setów w ocenie: **13.97**
 | Slot | Mod — parametry wyszukiwalne | Źródło | Fit |
 |---|---|---|---:|
 | Square | Square / Speed / Offense % 8.5% / secondary: Protection 1774, Tenacity % 2.52%, Defense 38, Speed 26 / 6★ A lvl15 | POSTAĆ: JARJARBINKS | 46.8 |
@@ -122,12 +133,21 @@ Bonus Speed Set używa bazowej szybkości 150, jeśli profil nie zawiera pola ba
 
 **STATUS: OK — transfery są fizycznie wykonalne i nie dublują modów.**
 Bilans pokazuje sumę modValue wyposażonych modów oraz pełne sety przed i po transferze. modValue jest wskaźnikiem jakości samych modów, a nie indywidualnym wynikiem buildu dawcy. Utrata wartości lub setu u dawcy nie blokuje ruchu; to jawna informacja do ręcznej decyzji.
-Wariant łańcucha wybierany jest najpierw według zachowania lub poprawy pełnych setów, następnie łącznego fit dawców i sumy modValue. Porównywane są wszystkie warianty na najkrótszym wykonalnym poziomie; dłuższe łańcuchy nie są preferowane, jeśli istnieje krótsze rozwiązanie. Dla dawców bez własnego profilu fit korzysta z ogólnego modValue.
+Wariant łańcucha wybierany jest na najkrótszym wykonalnym poziomie według fit profilu dawcy, następnie zmiany pełnych setów i sumy modValue. Istniejące sety nie są twardą ochroną. Każda zmiana liczby modów w secie i liczby pełnych grup jest wyszczególniona niżej dla każdej postaci w łańcuchu. Dla dawców bez własnego profilu fit korzysta z ogólnego modValue.
 
 | Postać | Σ modValue przed | Σ modValue po | Δ modValue | Pełne sety przed | Pełne sety po |
 |---|---:|---:|---:|---|---|
 | JARJARBINKS | 409.4 | 419.4 | +10.0 | Potency=1, Speed=1 | Potency=1, Speed=1 |
-| JEDIKNIGHTREVAN | 382.9 | 390.4 | +7.5 | Health=1, Speed=1 | Health=1, Speed=1 |
+| JEDIKNIGHTREVAN | 382.9 | 401.9 | +19.0 | Health=1, Speed=1 | Health=1 |
+
+### Zmiany setów — każda postać w łańcuchu
+
+ROZBITO oznacza utratę co najmniej jednej pełnej grupy. BUDOWANY oznacza zwiększenie liczby modów danego setu bez ukończenia kolejnej grupy. UKOŃCZONO oznacza powstanie dodatkowej pełnej grupy. OSŁABIONY oznacza zmianę liczebności bez ukończenia lub rozbicia pełnej grupy.
+
+| Postać | Set | Zmiana liczby modów | Pełne sety | Status |
+|---|---|---:|---:|---|
+| JEDIKNIGHTREVAN | Critical Chance | 0/2 → 1/2 | 0 → 0 | BUDOWANY |
+| JEDIKNIGHTREVAN | Speed | 4/4 → 3/4 | 1 → 0 | ROZBITO |
 
 ### Ruchy — kolejność fizyczna
 
@@ -137,7 +157,7 @@ Wariant łańcucha wybierany jest najpierw według zachowania lub poprawy pełny
 |---:|---|---|---|---|
 | 1 | MOD | JEDIKNIGHTREVAN → JARJARBINKS | Arrow / Speed / Protection % 24% / secondary: Health 770, Defense % 9.48%, Protection 1035, Speed 24 / 6★ A lvl15 | VALIDATED |
 | 2 | RETURN | JARJARBINKS → MAGAZYN | Arrow / Speed / Speed 32 / secondary: Protection 2672, Potency % 2.8%, Health 1200, Offense 129 / 6★ A lvl15 | VALIDATED |
-| 3 | PATCH | MAGAZYN → JEDIKNIGHTREVAN | Arrow / Speed / Health % 5.88% / secondary: Speed 9, Protection % 1.65%, Protection 1028, Offense 61 / 5★ B lvl15 | VALIDATED |
+| 3 | PATCH | MAGAZYN → JEDIKNIGHTREVAN | Arrow / Critical Chance / Health % 5.88% / secondary: Protection % 3.78%, Speed 10, Offense % 1.2%, Offense 26 / 5★ A lvl15 | VALIDATED |
 
 ## Definicje
 
