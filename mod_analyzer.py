@@ -953,8 +953,12 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                 failed.append((target_id, "brak wykonalnego łańcucha dla {} / {}".format(slot,mod.get("set","")))); continue
             physical = {rid(mod)}
             for move in plan["moves"]: physical.update((rid(move["removed"]),rid(move["replacement"])))
-            if physical & used_ids:
-                failed.append((target_id, "konflikt modów dla {} / {}".format(slot,mod.get("set","")))); continue
+            overlap = physical & used_ids
+            if overlap:
+                failed.append((target_id, "konflikt modów dla {} / {} — ponownie użyty mod ID: {}".format(
+                    slot, mod.get("set",""), ", ".join(sorted(overlap))
+                )))
+                continue
             used_ids.update(physical)
             plans.append({"target":target_id,"target_owner":target_owner,"mod":mod,
                           "target_current":current,"moves":plan["moves"],"chain_gain":plan["gain"],
