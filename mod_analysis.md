@@ -18,6 +18,8 @@ W raportach przeznaczonych do ręcznego wykonania mod identyfikowany jest wyłą
 
 Ocena kompletnego buildu: 40 pkt za statystyki główne, 60 pkt za maksymalnie 24 rolle secondary oraz wartość bonusów setów przeliczoną na równoważniki maksymalnych rolli i ważoną profilem setu. Preferencja setu jest miękką wskazówką (25–100%), nie blokadą; przy równym wyniku preferowane są mody pozostające już na celu.
 
+Ranking kandydujących buildów używa oddzielnej projekcji: brakujące rolle do limitu aktualnego tieru są optymistycznie przypisywane do najwyżej preferowanej statystyki profilu; mod 5A na poziomie 15 jest dodatkowo przeliczany do 6E. To górna granica potencjału, nie prognoza RNG ani rzeczywiste statystyki moda. Primary pozostaje na wartości z eksportu, ponieważ nie mamy w danych tabeli jego przyrostu dla każdego poziomu. Raport pokazuje osobno wynik aktualny i wynik po projekcji.
+
 Bonus Speed Set używa bazowej szybkości 150, jeśli profil nie zawiera pola base_stats.Speed. Pozostałe bonusy procentowe są normalizowane względem maksymalnego rolla odpowiedniej statystyki.
 
 ## Najważniejsi kandydaci
@@ -102,9 +104,10 @@ Bonus Speed Set używa bazowej szybkości 150, jeśli profil nie zawiera pola ba
 
 ### JARJARBINKS — najlepszy wirtualny build 6/6
 
-- Wynik optymalny: **115.6** (profil + bonusy setów)
-- Aktualny wynik: **115.6**
-- Zmiana: **+0.0**
+- Wynik buildu po projekcji: **115.6** (lvl 15; 5A → 6E)
+- Aktualny build bez projekcji: **115.6**
+- Aktualny build po tej samej projekcji: **115.6**
+- Zmiana potencjału względem projekcji obecnego buildu: **+0.0**
 - Bonus setów w ocenie: **14.09**
 | Slot | Mod — parametry wyszukiwalne | Źródło | Fit |
 |---|---|---|---:|
