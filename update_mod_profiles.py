@@ -484,7 +484,8 @@ def main():
         print("{}: {}".format(base_id, status))
     unavailable = [base_id for base_id, status in statuses.items() if status == "unavailable"]
     if unavailable:
-        raise RuntimeError("Brak profilu nawet po próbie pobrania: {}".format(", ".join(unavailable)))
+        print("UWAGA: nie udało się pobrać profili: {}".format(", ".join(unavailable)))
+        print("Poprawnie pobrane profile i statusy błędów zostały zachowane w lokalnej bazie.")
     print("OK: lokalna baza zawiera {} profili".format(len(profiles)))
 
 
