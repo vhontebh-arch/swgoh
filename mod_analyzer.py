@@ -8,6 +8,8 @@ import csv
 import json
 import os
 
+from update_mod_profiles import ensure_profiles
+
 INPUT_FILE = "mods.csv"
 OUTPUT_CSV = "mod_analysis.csv"
 OUTPUT_MD = "mod_analysis.md"
@@ -1495,6 +1497,13 @@ def main():
     names = load_player_names()
     protected_owners = load_protected_owners()
     protected_owners = {aliases.get(owner_id, owner_id) for owner_id in protected_owners}
+    target_ids = {t.get("baseId") for t in targets if t.get("baseId")}
+    profile_fetch_status = {}
+
+    # Fetch target profiles first: without them the first full-build ranking
+    # would be based on a fallback and could select the wrong mod slots.
+    profiles, target_profile_status = ensure_profiles(target_ids, names)
+    profile_fetch_status.update(target_profile_status)
     rows = [analyze(row) for row in source]
 
     for row in rows:
@@ -1518,7 +1527,34 @@ def main():
     def rid(row):
         return str(row.get("id", "") or "")
 
-    optimizer = optimize_target_build(rows, {t.get("baseId") for t in targets}, profiles, aliases, names, protected_owners)
+    optimizer = optimize_target_build(rows, target_ids, profiles, aliases, names, protected_owners)
+
+    # Expand the cache only to owners who can physically participate as same-slot
+    # donors for at least one selected target slot. This is a conservative
+    # candidate set for the transfer-chain search, not the whole roster.
+    candidate_slots = {
+        str(mod.get("slot", "") or "")
+        for opt in optimizer.values()
+        for mod in opt.get("mods", [])
+    }
+    donor_ids = {
+        aliases.get(str(row.get("assignedTo", "") or ""), str(row.get("assignedTo", "") or ""))
+        for row in rows
+        if is_true(row.get("equipped"))
+        and str(row.get("slot", "") or "") in candidate_slots
+        and aliases.get(str(row.get("assignedTo", "") or ""), str(row.get("assignedTo", "") or "")) not in target_ids
+        and aliases.get(str(row.get("assignedTo", "") or ""), str(row.get("assignedTo", "") or "")) not in protected_owners
+    }
+    donor_ids.discard("")
+    if donor_ids:
+        profiles, donor_profile_status = ensure_profiles(donor_ids, names)
+        profile_fetch_status.update(donor_profile_status)
+        # Re-score every mod and rebuild the optimizer after profile enrichment.
+        for row in rows:
+            fit = character_fit(row, targets, profiles, aliases)
+            row.update(fit)
+        optimizer = optimize_target_build(rows, target_ids, profiles, aliases, names, protected_owners)
+
     # Mark the physical mods selected by the complete six-slot optimizer.
     # These values describe the full-build result, not a single-slot swap;
     # keeping that distinction prevents the Jar Jar candidate table from
@@ -1579,6 +1615,13 @@ def main():
         "- REPLACE: **{}**".format(counts.get("REPLACE",0)),
         "- PATCH: **{}**".format(counts.get("PATCH",0)),
         "- KEEP: **{}**".format(counts.get("KEEP",0)), "",
+        "## Profile SWGOH.GG — lokalna baza", "",
+        "Profile są przechowywane lokalnie i odświeżane tylko dla celu oraz potencjalnych dawców z pasujących slotów. Cache ma ważność 90 dni. Nieudane lub niepełne pobranie nie nadpisuje poprzedniego poprawnego profilu.", "",
+        "| Postać (baseId) | Status |",
+        "|---|---|",
+        *["| {} | {} |".format(unit_id, status) for unit_id, status in sorted(profile_fetch_status.items())],
+        "",
+        "Dla dawców bez lokalnego profilu po próbie pobrania używany jest fallback modValue; nie jest to ocena dopasowania do indywidualnego profilu.", "",
         "## Globalny optimizer 6-slotowy", "",
         "Ocena kompletnego buildu: 40 pkt za statystyki główne, 60 pkt za maksymalnie 24 rolle secondary oraz bonusy setów ważone profilem postaci. Zgodność z profilem ma pierwszeństwo przed zachowaniem aktualnie założonych modów. Set nieobecny w profilu zachowuje 10% bazowej wagi bonusu; set z preferencją 100% otrzymuje pełną wagę. Zachowanie modów na celu jest dopiero końcowym tie-breakiem.", "",
         "Ranking kandydujących buildów używa oddzielnej projekcji: brakujące rolle do limitu aktualnego tieru są optymistycznie przypisywane do najwyżej preferowanej statystyki profilu; mod 5A na poziomie 15 jest dodatkowo przeliczany do 6E. To górna granica potencjału, nie prognoza RNG ani rzeczywiste statystyki moda. Primary pozostaje na wartości z eksportu, ponieważ nie mamy w danych tabeli jego przyrostu dla każdego poziomu. Raport pokazuje osobno wynik aktualny i wynik po projekcji.", "",
