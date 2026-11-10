@@ -976,7 +976,7 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
             mod=plan["mod"]; slot=str(mod.get("slot",""))
             target_slot_was_empty = (plan["target_owner"], str(mod.get("slot",""))) not in eq
             mod["recommendedAction"]="EQUIP" if target_slot_was_empty else "REPLACE"
-            mod["chainStatus"]="SAFE"
+            mod["chainStatus"]="VALIDATED"
             mod["chainId"]="{}:{}".format(plan["target"],slot)
             mod["chainLength"]=1+len(plan["moves"]); mod["chainGain"]=round(plan["chain_gain"],1)
             # Physical execution starts with the selected mod, then repairs the vacated slot.
@@ -992,7 +992,7 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
             mod["chainPath"] = "MOD: " + selected_path + (("; " + "; ".join(repair_path)) if repair_path else "")
             mod["reason"]="BEZPIECZNY ŁAŃCUCH; najpierw MOD bezpośrednio do celu, potem PATCH-y w kolejności zależności"
             for idx,move in enumerate(plan["moves"],1):
-                patch=move["replacement"]; patch["recommendedAction"]="PATCH"; patch["chainStatus"]="SAFE"
+                patch=move["replacement"]; patch["recommendedAction"]="PATCH"; patch["chainStatus"]="VALIDATED"
                 patch["patchOwner"]=move["owner"]; patch["patchOwnerName"]=move["name"]; patch["patchSlot"]=slot
                 patch["chainId"]=mod["chainId"]; patch["chainStep"]=idx; patch["chainLength"]=mod["chainLength"]
                 patch["chainPath"]=mod["chainPath"]; patch["replacesModId"]=rid(move["removed"])
@@ -1470,20 +1470,26 @@ def main():
                 source_label(m, aliases, names), score_profile(m, profiles[target_id])["fitScore"]))
     lines += ["", "## BEZPIECZNY ŁAŃCUCH — walidacja globalna", ""]
     if chain_result.get("safe"):
-        lines.append("**STATUS: OK — łańcuchy zostały zweryfikowane na pełnym stanie rosteru.**")
-        lines.append("PATCH-y używają tego samego slotu i setu co mod zabrany ze źródła, więc liczności setów postaci poza celem pozostają bez zmian.")
+        lines.append("**STATUS: OK — transfery są fizycznie wykonalne i nie dublują modów.**")
+        lines.append("Bilans pokazuje sumę modValue oraz pełne sety przed i po transferze. Utrata wartości lub setu u dawcy nie blokuje ruchu; to jawna informacja do ręcznej decyzji.")
     else:
         lines.append("**STATUS: BLOKADA — nie wygenerowano bezpiecznej listy ruchów.**")
         for target_id, reason in chain_result.get("failed", []):
             lines.append("- {}: {}".format(target_id, reason))
-    lines += ["", "| Postać | Sety przed | Sety po | Status |", "|---|---|---|---|"]
-    affected_owners={m.get("owner") for p in chain_result.get("plans",[]) for m in p.get("moves",[])}
+    lines += [
+        "", "| Postać | Σ modValue przed | Σ modValue po | Δ modValue | Pełne sety przed | Pełne sety po |",
+        "|---|---:|---:|---:|---|---|"
+    ]
+    affected_owners={p.get("target_owner") for p in chain_result.get("plans",[])}
+    affected_owners.update(str(p["mod"].get("assignedTo","") or "") for p in chain_result.get("plans",[]) if p["mod"].get("assignedTo"))
+    affected_owners.update(m.get("owner") for p in chain_result.get("plans",[]) for m in p.get("moves",[]))
     for item in chain_result.get("validation",[]):
         if item.get("owner") in affected_owners:
-            lines.append("| {} | {} | {} | {} |".format(item["name"],
-                ", ".join("{}={}".format(k,v) for k,v in sorted(item["before"].items())) or "—",
-                ", ".join("{}={}".format(k,v) for k,v in sorted(item["after"].items())) or "—",
-                "OK" if item["ok"] else "BŁĄD"))
+            before_groups = ", ".join("{}={}".format(k,v) for k,v in sorted(item["beforeGroups"].items()) if v) or "—"
+            after_groups = ", ".join("{}={}".format(k,v) for k,v in sorted(item["afterGroups"].items()) if v) or "—"
+            lines.append("| {} | {:.1f} | {:.1f} | {:+.1f} | {} | {} |".format(
+                item["name"], item["beforeModValue"], item["afterModValue"],
+                item["modValueDelta"], before_groups, after_groups))
     lines += ["", "### Ruchy — kolejność fizyczna", "",
               "**Ważne:** każdy mod jest przenoszony tylko raz. Najpierw właściwy mod z `Źródło` trafia **bezpośrednio** do celu. Dopiero potem wykonujemy PATCH-y. Ponieważ wyszukiwanie po postaci nie jest dostępne, każda operacja zawiera slot, set, primary, wszystkie dostępne secondary, liczbę gwiazdek, tier i poziom.", "",
               "| Krok | Typ | Operacja | Mod — parametry wyszukiwalne | Status |", "|---:|---|---|---|---|"]
@@ -1491,13 +1497,15 @@ def main():
         step_no = 1
         for p in chain_result.get("plans",[]):
             m=p["mod"]
-            lines.append("| {} | MOD | {} → {} | {} | SAFE |".format(
-                step_no, display_name(str(m.get("assignedTo", "") or "")), display_name(p["target_owner"]), mod_description(m)))
+            source_id = str(m.get("assignedTo", "") or "")
+            source_name = display_name(source_id) if source_id else "MAGAZYN"
+            lines.append("| {} | MOD | {} → {} | {} | VALIDATED |".format(
+                step_no, source_name, display_name(p["target_owner"]), mod_description(m)))
             step_no += 1
             for move in p.get("moves", []):
                 replacement = move["replacement"]
                 src_name = display_name(str(replacement.get("assignedTo", "") or "")) if is_true(replacement.get("equipped")) else "MAGAZYN"
-                lines.append("| {} | PATCH | {} → {} | {} | SAFE |".format(
+                lines.append("| {} | PATCH | {} → {} | {} | VALIDATED |".format(
                     step_no, src_name, move["name"], mod_description(replacement)))
                 step_no += 1
     else:
