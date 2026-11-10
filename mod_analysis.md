@@ -5,13 +5,13 @@ Model rozdziela **jakość obecnych rolli**, **potencjał dalszego rozwoju**, **
 W raportach przeznaczonych do ręcznego wykonania mod identyfikowany jest wyłącznie przez slot, set, primary, secondary, gwiazdki, tier i poziom; wewnętrzne ID nie są pokazywane.
 
 - Modów: **2192**
-- UPGRADE: **28**
-- SLICE: **1156**
-- SLICE_6E: **240**
-- CALIBRATE: **104**
+- UPGRADE: **25**
+- SLICE: **1155**
+- SLICE_6E: **238**
+- CALIBRATE: **101**
 - EQUIP: **0**
-- REPLACE: **0**
-- PATCH: **0**
+- REPLACE: **5**
+- PATCH: **4**
 - KEEP: **664**
 
 ## Profile SWGOH.GG — lokalna baza
@@ -39,8 +39,15 @@ Bonus Speed Set używa bazowej szybkości 150, jeśli profil nie zawiera pola ba
 
 | Akcja | Mod | Źródło | Set | Tier | Lvl | Quality | Value | Fit | 6E proj. | Speed | Potencjał | Inwestycja |
 |---|---|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---|
-| CALIBRATE | Triangle Critical Damage % 42% | POSTAĆ: SANASTARROS | Health | 6A | 15 | 100.0% | 71.3% | 42.5% | 0.0% | 76.7% | 71.3% | calibration |
-| CALIBRATE | Cross Protection % 24% | POSTAĆ: SCORCH | Health | 6A | 15 | 100.0% | 69.5% | 42.3% | 0.0% | 73.3% | 69.5% | calibration |
+| REPLACE | Arrow Offense % 5.88% | MAGAZYN | Defense | 5A | 15 | 100.0% | 68.8% | 43.4% | 60.1% | 87.5% | 68.8% | 6-dot |
+| REPLACE | Triangle Critical Damage % 42% | POSTAĆ: SANASTARROS | Health | 6A | 15 | 100.0% | 71.3% | 42.5% | 0.0% | 76.7% | 71.3% | calibration |
+| REPLACE | Cross Protection % 24% | POSTAĆ: SCORCH | Health | 6A | 15 | 100.0% | 69.5% | 42.3% | 0.0% | 73.3% | 69.5% | calibration |
+| REPLACE | Square Offense % 5.88% | POSTAĆ: QUIGGOLD | Defense | 5A | 15 | 100.0% | 71.5% | 36.9% | 58.4% | 83.3% | 71.5% | 6-dot |
+| REPLACE | Circle Protection % 24% | POSTAĆ: SCORCH | Defense | 6A | 15 | 100.0% | 51.8% | 30.3% | 0.0% | 88.9% | 51.8% | calibration |
+| PATCH | Square Offense % 0.63% | MAGAZYN | Health | 5D | 1 | 100.0% | 100.0% | 80.0% | 0.0% | 66.7% | 100.0% | upgrade |
+| PATCH | Circle Health % 0.63% | MAGAZYN | Potency | 5D | 1 | 100.0% | 100.0% | 80.0% | 0.0% | 50.0% | 100.0% | upgrade |
+| PATCH | Cross Potency % 3% | MAGAZYN | Potency | 5D | 1 | 100.0% | 100.0% | 80.0% | 0.0% | 66.7% | 100.0% | upgrade |
+| PATCH | Triangle Defense % 11.75% | MAGAZYN | Health | 5C | 15 | 100.0% | 81.3% | 46.7% | 0.0% | 83.3% | 81.3% | slice |
 | CALIBRATE | Circle Health % 16% | POSTAĆ: JEDIKNIGHTREVAN | Health | 6A | 15 | 100.0% | 62.5% | 41.3% | 0.0% | 80.0% | 62.5% | calibration |
 | CALIBRATE | Square Offense % 8.5% | POSTAĆ: GLREY | Offense | 6A | 15 | 100.0% | 76.7% | 40.2% | 0.0% | 80.0% | 76.7% | calibration |
 | CALIBRATE | Arrow Protection % 24% | POSTAĆ: JEDIKNIGHTREVAN | Speed | 6A | 15 | 100.0% | 68.2% | 40.2% | 0.0% | 80.0% | 68.2% | calibration |
@@ -74,7 +81,6 @@ Bonus Speed Set używa bazowej szybkości 150, jeśli profil nie zawiera pola ba
 | CALIBRATE | Cross Offense % 8.5% | POSTAĆ: GLREY | Health | 6A | 15 | 100.0% | 69.3% | 31.3% | 0.0% | 79.2% | 69.3% | calibration |
 | CALIBRATE | Cross Tenacity % 35% | POSTAĆ: NINTHSISTER | Tenacity | 6A | 15 | 100.0% | 62.0% | 31.3% | 0.0% | 83.3% | 62.0% | calibration |
 | CALIBRATE | Circle Protection % 24% | POSTAĆ: HOTHLEIA | Critical Chance | 6A | 15 | 100.0% | 69.2% | 31.1% | 0.0% | 79.2% | 69.2% | calibration |
-| CALIBRATE | Circle Protection % 24% | POSTAĆ: SCORCH | Defense | 6A | 15 | 100.0% | 51.8% | 30.3% | 0.0% | 88.9% | 51.8% | calibration |
 | CALIBRATE | Cross Potency % 30% | POSTAĆ: VADER | Critical Damage | 6A | 15 | 100.0% | 67.3% | 30.0% | 0.0% | 75.0% | 67.3% | calibration |
 | CALIBRATE | Triangle Health % 16% | POSTAĆ: JEDIKNIGHTREVAN | Speed | 6A | 15 | 100.0% | 58.0% | 30.0% | 0.0% | 79.2% | 58.0% | calibration |
 | CALIBRATE | Circle Protection % 24% | POSTAĆ: BOOMADIER | Critical Chance | 6A | 15 | 100.0% | 55.3% | 30.0% | 0.0% | 87.5% | 55.3% | calibration |
@@ -108,12 +114,6 @@ Bonus Speed Set używa bazowej szybkości 150, jeśli profil nie zawiera pola ba
 | CALIBRATE | Square Offense % 8.5% | POSTAĆ: COMMANDERLUKESKYWALKER | Offense | 6A | 15 | 100.0% | 57.0% | 26.7% | 0.0% | 83.3% | 57.0% | calibration |
 | CALIBRATE | Diamond Defense % 20% | POSTAĆ: REYJEDITRAINING | Health | 6A | 15 | 100.0% | 72.2% | 25.7% | 0.0% | 83.3% | 72.2% | calibration |
 | CALIBRATE | Cross Defense % 20% | POSTAĆ: BB8 | Speed | 6A | 15 | 100.0% | 61.2% | 25.7% | 0.0% | 83.3% | 61.2% | calibration |
-| CALIBRATE | Circle Protection % 24% | POSTAĆ: GRANDMOFFTARKIN | Potency | 6A | 15 | 100.0% | 64.3% | 24.7% | 0.0% | 75.0% | 64.3% | calibration |
-| CALIBRATE | Cross Offense % 8.5% | POSTAĆ: BOOMADIER | Speed | 6A | 15 | 100.0% | 57.7% | 24.6% | 0.0% | 83.3% | 57.7% | calibration |
-| CALIBRATE | Circle Protection % 24% | POSTAĆ: BB8 | Health | 6A | 15 | 100.0% | 66.5% | 24.5% | 0.0% | 91.7% | 66.5% | calibration |
-| CALIBRATE | Square Offense % 8.5% | POSTAĆ: EMPERORPALPATINE | Potency | 6A | 15 | 100.0% | 60.3% | 24.5% | 0.0% | 88.9% | 60.3% | calibration |
-| CALIBRATE | Circle Health % 16% | POSTAĆ: EPIXFINN | Speed | 6A | 15 | 100.0% | 65.8% | 24.4% | 0.0% | 88.9% | 65.8% | calibration |
-| CALIBRATE | Triangle Offense % 8.5% | POSTAĆ: GLREY | Offense | 6A | 15 | 100.0% | 65.8% | 23.3% | 0.0% | 83.3% | 65.8% | calibration |
 
 ### VEL — najlepszy wirtualny build 6/6
 
@@ -133,18 +133,16 @@ Bonus Speed Set używa bazowej szybkości 150, jeśli profil nie zawiera pola ba
 
 ## BEZPIECZNY ŁAŃCUCH — walidacja globalna
 
-**STATUS: BLOKADA — nie wygenerowano bezpiecznej listy ruchów.**
-- VEL: konflikt modów dla Circle / Defense — ponownie użyty mod ID: 
-- VEL: konflikt modów dla Triangle / Health — ponownie użyty mod ID: 
-- VEL: konflikt modów dla Cross / Health — ponownie użyty mod ID: 
-- VEL: optimizer mod nie trafił na miejsce: Circle
-- VEL: optimizer mod nie trafił na miejsce: Triangle
-- VEL: optimizer mod nie trafił na miejsce: Cross
+**STATUS: OK — transfery są fizycznie wykonalne i nie dublują modów.**
+Bilans pokazuje sumę modValue wyposażonych modów oraz pełne sety przed i po transferze. modValue jest wskaźnikiem jakości samych modów, a nie indywidualnym wynikiem buildu dawcy. Utrata wartości lub setu u dawcy nie blokuje ruchu; to jawna informacja do ręcznej decyzji.
+Wariant łańcucha wybierany jest na najkrótszym wykonalnym poziomie według fit profilu dawcy, następnie zmiany pełnych setów i sumy modValue. Istniejące sety nie są twardą ochroną. Każda zmiana liczby modów w secie i liczby pełnych grup jest wyszczególniona niżej dla każdej postaci w łańcuchu. Dla dawców bez własnego profilu fit korzysta z ogólnego modValue.
 
 | Postać | Σ modValue przed | Σ modValue po | Δ modValue | Pełne sety przed | Pełne sety po |
 |---|---:|---:|---:|---|---|
 | QUIGGOLD | 361.3 | 389.8 | +28.5 | Defense=1, Health=2 | Health=2 |
-| VEL | 402.2 | 415.9 | +13.7 | Defense=1, Health=2 | Defense=2, Health=1 |
+| SANASTARROS | 372.9 | 382.9 | +10.0 | Health=1, Speed=1 | Health=1, Speed=1 |
+| VEL | 402.2 | 412.9 | +10.7 | Defense=1, Health=2 | Defense=2, Health=1 |
+| SCORCH | 355.6 | 434.3 | +78.7 | Defense=1, Health=2 | Health=1, Potency=1 |
 
 ### Zmiany setów — każda postać w łańcuchu
 
@@ -156,6 +154,9 @@ ROZBITO oznacza utratę co najmniej jednej pełnej grupy. BUDOWANY oznacza zwię
 | QUIGGOLD | Health | 4/2 → 5/2 | 2 → 2 | BUDOWANY |
 | VEL | Defense | 2/2 → 4/2 | 1 → 2 | UKOŃCZONO |
 | VEL | Health | 4/2 → 2/2 | 2 → 1 | ROZBITO |
+| SCORCH | Defense | 2/2 → 1/2 | 1 → 0 | ROZBITO |
+| SCORCH | Health | 4/2 → 3/2 | 2 → 1 | ROZBITO |
+| SCORCH | Potency | 0/2 → 2/2 | 0 → 1 | UKOŃCZONO |
 
 ### Ruchy — kolejność fizyczna
 
@@ -163,7 +164,20 @@ ROZBITO oznacza utratę co najmniej jednej pełnej grupy. BUDOWANY oznacza zwię
 
 | Krok | Typ | Operacja | Mod — parametry wyszukiwalne | Status |
 |---:|---|---|---|---|
-| — | — | — | — | BLOCKED |
+| 1 | MOD | QUIGGOLD → VEL | Square / Defense / Offense % 5.88% / secondary: Protection % 3.36%, Speed 15, Defense % 2.69%, Health 326 / 5★ A lvl15 | VALIDATED |
+| 2 | RETURN | VEL → MAGAZYN | Square / Health / Offense % 8.5% / secondary: Defense % 11.39%, Potency % 5.43%, Protection 1219, Speed 11 / 6★ C lvl15 | VALIDATED |
+| 3 | PATCH | MAGAZYN → QUIGGOLD | Square / Health / Offense % 0.63% / secondary: Speed 4 / 5★ D lvl1 | VALIDATED |
+| 4 | MOD | SCORCH → VEL | Circle / Defense / Protection % 24% / secondary: Defense 13, Speed 16, Tenacity % 7.97%, Defense % 12.54% / 6★ A lvl15 | VALIDATED |
+| 5 | RETURN | VEL → MAGAZYN | Circle / Health / Protection % 23.5% / secondary: Offense % 0.35%, Health 636, Speed 11, Health % 2.58% / 5★ A lvl15 | VALIDATED |
+| 6 | PATCH | MAGAZYN → SCORCH | Circle / Potency / Health % 0.63% / secondary: Speed 3 / 5★ D lvl1 | VALIDATED |
+| 7 | MOD | MAGAZYN → VEL | Arrow / Defense / Offense % 5.88% / secondary: Defense % 1.37%, Speed 21, Protection 712, Tenacity % 2.79% / 5★ A lvl15 | VALIDATED |
+| 8 | RETURN | VEL → MAGAZYN | Arrow / Health / Speed 32 / secondary: Offense 79, Protection % 6.18%, Offense % 4.08%, Defense % 7.05% / 6★ C lvl15 | VALIDATED |
+| 9 | MOD | SANASTARROS → VEL | Triangle / Health / Critical Damage % 42% / secondary: Protection 764, Speed 23, Protection % 4.06%, Defense % 13.03% / 6★ A lvl15 | VALIDATED |
+| 10 | RETURN | VEL → MAGAZYN | Triangle / Health / Protection % 23.5% / secondary: Defense % 3.92%, Tenacity % 2.07%, Speed 8, Defense 14 / 5★ A lvl15 | VALIDATED |
+| 11 | PATCH | MAGAZYN → SANASTARROS | Triangle / Health / Defense % 11.75% / secondary: Speed 15, Offense 33, Health % 0.97%, Defense 4 / 5★ C lvl15 | VALIDATED |
+| 12 | MOD | SCORCH → VEL | Cross / Health / Protection % 24% / secondary: Defense 24, Speed 22, Critical Chance % 3.97%, Health % 4.38% / 6★ A lvl15 | VALIDATED |
+| 13 | RETURN | VEL → MAGAZYN | Cross / Defense / Protection % 23.5% / secondary: Health % 2.48%, Critical Chance % 1.73%, Speed 11, Health 648 / 5★ A lvl15 | VALIDATED |
+| 14 | PATCH | MAGAZYN → SCORCH | Cross / Potency / Potency % 3% / secondary: Speed 4 / 5★ D lvl1 | VALIDATED |
 
 ## Definicje
 
