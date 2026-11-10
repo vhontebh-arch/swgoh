@@ -296,16 +296,18 @@ def build_profile(existing, sources):
 
 
 def validate_profile(profile):
-    if not {"Speed", "Potency"}.intersection(profile.get("set_preferences", {})):
-        raise RuntimeError("profil nie zawiera oczekiwanych setów Speed/Potency")
+    set_preferences = profile.get("set_preferences", {})
+    if not set_preferences or max((float(v) for v in set_preferences.values()), default=0) <= 0:
+        raise RuntimeError("profil: brak użytecznych preferencji setów")
 
     for slot in SLOTS:
         values = profile.get("primary_preferences", {}).get(slot, {})
-        if not values or max(values.values()) <= 0:
+        if not values or max((float(v) for v in values.values()), default=0) <= 0:
             raise RuntimeError(f"profil: brak użytecznych primary dla {slot}")
 
-    if profile.get("secondary_preferences", {}).get("Speed", 0) <= 0:
-        raise RuntimeError("profil: brak preferencji Speed")
+    secondary = profile.get("secondary_preferences", {})
+    if not secondary or max((float(v) for v in secondary.values()), default=0) <= 0:
+        raise RuntimeError("profil: brak użytecznych preferencji secondary")
 
 
 
