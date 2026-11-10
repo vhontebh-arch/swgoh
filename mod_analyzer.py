@@ -1252,8 +1252,9 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
                         index = set_names.index(name)
                         new_counts[index] = min(caps[name], new_counts[index] + 1)
                     new_counts = tuple(new_counts)
+                    projected_row = project_mod_for_build(row, profile)
                     candidate = (
-                        score_so_far + mod_score(row, profile),
+                        score_so_far + mod_score(projected_row, profile),
                         unchanged_so_far + (1 if unchanged else 0),
                         chosen + [row],
                     )
@@ -1266,7 +1267,8 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
 
         best = None
         for _counts, (base_score, unchanged_count, chosen) in states.items():
-            set_score, set_pref, breakdown = set_bonus_score(chosen, profile)
+            projected_chosen = [project_mod_for_build(m, profile) for m in chosen]
+            set_score, set_pref, breakdown = set_bonus_score(projected_chosen, profile)
             total = base_score + set_score
             key = (total, unchanged_count, set_pref)
             if best is None or key > best["key"]:
@@ -1406,7 +1408,7 @@ def main():
         "- KEEP: **{}**".format(counts.get("KEEP",0)), "",
         "## Globalny optimizer 6-slotowy", "",
         "Ocena kompletnego buildu: 40 pkt za statystyki główne, 60 pkt za maksymalnie 24 rolle secondary oraz wartość bonusów setów przeliczoną na równoważniki maksymalnych rolli i ważoną profilem setu. Preferencja setu jest miękką wskazówką (25–100%), nie blokadą; przy równym wyniku preferowane są mody pozostające już na celu.", "",
-        "Ranking kandydujących buildów używa oddzielnej projekcji: brakujące rolle do limitu aktualnego tieru są optymistycznie przypisywane do najwyżej preferowanej statystyki profilu; mod 5A na poziomie 15 jest dodatkowo przeliczany do 6E. To górna granica potencjału, nie prognoza RNG ani rzeczywiste statystyki moda. Raport pokazuje osobno wynik aktualny i wynik po projekcji.", "",
+        "Ranking kandydujących buildów używa oddzielnej projekcji: brakujące rolle do limitu aktualnego tieru są optymistycznie przypisywane do najwyżej preferowanej statystyki profilu; mod 5A na poziomie 15 jest dodatkowo przeliczany do 6E. To górna granica potencjału, nie prognoza RNG ani rzeczywiste statystyki moda. Primary pozostaje na wartości z eksportu, ponieważ nie mamy w danych tabeli jego przyrostu dla każdego poziomu. Raport pokazuje osobno wynik aktualny i wynik po projekcji.", "",
         "Bonus Speed Set używa bazowej szybkości 150, jeśli profil nie zawiera pola base_stats.Speed. Pozostałe bonusy procentowe są normalizowane względem maksymalnego rolla odpowiedniej statystyki.", "",
         "## Najważniejsi kandydaci", "",
         "| Akcja | Mod | Źródło | Set | Tier | Lvl | Quality | Value | Fit | 6E proj. | Speed | Potencjał | Inwestycja |",
