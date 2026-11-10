@@ -2,7 +2,7 @@ import unittest
 
 from mod_analyzer import (apply_optimizer_replacements, rolls, quality,
                           profile_primary_preference, profile_secondary_preference,
-                          profile_set_preferences, render_user_report)
+                          profile_set_preferences, profile_set_combo_support, render_user_report)
 
 
 TARGET = "target-instance"
@@ -91,6 +91,28 @@ class ProfileNormalizationTests(unittest.TestCase):
         self.assertAlmostEqual(prefs["Speed"], 0.2)
         self.assertAlmostEqual(prefs["Offense"], 0.1)
         self.assertAlmostEqual(prefs["Critical Chance"], 0.1)
+
+
+class DonorProfileImpactTests(unittest.TestCase):
+    def test_rare_set_combination_is_not_material_donor_loss(self):
+        profile = {"set_combinations": {
+            "Speed + Health": 52.3,
+            "Crit Damage + Health": 6.3,
+            "Speed + Defense": 11.4,
+            "Triple Health": 8.3,
+        }}
+        self.assertAlmostEqual(profile_set_combo_support(profile, "Defense"), 11.4)
+        self.assertLess(profile_set_combo_support(profile, "Defense"), 20.0)
+
+    def test_common_scorch_defense_combinations_are_material(self):
+        profile = {"set_combinations": {
+            "Double Health + Defense": 48.9,
+            "Double Defense + Health": 16.65,
+            "Triple Health": 14.35,
+            "Triple Defense": 6.45,
+        }}
+        self.assertAlmostEqual(profile_set_combo_support(profile, "Defense"), 72.0)
+        self.assertGreaterEqual(profile_set_combo_support(profile, "Defense"), 20.0)
 
 
 class UserReportTests(unittest.TestCase):
