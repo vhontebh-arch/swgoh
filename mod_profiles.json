@@ -205,10 +205,10 @@
       "source": "local_cache"
     },
     "JEDIKNIGHTREVAN": {
-      "status": "partial",
-      "checked_at_utc": "2026-11-10T16:00:00+01:00",
-      "fetched_at_utc": null,
-      "source": "SWGOH.GG direct page read by ChatGPT",
+      "status": "refreshed",
+      "checked_at_utc": "2026-11-10T17:21:00+00:00",
+      "fetched_at_utc": "2026-11-10T17:21:00+00:00",
+      "source": "SWGOH.GG direct page read by ChatGPT; full 12-stat lists supplied from expanded page output",
       "sources": [
         {
           "name": "Kyber GAC (Top 1000)",
@@ -349,7 +349,15 @@
               "Defense": 4.77
             }
           },
-          "secondary_focus_top4": {
+          "average_stats": {
+            "relic": 7.69,
+            "health": 78551,
+            "protection": 40903,
+            "speed": 318,
+            "potency": 49.47,
+            "tenacity": 56.99
+          },
+          "secondary_focus": {
             "Speed": {
               "average": 21.7,
               "focus_pct": 20.91
@@ -365,22 +373,43 @@
             "Protection": {
               "average": 1495.4,
               "focus_pct": 7.91
+            },
+            "Critical Chance %": {
+              "average": 3.74,
+              "focus_pct": 7.83
+            },
+            "Protection %": {
+              "average": 5.22,
+              "focus_pct": 7.15
+            },
+            "Health %": {
+              "average": 3.72,
+              "focus_pct": 7.04
+            },
+            "Offense %": {
+              "average": 3.09,
+              "focus_pct": 6.94
+            },
+            "Tenacity": {
+              "average": 4.53,
+              "focus_pct": 6.88
+            },
+            "Defense": {
+              "average": 22.3,
+              "focus_pct": 6.85
+            },
+            "Potency": {
+              "average": 4.56,
+              "focus_pct": 6.82
+            },
+            "Defense %": {
+              "average": 6.26,
+              "focus_pct": 5.54
             }
-          },
-          "average_stats": {
-            "relic": 7.69,
-            "health": 78551,
-            "protection": 40903,
-            "speed": 318,
-            "potency": 49.47,
-            "tenacity": 56.99
           }
         }
       ],
-      "missing": [
-        "Pełne 12 statystyk drugorzędnych dla slice'u Top 100 Guilds — odczytano dotąd tylko 4 z 12."
-      ],
-      "note": "Slice Kyber GAC ma komplet 12 statystyk drugorzędnych. Slice Top 100 Guilds nadal ma tylko 4 z 12, dlatego profil optymalizatora pozostaje niekompletny i nie został zbudowany."
+      "note": "Oba źródła zawierają komplet 12 statystyk drugorzędnych. Pełne dane źródłowe zostały zapisane. Profil pochodny optymalizatora nie został jeszcze wyliczony."
     }
   }
 }
