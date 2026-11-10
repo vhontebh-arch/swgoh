@@ -986,7 +986,7 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
     names = names or {}
     protected_owners = set(protected_owners or set())
     slots = ("Square", "Diamond", "Circle", "Arrow", "Triangle", "Cross")
-    primary_points, secondary_points, max_rolls = 20.0, 80.0, 24.0
+    primary_points, secondary_points, max_rolls = 40.0, 60.0, 24.0
     speed_reference = 150.0
     # Level-15 primary ceilings at 6 dots: compare 5-dot and 6-dot primaries
     # on a common scale, as Grandivory does when scoring actual stat values.
@@ -1083,7 +1083,10 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
                 full_units, half_units = max_bonus, small_bonus
 
             equivalents = (full_groups * full_units + half_groups * half_units) / max_roll
-            points = equivalents * stat_pref * secondary_points / max_rolls
+            # Meta set prevalence is a soft prior, not a hard restriction:
+            # even an unlisted set retains 25% of its stat-derived value.
+            set_weight = 0.25 + 0.75 * min(1.0, set_pref)
+            points = equivalents * stat_pref * set_weight * secondary_points / max_rolls
             total += points
             breakdown[name] = {
                 "fullGroups": full_groups, "halfGroups": half_groups,
@@ -1301,7 +1304,7 @@ def main():
         "- PATCH: **{}**".format(counts.get("PATCH",0)),
         "- KEEP: **{}**".format(counts.get("KEEP",0)), "",
         "## Globalny optimizer 6-slotowy", "",
-        "Ocena kompletnego buildu: 20 pkt za statystyki główne, 80 pkt za maksymalnie 24 rolle secondary oraz osobna wartość rzeczywistych bonusów setów przeliczona na równoważniki maksymalnych rolli. Preferencje setów rozstrzygają remisy; przy równym wyniku preferowane są mody pozostające już na celu.", "",
+        "Ocena kompletnego buildu: 40 pkt za statystyki główne, 60 pkt za maksymalnie 24 rolle secondary oraz wartość bonusów setów przeliczoną na równoważniki maksymalnych rolli i ważoną profilem setu. Preferencja setu jest miękką wskazówką (25–100%), nie blokadą; przy równym wyniku preferowane są mody pozostające już na celu.", "",
         "Bonus Speed Set używa bazowej szybkości 150, jeśli profil nie zawiera pola base_stats.Speed. Pozostałe bonusy procentowe są normalizowane względem maksymalnego rolla odpowiedniej statystyki.", "",
         "## Najważniejsi kandydaci", "",
         "| Akcja | Mod | Źródło | Set | Tier | Lvl | Quality | Value | Fit | 6E proj. | Speed | Potencjał | Inwestycja |",
