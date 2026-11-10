@@ -30,7 +30,7 @@ jobs:
           set -e
           cp mod_profiles.json mod_profiles.previous.json
 
-          python update_mod_profiles.py --units "${{ inputs.base_ids }}"
+          python update_mod_profiles.py --units "${{ inputs.base_ids }}" --max-age-days 0
 
           test -s mod_profiles.json
           python -m json.tool mod_profiles.json >/dev/null
