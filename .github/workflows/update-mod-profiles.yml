@@ -8,6 +8,10 @@ on:
         required: false
         type: string
 
+concurrency:
+  group: swgoh-optimizer-v2-data
+  cancel-in-progress: false
+
 permissions:
   contents: write
 
