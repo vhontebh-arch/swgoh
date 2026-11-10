@@ -68,6 +68,11 @@ jobs:
           with open("mod_profiles.json", encoding="utf-8") as f:
               data = json.load(f)
 
+          status = data.get("profile_status", {}).get(base_id, {}).get("status")
+          if status != "refreshed":
+              detail = data.get("profile_status", {}).get(base_id, {}).get("error", "brak szczegółów")
+              raise SystemExit(f"ERROR: profil {base_id} nie został świeżo pobrany (status={status}): {detail}")
+
           profile = data.get("profiles", {}).get(base_id)
           if not profile:
               raise SystemExit(f"ERROR: brak profilu {base_id} po odświeżeniu")
@@ -75,7 +80,7 @@ jobs:
               raise SystemExit(f"ERROR: {base_id}: brak primary_preferences")
           if not profile.get("secondary_preferences"):
               raise SystemExit(f"ERROR: {base_id}: brak secondary_preferences")
-          print(f"OK: profil {base_id} został zweryfikowany")
+          print(f"OK: profil {base_id} został świeżo pobrany i zweryfikowany")
           PY
 
       - name: Commit refreshed profile data
@@ -109,11 +114,11 @@ jobs:
         run: |
           if [[ "$REFRESH_OUTCOME" == "success" && "$COMMIT_OUTCOME" == "success" ]]; then
             if [[ "$CHANGED" == "true" ]]; then
-              MESSAGE="✅ Profil `$BASE_ID` został odświeżony, zweryfikowany i zapisany na gałęzi `optimizer-v2`. [Logi workflow]($RUN_URL)"
+              MESSAGE="SUCCESS: Profil $BASE_ID został odświeżony, zweryfikowany i zapisany na optimizer-v2. Logi: $RUN_URL"
             else
-              MESSAGE="✅ Profil `$BASE_ID` został pobrany i zweryfikowany; nie było zmian do zapisania. [Logi workflow]($RUN_URL)"
+              MESSAGE="SUCCESS: Profil $BASE_ID został pobrany i zweryfikowany; nie było zmian do zapisania. Logi: $RUN_URL"
             fi
           else
-            MESSAGE="❌ Odświeżanie profilu `$BASE_ID` nie zakończyło się poprawnie. Sprawdź [logi workflow]($RUN_URL), aby zobaczyć przyczynę."
+            MESSAGE="FAILURE: Odświeżanie profilu $BASE_ID nie powiodło się. Sprawdź logi: $RUN_URL"
           fi
           gh issue comment "$ISSUE_NUMBER" --body "$MESSAGE"
