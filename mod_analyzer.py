@@ -1043,7 +1043,18 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
 
             set_pref = max(0.0, float(profile.get("set_preferences", {}).get(name, 0.0)))
             preference_tiebreak += (full_groups + half_groups) * set_pref
-            stat_pref = max(0.0, float(secondary_prefs.get(stat, 0.0)))
+            profile_stat = {
+                "Health %": "Health",
+                "Defense %": "Defense",
+                "Offense %": "Offense",
+                "Potency %": "Potency",
+                "Tenacity %": "Tenacity",
+            }.get(stat, stat)
+            stat_pref = max(
+                0.0,
+                float(secondary_prefs.get(stat, 0.0)),
+                float(secondary_prefs.get(profile_stat, 0.0)),
+            )
             max_roll = R5.get(stat, (0.0, 0.0))[1] or set_max_roll.get(stat)
             if not max_roll or not stat_pref:
                 continue
@@ -1275,6 +1286,8 @@ def main():
         "- PATCH: **{}**".format(counts.get("PATCH",0)),
         "- KEEP: **{}**".format(counts.get("KEEP",0)), "",
         "## Globalny optimizer 6-slotowy", "",
+        "Ocena kompletnego buildu: 20 pkt za statystyki główne, 80 pkt za maksymalnie 24 rolle secondary oraz osobna wartość rzeczywistych bonusów setów przeliczona na równoważniki maksymalnych rolli. Preferencje setów rozstrzygają remisy; przy równym wyniku preferowane są mody pozostające już na celu.", "",
+        "Bonus Speed Set używa bazowej szybkości 150, jeśli profil nie zawiera pola base_stats.Speed. Pozostałe bonusy procentowe są normalizowane względem maksymalnego rolla odpowiedniej statystyki.", "",
         "## Najważniejsi kandydaci", "",
         "| Akcja | Mod | Źródło | Set | Tier | Lvl | Quality | Value | Fit | 6E proj. | Speed | Potencjał | Inwestycja |",
         "|---|---|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---|"
