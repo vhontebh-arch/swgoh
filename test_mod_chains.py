@@ -54,7 +54,7 @@ class RawRollScaleTests(unittest.TestCase):
         stat, value, count, values = rolls(row, 1)
         self.assertAlmostEqual(values[0], 1.298, places=3)
         self.assertAlmostEqual(values[1], 2.067, places=3)
-        expected = (((1.298 - 1.125) / (2.25 - 1.125)) + 1.0) / 2.0
+        expected = (((1.298 - 1.125) / (2.25 - 1.125)) + ((2.067 - 1.125) / (2.25 - 1.125))) / 2.0
         self.assertAlmostEqual(quality(stat, value, count, values, 5), expected, places=4)
 
 
