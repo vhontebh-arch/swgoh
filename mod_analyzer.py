@@ -854,28 +854,27 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
         src = owner(selected_mod)
         if not src:
             # Inventory -> target is a direct equip; no source slot needs repair.
-            return {"moves": [], "gain": 0.0}
+            return {"moves": [], "gain": 0.0, "set_delta": 0, "mod_value_delta": 0.0}
 
-        # Breadth-first search finds the shortest repair chain. Every candidate
-        # is considered; no arbitrary top-K truncation is applied.
-        # The selected mod leaves its source slot before PATCH operations begin.
-        # Keep it as the logical "removed" mod for scoring/set deltas, but mark
-        # the first physical destination as an empty slot.
+        # Exact breadth-first search by chain length. At the first depth with
+        # terminal inventory solutions, compare EVERY such solution instead of
+        # accepting the first candidate encountered. Longer chains are only
+        # considered when no shorter physically executable chain exists.
         queue=[(src,{src},set(selected_ids)|set(used_ids)|{rid(selected_mod)},[],True)]
-        visited_owners={src}
         candidate_inventory = list(inventory)
         if target_current and rid(target_current) not in selected_ids and rid(target_current) not in used_ids:
             recycled = dict(target_current)
             recycled["equipped"] = "False"
             recycled["assignedTo"] = ""
             candidate_inventory.append(recycled)
+
         while queue:
             next_queue=[]
+            terminal_solutions=[]
             for hole_owner,seen,forbidden,moves,initial_hole in queue:
                 current=selected_mod if initial_hole else working_eq.get((hole_owner,slot))
                 if current is None:
-                    return {"moves":moves,"gain":sum(x["gain"] for x in moves)}
-
+                    continue
                 who=base(current) or hole_owner
                 candidates=[]
                 for r in candidate_inventory:
@@ -892,31 +891,49 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                         continue
                     candidates.append((1,r))
 
-                candidates.sort(key=lambda x: (
-                    x[0],
-                    -completed_set_delta(hole_owner,current,x[1]),
-                    -float(x[1].get("modValue",0) or 0),
-                    -fit(x[1],who)
-                ))
                 for kind,replacement in candidates:
                     replacement_id=rid(replacement)
                     local_gain=fit(replacement,who)-fit(current,who)
+                    set_delta=completed_set_delta(hole_owner,current,replacement)
                     move={"owner":hole_owner,"name":pname(hole_owner),
                           "removed":None if initial_hole else current,
                           "replacement":replacement,"gain":local_gain,
-                          "set_delta":completed_set_delta(hole_owner,current,replacement)}
+                          "set_delta":set_delta}
                     new_moves=moves+[move]
+                    next_forbidden=forbidden|{rid(current),replacement_id}
                     if kind==0:
-                        return {"moves":new_moves,"gain":sum(x["gain"] for x in new_moves)}
-                    next_owner=owner(replacement)
-                    if next_owner not in visited_owners:
-                        visited_owners.add(next_owner)
-                        next_queue.append((
-                            next_owner,
-                            seen|{next_owner},
-                            forbidden|{rid(current),replacement_id},
-                            new_moves,False
-                        ))
+                        mod_value_delta=0.0
+                        for item in new_moves:
+                            removed=item.get("removed")
+                            removed_value=(float(removed.get("modValue",0) or 0)
+                                           if removed else float(selected_mod.get("modValue",0) or 0))
+                            mod_value_delta += float(item["replacement"].get("modValue",0) or 0)-removed_value
+                        terminal_solutions.append({
+                            "moves":new_moves,
+                            "gain":sum(x["gain"] for x in new_moves),
+                            "set_delta":sum(x["set_delta"] for x in new_moves),
+                            "mod_value_delta":mod_value_delta
+                        })
+                    else:
+                        next_owner=owner(replacement)
+                        if next_owner and next_owner not in seen:
+                            next_queue.append((
+                                next_owner,
+                                seen|{next_owner},
+                                next_forbidden,
+                                new_moves,False
+                            ))
+            if terminal_solutions:
+                # Lexicographic objective: shortest chain (BFS layer), then
+                # maximum total donor fit gain, completed-set delta, and
+                # total equipped modValue delta. IDs break exact ties only.
+                terminal_solutions.sort(key=lambda solution: (
+                    solution["gain"],
+                    solution["set_delta"],
+                    solution["mod_value_delta"],
+                    tuple(rid(m["replacement"]) for m in solution["moves"])
+                ), reverse=True)
+                return terminal_solutions[0]
             queue=next_queue
         return None
 
