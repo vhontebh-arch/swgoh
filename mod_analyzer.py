@@ -788,7 +788,7 @@ def apply_replacements(rows, target_base_ids, profiles=None, aliases=None, names
 
 
 def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None, aliases=None, names=None, protected_owners=None):
-    """Realize optimizer mods with same-slot/same-set repair chains and full validation."""
+    """Plan physical same-slot mod transfers and report every affected owner's balance."""
     profiles = profiles or {}
     aliases = aliases or {}
     names = names or {}
@@ -802,7 +802,6 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
     def fit(r, who):
         profile = profiles.get(who)
         return float(score_profile(r, profile)["fitScore"]) if profile else float(r.get("modValue", 0) or 0)
-    def mature(r): return integer(r.get("level")) >= 15 and integer(r.get("dots")) >= 5
     def set_counts(mods):
         out = {}
         for m in mods:
@@ -860,8 +859,8 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
         # Breadth-first search finds the shortest repair chain. Every candidate
         # is considered; no arbitrary top-K truncation is applied.
         queue=[(src,{src},set(selected_ids)|set(used_ids)|{rid(selected_mod)},[])]
-        depth=0
-        while queue and depth <= 10:
+        visited_owners={src}
+        while queue:
             next_queue=[]
             for hole_owner,seen,forbidden,moves in queue:
                 current=working_eq.get((hole_owner,slot))
@@ -899,7 +898,8 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                     if kind==0:
                         return {"moves":new_moves,"gain":sum(x["gain"] for x in new_moves)}
                     next_owner=owner(replacement)
-                    if next_owner not in seen:
+                    if next_owner not in visited_owners:
+                        visited_owners.add(next_owner)
                         next_queue.append((
                             next_owner,
                             seen|{next_owner},
@@ -907,7 +907,6 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                             new_moves
                         ))
             queue=next_queue
-            depth+=1
         return None
 
     plans, failed, used_ids = [], [], set()
@@ -921,7 +920,7 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
             if current is not None and rid(current) == rid(mod): continue
             plan = find_chain(mod, target_id, used_ids)
             if plan is None:
-                failed.append((target_id, "brak bezpiecznego łańcucha dla {} / {}".format(slot,mod.get("set","")))); continue
+                failed.append((target_id, "brak wykonalnego łańcucha dla {} / {}".format(slot,mod.get("set","")))); continue
             physical = {rid(mod)}
             for move in plan["moves"]: physical.update((rid(move["removed"]),rid(move["replacement"])))
             if physical & used_ids:
@@ -965,7 +964,7 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
         })
 
     for target_id,opt in optimizer.items():
-        target_owner=next((o for (o,_s),r in eq.items() if base(r)==target_id),None)
+        target_owner=resolve_target_owner(target_id)
         for mod in opt.get("mods",[]):
             placed=final_eq.get((target_owner,str(mod.get("slot","")))) if target_owner else None
             if not placed or rid(placed)!=rid(mod):
@@ -990,7 +989,7 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                 replacement_source = pname(owner(replacement)) if is_true(replacement.get("equipped")) else "MAGAZYN"
                 repair_path.append("PATCH: {} -> {}".format(replacement_source, move["name"]))
             mod["chainPath"] = "MOD: " + selected_path + (("; " + "; ".join(repair_path)) if repair_path else "")
-            mod["reason"]="BEZPIECZNY ŁAŃCUCH; najpierw MOD bezpośrednio do celu, potem PATCH-y w kolejności zależności"
+            mod["reason"]="ŁAŃCUCH WYKONALNY; najpierw MOD bezpośrednio do celu, potem PATCH-y w kolejności zależności"
             for idx,move in enumerate(plan["moves"],1):
                 patch=move["replacement"]; patch["recommendedAction"]="PATCH"; patch["chainStatus"]="VALIDATED"
                 patch["patchOwner"]=move["owner"]; patch["patchOwnerName"]=move["name"]; patch["patchSlot"]=slot
