@@ -948,6 +948,79 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
 
     final_eq = dict(working_eq)
 
+    # Independent physical replay: do not trust the planner's mutable working_eq.
+    # Every step must consume a mod from its actual current location and leave
+    # exactly one copy in exactly one place.
+    simulated_slots = {(o, slot): rid(mod) for (o, slot), mod in eq.items()}
+    simulated_inventory = {rid(mod) for mod in inventory}
+    physical_errors = []
+
+    def take_mod(mod_id, expected_owner=None):
+        if expected_owner:
+            key = next((k for k, value in simulated_slots.items()
+                        if k[0] == expected_owner and value == mod_id), None)
+            if key is None:
+                physical_errors.append("mod {} nie znajduje się już na postaci {}".format(mod_id, expected_owner))
+                return False
+            simulated_slots.pop(key)
+            return True
+        if mod_id in simulated_inventory:
+            simulated_inventory.remove(mod_id)
+            return True
+        key = next((k for k, value in simulated_slots.items() if value == mod_id), None)
+        if key is not None:
+            simulated_slots.pop(key)
+            return True
+        physical_errors.append("mod {} nie istnieje w aktualnym stanie symulacji".format(mod_id))
+        return False
+
+    for plan in plans:
+        selected = plan["mod"]
+        selected_id = rid(selected)
+        selected_source = owner(selected)
+        target_owner = plan["target_owner"]
+        slot = str(selected.get("slot", "") or "")
+        if selected_source:
+            if not take_mod(selected_id, selected_source):
+                continue
+        elif not take_mod(selected_id):
+            continue
+
+        target_key = (target_owner, slot)
+        displaced_id = simulated_slots.pop(target_key, None)
+        if displaced_id:
+            simulated_inventory.add(displaced_id)
+        simulated_slots[target_key] = selected_id
+
+        for move in plan.get("moves", []):
+            replacement = move["replacement"]
+            replacement_id = rid(replacement)
+            replacement_slot = str(replacement.get("slot", "") or "")
+            destination = (move["owner"], slot)
+            if replacement_slot != slot:
+                physical_errors.append("PATCH {} używa slotu {}, wymagany {}".format(
+                    replacement_id, replacement_slot, slot))
+                continue
+            if not take_mod(replacement_id):
+                continue
+            removed_id = simulated_slots.pop(destination, None)
+            if removed_id != rid(move["removed"]):
+                physical_errors.append("PATCH {}: w slocie {} postaci {} oczekiwano {}, znaleziono {}".format(
+                    replacement_id, slot, move["owner"], rid(move["removed"]), removed_id))
+            if removed_id:
+                simulated_inventory.add(removed_id)
+            simulated_slots[destination] = replacement_id
+
+    expected_slots = {(o, slot): rid(mod) for (o, slot), mod in final_eq.items()}
+    if simulated_slots != expected_slots:
+        physical_errors.append("końcowy stan slotów po symulacji różni się od stanu zaplanowanego")
+    all_simulated_ids = list(simulated_slots.values()) + list(simulated_inventory)
+    if len(all_simulated_ids) != len(set(all_simulated_ids)):
+        physical_errors.append("ten sam mod występuje jednocześnie w kilku miejscach")
+    if physical_errors:
+        safe = False
+        failed.extend(("walidacja fizyczna", error) for error in physical_errors)
+
     affected = {p["target_owner"] for p in plans}
     affected.update(owner(p["mod"]) for p in plans if owner(p["mod"]))
     affected.update(m["owner"] for p in plans for m in p["moves"])
