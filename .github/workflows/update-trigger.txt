@@ -1,1 +1,1 @@
-optimizer-v2 projected mod development scoring verification 2026-11-10
+optimizer-v2 projected build scoring and generic target report verification 2026-11-10
