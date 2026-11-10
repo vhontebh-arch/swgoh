@@ -206,7 +206,7 @@
     },
     "JEDIKNIGHTREVAN": {
       "status": "unavailable",
-      "checked_at_utc": "2026-11-10T16:42:34.539063+00:00",
+      "checked_at_utc": "2026-11-10T16:44:04.933550+00:00",
       "fetched_at_utc": null,
       "source": "none",
       "error": "RuntimeError: nie udało się pobrać https://swgoh.gg/units/jediknightrevan/best-mods/: odpowiedź zbyt krótka (861 B)"
