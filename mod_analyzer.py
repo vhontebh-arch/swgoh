@@ -12,7 +12,7 @@ INPUT_FILE = "mods.csv"
 OUTPUT_CSV = "mod_analysis.csv"
 OUTPUT_MD = "mod_analysis.md"
 PROFILE_FILE = "mod_profiles.json"
-ANALYZER_VERSION = "2026-11-10-global-chain-balance-v5"
+ANALYZER_VERSION = "2026-11-10-global-chain-balance-v6"
 
 R5 = {
     "Critical Chance %": (1.125, 2.25), "Defense": (4.9, 9.8),
@@ -955,7 +955,9 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                 failed.append((target_id, "konflikt modów dla {} / {}".format(slot,mod.get("set","")))); continue
             used_ids.update(physical)
             plans.append({"target":target_id,"target_owner":target_owner,"mod":mod,
-                          "target_current":current,"moves":plan["moves"],"chain_gain":plan["gain"]})
+                          "target_current":current,"moves":plan["moves"],"chain_gain":plan["gain"],
+                          "chain_set_delta":plan.get("set_delta",0),
+                          "chain_mod_value_delta":plan.get("mod_value_delta",0.0)})
 
             old_owner = owner(mod)
             if old_owner and (old_owner,slot) in working_eq and rid(working_eq[(old_owner,slot)]) == rid(mod):
@@ -1086,6 +1088,8 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
             mod["chainStatus"]="VALIDATED"
             mod["chainId"]="{}:{}".format(plan["target"],slot)
             mod["chainLength"]=1+len(plan["moves"]); mod["chainGain"]=round(plan["chain_gain"],1)
+            mod["chainSetDelta"]=plan.get("chain_set_delta",0)
+            mod["chainModValueDelta"]=round(plan.get("chain_mod_value_delta",0.0),1)
             # Physical execution starts with the selected mod, then repairs the vacated slot.
             # Every PATCH is a separate mod transfer; the selected mod never travels through
             # another character.
@@ -1106,6 +1110,8 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                 patch_row["chainId"]=mod["chainId"]; patch_row["chainStep"]=idx; patch_row["chainLength"]=mod["chainLength"]
                 patch_row["chainPath"]=mod["chainPath"]; patch_row["replacesModId"]=rid(move["removed"])
                 patch_row["replacementGain"]=round(move["gain"],1); patch_row["accountGain"]=round(move["gain"],1)
+                patch_row["chainSetDelta"]=mod.get("chainSetDelta",0)
+                patch_row["chainModValueDelta"]=mod.get("chainModValueDelta",0.0)
                 patch_row["reason"]="PATCH {}; zmiana pełnych setów {:+d}".format(move["name"],move["set_delta"])
     else:
         for r in rows:
