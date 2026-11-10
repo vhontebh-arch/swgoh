@@ -274,38 +274,6 @@
             "Protection %": {
               "average": 5.37,
               "focus_pct": 7.6
-            },
-            "Critical Chance %": {
-              "average": 3.51,
-              "focus_pct": 7.57
-            },
-            "Offense": {
-              "average": 83.7,
-              "focus_pct": 7.54
-            },
-            "Offense %": {
-              "average": 3.16,
-              "focus_pct": 7.45
-            },
-            "Health %": {
-              "average": 3.88,
-              "focus_pct": 7.41
-            },
-            "Potency": {
-              "average": 4.31,
-              "focus_pct": 6.7
-            },
-            "Tenacity": {
-              "average": 4.31,
-              "focus_pct": 6.66
-            },
-            "Defense": {
-              "average": 21.7,
-              "focus_pct": 6.49
-            },
-            "Defense %": {
-              "average": 6.56,
-              "focus_pct": 5.6
             }
           }
         },
@@ -373,43 +341,11 @@
             "Protection": {
               "average": 1495.4,
               "focus_pct": 7.91
-            },
-            "Critical Chance %": {
-              "average": 3.74,
-              "focus_pct": 7.83
-            },
-            "Protection %": {
-              "average": 5.22,
-              "focus_pct": 7.15
-            },
-            "Health %": {
-              "average": 3.72,
-              "focus_pct": 7.04
-            },
-            "Offense %": {
-              "average": 3.09,
-              "focus_pct": 6.94
-            },
-            "Tenacity": {
-              "average": 4.53,
-              "focus_pct": 6.88
-            },
-            "Defense": {
-              "average": 22.3,
-              "focus_pct": 6.85
-            },
-            "Potency": {
-              "average": 4.56,
-              "focus_pct": 6.82
-            },
-            "Defense %": {
-              "average": 6.26,
-              "focus_pct": 5.54
             }
           }
         }
       ],
-      "note": "Oba źródła zawierają komplet 12 statystyk drugorzędnych. Pełne dane źródłowe zostały zapisane. Profil pochodny optymalizatora nie został jeszcze wyliczony."
+      "note": "Oba źródła zawierają wymagane TOP 4 statystyki drugorzędne, zachowane w oryginalnej kolejności źródła wraz ze średnią i focus_pct. Pozostałe statystyki drugorzędne nie są wymagane. Profil pochodny optymalizatora nie został jeszcze wyliczony."
     }
   }
 }
