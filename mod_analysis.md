@@ -47,12 +47,12 @@
 3. **PATCH — załóż na MASTERQUIGON** mod z MAGAZYN: Square / Health / Offense % 0.63% / secondary: Speed 4 / 5★ D lvl1
 4. **Circle — załóż na VEL** mod z SCORCH: Circle / Defense / Protection % 24% / secondary: Defense 13, Speed 16, Tenacity % 7.97%, Defense % 12.54% / 6★ A lvl15
 5. Zdejmij dotychczasowy mod z VEL do MAGAZYNU: Circle / Health / Protection % 23.5% / secondary: Offense % 0.35%, Health 636, Speed 11, Health % 2.58% / 5★ A lvl15
-6. **PATCH — załóż na SCORCH** mod z MAGAZYN: Circle / Health / Protection % 23.5% / secondary: Speed 10, Defense % 1.25%, Tenacity % 1.36%, Health 567 / 5★ C lvl15
-7. **Arrow — załóż na VEL** mod z MAGAZYN: Arrow / Health / Protection % 24% / secondary: Speed 6, Potency % 3.5%, Offense % 2.5%, Critical Chance % 6.61% / 6★ E lvl15
+6. **PATCH — załóż na SCORCH** mod z MAGAZYNU: Circle / Health / Protection % 23.5% / secondary: Speed 10, Defense % 1.25%, Tenacity % 1.36%, Health 567 / 5★ C lvl15
+7. **Arrow — załóż na VEL** mod z MAGAZYNU: Arrow / Health / Protection % 24% / secondary: Speed 6, Potency % 3.5%, Offense % 2.5%, Critical Chance % 6.61% / 6★ E lvl15
 8. Zdejmij dotychczasowy mod z VEL do MAGAZYNU: Arrow / Health / Speed 32 / secondary: Offense 79, Protection % 6.18%, Offense % 4.08%, Defense % 7.05% / 6★ C lvl15
 9. **Triangle — załóż na VEL** mod z ZAALBAR: Triangle / Health / Protection % 24% / secondary: Tenacity % 6.59%, Offense % 3.14%, Potency % 2.98%, Speed 12 / 6★ E lvl15
 10. Zdejmij dotychczasowy mod z VEL do MAGAZYNU: Triangle / Health / Protection % 23.5% / secondary: Defense % 3.92%, Tenacity % 2.07%, Speed 8, Defense 14 / 5★ A lvl15
-11. **PATCH — załóż na ZAALBAR** mod z MAGAZYN: Triangle / Health / Protection % 2.5% / secondary: Speed 5, Offense % 0.43%, Protection 653 / 5★ B lvl1
+11. **PATCH — załóż na ZAALBAR** mod z MAGAZYNU: Triangle / Health / Protection % 2.5% / secondary: Speed 5, Offense % 0.43%, Protection 653 / 5★ B lvl1
 
 Wszystkie powyższe kroki zostały sprawdzone na pełnym stanie slotów i magazynu.
 
@@ -60,9 +60,11 @@ Wszystkie powyższe kroki zostały sprawdzone na pełnym stanie slotów i magazy
 
 - **MASTERQUIGON:** modValue 210.9 → 218.0 (+7.1).
   - Defense: ROZBITO pełnych setów (1 → 0).
+    - ZMIANA NIEISTOTNA WG PROFILU: set występuje w 11.4% kombinacji SWGOH.GG.
   - Health: BUDOWANY pełnych setów (0 → 0).
 - **SCORCH:** modValue 201.9 → 206.4 (+4.5).
   - Defense: ROZBITO pełnych setów (1 → 0).
+    - ISTOTNA STRATA: set występuje w 72.0% kombinacji profilu SWGOH.GG.
   - Health: BUDOWANY pełnych setów (2 → 2).
 - **ZAALBAR:** modValue 231.5 → 239.6 (+8.1).
 
