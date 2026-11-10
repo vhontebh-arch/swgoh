@@ -941,6 +941,131 @@
           }
         ]
       }
+    },
+    "JEDIKNIGHTREVAN": {
+      "name": "Jedi Knight Revan",
+      "role": "attacker",
+      "source_model": {
+        "method": "direct SWGOH.GG Best Mods page read by ChatGPT",
+        "sources": [
+          {
+            "name": "Top 1000 Kyber GAC",
+            "url": "https://swgoh.gg/units/jedi-knight-revan/best-mods/",
+            "units_fully_modded": 975,
+            "set_combinations_pct": {
+              "Speed + Health": 73.84,
+              "Speed": 4.61,
+              "Speed + Crit Chance": 4.2,
+              "Offense + Crit Chance": 3.79,
+              "Speed + Defense": 3.69,
+              "Speed + Tenacity": 2.35,
+              "Speed + Potency": 1.74,
+              "Health": 1.64,
+              "Offense + Health": 0.92
+            },
+            "primary_pct": {
+              "Arrow": {
+                "Speed": 95.69,
+                "Health": 3.19,
+                "Protection": 0.55,
+                "Offense": 0.41
+              },
+              "Triangle": {
+                "Health": 53.19,
+                "Protection": 18.75,
+                "Offense": 11.38,
+                "Critical Damage": 11.25
+              },
+              "Circle": {
+                "Health": 67.77,
+                "Protection": 32.22
+              },
+              "Cross": {
+                "Health": 56.8,
+                "Protection": 21.8,
+                "Offense": 14.72,
+                "Defense": 2.22
+              }
+            },
+            "secondary_focus": {
+              "Speed": {
+                "average": 23.4,
+                "focus_pct": 21.01
+              },
+              "Health": {
+                "average": 851.2,
+                "focus_pct": 8.18
+              },
+              "Protection": {
+                "average": 1472.3,
+                "focus_pct": 7.73
+              },
+              "Protection %": {
+                "average": 5.37,
+                "focus_pct": 7.6
+              }
+            }
+          },
+          {
+            "name": "Top 100 Guilds",
+            "url": "https://swgoh.gg/units/jedi-knight-revan/best-mods/?s=GUILDTOP100",
+            "units_fully_modded": 4966,
+            "set_combinations_pct": {
+              "Speed + Health": 64.53,
+              "Speed + Crit Chance": 6.94,
+              "Offense + Crit Chance": 5.85,
+              "Speed": 5.53,
+              "Speed + Tenacity": 2.45,
+              "Speed + Potency": 2.23,
+              "Health": 1.93,
+              "Speed + Defense": 1.77,
+              "Offense + Health": 1.38
+            },
+            "primary_pct": {
+              "Arrow": {
+                "Speed": 97.5,
+                "Health": 1.59,
+                "Offense": 0.37,
+                "Protection": 0.28
+              },
+              "Triangle": {
+                "Health": 45.14,
+                "Critical Damage": 19.18,
+                "Offense": 14.63,
+                "Protection": 10.95
+              },
+              "Circle": {
+                "Health": 67.08,
+                "Protection": 32.91
+              },
+              "Cross": {
+                "Health": 50.23,
+                "Offense": 19.87,
+                "Protection": 17.16,
+                "Defense": 4.77
+              }
+            },
+            "secondary_focus": {
+              "Speed": {
+                "average": 21.7,
+                "focus_pct": 20.91
+              },
+              "Health": {
+                "average": 880.6,
+                "focus_pct": 8.12
+              },
+              "Offense": {
+                "average": 85.4,
+                "focus_pct": 7.94
+              },
+              "Protection": {
+                "average": 1495.4,
+                "focus_pct": 7.91
+              }
+            }
+          }
+        ]
+      }
     }
   }
 }
