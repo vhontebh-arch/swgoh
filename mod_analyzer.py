@@ -849,7 +849,7 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
         bg=set_groups(before); ag=set_groups(after)
         return sum(ag[s]-bg[s] for s in SET_RULES)
 
-    def find_chain(selected_mod, target_id, used_ids):
+    def find_chain(selected_mod, target_id, target_owner, target_current, used_ids):
         slot = str(selected_mod.get("slot", "") or "")
         src = owner(selected_mod)
         if not src:
@@ -860,6 +860,12 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
         # is considered; no arbitrary top-K truncation is applied.
         queue=[(src,{src},set(selected_ids)|set(used_ids)|{rid(selected_mod)},[])]
         visited_owners={src}
+        candidate_inventory = list(inventory)
+        if target_current and rid(target_current) not in selected_ids and rid(target_current) not in used_ids:
+            recycled = dict(target_current)
+            recycled["equipped"] = "False"
+            recycled["assignedTo"] = ""
+            candidate_inventory.append(recycled)
         while queue:
             next_queue=[]
             for hole_owner,seen,forbidden,moves in queue:
@@ -869,13 +875,13 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
 
                 who=base(current) or hole_owner
                 candidates=[]
-                for r in inventory:
+                for r in candidate_inventory:
                     if rid(r) in forbidden or rid(r) in selected_ids:
                         continue
                     if str(r.get("slot","")) == slot:
                         candidates.append((0,r))
                 for (other_owner,other_slot),r in working_eq.items():
-                    if other_slot != slot or other_owner == hole_owner or other_owner in seen:
+                    if other_slot != slot or other_owner == hole_owner or other_owner == target_owner or other_owner in seen:
                         continue
                     if base(r) in protected_owners:
                         continue
@@ -918,7 +924,7 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
             slot = str(mod.get("slot",""))
             current = working_eq.get((target_owner, slot))
             if current is not None and rid(current) == rid(mod): continue
-            plan = find_chain(mod, target_id, used_ids)
+            plan = find_chain(mod, target_id, target_owner, current, used_ids)
             if plan is None:
                 failed.append((target_id, "brak wykonalnego łańcucha dla {} / {}".format(slot,mod.get("set","")))); continue
             physical = {rid(mod)}
@@ -927,7 +933,7 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                 failed.append((target_id, "konflikt modów dla {} / {}".format(slot,mod.get("set","")))); continue
             used_ids.update(physical)
             plans.append({"target":target_id,"target_owner":target_owner,"mod":mod,
-                          "moves":plan["moves"],"chain_gain":plan["gain"]})
+                          "target_current":current,"moves":plan["moves"],"chain_gain":plan["gain"]})
 
             old_owner = owner(mod)
             if old_owner and (old_owner,slot) in working_eq and rid(working_eq[(old_owner,slot)]) == rid(mod):
@@ -991,12 +997,14 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
             mod["chainPath"] = "MOD: " + selected_path + (("; " + "; ".join(repair_path)) if repair_path else "")
             mod["reason"]="ŁAŃCUCH WYKONALNY; najpierw MOD bezpośrednio do celu, potem PATCH-y w kolejności zależności"
             for idx,move in enumerate(plan["moves"],1):
-                patch=move["replacement"]; patch["recommendedAction"]="PATCH"; patch["chainStatus"]="VALIDATED"
-                patch["patchOwner"]=move["owner"]; patch["patchOwnerName"]=move["name"]; patch["patchSlot"]=slot
-                patch["chainId"]=mod["chainId"]; patch["chainStep"]=idx; patch["chainLength"]=mod["chainLength"]
-                patch["chainPath"]=mod["chainPath"]; patch["replacesModId"]=rid(move["removed"])
-                patch["replacementGain"]=round(move["gain"],1); patch["accountGain"]=round(move["gain"],1)
-                patch["reason"]="PATCH {}; zachowanie setu {}".format(move["name"],move["removed"].get("set",""))
+                patch=move["replacement"]
+                patch_row=next((r for r in rows if rid(r)==rid(patch)),patch)
+                patch_row["recommendedAction"]="PATCH"; patch_row["chainStatus"]="VALIDATED"
+                patch_row["patchOwner"]=move["owner"]; patch_row["patchOwnerName"]=move["name"]; patch_row["patchSlot"]=slot
+                patch_row["chainId"]=mod["chainId"]; patch_row["chainStep"]=idx; patch_row["chainLength"]=mod["chainLength"]
+                patch_row["chainPath"]=mod["chainPath"]; patch_row["replacesModId"]=rid(move["removed"])
+                patch_row["replacementGain"]=round(move["gain"],1); patch_row["accountGain"]=round(move["gain"],1)
+                patch_row["reason"]="PATCH {}; zmiana pełnych setów {:+d}".format(move["name"],completed_set_delta(move["owner"],move["removed"],patch))
     else:
         for r in rows:
             if r.get("optimizerTarget"): r["chainStatus"]="BLOCKED"
@@ -1501,6 +1509,12 @@ def main():
             lines.append("| {} | MOD | {} → {} | {} | VALIDATED |".format(
                 step_no, source_name, display_name(p["target_owner"]), mod_description(m)))
             step_no += 1
+            patched_ids = {rid(move["replacement"]) for move in p.get("moves", [])}
+            displaced = p.get("target_current")
+            if displaced and rid(displaced) not in patched_ids:
+                lines.append("| {} | RETURN | {} → MAGAZYN | {} | VALIDATED |".format(
+                    step_no, display_name(p["target_owner"]), mod_description(displaced)))
+                step_no += 1
             for move in p.get("moves", []):
                 replacement = move["replacement"]
                 src_name = display_name(str(replacement.get("assignedTo", "") or "")) if is_true(replacement.get("equipped")) else "MAGAZYN"
