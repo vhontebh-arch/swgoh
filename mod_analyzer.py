@@ -899,7 +899,8 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                     replacement_id=rid(replacement)
                     local_gain=fit(replacement,who)-fit(current,who)
                     move={"owner":hole_owner,"name":pname(hole_owner),
-                          "removed":current,"replacement":replacement,"gain":local_gain}
+                          "removed":current,"replacement":replacement,"gain":local_gain,
+                          "set_delta":completed_set_delta(hole_owner,current,replacement)}
                     new_moves=moves+[move]
                     if kind==0:
                         return {"moves":new_moves,"gain":sum(x["gain"] for x in new_moves)}
@@ -1004,7 +1005,7 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                 patch_row["chainId"]=mod["chainId"]; patch_row["chainStep"]=idx; patch_row["chainLength"]=mod["chainLength"]
                 patch_row["chainPath"]=mod["chainPath"]; patch_row["replacesModId"]=rid(move["removed"])
                 patch_row["replacementGain"]=round(move["gain"],1); patch_row["accountGain"]=round(move["gain"],1)
-                patch_row["reason"]="PATCH {}; zmiana pełnych setów {:+d}".format(move["name"],completed_set_delta(move["owner"],move["removed"],patch))
+                patch_row["reason"]="PATCH {}; zmiana pełnych setów {:+d}".format(move["name"],move["set_delta"])
     else:
         for r in rows:
             if r.get("optimizerTarget"): r["chainStatus"]="BLOCKED"
@@ -1478,7 +1479,7 @@ def main():
     lines += ["", "## BEZPIECZNY ŁAŃCUCH — walidacja globalna", ""]
     if chain_result.get("safe"):
         lines.append("**STATUS: OK — transfery są fizycznie wykonalne i nie dublują modów.**")
-        lines.append("Bilans pokazuje sumę modValue oraz pełne sety przed i po transferze. Utrata wartości lub setu u dawcy nie blokuje ruchu; to jawna informacja do ręcznej decyzji.")
+        lines.append("Bilans pokazuje sumę modValue wyposażonych modów oraz pełne sety przed i po transferze. modValue jest wskaźnikiem jakości samych modów, a nie indywidualnym wynikiem buildu dawcy. Utrata wartości lub setu u dawcy nie blokuje ruchu; to jawna informacja do ręcznej decyzji.")
     else:
         lines.append("**STATUS: BLOKADA — nie wygenerowano bezpiecznej listy ruchów.**")
         for target_id, reason in chain_result.get("failed", []):
