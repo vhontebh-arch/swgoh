@@ -2868,6 +2868,183 @@
         "Tenacity %": 0.1858,
         "Defense": 0.1875
       }
+    },
+    "ZAALBAR": {
+      "name": "Zaalbar",
+      "role": "tank",
+      "source_model": {
+        "method": "direct SWGOH.GG Best Mods page read by ChatGPT; TOP 4 secondary-stat focus entries retained per source",
+        "sources": [
+          {
+            "name": "Top 1000 Kyber GAC",
+            "url": "https://swgoh.gg/units/zaalbar/best-mods/",
+            "units_fully_modded": 971,
+            "set_combinations_pct": {
+              "Triple Health": 26.77,
+              "Double Health + Defense": 18.12,
+              "Double Defense + Health": 14.62,
+              "Triple Defense": 12.35,
+              "Triple Tenacity": 4.42
+            },
+            "primary_pct": {
+              "Arrow": {
+                "Protection": 51.15,
+                "Speed": 18.84,
+                "Health": 16.53,
+                "Critical Avoidance": 7.3
+              },
+              "Triangle": {
+                "Protection": 62.3,
+                "Health": 25,
+                "Defense": 5.38,
+                "Critical Damage": 3.07
+              },
+              "Circle": {
+                "Protection": 71.53,
+                "Health": 28.46
+              },
+              "Cross": {
+                "Protection": 57.69,
+                "Health": 21.15,
+                "Defense": 10.38,
+                "Tenacity": 8.46
+              }
+            },
+            "secondary_focus": {
+              "Speed": {
+                "average": 12.7,
+                "focus_pct": 20.1
+              },
+              "Protection": {
+                "average": 1434.7,
+                "focus_pct": 9.43
+              },
+              "Health": {
+                "average": 766,
+                "focus_pct": 8.26
+              },
+              "Health %": {
+                "average": 2.98,
+                "focus_pct": 7.89
+              }
+            }
+          },
+          {
+            "name": "Top 100 Guilds",
+            "url": "https://swgoh.gg/units/zaalbar/best-mods/?s=GUILDTOP100",
+            "units_fully_modded": 4890,
+            "set_combinations_pct": {
+              "Triple Health": 38.65,
+              "Double Health + Defense": 13.41,
+              "Double Defense + Health": 8.38,
+              "Triple Defense": 6.09,
+              "Double Health + Tenacity": 4.76
+            },
+            "primary_pct": {
+              "Arrow": {
+                "Speed": 36.7,
+                "Protection": 28.42,
+                "Health": 12.96,
+                "Critical Avoidance": 12.04,
+                "Defense": 8.6,
+                "Offense": 0.96,
+                "Accuracy": 0.28
+              },
+              "Triangle": {
+                "Protection": 46.68,
+                "Health": 22,
+                "Defense": 18.56,
+                "Critical Damage": 4.45,
+                "Critical Chance": 4.31,
+                "Offense": 3.96
+              },
+              "Circle": {
+                "Protection": 63.16,
+                "Health": 36.83
+              },
+              "Cross": {
+                "Protection": 42.33,
+                "Health": 18.36,
+                "Defense": 16.7,
+                "Tenacity": 16.58,
+                "Potency": 3.39,
+                "Offense": 2.61
+              }
+            },
+            "secondary_focus": {
+              "Speed": {
+                "average": 12.2,
+                "focus_pct": 21.64
+              },
+              "Protection": {
+                "average": 1466,
+                "focus_pct": 9.92
+              },
+              "Health %": {
+                "average": 2.63,
+                "focus_pct": 7.84
+              },
+              "Health": {
+                "average": 747.3,
+                "focus_pct": 7.66
+              }
+            }
+          }
+        ],
+        "fetched_at_utc": "2026-11-10T19:57:49.751Z",
+        "refreshed_at_utc": "2026-11-10T19:57:49.751Z",
+        "note": "Oba wymagane źródła odczytane bezpośrednio; zapisano wszystkie widoczne kombinacje setów i primary stats oraz TOP 4 Secondary Stat Focus z każdego slice."
+      },
+      "set_combinations": {
+        "Triple Health": 32.71,
+        "Double Health + Defense": 15.765,
+        "Double Defense + Health": 11.5,
+        "Triple Defense": 9.22,
+        "Triple Tenacity": 2.21,
+        "Double Health + Tenacity": 2.38
+      },
+      "set_preferences": {
+        "Health": 1,
+        "Defense": 0.5851,
+        "Tenacity": 0.0736
+      },
+      "primary_preferences": {
+        "Arrow": {
+          "Protection": 0.4106,
+          "Speed": 0.2866,
+          "Health": 0.1522,
+          "Critical Avoidance": 0.0998,
+          "Defense": 0.0444,
+          "Offense": 0.005,
+          "Accuracy": 0.0014
+        },
+        "Triangle": {
+          "Protection %": 0.5568,
+          "Health %": 0.2402,
+          "Defense %": 0.1223,
+          "Critical Damage %": 0.0384,
+          "Critical Chance %": 0.022,
+          "Offense %": 0.0202
+        },
+        "Circle": {
+          "Protection %": 0.6735,
+          "Health %": 0.3265
+        },
+        "Cross": {
+          "Protection %": 0.506,
+          "Health %": 0.1999,
+          "Defense %": 0.137,
+          "Tenacity %": 0.1267,
+          "Potency %": 0.0172,
+          "Offense %": 0.0132
+        }
+      },
+      "secondary_preferences": {
+        "Speed": 1,
+        "Protection": 0.4636,
+        "Health": 0.3814,
+        "Health %": 0.3769
+      }
     }
   },
   "profile_status": {
@@ -3512,6 +3689,12 @@
       "status": "refreshed",
       "checked_at_utc": "2026-11-10T19:56:20.720Z",
       "fetched_at_utc": "2026-11-10T19:56:20.720Z",
+      "source": "SWGOH.GG direct Best Mods page read by ChatGPT; Kyber GAC + Top 100 Guilds; TOP 4 secondary focus per source"
+    },
+    "ZAALBAR": {
+      "status": "refreshed",
+      "checked_at_utc": "2026-11-10T19:57:49.751Z",
+      "fetched_at_utc": "2026-11-10T19:57:49.751Z",
       "source": "SWGOH.GG direct Best Mods page read by ChatGPT; Kyber GAC + Top 100 Guilds; TOP 4 secondary focus per source"
     }
   }
