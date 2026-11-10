@@ -1529,27 +1529,37 @@ def main():
 
     optimizer = optimize_target_build(rows, target_ids, profiles, aliases, names, protected_owners)
 
-    # Expand the cache only to owners who can physically participate as same-slot
-    # donors for at least one selected target slot. This is a conservative
-    # candidate set for the transfer-chain search, not the whole roster.
-    candidate_slots = {
-        str(mod.get("slot", "") or "")
-        for opt in optimizer.values()
-        for mod in opt.get("mods", [])
-    }
-    donor_ids = {
-        aliases.get(str(row.get("assignedTo", "") or ""), str(row.get("assignedTo", "") or ""))
-        for row in rows
-        if is_true(row.get("equipped"))
-        and str(row.get("slot", "") or "") in candidate_slots
-        and aliases.get(str(row.get("assignedTo", "") or ""), str(row.get("assignedTo", "") or "")) not in target_ids
-        and aliases.get(str(row.get("assignedTo", "") or ""), str(row.get("assignedTo", "") or "")) not in protected_owners
-    }
-    donor_ids.discard("")
-    if donor_ids:
-        profiles, donor_profile_status = ensure_profiles(donor_ids, names)
+    # Resolve a provisional physical chain, fetch profiles only for owners
+    # that actually appear in it, then re-run. Repeat if the improved ranking
+    # selects a different donor. This avoids downloading profiles for the roster.
+    attempted_profile_units = set(target_ids)
+    while True:
+        chain_result = apply_optimizer_replacements(
+            rows, optimizer, target_ids, profiles, aliases, names, protected_owners
+        )
+        chain_donor_ids = set()
+        for plan in chain_result.get("plans", []):
+            selected_owner = str(plan.get("mod", {}).get("assignedTo", "") or "")
+            if selected_owner:
+                chain_donor_ids.add(aliases.get(selected_owner, selected_owner))
+            for move in plan.get("moves", []):
+                replacement_mod = move.get("replacement", {})
+                if is_true(replacement_mod.get("equipped")):
+                    donor_owner = str(replacement_mod.get("assignedTo", "") or "")
+                    if donor_owner:
+                        chain_donor_ids.add(aliases.get(donor_owner, donor_owner))
+        chain_donor_ids -= target_ids
+        chain_donor_ids -= protected_owners
+        missing_attempts = chain_donor_ids - attempted_profile_units
+        if not missing_attempts:
+            break
+
+        profiles, donor_profile_status = ensure_profiles(missing_attempts, names)
         profile_fetch_status.update(donor_profile_status)
-        # Re-score every mod and rebuild the optimizer after profile enrichment.
+        attempted_profile_units.update(missing_attempts)
+
+        # Re-score every mod and rebuild the target build with newly cached
+        # donor profiles before validating the next physical chain.
         for row in rows:
             fit = character_fit(row, targets, profiles, aliases)
             row.update(fit)
@@ -1577,7 +1587,6 @@ def main():
             row["optimizerFullBuildGain"] = round(selected["gain"], 1)
             row["optimizerFullBuildSetBonus"] = round(selected["set_bonus"], 2)
 
-    chain_result = apply_optimizer_replacements(rows, optimizer, {t.get("baseId") for t in targets}, profiles, aliases, names, protected_owners)
 
     with open(OUTPUT_CSV, "w", newline="", encoding="utf-8-sig") as f:
         fields = list(rows[0].keys())
