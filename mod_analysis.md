@@ -121,7 +121,7 @@ Bonus Speed Set używa bazowej szybkości 150, jeśli profil nie zawiera pola ba
 ## BEZPIECZNY ŁAŃCUCH — walidacja globalna
 
 **STATUS: OK — transfery są fizycznie wykonalne i nie dublują modów.**
-Bilans pokazuje sumę modValue oraz pełne sety przed i po transferze. Utrata wartości lub setu u dawcy nie blokuje ruchu; to jawna informacja do ręcznej decyzji.
+Bilans pokazuje sumę modValue wyposażonych modów oraz pełne sety przed i po transferze. modValue jest wskaźnikiem jakości samych modów, a nie indywidualnym wynikiem buildu dawcy. Utrata wartości lub setu u dawcy nie blokuje ruchu; to jawna informacja do ręcznej decyzji.
 
 | Postać | Σ modValue przed | Σ modValue po | Δ modValue | Pełne sety przed | Pełne sety po |
 |---|---:|---:|---:|---|---|
@@ -135,7 +135,8 @@ Bilans pokazuje sumę modValue oraz pełne sety przed i po transferze. Utrata wa
 | Krok | Typ | Operacja | Mod — parametry wyszukiwalne | Status |
 |---:|---|---|---|---|
 | 1 | MOD | JEDIKNIGHTREVAN → JARJARBINKS | Arrow / Speed / Protection % 24% / secondary: Health 770, Defense % 9.48%, Protection 1035, Speed 24 / 6★ A lvl15 | VALIDATED |
-| 2 | PATCH | MAGAZYN → JEDIKNIGHTREVAN | Arrow / Speed / Health % 5.88% / secondary: Speed 9, Protection % 1.65%, Protection 1028, Offense 61 / 5★ B lvl15 | VALIDATED |
+| 2 | RETURN | JARJARBINKS → MAGAZYN | Arrow / Speed / Speed 32 / secondary: Protection 2672, Potency % 2.8%, Health 1200, Offense 129 / 6★ A lvl15 | VALIDATED |
+| 3 | PATCH | MAGAZYN → JEDIKNIGHTREVAN | Arrow / Speed / Health % 5.88% / secondary: Speed 9, Protection % 1.65%, Protection 1028, Offense 61 / 5★ B lvl15 | VALIDATED |
 
 ## Definicje
 
