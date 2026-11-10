@@ -957,6 +957,8 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
             # Inventory PATCH steps have no displaced mod; rid(None) is an
             # empty string and must never enter the global used-ID set.
             physical.discard("")
+            # A blank placeholder is not a physical object and cannot collide
+            # with another chain; only real, non-empty mod IDs are reserved.
             overlap = physical & used_ids
             if overlap:
                 failed.append((target_id, "konflikt modów dla {} / {} — ponownie użyty mod ID: {}".format(
