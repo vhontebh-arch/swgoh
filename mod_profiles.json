@@ -205,11 +205,21 @@
       "source": "local_cache"
     },
     "JEDIKNIGHTREVAN": {
-      "status": "unavailable",
-      "checked_at_utc": "2026-11-10T16:44:04.933550+00:00",
+      "status": "source_available",
+      "checked_at_utc": "2026-11-10T16:00:00+01:00",
       "fetched_at_utc": null,
-      "source": "none",
-      "error": "RuntimeError: nie udało się pobrać https://swgoh.gg/units/jediknightrevan/best-mods/: odpowiedź zbyt krótka (861 B)"
+      "source": "SWGOH.GG direct page read by ChatGPT",
+      "sources": [
+        {
+          "name": "Kyber GAC",
+          "url": "https://swgoh.gg/units/jedi-knight-revan/best-mods/"
+        },
+        {
+          "name": "Top 100 Guilds",
+          "url": "https://swgoh.gg/units/jedi-knight-revan/best-mods/?s=GUILDTOP100"
+        }
+      ],
+      "note": "Oba źródła są dostępne do bezpośredniego odczytu. Profil nie został jeszcze zbudowany i zapisany jako kompletne dane optymalizatora."
     }
   }
 }
