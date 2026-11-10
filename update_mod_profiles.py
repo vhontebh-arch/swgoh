@@ -9,6 +9,7 @@ until every configured profile and both source slices pass validation.
 
 import argparse
 import csv
+from concurrent.futures import ThreadPoolExecutor, as_completed
 import json
 import os
 import re
@@ -20,7 +21,7 @@ from urllib.parse import quote, urlsplit, urlunsplit
 from urllib.request import Request, urlopen
 
 PROFILE_FILE = Path("mod_profiles.json")
-TIMEOUT = 45
+TIMEOUT = 20
 USER_AGENT = "Mozilla/5.0 (compatible; Vhonte-SWGOH-Mod-Analyzer/1.0)"
 
 SLOTS = {
@@ -394,7 +395,8 @@ def ensure_profiles(base_ids, names=None, max_age_days=CACHE_MAX_AGE_DAYS):
     """Load cached profiles and refresh only requested missing/stale units.
 
     A failed or incomplete fetch never replaces an existing valid cached profile.
-    Successful profiles are atomically persisted one by one.
+    Successful profiles are atomically persisted one by one. Network work is
+    limited to three concurrent profile refreshes.
     """
     if PROFILE_FILE.exists():
         data = json.loads(PROFILE_FILE.read_text(encoding="utf-8"))
@@ -404,6 +406,7 @@ def ensure_profiles(base_ids, names=None, max_age_days=CACHE_MAX_AGE_DAYS):
     statuses = data.setdefault("profile_status", {})
     names = names or read_roster_names()
     result = {}
+    pending = {}
 
     for base_id in sorted(set(str(x).strip() for x in base_ids if str(x).strip())):
         existing = profiles.get(base_id, {})
@@ -416,44 +419,45 @@ def ensure_profiles(base_ids, names=None, max_age_days=CACHE_MAX_AGE_DAYS):
             except Exception:
                 cache_valid = False
         if cache_valid and profile_is_fresh(existing, max_age_days):
-            statuses[base_id] = {
-                "status": "cached",
-                "checked_at_utc": datetime.now(timezone.utc).isoformat(),
-                "fetched_at_utc": existing.get("source_model", {}).get("refreshed_at_utc"),
-                "source": "local_cache",
-            }
             result[base_id] = "cached"
-            continue
+        else:
+            pending[base_id] = (name, existing)
 
-        try:
-            refreshed = refresh_one(base_id, name, existing)
-            profiles[base_id] = refreshed
-            statuses[base_id] = {
-                "status": "refreshed",
-                "checked_at_utc": datetime.now(timezone.utc).isoformat(),
-                "fetched_at_utc": refreshed["source_model"]["refreshed_at_utc"],
-                "source": "SWGOH.GG",
-            }
-            result[base_id] = "refreshed"
-            atomic_save(data)
-        except Exception as exc:
-            # Keep an older valid profile untouched; record the failed attempt separately.
-            statuses[base_id] = {
-                "status": "stale_fallback" if existing else "unavailable",
-                "checked_at_utc": datetime.now(timezone.utc).isoformat(),
-                "fetched_at_utc": existing.get("source_model", {}).get("refreshed_at_utc"),
-                "source": "local_cache" if existing else "none",
-                "error": "{}: {}".format(type(exc).__name__, exc),
-            }
-            result[base_id] = statuses[base_id]["status"]
-            atomic_save(data)
-            print("UWAGA {}: {}".format(base_id, exc), file=sys.stderr)
+    with ThreadPoolExecutor(max_workers=3) as executor:
+        futures = {
+            executor.submit(refresh_one, base_id, name, existing): base_id
+            for base_id, (name, existing) in pending.items()
+        }
+        for future in as_completed(futures):
+            base_id = futures[future]
+            name, existing = pending[base_id]
+            try:
+                refreshed = future.result()
+                profiles[base_id] = refreshed
+                statuses[base_id] = {
+                    "status": "refreshed",
+                    "checked_at_utc": datetime.now(timezone.utc).isoformat(),
+                    "fetched_at_utc": refreshed["source_model"]["refreshed_at_utc"],
+                    "source": "SWGOH.GG",
+                }
+                result[base_id] = "refreshed"
+                atomic_save(data)
+            except Exception as exc:
+                # Keep an older valid profile untouched; record the failed attempt separately.
+                statuses[base_id] = {
+                    "status": "stale_fallback" if existing else "unavailable",
+                    "checked_at_utc": datetime.now(timezone.utc).isoformat(),
+                    "fetched_at_utc": existing.get("source_model", {}).get("refreshed_at_utc"),
+                    "source": "local_cache" if existing else "none",
+                    "error": "{}: {}".format(type(exc).__name__, exc),
+                }
+                result[base_id] = statuses[base_id]["status"]
+                atomic_save(data)
+                print("UWAGA {}: {}".format(base_id, exc), file=sys.stderr)
 
-    # Persist cache-hit timestamps/status too, without changing profile payloads.
     if result:
         atomic_save(data)
     return profiles, result
-
 
 
 def main():
