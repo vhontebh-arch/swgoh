@@ -23,7 +23,7 @@ Profile są przechowywane lokalnie i odświeżane tylko dla celu oraz dawców fa
 | MASTERQUIGON | cached |
 | SCORCH | cached |
 | VEL | cached |
-| ZAALBAR | unavailable |
+| ZAALBAR | cached |
 
 Dla dawców bez lokalnego profilu po próbie pobrania używany jest fallback modValue; nie jest to ocena dopasowania do indywidualnego profilu.
 
@@ -44,8 +44,8 @@ Bonus Speed Set używa bazowej szybkości 150, jeśli profil nie zawiera pola ba
 | REPLACE | Arrow Protection % 24% | MAGAZYN | Health | 6E | 15 | 58.0% | 29.6% | 16.9% | 0.0% | 100.0% | 29.6% | slice |
 | REPLACE | Square Offense % 5.88% | POSTAĆ: MASTERQUIGON | Defense | 5A | 15 | 72.9% | 47.7% | 16.7% | 69.9% | 83.3% | 47.7% | 6-dot |
 | PATCH | Square Offense % 0.63% | MAGAZYN | Health | 5D | 1 | 54.8% | 54.8% | 43.9% | 0.0% | 66.7% | 91.0% | upgrade |
+| PATCH | Triangle Protection % 2.5% | MAGAZYN | Health | 5B | 1 | 69.8% | 58.4% | 40.8% | 0.0% | 83.3% | 82.2% | upgrade |
 | PATCH | Circle Protection % 23.5% | MAGAZYN | Health | 5C | 15 | 48.3% | 35.6% | 39.2% | 0.0% | 83.3% | 35.6% | slice |
-| PATCH | Triangle Critical Chance % 1.5% | MAGAZYN | Health | 5B | 1 | 78.8% | 60.8% | 27.6% | 0.0% | 83.3% | 83.2% | upgrade |
 | CALIBRATE | Circle Protection % 24% | POSTAĆ: MARAJADE | Speed | 6A | 15 | 65.2% | 38.6% | 39.6% | 0.0% | 88.9% | 38.6% | calibration |
 | CALIBRATE | Circle Protection % 24% | POSTAĆ: BOOMADIER | Critical Chance | 6A | 15 | 58.1% | 35.8% | 37.9% | 0.0% | 87.5% | 35.8% | calibration |
 | CALIBRATE | Circle Protection % 24% | POSTAĆ: COMMANDERLUKESKYWALKER | Offense | 6A | 15 | 49.8% | 39.5% | 36.5% | 0.0% | 80.0% | 39.5% | calibration |
@@ -133,15 +133,16 @@ Bonus Speed Set używa bazowej szybkości 150, jeśli profil nie zawiera pola ba
 
 ## BEZPIECZNY ŁAŃCUCH — walidacja globalna
 
-**STATUS: BLOKADA — nie wygenerowano bezpiecznej listy ruchów.**
-- profil dawcy: ZAALBAR — brak zweryfikowanego profilu; łańcuch nie może być zatwierdzony
+**STATUS: OK — transfery są fizycznie wykonalne i nie dublują modów.**
+Bilans pokazuje sumę modValue wyposażonych modów oraz pełne sety przed i po transferze. modValue jest wskaźnikiem jakości samych modów, a nie indywidualnym wynikiem buildu dawcy. Utrata wartości lub setu u dawcy nie blokuje ruchu; to jawna informacja do ręcznej decyzji.
+Wariant łańcucha wybierany jest na najkrótszym wykonalnym poziomie według fit profilu dawcy, następnie zmiany pełnych setów i sumy modValue. Istniejące sety nie są twardą ochroną. Każda zmiana liczby modów w secie i liczby pełnych grup jest wyszczególniona niżej dla każdej postaci w łańcuchu. Dla dawców bez własnego profilu fit korzysta z ogólnego modValue.
 
 | Postać | Σ modValue przed | Σ modValue po | Δ modValue | Pełne sety przed | Pełne sety po |
 |---|---:|---:|---:|---|---|
 | VEL | 220.7 | 237.1 | +16.4 | Defense=1, Health=2 | Defense=2, Health=1 |
 | MASTERQUIGON | 210.9 | 218.0 | +7.1 | Defense=1, Speed=1 | Speed=1 |
 | SCORCH | 201.9 | 206.4 | +4.5 | Defense=1, Health=2 | Health=2 |
-| ZAALBAR | 231.5 | 242.0 | +10.5 | Health=3 | Health=3 |
+| ZAALBAR | 231.5 | 239.6 | +8.1 | Health=3 | Health=3 |
 
 ### Zmiany setów — każda postać w łańcuchu
 
@@ -162,7 +163,17 @@ ROZBITO oznacza utratę co najmniej jednej pełnej grupy. BUDOWANY oznacza zwię
 
 | Krok | Typ | Operacja | Mod — parametry wyszukiwalne | Status |
 |---:|---|---|---|---|
-| — | — | — | — | BLOCKED |
+| 1 | MOD | MASTERQUIGON → VEL | Square / Defense / Offense % 5.88% / secondary: Speed 5, Health % 2.97%, Protection 1303, Health 752 / 5★ A lvl15 | VALIDATED |
+| 2 | RETURN | VEL → MAGAZYN | Square / Health / Offense % 8.5% / secondary: Defense % 11.39%, Potency % 5.43%, Protection 1219, Speed 11 / 6★ C lvl15 | VALIDATED |
+| 3 | PATCH | MAGAZYN → MASTERQUIGON | Square / Health / Offense % 0.63% / secondary: Speed 4 / 5★ D lvl1 | VALIDATED |
+| 4 | MOD | SCORCH → VEL | Circle / Defense / Protection % 24% / secondary: Defense 13, Speed 16, Tenacity % 7.97%, Defense % 12.54% / 6★ A lvl15 | VALIDATED |
+| 5 | RETURN | VEL → MAGAZYN | Circle / Health / Protection % 23.5% / secondary: Offense % 0.35%, Health 636, Speed 11, Health % 2.58% / 5★ A lvl15 | VALIDATED |
+| 6 | PATCH | MAGAZYN → SCORCH | Circle / Health / Protection % 23.5% / secondary: Speed 10, Defense % 1.25%, Tenacity % 1.36%, Health 567 / 5★ C lvl15 | VALIDATED |
+| 7 | MOD | MAGAZYN → VEL | Arrow / Health / Protection % 24% / secondary: Speed 6, Potency % 3.5%, Offense % 2.5%, Critical Chance % 6.61% / 6★ E lvl15 | VALIDATED |
+| 8 | RETURN | VEL → MAGAZYN | Arrow / Health / Speed 32 / secondary: Offense 79, Protection % 6.18%, Offense % 4.08%, Defense % 7.05% / 6★ C lvl15 | VALIDATED |
+| 9 | MOD | ZAALBAR → VEL | Triangle / Health / Protection % 24% / secondary: Tenacity % 6.59%, Offense % 3.14%, Potency % 2.98%, Speed 12 / 6★ E lvl15 | VALIDATED |
+| 10 | RETURN | VEL → MAGAZYN | Triangle / Health / Protection % 23.5% / secondary: Defense % 3.92%, Tenacity % 2.07%, Speed 8, Defense 14 / 5★ A lvl15 | VALIDATED |
+| 11 | PATCH | MAGAZYN → ZAALBAR | Triangle / Health / Protection % 2.5% / secondary: Speed 5, Offense % 0.43%, Protection 653 / 5★ B lvl1 | VALIDATED |
 
 ## Definicje
 
