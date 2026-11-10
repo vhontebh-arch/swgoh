@@ -16,7 +16,7 @@
 
 ## Co zostało zaimplementowane w optimizer-v2
 
-Nowa funkcja `optimize_target_build()`:
+Nowa funkcja `optimize_target_build()` (wersja `2026-11-10-grandivory-projected-build-scoring-v3`):
 
 - ocenia sześć slotów jako jeden build;
 - oddziela punktację primary i secondary od preferencji setów;
@@ -36,11 +36,20 @@ DP przechowuje liczbę elementów każdego setu aż do maksymalnej liczby pełny
 
 ### Skala punktacji
 
-- 20 punktów: statystyki główne, równomiernie rozłożone na sześć slotów;
-- 80 punktów: secondary, znormalizowane względem maksymalnie 24 rolli;
+- 40 punktów: statystyki główne, równomiernie rozłożone na sześć slotów;
+- 60 punktów: secondary, znormalizowane względem maksymalnie 24 rolli;
 - bonus setu: równoważnik maksymalnych rolli odpowiedniej statystyki, pomnożony przez jej preferencję w profilu.
 
 To zachowuje prosty model profili oparty na preferencjach statystyk i setów. Nie wprowadzono targetów wartości statystyk z Grandivory.
+
+
+## Projekcja rozwoju modów — v3
+
+- `project_mod_for_build()` tworzy kopię moda do oceny; nie zmienia danych źródłowych ani bieżących statystyk w rosterze.
+- Dla moda poniżej 15 poziomu dopisuje brakujące rolle do limitu wynikającego z aktualnego tieru. Wartość założonego rolla to środek zakresu dla danej statystyki; jego przypisanie do najlepiej ocenianej statystyki profilu jest optymistycznym założeniem.
+- Dla moda 5★ na poziomie 15 i tierze A przelicza każdy secondary do odpowiedniego zakresu 6-dot, tworząc wariant 6E. Roll count pozostaje bez zmian.
+- Ranking pełnych buildów i bonusy setów są liczone na kopiach po projekcji. Wynik aktualny i wynik po projekcji są raportowane oddzielnie. `gain` oznacza różnicę między najlepszym buildem po projekcji a obecnym buildem po tej samej projekcji — nie jest to zysk już osiągnięty ani zatwierdzony transfer.
+- Wartość primary pozostaje taka jak w eksporcie; nie jest sztucznie podbijana w projekcji poziomu.
 
 ## Ograniczenie danych — ważne
 
@@ -54,7 +63,9 @@ To jest jawne przybliżenie, a nie pełna reprodukcja dokładnego przeliczenia s
 
 ## Czego ta zmiana jeszcze nie obejmuje
 
-- Symulacji levelowania modów poniżej 15 i slice 5A→6E w rankingu kandydatów. Aktualna pula kandydatów nadal wymaga poziomu 15 i co najmniej 5★.
+- Dokładnego przewidywania wyniku levelowania, ponieważ nie znamy przyszłych losowych rolli. Projekcja w `project_mod_for_build()` jest jawnie optymistycznym wariantem: brakujące rolle do limitu aktualnego tieru przypisuje do najwyżej preferowanej statystyki profilu. Nie jest to średnia statystyczna ani gwarantowany wynik.
+- Dokładnego przeliczenia primary dla poziomów poniżej 15. Primary pozostaje na wartości z eksportu, ponieważ wejściowe dane nie zawierają tabeli przyrostu primary na każdym poziomie.
+- Projekcji 5A→6E dla modów innych niż 5A na poziomie 15; nie zakładamy, że można pominąć wcześniejsze etapy slice.
 - Pełnej globalnej optymalizacji wielu celów jednocześnie.
 - Nowego algorytmu łańcuchów MOD/PATCH i pełnego bilansu końcowego dawców. To pozostaje osobnym etapem; wybór buildów jest na razie wirtualnym wyborem najlepszych modów.
 - Automatycznego chronienia wszystkich dawców ani automatycznych testów.
