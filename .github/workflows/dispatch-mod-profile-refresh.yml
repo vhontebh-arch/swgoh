@@ -27,12 +27,17 @@ jobs:
           TITLE: ${{ github.event.issue.title }}
         run: |
           set -euo pipefail
-          if [[ "$TITLE" =~ ^\\[refresh-mod-profile\\]\\ ([A-Z0-9_]+)$ ]]; then
-            echo "base_id=${BASH_REMATCH[1]}" >> "$GITHUB_OUTPUT"
-          else
+          PREFIX='[refresh-mod-profile] '
+          if [[ "$TITLE" != "$PREFIX"* ]]; then
             echo "Invalid request title. Expected: [refresh-mod-profile] BASE_ID"
             exit 1
           fi
+          BASE_ID="${TITLE#"$PREFIX"}"
+          if [[ ! "$BASE_ID" =~ ^[A-Z0-9_]+$ ]]; then
+            echo "Invalid baseId: only A-Z, 0-9 and underscore are allowed."
+            exit 1
+          fi
+          echo "base_id=$BASE_ID" >> "$GITHUB_OUTPUT"
 
       - name: Checkout optimizer-v2
         uses: actions/checkout@v4
