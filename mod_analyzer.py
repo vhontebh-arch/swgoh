@@ -795,7 +795,7 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
     targets = set(target_base_ids)
     protected_owners = set(protected_owners or set())
 
-    def rid(r): return str(r.get("id", "") or "")
+    def rid(r): return str(r.get("id", "") or "") if r else ""
     def owner(r): return str(r.get("assignedTo", "") or "")
     def base(r): return aliases.get(owner(r), owner(r))
     def pname(o): return names.get(o) or names.get(aliases.get(o, o)) or aliases.get(o, o) or "nieznana"
@@ -858,7 +858,10 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
 
         # Breadth-first search finds the shortest repair chain. Every candidate
         # is considered; no arbitrary top-K truncation is applied.
-        queue=[(src,{src},set(selected_ids)|set(used_ids)|{rid(selected_mod)},[])]
+        # The selected mod leaves its source slot before PATCH operations begin.
+        # Keep it as the logical "removed" mod for scoring/set deltas, but mark
+        # the first physical destination as an empty slot.
+        queue=[(src,{src},set(selected_ids)|set(used_ids)|{rid(selected_mod)},[],True)]
         visited_owners={src}
         candidate_inventory = list(inventory)
         if target_current and rid(target_current) not in selected_ids and rid(target_current) not in used_ids:
@@ -868,8 +871,8 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
             candidate_inventory.append(recycled)
         while queue:
             next_queue=[]
-            for hole_owner,seen,forbidden,moves in queue:
-                current=working_eq.get((hole_owner,slot))
+            for hole_owner,seen,forbidden,moves,initial_hole in queue:
+                current=selected_mod if initial_hole else working_eq.get((hole_owner,slot))
                 if current is None:
                     return {"moves":moves,"gain":sum(x["gain"] for x in moves)}
 
@@ -899,7 +902,8 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                     replacement_id=rid(replacement)
                     local_gain=fit(replacement,who)-fit(current,who)
                     move={"owner":hole_owner,"name":pname(hole_owner),
-                          "removed":current,"replacement":replacement,"gain":local_gain,
+                          "removed":None if initial_hole else current,
+                          "replacement":replacement,"gain":local_gain,
                           "set_delta":completed_set_delta(hole_owner,current,replacement)}
                     new_moves=moves+[move]
                     if kind==0:
@@ -911,7 +915,7 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                             next_owner,
                             seen|{next_owner},
                             forbidden|{rid(current),replacement_id},
-                            new_moves
+                            new_moves,False
                         ))
             queue=next_queue
         return None
@@ -955,12 +959,15 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
     simulated_inventory = {rid(mod) for mod in inventory}
     physical_errors = []
 
-    def take_mod(mod_id, expected_owner=None):
+    def take_mod(mod_id, expected_owner=None, expected_slot=None):
         if expected_owner:
-            key = next((k for k, value in simulated_slots.items()
-                        if k[0] == expected_owner and value == mod_id), None)
-            if key is None:
-                physical_errors.append("mod {} nie znajduje się już na postaci {}".format(mod_id, expected_owner))
+            key = (expected_owner, expected_slot) if expected_slot else next(
+                (k for k, value in simulated_slots.items()
+                 if k[0] == expected_owner and value == mod_id), None)
+            if key is None or simulated_slots.get(key) != mod_id:
+                physical_errors.append(
+                    "mod {} nie znajduje się w slocie {} postaci {}".format(
+                        mod_id, expected_slot or "dowolnym", expected_owner))
                 return False
             simulated_slots.pop(key)
             return True
@@ -981,7 +988,7 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
         target_owner = plan["target_owner"]
         slot = str(selected.get("slot", "") or "")
         if selected_source:
-            if not take_mod(selected_id, selected_source):
+            if not take_mod(selected_id, selected_source, slot):
                 continue
         elif not take_mod(selected_id):
             continue
@@ -1004,9 +1011,10 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
             if not take_mod(replacement_id):
                 continue
             removed_id = simulated_slots.pop(destination, None)
-            if removed_id != rid(move["removed"]):
+            expected_removed_id = rid(move.get("removed"))
+            if removed_id != (expected_removed_id or None):
                 physical_errors.append("PATCH {}: w slocie {} postaci {} oczekiwano {}, znaleziono {}".format(
-                    replacement_id, slot, move["owner"], rid(move["removed"]), removed_id))
+                    replacement_id, slot, move["owner"], expected_removed_id or "PUSTO", removed_id or "PUSTO"))
             if removed_id:
                 simulated_inventory.add(removed_id)
             simulated_slots[destination] = replacement_id
@@ -1014,9 +1022,12 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
     expected_slots = {(o, slot): rid(mod) for (o, slot), mod in final_eq.items()}
     if simulated_slots != expected_slots:
         physical_errors.append("końcowy stan slotów po symulacji różni się od stanu zaplanowanego")
+    initial_ids = [rid(mod) for mod in eq.values()] + [rid(mod) for mod in inventory]
     all_simulated_ids = list(simulated_slots.values()) + list(simulated_inventory)
     if len(all_simulated_ids) != len(set(all_simulated_ids)):
         physical_errors.append("ten sam mod występuje jednocześnie w kilku miejscach")
+    if set(all_simulated_ids) != set(initial_ids) or len(all_simulated_ids) != len(initial_ids):
+        physical_errors.append("końcowy stan zgubił lub dodał mod względem pełnego stanu wejściowego")
     if physical_errors:
         safe = False
         failed.extend(("walidacja fizyczna", error) for error in physical_errors)
