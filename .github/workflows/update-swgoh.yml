@@ -6,7 +6,6 @@ on:
     paths:
       - "mod_analyzer.py"
       - "update_mod_profiles.py"
-      - "mod_profiles.json"
       - "generate_mods.py"
       - "targets.json"
       - ".github/workflows/update-trigger.txt"
@@ -1132,6 +1131,7 @@ jobs:
             mods.csv \
             mod_analysis.csv \
             mod_analysis.md \
+            mod_profiles.json \
             mod_profiles.json \
             mod_profiles.json \
             account_farming_report.md \
