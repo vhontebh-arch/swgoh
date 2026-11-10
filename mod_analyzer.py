@@ -1426,7 +1426,6 @@ def main():
             )
         )
 
-    jar_rows = [r for r in rows if r.get("fitTarget") == "JARJARBINKS"]
     for target_id, opt in optimizer.items():
         lines += [
             "", "### {} — najlepszy wirtualny build 6/6".format(target_id), "",
@@ -1477,45 +1476,6 @@ def main():
     else:
         lines.append("| — | — | — | — | BLOCKED |")
     
-    jar_order = {
-        "REPLACE": 0,
-        "EQUIP": 1,
-        "PATCH": 2,
-        "CALIBRATE": 3,
-        "SLICE_6E": 4,
-        "SLICE": 5,
-        "UPGRADE": 6,
-        "KEEP": 7
-    }
-    jar_rows.sort(key=lambda r: (
-        jar_order.get(r.get("recommendedAction"), 9),
-        -float(r.get("accountGain", 0)),
-        -float(r.get("replacementGain", 0)),
-        -float(r.get("fitScore", 0)),
-        -float(r.get("modValue", 0))
-    ))
-    lines += [
-        "", "## Jar Jar Binks — kandydaci", "",
-        "Analiza porównuje mody wyposażone z kandydatami z inventory dla każdego slotu.",
-        "",
-        "| Akcja | Mod | Źródło | Slot | Set | Tier | Lvl | Fit | Set Δ | Fit po secie | Wkład moda | Pełny build Δ | Łańcuch |",
-        "|---|---|---|---|---|---|---|---:|---:|---:|---:|---:|---:|"
-    ]
-    for r in jar_rows[:18]:
-        mod = "{} {} {}".format(r["slot"], r["primaryStat"], r["primaryValue"])
-        lines.append(
-            "| {} | {} | {} | {} | {} | {}{} | {} | {:.1f}% | {:.2f} | {:.1f} | {:.1f} | {:.1f} | {} |".format(
-                r["recommendedAction"], mod, r["source"], r["slot"], r["set"],
-                r["dots"], r["tierName"], r["level"],
-                float(r.get("fitScore", 0)),
-                float(r.get("setBonusDelta", 0)),
-                float(r.get("targetFitAfterSet", r.get("fitScore", 0))),
-                float(r.get("optimizerModScore", r.get("replacementGain", 0))),
-                float(r.get("optimizerFullBuildGain", r.get("accountGain", 0))),
-                r.get("chainPath", "—")
-            )
-        )
-
     lines += [
         "", "## Definicje", "",
         "- **Quality** — jakość wykonanych rolli względem zakresu dla 5-dot/6-dot.",
