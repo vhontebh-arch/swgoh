@@ -1,10 +1,12 @@
-name: Mod chain regression tests
+name: Mod optimizer preflight and regression tests
 
 on:
   push:
     branches:
       - optimizer-v2
     paths:
+      - "optimizer_preflight.py"
+      - "test_optimizer_preflight.py"
       - "mod_analyzer.py"
       - "test_mod_chains.py"
       - "update_mod_profiles.py"
@@ -25,5 +27,5 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Run transfer chain and profile cache regression tests
-        run: python -m unittest -v test_mod_chains test_mod_profile_cache
+      - name: Run preflight and optimizer regression tests
+        run: python -m unittest -v test_optimizer_preflight test_mod_chains test_mod_profile_cache
