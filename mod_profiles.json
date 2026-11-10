@@ -2206,6 +2206,183 @@
         "Critical Avoidance %": 0,
         "Accuracy": 0
       }
+    },
+    "SCORCH": {
+      "name": "RC-1262 \"Scorch\"",
+      "role": "tank",
+      "source_model": {
+        "method": "direct SWGOH.GG Best Mods page read by ChatGPT",
+        "sources": [
+          {
+            "name": "Top 1000 Kyber GAC",
+            "url": "https://swgoh.gg/units/rc-1262-scorch/best-mods/",
+            "units_fully_modded": 958,
+            "set_combinations_pct": {
+              "Double Health + Defense": 48,
+              "Double Defense + Health": 18.8,
+              "Triple Health": 12.8,
+              "Triple Defense": 7.6,
+              "Speed + Health": 3
+            },
+            "primary_pct": {
+              "Arrow": {
+                "Protection": 67.6,
+                "Speed": 26.3,
+                "Health": 4.13,
+                "Critical Avoidance": 0.86
+              },
+              "Triangle": {
+                "Protection": 84.56,
+                "Health": 10.86,
+                "Defense": 4.13,
+                "Offense": 0.21
+              },
+              "Circle": {
+                "Protection": 88.47,
+                "Health": 11.52
+              },
+              "Cross": {
+                "Protection": 88.04,
+                "Health": 5.21,
+                "Defense": 4.34,
+                "Tenacity": 1.08
+              }
+            },
+            "secondary_focus": {
+              "Speed": {
+                "average": 18.1,
+                "focus_pct": 23.07
+              },
+              "Defense %": {
+                "average": 7.92,
+                "focus_pct": 9.73
+              },
+              "Health %": {
+                "average": 3.76,
+                "focus_pct": 8.12
+              },
+              "Protection": {
+                "average": 1570.4,
+                "focus_pct": 8.06
+              }
+            }
+          },
+          {
+            "name": "Top 100 Guilds",
+            "url": "https://swgoh.gg/units/rc-1262-scorch/best-mods/?s=GUILDTOP100",
+            "units_fully_modded": 4935,
+            "set_combinations_pct": {
+              "Double Health + Defense": 49.8,
+              "Triple Health": 15.9,
+              "Double Defense + Health": 14.5,
+              "Triple Defense": 5.3,
+              "Speed + Health": 2.1
+            },
+            "primary_pct": {
+              "Arrow": {
+                "Protection": 56.59,
+                "Speed": 37.1,
+                "Health": 2.68,
+                "Critical Avoidance": 1.91
+              },
+              "Triangle": {
+                "Protection": 74.24,
+                "Health": 17.69,
+                "Defense": 5.65,
+                "Critical Damage": 0.97
+              },
+              "Circle": {
+                "Protection": 78.88,
+                "Health": 21.11
+              },
+              "Cross": {
+                "Protection": 83.07,
+                "Defense": 6.71,
+                "Health": 6.67,
+                "Tenacity": 1.7
+              }
+            },
+            "secondary_focus": {
+              "Speed": {
+                "average": 17.8,
+                "focus_pct": 23.13
+              },
+              "Defense %": {
+                "average": 7.79,
+                "focus_pct": 8.34
+              },
+              "Protection": {
+                "average": 1659,
+                "focus_pct": 8.31
+              },
+              "Health": {
+                "average": 928,
+                "focus_pct": 8
+              }
+            }
+          }
+        ],
+        "refreshed_at_utc": "2026-11-10T17:46:00Z",
+        "note": "Raw source data integrated into the main profile database. Derived optimizer preferences are intentionally not generated yet."
+      },
+      "set_combinations": {
+        "Double Health + Defense": 48.9,
+        "Double Defense + Health": 16.65,
+        "Triple Health": 14.35,
+        "Triple Defense": 6.45,
+        "Speed + Health": 2.55
+      },
+      "set_preferences": {
+        "Double Health": 1,
+        "Defense": 1,
+        "Double Defense": 0.3405,
+        "Health": 0.3926,
+        "Triple Health": 0.2935,
+        "Triple Defense": 0.1319,
+        "Speed": 0.0521
+      },
+      "primary_preferences": {
+        "Arrow": {
+          "Protection": 0.6299,
+          "Speed": 0.3215,
+          "Health": 0.0345,
+          "Critical Avoidance": 0.014
+        },
+        "Triangle": {
+          "Protection": 0.8008,
+          "Health": 0.144,
+          "Defense": 0.0493,
+          "Offense": 0.0011,
+          "Critical Damage": 0.0049
+        },
+        "Circle": {
+          "Protection": 0.8368,
+          "Health": 0.1632
+        },
+        "Cross": {
+          "Protection": 0.8694,
+          "Health": 0.0604,
+          "Defense": 0.0561,
+          "Tenacity": 0.0141
+        }
+      },
+      "secondary_preferences": {
+        "Speed": 1,
+        "Defense %": 0.3911,
+        "Health %": 0.1758,
+        "Protection": 0.3543,
+        "Health": 0.1732,
+        "Potency": 0,
+        "Protection %": 0,
+        "Offense": 0,
+        "Offense %": 0,
+        "Defense": 0,
+        "Tenacity %": 0,
+        "Critical Chance %": 0,
+        "Critical Damage %": 0,
+        "Critical Avoidance %": 0,
+        "Accuracy": 0
+      }
     }
   },
   "profile_status": {
@@ -2827,6 +3004,12 @@
       "checked_at_utc": "2026-11-10T19:20:44Z",
       "fetched_at_utc": "2026-11-10T19:20:44Z",
       "source": "SWGOH.GG direct Best Mods page read by ChatGPT; Kyber GAC + Top 100 Guilds; TOP 4 secondary focus per source"
+    },
+    "SCORCH": {
+      "status": "refreshed",
+      "checked_at_utc": "2026-11-10T19:20:44Z",
+      "fetched_at_utc": "2026-11-10T17:46:00Z",
+      "source": "Existing verified RC-1262 Scorch profile mapped to current roster baseId SCORCH; source pages and raw data unchanged"
     }
   }
 }
