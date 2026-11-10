@@ -6,12 +6,12 @@ W raportach przeznaczonych do ręcznego wykonania mod identyfikowany jest wyłą
 
 - Modów: **2192**
 - UPGRADE: **28**
-- SLICE: **1155**
+- SLICE: **1156**
 - SLICE_6E: **240**
-- CALIBRATE: **103**
+- CALIBRATE: **104**
 - EQUIP: **0**
-- REPLACE: **1**
-- PATCH: **1**
+- REPLACE: **0**
+- PATCH: **0**
 - KEEP: **664**
 
 ## Globalny optimizer 6-slotowy
@@ -26,8 +26,6 @@ Bonus Speed Set używa bazowej szybkości 150, jeśli profil nie zawiera pola ba
 
 | Akcja | Mod | Źródło | Set | Tier | Lvl | Quality | Value | Fit | 6E proj. | Speed | Potencjał | Inwestycja |
 |---|---|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---|
-| REPLACE | Arrow Protection % 24% | POSTAĆ: JEDIKNIGHTREVAN | Speed | 6A | 15 | 100.0% | 68.2% | 42.7% | 0.0% | 80.0% | 68.2% | calibration |
-| PATCH | Arrow Health % 5.88% | MAGAZYN | Speed | 5B | 15 | 100.0% | 75.7% | 43.4% | 0.0% | 75.0% | 75.7% | slice |
 | CALIBRATE | Cross Health % 16% | POSTAĆ: JEDIKNIGHTREVAN | Health | 6A | 15 | 100.0% | 78.2% | 49.6% | 0.0% | 66.7% | 78.2% | calibration |
 | CALIBRATE | Circle Protection % 24% | POSTAĆ: JARJARBINKS | Speed | 6A | 15 | 100.0% | 75.3% | 49.5% | 0.0% | 76.7% | 75.3% | calibration |
 | CALIBRATE | Diamond Defense % 20% | POSTAĆ: SEVENTHSISTER | Speed | 6A | 15 | 100.0% | 63.8% | 46.8% | 0.0% | 76.7% | 63.8% | calibration |
@@ -41,6 +39,7 @@ Bonus Speed Set używa bazowej szybkości 150, jeśli profil nie zawiera pola ba
 | CALIBRATE | Cross Potency % 30% | POSTAĆ: VADER | Critical Damage | 6A | 15 | 100.0% | 67.3% | 44.5% | 0.0% | 75.0% | 67.3% | calibration |
 | CALIBRATE | Circle Protection % 24% | POSTAĆ: HOTHLEIA | Critical Chance | 6A | 15 | 100.0% | 69.2% | 44.3% | 0.0% | 79.2% | 69.2% | calibration |
 | CALIBRATE | Square Offense % 8.5% | POSTAĆ: GLREY | Offense | 6A | 15 | 100.0% | 76.7% | 42.8% | 0.0% | 80.0% | 76.7% | calibration |
+| CALIBRATE | Arrow Protection % 24% | POSTAĆ: JEDIKNIGHTREVAN | Speed | 6A | 15 | 100.0% | 68.2% | 42.7% | 0.0% | 80.0% | 68.2% | calibration |
 | CALIBRATE | Diamond Defense % 20% | POSTAĆ: JARJARBINKS | Potency | 6A | 15 | 100.0% | 68.2% | 42.2% | 0.0% | 75.0% | 68.2% | calibration |
 | CALIBRATE | Circle Health % 16% | POSTAĆ: GLREY | Health | 6A | 15 | 100.0% | 65.3% | 42.1% | 0.0% | 73.3% | 65.3% | calibration |
 | CALIBRATE | Diamond Defense % 20% | POSTAĆ: GRANDADMIRALTHRAWN | Speed | 6A | 15 | 100.0% | 70.0% | 41.0% | 0.0% | 83.3% | 70.0% | calibration |
@@ -101,6 +100,7 @@ Bonus Speed Set używa bazowej szybkości 150, jeśli profil nie zawiera pola ba
 | CALIBRATE | Triangle Protection % 24% | POSTAĆ: GRANDADMIRALTHRAWN | Health | 6A | 15 | 100.0% | 77.0% | 28.6% | 0.0% | 72.2% | 77.0% | calibration |
 | CALIBRATE | Arrow Speed 32 | POSTAĆ: BENSOLO | Offense | 6A | 15 | 100.0% | 66.5% | 28.6% | 0.0% | 0.0% | 66.5% | calibration |
 | CALIBRATE | Cross Tenacity % 35% | POSTAĆ: ENFYSNEST | Tenacity | 6A | 15 | 100.0% | 56.0% | 27.5% | 0.0% | 77.8% | 56.0% | calibration |
+| CALIBRATE | Cross Defense % 20% | POSTAĆ: BB8 | Speed | 6A | 15 | 100.0% | 61.2% | 27.2% | 0.0% | 83.3% | 61.2% | calibration |
 
 ### JARJARBINKS — najlepszy wirtualny build 6/6
 
@@ -120,8 +120,8 @@ Bonus Speed Set używa bazowej szybkości 150, jeśli profil nie zawiera pola ba
 
 ## BEZPIECZNY ŁAŃCUCH — walidacja globalna
 
-**STATUS: OK — transfery są fizycznie wykonalne i nie dublują modów.**
-Bilans pokazuje sumę modValue wyposażonych modów oraz pełne sety przed i po transferze. modValue jest wskaźnikiem jakości samych modów, a nie indywidualnym wynikiem buildu dawcy. Utrata wartości lub setu u dawcy nie blokuje ruchu; to jawna informacja do ręcznej decyzji.
+**STATUS: BLOKADA — nie wygenerowano bezpiecznej listy ruchów.**
+- walidacja fizyczna: PATCH dcQnaS4NSrS-wkWFYJTr0A: w slocie Arrow postaci ygHtxMMsQoi_z9K1Jk0OEg oczekiwano HRfnUW9PSFGTmeIKM55qYg, znaleziono None
 
 | Postać | Σ modValue przed | Σ modValue po | Δ modValue | Pełne sety przed | Pełne sety po |
 |---|---:|---:|---:|---|---|
@@ -134,9 +134,7 @@ Bilans pokazuje sumę modValue wyposażonych modów oraz pełne sety przed i po 
 
 | Krok | Typ | Operacja | Mod — parametry wyszukiwalne | Status |
 |---:|---|---|---|---|
-| 1 | MOD | JEDIKNIGHTREVAN → JARJARBINKS | Arrow / Speed / Protection % 24% / secondary: Health 770, Defense % 9.48%, Protection 1035, Speed 24 / 6★ A lvl15 | VALIDATED |
-| 2 | RETURN | JARJARBINKS → MAGAZYN | Arrow / Speed / Speed 32 / secondary: Protection 2672, Potency % 2.8%, Health 1200, Offense 129 / 6★ A lvl15 | VALIDATED |
-| 3 | PATCH | MAGAZYN → JEDIKNIGHTREVAN | Arrow / Speed / Health % 5.88% / secondary: Speed 9, Protection % 1.65%, Protection 1028, Offense 61 / 5★ B lvl15 | VALIDATED |
+| — | — | — | — | BLOCKED |
 
 ## Definicje
 
