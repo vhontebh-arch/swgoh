@@ -1,1 +1,1 @@
-optimizer-v2 source-hole PATCH fix and full inventory conservation validation 2026-11-10
+optimizer-v2 exhaustive shortest-chain comparison v6 rerun 2026-11-10T16:00Z
