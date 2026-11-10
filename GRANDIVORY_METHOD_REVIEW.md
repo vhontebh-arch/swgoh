@@ -109,3 +109,16 @@ Te ograniczenia są celowe i widoczne: nie udajemy, że samo przeniesienie metod
 - Raport obejmuje cel, źródło moda i każdego dawcę PATCH w łańcuchu. Nie ogranicza się do postaci docelowej.
 - Profil SWGOH.GG opisuje popularność/priorytety buildów w wybranej populacji, a nie bezwzględny wymóg. Nadal jest to miękki model preferencji, nie nakaz kopiowania jednego szablonu.
 - Ograniczenie danych pozostaje istotne: w aktualnym pliku `mod_profiles.json` może brakować profili wielu postaci. Dla dawcy bez profilu algorytm nie potrafi ocenić jego rzeczywistego dopasowania; stosuje jawny fallback `modValue`. Raport musi ten brak ujawniać, a nie sugerować, że fit dawcy został oceniony profilowo.
+
+
+## Lokalna baza profili SWGOH.GG — v1
+
+- `mod_profiles.json` jest trwałym cache profili. Zawiera profile, datę ostatniego poprawnego pobrania, źródła oraz osobny status ostatniej próby odświeżenia.
+- Analizator najpierw ładuje lokalny profil celu. Brakujący, niepoprawny lub starszy niż 90 dni profil jest pobierany z SWGOH.GG przez istniejący parser stron Best Mods.
+- Po wstępnym wyznaczeniu łańcucha analizator pobiera profile tylko dla dawców rzeczywiście występujących w tym łańcuchu. Następnie ponawia optymalizację i walidację; jeżeli zmieni się zestaw dawców, pobieranie i ponowna ocena są kontynuowane aż do ustabilizowania wybranego łańcucha.
+- Każdy poprawnie pobrany profil jest zapisywany atomowo od razu po walidacji. Niepełna odpowiedź, błąd proxy lub brak danych nie może zastąpić poprzedniego poprawnego profilu.
+- Jeżeli odświeżenie starego profilu się nie powiedzie, używana jest ostatnia poprawna kopia (`stale_fallback`). Jeżeli profilu nigdy nie było, status to `unavailable`; optymalizator zachowuje jawny fallback `modValue`, a raport nie przedstawia go jako oceny profilowej.
+- Cache ma TTL 90 dni. Nie ma już codziennego automatycznego odświeżania wszystkich profili. Można wymusić odświeżenie ręcznie przez workflow `Refresh SWGOH mod profiles`, wskazując opcjonalnie listę `baseId`.
+- Workflow analizy konta zapisuje zmieniony `mod_profiles.json` razem z raportami, dzięki czemu cache przetrwa kolejne uruchomienia GitHub Actions.
+- Testy cache sprawdzają: użycie świeżej kopii bez pobierania, zapis nowego profilu, zachowanie starego profilu po błędzie oraz niezależność pobierania kilku postaci.
+- Profile są pobierane dla wybranego łańcucha, a nie dla całego rosteru. To celowo ogranicza ruch do SWGOH.GG i ryzyko błędów pobierania.
