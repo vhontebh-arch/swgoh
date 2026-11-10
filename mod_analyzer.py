@@ -952,7 +952,11 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
             if plan is None:
                 failed.append((target_id, "brak wykonalnego łańcucha dla {} / {}".format(slot,mod.get("set","")))); continue
             physical = {rid(mod)}
-            for move in plan["moves"]: physical.update((rid(move["removed"]),rid(move["replacement"])))
+            for move in plan["moves"]:
+                physical.update((rid(move["removed"]), rid(move["replacement"])))
+            # Inventory PATCH steps have no displaced mod; rid(None) is an
+            # empty string and must never enter the global used-ID set.
+            physical.discard("")
             overlap = physical & used_ids
             if overlap:
                 failed.append((target_id, "konflikt modów dla {} / {} — ponownie użyty mod ID: {}".format(
