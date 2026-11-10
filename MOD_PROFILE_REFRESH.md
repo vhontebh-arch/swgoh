@@ -2,6 +2,16 @@
 
 **Obowiązujący sposób:** ręczny odczyt źródła przez ChatGPT na żądanie użytkownika. GitHub Actions i skrypty repozytorium nie pobierają profili ze SWGOH.GG.
 
+## Świeżość danych i kontrola przy łańcuchach optymalizatora
+
+- **Okres ważności profilu: 5 dni** od `fetched_at_utc` (lub równoważnego `refreshed_at_utc`, jeśli brak osobnego pola pobrania).
+- Przy każdym uruchomieniu optymalizacji sprawdź wszystkie postacie występujące w pełnym łańcuchu: cel oraz wszystkich dawców.
+- Jeśli postać nie istnieje w `mod_profiles.json`, pobierz i zweryfikuj jej profil z obu źródeł.
+- Jeśli profil istnieje i jego dane źródłowe mają najwyżej 5 dni, wystarczy odnotować kontrolę (`checked_at_utc`); nie pobieraj ponownie stron.
+- Jeśli profil jest starszy niż 5 dni, odśwież go z obu źródeł. Profil niekompletny wymaga uzupełnienia niezależnie od wieku.
+- `checked_at_utc` oznacza ostatnią kontrolę, a nie datę pobrania — samo sprawdzenie nie przedłuża ważności danych. Ważność liczymy od `fetched_at_utc` / `refreshed_at_utc`.
+- Nie zmieniaj danych profilu ani nie oznaczaj go jako świeżego wyłącznie na podstawie kontroli jego obecności.
+
 ## Przebieg
 
 1. Użytkownik wskazuje postać (BASE_ID) lub prosi o odświeżenie konkretnego profilu.
