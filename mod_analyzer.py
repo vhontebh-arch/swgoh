@@ -1027,7 +1027,8 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
             pref = max(0.0, float(profile.get("secondary_preferences", {}).get(stat, 0.0)))
             weighted_rolls += q * pref * count
         primary_value = number(row.get("primaryValue", 0), 0.0)
-        primary_ceiling = primary_max_6dot.get(primary, 0.0)
+        primary_base = primary.replace("%", "").strip()
+        primary_ceiling = primary_max_6dot.get(primary_base, 0.0)
         primary_quality = (
             max(0.0, min(1.0, primary_value / primary_ceiling))
             if primary_ceiling > 0 else 1.0
