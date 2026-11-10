@@ -3,7 +3,7 @@
 **Repozytorium źródłowe:** https://github.com/grandivory/mods-optimizer  
 **Przeanalizowany plik:** `public/workers/optimizer.js` (gałąź `develop`)  
 **Licencja repozytorium:** MIT (potwierdzona w metadanych GitHub).  
-**Status:** niezależna implementacja wybranych metod w `mod_analyzer.py`; bez kopiowania kodu źródłowego.
+**Status:** niezależna implementacja wybranych metod w `mod_analyzer.py`; bez kopiowania kodu źródłowego. Aktualny analizator: `2026-11-10-global-chain-balance-v4`.
 
 ## Co robi Grandivory
 
@@ -50,6 +50,22 @@ To zachowuje prosty model profili oparty na preferencjach statystyk i setów. Ni
 - Dla moda 5★ na poziomie 15 i tierze A przelicza każdy secondary do odpowiedniego zakresu 6-dot, tworząc wariant 6E. Roll count pozostaje bez zmian.
 - Ranking pełnych buildów i bonusy setów są liczone na kopiach po projekcji. Wynik aktualny i wynik po projekcji są raportowane oddzielnie. `gain` oznacza różnicę między najlepszym buildem po projekcji a obecnym buildem po tej samej projekcji — nie jest to zysk już osiągnięty ani zatwierdzony transfer.
 - Wartość primary pozostaje taka jak w eksporcie; nie jest sztucznie podbijana w projekcji poziomu.
+
+
+## Łańcuchy transferów i bilans dawców — v4
+
+- Cel jest rozpoznawany również wtedy, gdy nie ma obecnie żadnego założonego moda: identyfikator instancji postaci jest odtwarzany z mapowania rosteru.
+- Pula naprawcza obejmuje wszystkie mody z magazynu, również poniżej poziomu 15. Koszt ich ulepszenia jest osobną decyzją inwestycyjną, a nie powodem do ukrycia ich z wyszukiwania.
+- Wyszukiwanie łańcucha nie ucina kandydatów do top 50 i nie ma arbitralnego limitu długości 10. Przeszukuje poziomami najkrótsze ścieżki, odwiedzając właściciela najwyżej raz.
+- Ukończone sety nie są już twardym warunkiem blokującym ruch. Są kryterium preferencji przy wyborze zastępstwa; rzeczywista zmiana liczby pełnych setów jest raportowana przed/po.
+- Mod wyparty z docelowego slotu jest dostępny jako mod z magazynu dla naprawy źródłowego slotu. Jeśli nie zostanie użyty w łańcuchu, raport pokazuje jego zwrot do magazynu.
+- Każdy plan jest walidowany na końcowym stanie slotów: mod nie może być użyty dwa razy, a każdy wybrany mod musi znaleźć się w docelowym slocie. Ruchy są przedstawione w kolejności fizycznej: MOD, następnie PATCH-y.
+- Raport podaje dla każdej dotkniętej postaci sumę `modValue` założonych modów przed i po transferze oraz zmianę liczby pełnych setów. `modValue` jest ogólną miarą jakości samych modów, nie oceną całego buildu konkretnego dawcy.
+- Nie ma automatycznej ochrony dawcy przed spadkiem jakości ani utratą setu. Użytkownik widzi bilans i podejmuje decyzję; algorytm nie ukrywa kosztu transferu.
+
+### Ograniczenie interpretacji bilansu
+
+Obecny zestaw profili zawiera profile celów optymalizacji, a nie indywidualny profil każdej postaci w rosterze. Dlatego nie wolno nazywać sumy `modValue` pełnym wynikiem buildu dawcy. Jest to jawny, porównywalny wskaźnik jakości wyposażonych modów; do dokładnego bilansu statystyk postaci potrzebne byłyby profile statystyk wszystkich dawców lub pełne bazowe statystyki postaci.
 
 ## Ograniczenie danych — ważne
 
