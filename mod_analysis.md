@@ -16,7 +16,7 @@ W raportach przeznaczonych do ręcznego wykonania mod identyfikowany jest wyłą
 
 ## Profile SWGOH.GG — lokalna baza
 
-Profile są przechowywane lokalnie i odświeżane tylko dla celu oraz potencjalnych dawców z pasujących slotów. Cache ma ważność 90 dni. Nieudane lub niepełne pobranie nie nadpisuje poprzedniego poprawnego profilu.
+Profile są przechowywane lokalnie i odświeżane tylko dla celu oraz dawców faktycznie wyznaczonego łańcucha transferów. Po pobraniu profili dawców łańcuch jest ponownie oceniany; jeśli zmieni się dawca, jego profil również zostanie sprawdzony. Cache ma ważność 90 dni. Nieudane lub niepełne pobranie nie nadpisuje poprzedniego poprawnego profilu.
 
 | Postać (baseId) | Status |
 |---|---|
