@@ -59,9 +59,12 @@ To zachowuje prosty model profili oparty na preferencjach statystyk i setów. Ni
 - Wyszukiwanie łańcucha nie ucina kandydatów do top 50 i nie ma arbitralnego limitu długości 10. Przeszukuje poziomami najkrótsze ścieżki, odwiedzając właściciela najwyżej raz.
 - Ukończone sety nie są już twardym warunkiem blokującym ruch. Są kryterium preferencji przy wyborze zastępstwa; rzeczywista zmiana liczby pełnych setów jest raportowana przed/po.
 - Mod wyparty z docelowego slotu jest dostępny jako mod z magazynu dla naprawy źródłowego slotu. Jeśli nie zostanie użyty w łańcuchu, raport pokazuje jego zwrot do magazynu.
-- Każdy plan jest walidowany na końcowym stanie slotów: mod nie może być użyty dwa razy, a każdy wybrany mod musi znaleźć się w docelowym slocie. Ruchy są przedstawione w kolejności fizycznej: MOD, następnie PATCH-y.
+- Każdy plan jest odtwarzany niezależnie od stanu roboczego planera. Walidator sprawdza źródłowy slot, kolejność MOD/PATCH, zgodność slotu, brak duplikatów, końcowy układ slotów oraz zachowanie pełnego zbioru identyfikatorów modów (żaden mod nie może zniknąć ani zostać dodany).
+- Pierwszy PATCH po zabraniu moda z dawcy uzupełnia fizycznie pusty slot. W bilansie logicznym porównuje się go z modem, który został zabrany w kroku MOD, ale w symulacji nie oczekuje się, że nadal będzie zajmował slot.
 - Raport podaje dla każdej dotkniętej postaci sumę `modValue` założonych modów przed i po transferze oraz zmianę liczby pełnych setów. `modValue` jest ogólną miarą jakości samych modów, nie oceną całego buildu konkretnego dawcy.
 - Nie ma automatycznej ochrony dawcy przed spadkiem jakości ani utratą setu. Użytkownik widzi bilans i podejmuje decyzję; algorytm nie ukrywa kosztu transferu.
+- Testy regresyjne obejmują: equip z magazynu do pustego celu, zastąpienie moda w celu i jego zwrot do magazynu, naprawę pustego slotu dawcy, wykorzystanie moda wypieranego z celu jako PATCH, konflikt dwóch celów o ten sam mod oraz odrzucenie niewykonalnego transferu.
+- Ograniczenie bieżącej wersji: wyszukiwanie wybiera bezpośredni PATCH z dostępnej puli magazynowej przed rozważaniem kolejnych dawców. Nie jest to jeszcze optymalizacja alternatywnych łańcuchów wielodawcowych; ten etap pozostaje otwarty i nie należy zakładać, że raport znajduje globalnie najlepszy łańcuch.
 
 ### Ograniczenie interpretacji bilansu
 
@@ -83,7 +86,7 @@ To jest jawne przybliżenie, a nie pełna reprodukcja dokładnego przeliczenia s
 - Dokładnego przeliczenia primary dla poziomów poniżej 15. Primary pozostaje na wartości z eksportu, ponieważ wejściowe dane nie zawierają tabeli przyrostu primary na każdym poziomie.
 - Projekcji 5A→6E dla modów innych niż 5A na poziomie 15; nie zakładamy, że można pominąć wcześniejsze etapy slice.
 - Pełnej globalnej optymalizacji wielu celów jednocześnie.
-- Nowego algorytmu łańcuchów MOD/PATCH i pełnego bilansu końcowego dawców. To pozostaje osobnym etapem; wybór buildów jest na razie wirtualnym wyborem najlepszych modów.
+- Globalnego wyszukiwania i optymalizacji alternatywnych łańcuchów wielodawcowych. Obecna wersja ma fizyczną walidację i bilans końcowy, ale nie gwarantuje najlepszego łańcucha ani nie eksploruje wszystkich alternatyw.
 - Automatycznego chronienia wszystkich dawców ani automatycznych testów.
 
 Te ograniczenia są celowe i widoczne: nie udajemy, że samo przeniesienie metody doboru buildów rozwiązuje problemy łańcuchów i bilansu całego rosteru.
