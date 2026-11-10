@@ -111,14 +111,14 @@ Te ograniczenia są celowe i widoczne: nie udajemy, że samo przeniesienie metod
 - Ograniczenie danych pozostaje istotne: w aktualnym pliku `mod_profiles.json` może brakować profili wielu postaci. Dla dawcy bez profilu algorytm nie potrafi ocenić jego rzeczywistego dopasowania; stosuje jawny fallback `modValue`. Raport musi ten brak ujawniać, a nie sugerować, że fit dawcy został oceniony profilowo.
 
 
-## Lokalna baza profili SWGOH.GG — v1
+## Lokalna baza profili SWGOH.GG — obowiązująca procedura
 
 - `mod_profiles.json` jest trwałym cache profili. Zawiera profile, datę ostatniego poprawnego pobrania, źródła oraz osobny status ostatniej próby odświeżenia.
-- Analizator najpierw ładuje lokalny profil celu. Brakujący, niepoprawny lub starszy niż 90 dni profil jest pobierany z SWGOH.GG przez istniejący parser stron Best Mods.
-- Po wstępnym wyznaczeniu łańcucha analizator pobiera profile tylko dla dawców rzeczywiście występujących w tym łańcuchu. Następnie ponawia optymalizację i walidację; jeżeli zmieni się zestaw dawców, pobieranie i ponowna ocena są kontynuowane aż do ustabilizowania wybranego łańcucha.
-- Każdy poprawnie pobrany profil jest zapisywany atomowo od razu po walidacji. Niepełna odpowiedź, błąd proxy lub brak danych nie może zastąpić poprzedniego poprawnego profilu.
-- Jeżeli odświeżenie starego profilu się nie powiedzie, używana jest ostatnia poprawna kopia (`stale_fallback`). Jeżeli profilu nigdy nie było, status to `unavailable`; optymalizator zachowuje jawny fallback `modValue`, a raport nie przedstawia go jako oceny profilowej.
-- Cache ma TTL 90 dni. Nie ma już codziennego automatycznego odświeżania wszystkich profili. Można wymusić odświeżenie ręcznie przez workflow `Refresh SWGOH mod profiles`, wskazując opcjonalnie listę `baseId`.
-- Workflow analizy konta zapisuje zmieniony `mod_profiles.json` razem z raportami, dzięki czemu cache przetrwa kolejne uruchomienia GitHub Actions.
-- Testy cache sprawdzają: użycie świeżej kopii bez pobierania, zapis nowego profilu, zachowanie starego profilu po błędzie oraz niezależność pobierania kilku postaci.
-- Profile są pobierane dla wybranego łańcucha, a nie dla całego rosteru. To celowo ogranicza ruch do SWGOH.GG i ryzyko błędów pobierania.
+- **TTL profilu wynosi 5 dni** od `fetched_at_utc` (lub `refreshed_at_utc`, jeśli brak osobnego pola pobrania). `checked_at_utc` nie przedłuża ważności.
+- Profile pobiera się **wyłącznie na potrzeby konkretnej analizy**: dla wskazanej postaci docelowej oraz dawców występujących w aktualnie wyznaczonym łańcuchu. Nie wolno profilować całego rosteru, wszystkich postaci w grze ani budować bazy na zapas.
+- Dla każdej postaci w łańcuchu: brak profilu oznacza pobranie obu źródeł; profil starszy niż 5 dni — odświeżenie obu źródeł; profil niekompletny — uzupełnienie niezależnie od wieku; profil kompletny i nie starszy niż 5 dni — użycie cache bez ponownego pobierania stron.
+- Po wstępnym wyznaczeniu łańcucha sprawdza się profile wszystkich jego uczestników. Jeżeli ponowna optymalizacja zmieni łańcuch, kontrolę profili i ocenę powtarza się dla nowego łańcucha aż do ustabilizowania wyniku.
+- Każdy poprawnie pobrany profil jest zapisywany atomowo po walidacji. Niepełna odpowiedź, błąd odczytu lub brak danych nie może zastąpić poprzedniego poprawnego profilu.
+- Jeżeli odświeżenie starego profilu się nie powiedzie, można użyć ostatniej poprawnej kopii wyłącznie z jawnym oznaczeniem jej jako nieaktualnej; raport nie może przedstawiać jej jako świeżego profilu. Jeżeli profilu nigdy nie było, stosuje się jawny fallback `modValue` i ujawnia brak oceny profilowej.
+- Odczyt profili wykonuje ChatGPT bezpośrednio ze stron SWGOH.GG na żądanie użytkownika. GitHub Actions i skrypty repozytorium nie są używane do pobierania profili SWGOH.GG.
+- Szczegółowy przebieg odczytu, walidacji dwóch źródeł, zapisu i read-back opisuje `MOD_PROFILE_REFRESH.md`.
