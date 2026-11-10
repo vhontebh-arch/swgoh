@@ -428,8 +428,7 @@ def source_label(row, aliases, names):
 def score_profile(row, profile):
     primary = row.get("primaryStat", "")
     slot = row.get("slot", "")
-    primary_pref = profile.get("primary_preferences", {}).get(slot, {})
-    primary_fit = float(primary_pref.get(primary, 0.0)) * 100.0
+    primary_fit = profile_primary_preference(profile, slot, primary) * 100.0
 
     secs = []
     for i in range(1, 5):
@@ -1244,11 +1243,10 @@ def project_mod_for_build(row, profile):
     max_rolls = TOTAL.get((dots, tier), current_rolls)
     missing_rolls = max(0, max_rolls - current_rolls)
 
-    preferences = profile.get("secondary_preferences", {})
     candidates = [
-        (float(weight), stat)
-        for stat, weight in preferences.items()
-        if stat in (R6 if dots >= 6 else R5) and float(weight) > 0
+        (profile_secondary_preference(profile, stat), stat)
+        for stat in (R6 if dots >= 6 else R5)
+        if profile_secondary_preference(profile, stat) > 0
     ]
     candidates.sort(key=lambda item: (item[0], STAT_VALUE.get(item[1], 0.0)), reverse=True)
 
@@ -1336,9 +1334,7 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
     def mod_score(row, profile):
         slot = str(row.get("slot", "") or "")
         primary = str(row.get("primaryStat", "") or "")
-        primary_fit = max(0.0, min(1.0, float(
-            profile.get("primary_preferences", {}).get(slot, {}).get(primary, 0.0)
-        )))
+        primary_fit = max(0.0, min(1.0, profile_primary_preference(profile, slot, primary)))
         weighted_rolls = 0.0
         for index in range(1, 5):
             stat_data = rolls(row, index)
