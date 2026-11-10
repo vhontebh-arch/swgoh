@@ -1,6 +1,6 @@
 import unittest
 
-from mod_analyzer import apply_optimizer_replacements
+from mod_analyzer import apply_optimizer_replacements, rolls, quality
 
 
 TARGET = "target-instance"
@@ -27,6 +27,35 @@ def run_plan(rows, selected, aliases=None):
         {"TARGET"},
         aliases=aliases,
     )
+
+
+
+class RawRollScaleTests(unittest.TestCase):
+    def test_flat_speed_raw_roll_uses_unscaled_roll_value_scale(self):
+        row = {
+            "secondary1Stat": "Speed",
+            "secondary1Value": "4",
+            "secondary1Rolls": "1",
+            "secondary1RawRolls": "464520",
+            "dots": "5",
+        }
+        stat, value, count, values = rolls(row, 1)
+        self.assertAlmostEqual(values[0], 4.6452, places=4)
+        self.assertAlmostEqual(quality(stat, value, count, values, 5), (4.6452 - 3.0) / 3.0, places=4)
+
+    def test_percent_raw_roll_uses_unscaled_roll_value_scale(self):
+        row = {
+            "secondary1Stat": "Protection %",
+            "secondary1Value": "3.36%",
+            "secondary1Rolls": "2",
+            "secondary1RawRolls": "1298|2067",
+            "dots": "5",
+        }
+        stat, value, count, values = rolls(row, 1)
+        self.assertAlmostEqual(values[0], 1.298, places=3)
+        self.assertAlmostEqual(values[1], 2.067, places=3)
+        expected = (((1.298 - 1.125) / (2.25 - 1.125)) + 1.0) / 2.0
+        self.assertAlmostEqual(quality(stat, value, count, values, 5), expected, places=4)
 
 
 class TransferChainTests(unittest.TestCase):
