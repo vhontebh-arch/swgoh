@@ -1048,6 +1048,15 @@ jobs:
           head -n 6 mods.csv
 
       # ============================================================
+      # MOD OPTIMIZER REGRESSION TESTS
+      # ============================================================
+
+      - name: Run optimizer regression tests
+        run: |
+          set -e
+          python -m unittest -v test_optimizer_preflight test_mod_chains test_mod_profile_cache
+
+      # ============================================================
       # MOD ANALYSIS
       # ============================================================
 
