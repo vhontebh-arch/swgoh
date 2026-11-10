@@ -406,7 +406,14 @@ def ensure_profiles(base_ids, names=None, max_age_days=CACHE_MAX_AGE_DAYS):
     for base_id in sorted(set(str(x).strip() for x in base_ids if str(x).strip())):
         existing = profiles.get(base_id, {})
         name = names.get(base_id) or existing.get("name") or base_id
-        if existing and profile_is_fresh(existing, max_age_days):
+        cache_valid = False
+        if existing:
+            try:
+                validate_profile(existing)
+                cache_valid = True
+            except Exception:
+                cache_valid = False
+        if cache_valid and profile_is_fresh(existing, max_age_days):
             statuses[base_id] = {
                 "status": "cached",
                 "checked_at_utc": datetime.now(timezone.utc).isoformat(),
