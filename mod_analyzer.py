@@ -988,6 +988,14 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
     slots = ("Square", "Diamond", "Circle", "Arrow", "Triangle", "Cross")
     primary_points, secondary_points, max_rolls = 20.0, 80.0, 24.0
     speed_reference = 150.0
+    # Level-15 primary ceilings at 6 dots: compare 5-dot and 6-dot primaries
+    # on a common scale, as Grandivory does when scoring actual stat values.
+    primary_max_6dot = {
+        "Offense": 8.50, "Defense": 20.0, "Health": 16.0,
+        "Protection": 24.0, "Speed": 32.0, "Accuracy": 30.0,
+        "Critical Avoidance": 35.0, "Critical Chance": 20.0,
+        "Critical Damage": 42.0, "Potency": 30.0, "Tenacity": 35.0,
+    }
     set_max_roll = {
         "Critical Chance %": 2.25, "Critical Damage %": 36.0,
         "Defense %": 1.70, "Health %": 1.125, "Offense %": 0.563,
@@ -1018,8 +1026,14 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
             q = quality(stat, value, count, values, integer(row.get("dots")))
             pref = max(0.0, float(profile.get("secondary_preferences", {}).get(stat, 0.0)))
             weighted_rolls += q * pref * count
+        primary_value = number(row.get("primaryValue", 0), 0.0)
+        primary_ceiling = primary_max_6dot.get(primary, 0.0)
+        primary_quality = (
+            max(0.0, min(1.0, primary_value / primary_ceiling))
+            if primary_ceiling > 0 else 1.0
+        )
         return (
-            primary_fit * primary_points / len(slots)
+            primary_fit * primary_quality * primary_points / len(slots)
             + weighted_rolls * secondary_points / max_rolls
         )
 
