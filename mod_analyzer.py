@@ -1541,7 +1541,8 @@ def main():
     selected_donor_ids -= target_ids
     selected_donor_ids -= protected_owners
     if selected_donor_ids:
-        profiles, selected_donor_status = ensure_profiles(selected_donor_ids, names)
+        cached_donor_profiles, selected_donor_status = ensure_profiles(selected_donor_ids, names)
+        profiles.update(cached_donor_profiles)
         profile_fetch_status.update(selected_donor_status)
         attempted_profile_units = set(target_ids) | selected_donor_ids
     else:
@@ -1571,7 +1572,8 @@ def main():
         if not missing_attempts:
             break
 
-        profiles, donor_profile_status = ensure_profiles(missing_attempts, names)
+        cached_donor_profiles, donor_profile_status = ensure_profiles(missing_attempts, names)
+        profiles.update(cached_donor_profiles)
         profile_fetch_status.update(donor_profile_status)
         attempted_profile_units.update(missing_attempts)
 
@@ -1612,6 +1614,10 @@ def main():
             chain_result.setdefault("failed", []).append(
                 (target_id, "niekompletny build: {}/6 slotów".format(len(opt.get("mods", []))))
             )
+    if not chain_result.get("safe"):
+        for row in rows:
+            if row.get("optimizerTarget"):
+                row["chainStatus"] = "BLOCKED"
 
     # Mark the physical mods selected by the complete six-slot optimizer.
     # These values describe the full-build result, not a single-slot swap;
