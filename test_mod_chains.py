@@ -158,6 +158,50 @@ class UserReportTests(unittest.TestCase):
         self.assertNotIn("UPGRADE:", report)
 
 
+
+    def test_report_preserves_validated_plan_order(self):
+        def mod(mid, slot, equipped, assigned_to, set_name):
+            return {
+                "id": mid, "slot": slot, "equipped": equipped,
+                "assignedTo": assigned_to, "set": set_name,
+                "primaryStat": "Protection %", "primaryValue": "24%",
+                "dots": "6", "tierName": "A", "level": "15",
+                "secondary1Stat": "Speed", "secondary1Value": "10",
+            }
+
+        current_circle = mod("old-circle", "Circle", True, "target-instance", "Health")
+        current_square = mod("old-square", "Square", True, "target-instance", "Health")
+        selected_circle = mod("new-circle", "Circle", False, "", "Defense")
+        selected_square = mod("new-square", "Square", False, "", "Defense")
+        aliases = {"target-instance": "VEL"}
+        names = {"VEL": "Vel Sartha"}
+        def display_name(owner_id):
+            base = aliases.get(owner_id, owner_id)
+            return names.get(owner_id) or names.get(base) or base or "MAGAZYN"
+
+        plans = [
+            {"target": "VEL", "target_owner": "target-instance", "mod": selected_circle,
+             "target_current": current_circle, "moves": []},
+            {"target": "VEL", "target_owner": "target-instance", "mod": selected_square,
+             "target_current": current_square, "moves": []},
+        ]
+        report = render_user_report(
+            rows=[current_circle, current_square],
+            optimizer={"VEL": {"mods": [selected_circle, selected_square], "gain": 0.0}},
+            chain_result={"safe": True, "plans": plans, "validation": [], "failed": []},
+            profiles={"VEL": {"source_model": {"sources": [
+                {"name": "Kyber", "units_fully_modded": 1},
+                {"name": "Top 100 Guilds", "units_fully_modded": 2},
+            ]}}},
+            aliases=aliases, names=names, target_ids={"VEL"},
+            profile_fetch_status={"VEL": "cached"}, display_name=display_name,
+        )
+        self.assertLess(
+            report.index("**Circle — załóż na Vel Sartha"),
+            report.index("**Square — załóż na Vel Sartha"),
+        )
+
+
 class TransferChainTests(unittest.TestCase):
     def test_inventory_to_empty_target(self):
         selected = make_mod("inventory-mod")

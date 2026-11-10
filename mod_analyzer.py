@@ -14,7 +14,7 @@ INPUT_FILE = "mods.csv"
 OUTPUT_CSV = "mod_analysis.csv"
 OUTPUT_MD = "mod_analysis.md"
 PROFILE_FILE = "mod_profiles.json"
-ANALYZER_VERSION = "2026-11-10-profile-first-set-audit-v13-user-report-actual-donors"
+ANALYZER_VERSION = "2026-11-10-profile-first-set-audit-v14-preserve-validated-plan-order"
 
 R5 = {
     "Critical Chance %": (1.125, 2.25), "Defense": (4.9, 9.8),
@@ -1647,11 +1647,6 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
             str(mod.get("slot", "")): mod for mod in opt.get("mods", [])
         }
         slot_order = ["Arrow", "Square", "Diamond", "Triangle", "Circle", "Cross"]
-        plan_by_slot = {
-            str(plan.get("mod", {}).get("slot", "")): plan
-            for plan in chain_result.get("plans", [])
-            if plan.get("target") == target_id or plan.get("target_owner") == target_owner
-        }
         for slot in slot_order:
             mod = selected_by_slot.get(slot)
             if not mod:
@@ -1681,10 +1676,12 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
         if chain_result.get("safe"):
             lines += ["## Kolejność przekładania", ""]
             step = 1
-            for slot in slot_order:
-                plan = plan_by_slot.get(slot)
-                if not plan:
+            # Preserve the exact plan order validated by the physical simulator.
+            # Sorting by slot here could reorder dependent donor repairs.
+            for plan in chain_result.get("plans", []):
+                if plan.get("target") != target_id and plan.get("target_owner") != target_owner:
                     continue
+                slot = str(plan.get("mod", {}).get("slot", ""))
                 selected = plan["mod"]
                 selected_source = mod_owner(selected)
                 selected_source_name = display_name(selected_source) if selected_source else "MAGAZYN"
