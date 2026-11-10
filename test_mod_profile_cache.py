@@ -37,51 +37,43 @@ class ProfileCacheTests(unittest.TestCase):
     def save(self, data):
         self.path.write_text(json.dumps(data), encoding="utf-8")
 
-    def load(self):
-        return json.loads(self.path.read_text(encoding="utf-8"))
+    def load_text(self):
+        return self.path.read_text(encoding="utf-8")
 
-    def test_fresh_profile_uses_cache_without_fetch(self):
+    def test_requested_profile_uses_cache_without_network_or_write(self):
         cached = valid_profile()
         self.save({"profiles": {"UNIT": cached}})
-        with patch.object(profiles, "refresh_one", side_effect=AssertionError("unexpected fetch")):
+        before = self.load_text()
+        with patch("urllib.request.urlopen", side_effect=AssertionError("network access forbidden")):
             result, status = profiles.ensure_profiles({"UNIT"}, {"UNIT": "Example"})
         self.assertEqual(status["UNIT"], "cached")
         self.assertEqual(result["UNIT"], cached)
+        self.assertEqual(self.load_text(), before)
 
-    def test_missing_profile_is_fetched_and_persisted(self):
-        fetched = valid_profile()
+    def test_missing_profile_is_reported_unavailable_without_fetch(self):
         self.save({"profiles": {}})
-        with patch.object(profiles, "refresh_one", return_value=fetched) as fetch:
+        before = self.load_text()
+        with patch("urllib.request.urlopen", side_effect=AssertionError("network access forbidden")):
             result, status = profiles.ensure_profiles({"UNIT"}, {"UNIT": "Example"})
-        fetch.assert_called_once()
-        self.assertEqual(status["UNIT"], "refreshed")
-        self.assertEqual(self.load()["profiles"]["UNIT"], fetched)
-        self.assertIn("profile_status", self.load())
+        self.assertEqual(status["UNIT"], "unavailable")
+        self.assertNotIn("UNIT", result)
+        self.assertEqual(self.load_text(), before)
 
-    def test_failed_refresh_keeps_previous_profile_unchanged(self):
-        cached = valid_profile()
-        cached["source_model"]["refreshed_at_utc"] = "2020-01-01T00:00:00+00:00"
-        self.save({"profiles": {"UNIT": cached}})
-        with patch.object(profiles, "refresh_one", side_effect=RuntimeError("short response")):
-            result, status = profiles.ensure_profiles({"UNIT"}, {"UNIT": "Example"})
-        self.assertEqual(status["UNIT"], "stale_fallback")
-        self.assertEqual(result["UNIT"], cached)
-        self.assertEqual(self.load()["profiles"]["UNIT"], cached)
-        self.assertEqual(self.load()["profile_status"]["UNIT"]["status"], "stale_fallback")
+    def test_only_explicitly_requested_profiles_are_returned(self):
+        wanted = valid_profile()
+        other = valid_profile()
+        self.save({"profiles": {"UNIT": wanted, "OTHER": other}})
+        result, status = profiles.ensure_profiles({"UNIT"}, {"UNIT": "Example"})
+        self.assertEqual(set(result), {"UNIT"})
+        self.assertEqual(status, {"UNIT": "cached"})
 
-    def test_one_failed_unit_does_not_block_other_profiles(self):
-        good = valid_profile()
-        self.save({"profiles": {}})
-        def refresh(base_id, name, existing):
-            if base_id == "BAD":
-                raise RuntimeError("unavailable")
-            return good
-        with patch.object(profiles, "refresh_one", side_effect=refresh):
-            result, status = profiles.ensure_profiles({"BAD", "GOOD"}, {"BAD": "Bad", "GOOD": "Good"})
-        self.assertEqual(status["BAD"], "unavailable")
-        self.assertEqual(status["GOOD"], "refreshed")
-        self.assertIn("GOOD", result)
-        self.assertNotIn("BAD", result)
+    def test_corrupt_cache_fails_closed_without_rewriting_file(self):
+        self.path.write_text("{broken", encoding="utf-8")
+        before = self.load_text()
+        result, status = profiles.ensure_profiles({"UNIT"}, {"UNIT": "Example"})
+        self.assertEqual(result, {})
+        self.assertEqual(status, {"UNIT": "unavailable"})
+        self.assertEqual(self.load_text(), before)
 
 
 if __name__ == "__main__":
