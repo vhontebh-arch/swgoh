@@ -1590,6 +1590,7 @@ def main():
     if chain_result.get("safe"):
         lines.append("**STATUS: OK — transfery są fizycznie wykonalne i nie dublują modów.**")
         lines.append("Bilans pokazuje sumę modValue wyposażonych modów oraz pełne sety przed i po transferze. modValue jest wskaźnikiem jakości samych modów, a nie indywidualnym wynikiem buildu dawcy. Utrata wartości lub setu u dawcy nie blokuje ruchu; to jawna informacja do ręcznej decyzji.")
+        lines.append("Wariant łańcucha wybierany jest najpierw według zachowania lub poprawy pełnych setów, następnie łącznego fit dawców i sumy modValue. Porównywane są wszystkie warianty na najkrótszym wykonalnym poziomie; dłuższe łańcuchy nie są preferowane, jeśli istnieje krótsze rozwiązanie. Dla dawców bez własnego profilu fit korzysta z ogólnego modValue.")
     else:
         lines.append("**STATUS: BLOKADA — nie wygenerowano bezpiecznej listy ruchów.**")
         for target_id, reason in chain_result.get("failed", []):
