@@ -114,7 +114,10 @@ class TransferChainTests(unittest.TestCase):
         )
         self.assertTrue(result["safe"], result["failed"])
         move = result["plans"][0]["moves"][0]
-        self.assertEqual(move["replacement"]["id"], "set-preserving-patch")
+        self.assertEqual(
+            move["replacement"]["id"], "set-preserving-patch",
+            "chosen move={!r}".format(move),
+        )
         self.assertEqual(move["set_delta"], 0)
 
     def test_inventory_patch_is_currently_preferred_to_another_donor(self):
