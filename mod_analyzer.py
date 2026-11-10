@@ -12,7 +12,7 @@ INPUT_FILE = "mods.csv"
 OUTPUT_CSV = "mod_analysis.csv"
 OUTPUT_MD = "mod_analysis.md"
 PROFILE_FILE = "mod_profiles.json"
-ANALYZER_VERSION = "2026-11-10-global-chain-balance-v6"
+ANALYZER_VERSION = "2026-11-10-global-chain-balance-v7"
 
 R5 = {
     "Critical Chance %": (1.125, 2.25), "Defense": (4.9, 9.8),
@@ -928,8 +928,8 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                 # maximum total donor fit gain, completed-set delta, and
                 # total equipped modValue delta. IDs break exact ties only.
                 terminal_solutions.sort(key=lambda solution: (
-                    solution["gain"],
                     solution["set_delta"],
+                    solution["gain"],
                     solution["mod_value_delta"],
                     tuple(rid(m["replacement"]) for m in solution["moves"])
                 ), reverse=True)
