@@ -2209,6 +2209,25 @@
         }
       ],
       "note": "Oba źródła zawierają wymagane TOP 4 statystyki drugorzędne, zachowane w oryginalnej kolejności wraz ze średnią i focus_pct."
+    },
+    "ADELPHIRANGER": {
+      "status": "unavailable",
+      "checked_at_utc": "2026-11-10T18:12:00Z",
+      "fetched_at_utc": "2026-11-10T18:12:00Z",
+      "source": "SWGOH.GG Best Mods pages checked directly",
+      "sources": [
+        {
+          "name": "Top 1000 Kyber GAC",
+          "url": "https://swgoh.gg/units/adelphi-ranger/best-mods/",
+          "units_fully_modded": 0
+        },
+        {
+          "name": "Top 100 Guilds",
+          "url": "https://swgoh.gg/units/adelphi-ranger/best-mods/?s=GUILDTOP100",
+          "units_fully_modded": 0
+        }
+      ],
+      "note": "Oba źródła SWGOH.GG zwracają 0 fully-modded units. Nie ma podstaw do utworzenia profilu ani uzupełniania wartości."
     }
   }
 }
