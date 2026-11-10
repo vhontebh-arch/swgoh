@@ -1,6 +1,6 @@
 import unittest
 
-from mod_analyzer import apply_optimizer_replacements, rolls, quality
+from mod_analyzer import (apply_optimizer_replacements, rolls, quality,\n                          profile_primary_preference, profile_secondary_preference,\n                          profile_set_preferences)
 
 
 TARGET = "target-instance"
@@ -56,6 +56,39 @@ class RawRollScaleTests(unittest.TestCase):
         self.assertAlmostEqual(values[1], 2.067, places=3)
         expected = (((1.298 - 1.125) / (2.25 - 1.125)) + ((2.067 - 1.125) / (2.25 - 1.125))) / 2.0
         self.assertAlmostEqual(quality(stat, value, count, values, 5), expected, places=4)
+
+
+
+class ProfileNormalizationTests(unittest.TestCase):
+    def test_percent_primary_matches_swgoh_gg_label_without_percent(self):
+        profile = {"primary_preferences": {"Triangle": {"Critical Damage": 0.82}}}
+        self.assertAlmostEqual(
+            profile_primary_preference(profile, "Triangle", "Critical Damage %"),
+            0.82,
+        )
+
+    def test_percent_secondary_maps_only_known_swgoh_gg_aliases(self):
+        profile = {"secondary_preferences": {"Tenacity": 0.7, "Health": 0.4}}
+        self.assertAlmostEqual(profile_secondary_preference(profile, "Tenacity %"), 0.7)
+        self.assertEqual(profile_secondary_preference(profile, "Health %"), 0.0)
+        self.assertAlmostEqual(profile_secondary_preference(profile, "Health"), 0.4)
+
+    def test_set_preferences_aggregate_base_sets_from_combinations(self):
+        profile = {
+            "set_combinations": {
+                "Double Health + Defense": 50.0,
+                "Triple Health": 30.0,
+                "Speed + Health": 20.0,
+                "Offense + Crit Chance": 10.0,
+            },
+            "set_preferences": {"Health": 0.1},
+        }
+        prefs = profile_set_preferences(profile)
+        self.assertAlmostEqual(prefs["Health"], 1.0)
+        self.assertAlmostEqual(prefs["Defense"], 0.5)
+        self.assertAlmostEqual(prefs["Speed"], 0.2)
+        self.assertAlmostEqual(prefs["Offense"], 0.1)
+        self.assertAlmostEqual(prefs["Critical Chance"], 0.1)
 
 
 class TransferChainTests(unittest.TestCase):
