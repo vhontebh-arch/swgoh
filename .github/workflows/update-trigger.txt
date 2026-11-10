@@ -1,1 +1,1 @@
-optimizer-v2 chain ranking v7 preserve completed sets 2026-11-10
+optimizer-v2 chain report objective text 2026-11-10
