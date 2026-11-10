@@ -6,8 +6,8 @@ W raportach przeznaczonych do ręcznego wykonania mod identyfikowany jest wyłą
 
 - Modów: **2192**
 - UPGRADE: **28**
-- SLICE: **1155**
-- SLICE_6E: **240**
+- SLICE: **1156**
+- SLICE_6E: **239**
 - CALIBRATE: **103**
 - EQUIP: **0**
 - REPLACE: **1**
@@ -27,7 +27,7 @@ Bonus Speed Set używa bazowej szybkości 150, jeśli profil nie zawiera pola ba
 | Akcja | Mod | Źródło | Set | Tier | Lvl | Quality | Value | Fit | 6E proj. | Speed | Potencjał | Inwestycja |
 |---|---|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---|
 | REPLACE | Arrow Protection % 24% | POSTAĆ: JEDIKNIGHTREVAN | Speed | 6A | 15 | 100.0% | 68.2% | 42.7% | 0.0% | 80.0% | 68.2% | calibration |
-| PATCH | Arrow Health % 5.88% | MAGAZYN | Speed | 5B | 15 | 100.0% | 75.7% | 43.4% | 0.0% | 75.0% | 75.7% | slice |
+| PATCH | Arrow Health % 5.88% | MAGAZYN | Critical Chance | 5A | 15 | 100.0% | 87.2% | 30.5% | 51.2% | 83.3% | 87.2% | 6-dot |
 | CALIBRATE | Cross Health % 16% | POSTAĆ: JEDIKNIGHTREVAN | Health | 6A | 15 | 100.0% | 78.2% | 49.6% | 0.0% | 66.7% | 78.2% | calibration |
 | CALIBRATE | Circle Protection % 24% | POSTAĆ: JARJARBINKS | Speed | 6A | 15 | 100.0% | 75.3% | 49.5% | 0.0% | 76.7% | 75.3% | calibration |
 | CALIBRATE | Diamond Defense % 20% | POSTAĆ: SEVENTHSISTER | Speed | 6A | 15 | 100.0% | 63.8% | 46.8% | 0.0% | 76.7% | 63.8% | calibration |
@@ -126,7 +126,7 @@ Bilans pokazuje sumę modValue wyposażonych modów oraz pełne sety przed i po 
 | Postać | Σ modValue przed | Σ modValue po | Δ modValue | Pełne sety przed | Pełne sety po |
 |---|---:|---:|---:|---|---|
 | JARJARBINKS | 409.4 | 419.4 | +10.0 | Potency=1, Speed=1 | Potency=1, Speed=1 |
-| JEDIKNIGHTREVAN | 382.9 | 390.4 | +7.5 | Health=1, Speed=1 | Health=1, Speed=1 |
+| JEDIKNIGHTREVAN | 382.9 | 401.9 | +19.0 | Health=1, Speed=1 | Health=1 |
 
 ### Ruchy — kolejność fizyczna
 
@@ -136,7 +136,7 @@ Bilans pokazuje sumę modValue wyposażonych modów oraz pełne sety przed i po 
 |---:|---|---|---|---|
 | 1 | MOD | JEDIKNIGHTREVAN → JARJARBINKS | Arrow / Speed / Protection % 24% / secondary: Health 770, Defense % 9.48%, Protection 1035, Speed 24 / 6★ A lvl15 | VALIDATED |
 | 2 | RETURN | JARJARBINKS → MAGAZYN | Arrow / Speed / Speed 32 / secondary: Protection 2672, Potency % 2.8%, Health 1200, Offense 129 / 6★ A lvl15 | VALIDATED |
-| 3 | PATCH | MAGAZYN → JEDIKNIGHTREVAN | Arrow / Speed / Health % 5.88% / secondary: Speed 9, Protection % 1.65%, Protection 1028, Offense 61 / 5★ B lvl15 | VALIDATED |
+| 3 | PATCH | MAGAZYN → JEDIKNIGHTREVAN | Arrow / Critical Chance / Health % 5.88% / secondary: Protection % 3.78%, Speed 10, Offense % 1.2%, Offense 26 / 5★ A lvl15 | VALIDATED |
 
 ## Definicje
 
