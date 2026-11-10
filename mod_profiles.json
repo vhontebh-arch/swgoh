@@ -208,7 +208,7 @@
       "status": "refreshed",
       "checked_at_utc": "2026-11-10T17:21:00+00:00",
       "fetched_at_utc": "2026-11-10T17:21:00+00:00",
-      "source": "SWGOH.GG direct page read by ChatGPT; full 12-stat lists supplied from expanded page output",
+      "source": "SWGOH.GG direct page read by ChatGPT; TOP 4 secondary-stat focus entries retained per source",
       "sources": [
         {
           "name": "Kyber GAC (Top 1000)",
