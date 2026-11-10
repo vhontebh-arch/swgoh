@@ -196,5 +196,13 @@
         "Accuracy": 0.0
       }
     }
+  },
+  "profile_status": {
+    "JARJARBINKS": {
+      "status": "cached",
+      "checked_at_utc": "2026-11-10T16:25:52.338623+00:00",
+      "fetched_at_utc": "2026-10-31T10:55:38.278125+00:00",
+      "source": "local_cache"
+    }
   }
 }
