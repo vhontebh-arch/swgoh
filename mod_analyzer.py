@@ -14,7 +14,7 @@ INPUT_FILE = "mods.csv"
 OUTPUT_CSV = "mod_analysis.csv"
 OUTPUT_MD = "mod_analysis.md"
 PROFILE_FILE = "mod_profiles.json"
-ANALYZER_VERSION = "2026-11-10-profile-first-set-audit-v9-raw-roll-scale-fix"
+ANALYZER_VERSION = "2026-11-10-profile-first-set-audit-v10-roll-scale-profile-normalization"
 
 R5 = {
     "Critical Chance %": (1.125, 2.25), "Defense": (4.9, 9.8),
@@ -99,6 +99,58 @@ def rolls(row, i):
     if not values and count:
         values = [value / count] * count
     return stat, value, count, values
+
+
+def profile_secondary_preference(profile, stat):
+    """Resolve SWGOH.GG labels to the exact stat names used by the game export."""
+    preferences = profile.get("secondary_preferences", {}) or {}
+    if stat in preferences:
+        return float(preferences.get(stat, 0.0) or 0.0)
+    aliases = {"Potency %": "Potency", "Tenacity %": "Tenacity"}
+    alias = aliases.get(stat)
+    return float(preferences.get(alias, 0.0) or 0.0) if alias else 0.0
+
+
+def profile_primary_preference(profile, slot, stat):
+    """SWGOH.GG primary labels omit '%' for percentage primaries."""
+    preferences = (profile.get("primary_preferences", {}) or {}).get(slot, {}) or {}
+    if stat in preferences:
+        return float(preferences.get(stat, 0.0) or 0.0)
+    if stat.endswith(" %"):
+        return float(preferences.get(stat[:-2], 0.0) or 0.0)
+    return 0.0
+
+
+def profile_set_preferences(profile):
+    """Derive base-set preferences from averaged set-combination frequencies."""
+    combinations = profile.get("set_combinations", {}) or {}
+    if not isinstance(combinations, dict) or not combinations:
+        return profile.get("set_preferences", {}) or {}
+
+    totals = {}
+    aliases = {"Crit Damage": "Critical Damage", "Crit Chance": "Critical Chance"}
+    for combination, frequency in combinations.items():
+        try:
+            weight = float(frequency or 0.0)
+        except (TypeError, ValueError):
+            continue
+        # "Double Health" and "Triple Health" both indicate the Health set;
+        # each combination contributes its frequency once to each set present.
+        for token in str(combination).split("+"):
+            name = token.strip()
+            for prefix in ("Double ", "Triple "):
+                if name.startswith(prefix):
+                    name = name[len(prefix):].strip()
+                    break
+            name = aliases.get(name, name)
+            if name:
+                totals[name] = totals.get(name, 0.0) + weight
+
+    maximum = max(totals.values(), default=0.0)
+    if maximum <= 0:
+        return profile.get("set_preferences", {}) or {}
+    return {name: round(value / maximum, 4) for name, value in totals.items()}
+
 
 def mod_description(row):
     """Human-searchable mod identification; never relies on the current owner."""
@@ -385,7 +437,7 @@ def score_profile(row, profile):
         if x is not None:
             stat, value, count, values = x
             q = quality(stat, value, count, values, integer(row.get("dots")))
-            pref = float(profile.get("secondary_preferences", {}).get(stat, 0.0))
+            pref = profile_secondary_preference(profile, stat)
             secs.append((q, pref, count))
 
     # q is already normalized to 0..1. Convert to 0..100 only once
@@ -394,7 +446,7 @@ def score_profile(row, profile):
     max_weight = sum(max(1, count) for q, pref, count in secs) or 1
     secondary_fit = 100.0 * weighted / max_weight
     set_name = row.get("set", "")
-    set_fit = float(profile.get("set_preferences", {}).get(set_name, 0.0)) * 100.0
+    set_fit = float(profile_set_preferences(profile).get(set_name, 0.0)) * 100.0
 
     # Set preference is evaluated once at complete-build level, not per mod.
     fit_score = 0.20 * primary_fit + 0.80 * secondary_fit
@@ -1296,7 +1348,7 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
             if count <= 0:
                 continue
             q = quality(stat, value, count, values, integer(row.get("dots")))
-            pref = max(0.0, float(profile.get("secondary_preferences", {}).get(stat, 0.0)))
+            pref = max(0.0, profile_secondary_preference(profile, stat))
             weighted_rolls += q * pref * count
         primary_value = number(row.get("primaryValue", 0), 0.0)
         primary_base = primary.replace("%", "").strip()
@@ -1328,20 +1380,9 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
             if not full_groups and not half_groups:
                 continue
 
-            set_pref = max(0.0, float(profile.get("set_preferences", {}).get(name, 0.0)))
+            set_pref = max(0.0, float(profile_set_preferences(profile).get(name, 0.0)))
             preference_tiebreak += (full_groups + half_groups) * set_pref
-            profile_stat = {
-                "Health %": "Health",
-                "Defense %": "Defense",
-                "Offense %": "Offense",
-                "Potency %": "Potency",
-                "Tenacity %": "Tenacity",
-            }.get(stat, stat)
-            stat_pref = max(
-                0.0,
-                float(secondary_prefs.get(stat, 0.0)),
-                float(secondary_prefs.get(profile_stat, 0.0)),
-            )
+            stat_pref = max(0.0, profile_secondary_preference(profile, stat))
             max_roll = R5.get(stat, (0.0, 0.0))[1] or set_max_roll.get(stat)
             if not max_roll or not stat_pref:
                 continue
