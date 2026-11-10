@@ -1,8 +1,8 @@
 {
   "targets": [
     {
-      "baseId": "VELSARTHA",
-      "analysisRun": "Vel Sartha isolated report"
+      "baseId": "VEL",
+      "analysisRun": "Vel Sartha isolated report — mapped to roster baseId VEL"
     }
   ]
 }
