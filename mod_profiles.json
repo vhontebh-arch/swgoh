@@ -250,7 +250,15 @@
               "Defense": 2.22
             }
           },
-          "secondary_focus_top4": {
+          "average_stats": {
+            "relic": 8.26,
+            "health": 83612,
+            "protection": 43307,
+            "speed": 327,
+            "potency": 48,
+            "tenacity": 55.32
+          },
+          "secondary_focus": {
             "Speed": {
               "average": 23.4,
               "focus_pct": 21.01
@@ -266,15 +274,39 @@
             "Protection %": {
               "average": 5.37,
               "focus_pct": 7.6
+            },
+            "Critical Chance %": {
+              "average": 3.51,
+              "focus_pct": 7.57
+            },
+            "Offense": {
+              "average": 83.7,
+              "focus_pct": 7.54
+            },
+            "Offense %": {
+              "average": 3.16,
+              "focus_pct": 7.45
+            },
+            "Health %": {
+              "average": 3.88,
+              "focus_pct": 7.41
+            },
+            "Potency": {
+              "average": 4.31,
+              "focus_pct": 6.7
+            },
+            "Tenacity": {
+              "average": 4.31,
+              "focus_pct": 6.66
+            },
+            "Defense": {
+              "average": 21.7,
+              "focus_pct": 6.49
+            },
+            "Defense %": {
+              "average": 6.56,
+              "focus_pct": 5.6
             }
-          },
-          "average_stats": {
-            "relic": 8.26,
-            "health": 83612,
-            "protection": 43307,
-            "speed": 327,
-            "potency": 48,
-            "tenacity": 55.32
           }
         },
         {
@@ -346,9 +378,9 @@
         }
       ],
       "missing": [
-        "Pełne 12 statystyk drugorzędnych — strona Best Mods pokazuje domyślnie tylko 4; pozostałe wymagają rozwinięcia kontrolki Show all 12 stats, której tekstowy odczyt nie udostępnia."
+        "Pełne 12 statystyk drugorzędnych dla slice'u Top 100 Guilds — odczytano dotąd tylko 4 z 12."
       ],
-      "note": "Odczytano oba slice'y i komplet widocznych zestawów oraz statystyk głównych. Nie zbudowano profilu optymalizatora, ponieważ dane drugorzędne są niekompletne."
+      "note": "Slice Kyber GAC ma komplet 12 statystyk drugorzędnych. Slice Top 100 Guilds nadal ma tylko 4 z 12, dlatego profil optymalizatora pozostaje niekompletny i nie został zbudowany."
     }
   }
 }
