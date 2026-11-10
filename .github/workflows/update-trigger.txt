@@ -15,3 +15,5 @@ rerun-after-report-owner-fix-2026-11-10T20:07+01:00
 rerun-after-user-report-donor-filter-2026-11-10T20:09+01:00
 
 rerun-after-preserving-validated-order-2026-11-10T20:12+01:00
+
+rerun-after-validated-order-report-2026-11-10T20:13+01:00
