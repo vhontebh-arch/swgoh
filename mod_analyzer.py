@@ -124,6 +124,8 @@ def profile_primary_preference(profile, slot, stat):
 def profile_set_combo_support(profile, set_name):
     """Percentage of observed builds whose set combination contains set_name."""
     combinations = profile.get("set_combinations", {}) or {}
+    if not combinations:
+        return None
     total = 0.0
     aliases = {"Crit Damage": "Critical Damage", "Crit Chance": "Critical Chance"}
     for combination, frequency in combinations.items():
