@@ -1529,10 +1529,27 @@ def main():
 
     optimizer = optimize_target_build(rows, target_ids, profiles, aliases, names, protected_owners)
 
-    # Resolve a provisional physical chain, fetch profiles only for owners
-    # that actually appear in it, then re-run. Repeat if the improved ranking
-    # selects a different donor. This avoids downloading profiles for the roster.
-    attempted_profile_units = set(target_ids)
+    # A selected mod's equipped owner is already a real donor candidate even
+    # when the physical planner cannot yet construct a complete chain. Load
+    # those profiles BEFORE planning; otherwise the first pass silently falls
+    # back to generic modValue and may reject or mis-rank donor repairs.
+    selected_donor_ids = {
+        aliases.get(str(mod.get("assignedTo", "") or ""), str(mod.get("assignedTo", "") or ""))
+        for opt in optimizer.values() for mod in opt.get("mods", [])
+        if str(mod.get("assignedTo", "") or "")
+    }
+    selected_donor_ids -= target_ids
+    selected_donor_ids -= protected_owners
+    if selected_donor_ids:
+        profiles, selected_donor_status = ensure_profiles(selected_donor_ids, names)
+        profile_fetch_status.update(selected_donor_status)
+        attempted_profile_units = set(target_ids) | selected_donor_ids
+    else:
+        attempted_profile_units = set(target_ids)
+
+    # Resolve the physical chain, then load profiles for any additional donors
+    # discovered in PATCH steps and re-evaluate. Never treat a missing donor
+    # profile as a valid basis for a completed transfer chain.
     while True:
         chain_result = apply_optimizer_replacements(
             rows, optimizer, target_ids, profiles, aliases, names, protected_owners
@@ -1564,6 +1581,37 @@ def main():
             fit = character_fit(row, targets, profiles, aliases)
             row.update(fit)
         optimizer = optimize_target_build(rows, target_ids, profiles, aliases, names, protected_owners)
+
+    # Every selected equipped source and every equipped PATCH source must have
+    # a verified cached profile. Inventory mods have no donor owner.
+    required_profile_units = set(target_ids) | set(selected_donor_ids)
+    for plan in chain_result.get("plans", []):
+        for move in plan.get("moves", []):
+            patch_mod = move.get("replacement", {})
+            if is_true(patch_mod.get("equipped")):
+                patch_owner = str(patch_mod.get("assignedTo", "") or "")
+                if patch_owner:
+                    required_profile_units.add(aliases.get(patch_owner, patch_owner))
+    missing_chain_profiles = sorted(required_profile_units - set(profiles))
+    if missing_chain_profiles:
+        chain_result["safe"] = False
+        chain_result.setdefault("failed", []).extend(
+            ("profil dawcy", "{} — brak zweryfikowanego profilu; łańcuch nie może być zatwierdzony".format(unit_id))
+            for unit_id in missing_chain_profiles
+        )
+
+    # A no-op/empty optimizer must not be reported as a successful 6-slot build.
+    if not optimizer:
+        chain_result["safe"] = False
+        chain_result.setdefault("failed", []).append(
+            ("optimizer", "nie zwrócił żadnego kompletnego buildu celu")
+        )
+    for target_id, opt in optimizer.items():
+        if len(opt.get("mods", [])) != 6:
+            chain_result["safe"] = False
+            chain_result.setdefault("failed", []).append(
+                (target_id, "niekompletny build: {}/6 slotów".format(len(opt.get("mods", []))))
+            )
 
     # Mark the physical mods selected by the complete six-slot optimizer.
     # These values describe the full-build result, not a single-slot swap;
