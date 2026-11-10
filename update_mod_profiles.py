@@ -7,10 +7,14 @@ therefore uses proxy readers and parses the resulting text. Nothing is written
 until every configured profile and both source slices pass validation.
 """
 
+import argparse
+import csv
 import json
+import os
 import re
 import sys
-from datetime import datetime, timezone
+import tempfile
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from urllib.parse import quote, urlsplit, urlunsplit
 from urllib.request import Request, urlopen
@@ -304,54 +308,171 @@ def validate_profile(profile):
         raise RuntimeError("profil: brak preferencji Speed")
 
 
+
+CACHE_MAX_AGE_DAYS = 90
+
+
+def read_roster_names():
+    names = {}
+    path = Path("roster.csv")
+    if path.exists():
+        with path.open(newline="", encoding="utf-8-sig") as handle:
+            for row in csv.DictReader(handle):
+                base_id = str(row.get("baseId", "") or "").strip()
+                name = str(row.get("name", "") or "").strip()
+                if base_id and name:
+                    names[base_id] = name
+    return names
+
+
+def profile_is_fresh(profile, max_age_days=CACHE_MAX_AGE_DAYS, now=None):
+    stamp = profile.get("source_model", {}).get("refreshed_at_utc", "")
+    try:
+        fetched = datetime.fromisoformat(stamp.replace("Z", "+00:00"))
+        if fetched.tzinfo is None:
+            fetched = fetched.replace(tzinfo=timezone.utc)
+        current = now or datetime.now(timezone.utc)
+        return current - fetched <= timedelta(days=max_age_days)
+    except (TypeError, ValueError):
+        return False
+
+
+def profile_source_urls(name, existing):
+    configured = existing.get("source_model", {}).get("sources", [])
+    if len(configured) >= 2 and all(item.get("url") for item in configured[:2]):
+        return configured[:2]
+    slug = re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
+    if not slug:
+        raise RuntimeError("nie można utworzyć adresu SWGOH.GG bez nazwy postaci")
+    base = "https://swgoh.gg/units/{}/best-mods/".format(slug)
+    return [
+        {"name": "Top 1000 Kyber GAC", "url": base},
+        {"name": "Top 100 Guilds", "url": base + "?s=GUILDTOP100"},
+    ]
+
+
+def atomic_save(data):
+    path = PROFILE_FILE
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fd, temporary = tempfile.mkstemp(prefix=path.name + ".", suffix=".tmp", dir=str(path.parent))
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as handle:
+            json.dump(data, handle, ensure_ascii=False, indent=2)
+            handle.write("\n")
+        os.replace(temporary, path)
+    finally:
+        if os.path.exists(temporary):
+            os.unlink(temporary)
+
+
+def refresh_one(base_id, name, existing):
+    source_cfg = profile_source_urls(name, existing)
+    sources = []
+    for source in source_cfg[:2]:
+        url = source["url"]
+        label = source.get("name", url)
+        print("Pobieranie {}: {}".format(base_id, label))
+        parsed = normalize_source(url, label)
+        previous_secondary = source.get("secondary_focus_avg", {})
+        for stat, value in previous_secondary.items():
+            parsed["secondary_focus_avg"].setdefault(stat, value)
+        sources.append(parsed)
+        print("  sety={}, primary={}, secondary={}".format(
+            len(parsed["set_combinations"]),
+            sum(len(v) for v in parsed["primary_pct"].values()),
+            len(parsed["secondary_focus_avg"]),
+        ))
+    profile = build_profile(existing, sources)
+    profile["name"] = name or profile.get("name") or base_id
+    validate_profile(profile)
+    return profile
+
+
+def ensure_profiles(base_ids, names=None, max_age_days=CACHE_MAX_AGE_DAYS):
+    """Load cached profiles and refresh only requested missing/stale units.
+
+    A failed or incomplete fetch never replaces an existing valid cached profile.
+    Successful profiles are atomically persisted one by one.
+    """
+    if PROFILE_FILE.exists():
+        data = json.loads(PROFILE_FILE.read_text(encoding="utf-8"))
+    else:
+        data = {}
+    profiles = data.setdefault("profiles", {})
+    statuses = data.setdefault("profile_status", {})
+    names = names or read_roster_names()
+    result = {}
+
+    for base_id in sorted(set(str(x).strip() for x in base_ids if str(x).strip())):
+        existing = profiles.get(base_id, {})
+        name = names.get(base_id) or existing.get("name") or base_id
+        if existing and profile_is_fresh(existing, max_age_days):
+            statuses[base_id] = {
+                "status": "cached",
+                "checked_at_utc": datetime.now(timezone.utc).isoformat(),
+                "fetched_at_utc": existing.get("source_model", {}).get("refreshed_at_utc"),
+                "source": "local_cache",
+            }
+            result[base_id] = "cached"
+            continue
+
+        try:
+            refreshed = refresh_one(base_id, name, existing)
+            profiles[base_id] = refreshed
+            statuses[base_id] = {
+                "status": "refreshed",
+                "checked_at_utc": datetime.now(timezone.utc).isoformat(),
+                "fetched_at_utc": refreshed["source_model"]["refreshed_at_utc"],
+                "source": "SWGOH.GG",
+            }
+            result[base_id] = "refreshed"
+            atomic_save(data)
+        except Exception as exc:
+            # Keep an older valid profile untouched; record the failed attempt separately.
+            statuses[base_id] = {
+                "status": "stale_fallback" if existing else "unavailable",
+                "checked_at_utc": datetime.now(timezone.utc).isoformat(),
+                "fetched_at_utc": existing.get("source_model", {}).get("refreshed_at_utc"),
+                "source": "local_cache" if existing else "none",
+                "error": "{}: {}".format(type(exc).__name__, exc),
+            }
+            result[base_id] = statuses[base_id]["status"]
+            atomic_save(data)
+            print("UWAGA {}: {}".format(base_id, exc), file=sys.stderr)
+
+    # Persist cache-hit timestamps/status too, without changing profile payloads.
+    if result:
+        atomic_save(data)
+    return profiles, result
+
+
+
 def main():
-    if not PROFILE_FILE.exists():
-        raise RuntimeError("Brak mod_profiles.json")
+    parser = argparse.ArgumentParser(description="Odśwież lokalną bazę profili SWGOH.GG.")
+    parser.add_argument("--units", default="", help="Lista baseId oddzielona przecinkami; puste = wszystkie zapisane profile.")
+    parser.add_argument("--max-age-days", type=int, default=CACHE_MAX_AGE_DAYS)
+    args = parser.parse_args()
 
-    data = json.loads(PROFILE_FILE.read_text(encoding="utf-8"))
-    profiles = data.get("profiles", {})
-    if not profiles:
-        raise RuntimeError("Brak profili")
+    if args.units.strip():
+        requested = [item.strip() for item in args.units.split(",") if item.strip()]
+    else:
+        if not PROFILE_FILE.exists():
+            raise RuntimeError("Brak mod_profiles.json")
+        data = json.loads(PROFILE_FILE.read_text(encoding="utf-8"))
+        requested = list(data.get("profiles", {}).keys())
 
-    new_profiles = {}
-    for base_id, existing in profiles.items():
-        source_cfg = existing.get("source_model", {}).get("sources", [])
-        if len(source_cfg) < 2:
-            raise RuntimeError(f"{base_id}: profil wymaga dwóch źródeł SWGOH.GG")
+    if not requested:
+        raise RuntimeError("Nie wskazano postaci do odświeżenia.")
 
-        sources = []
-        for source in source_cfg[:2]:
-            url = source["url"]
-            label = source.get("name", url)
-            print(f"Pobieranie {base_id}: {label}")
-            parsed = normalize_source(url, label)
-
-            # Some SWGOH.GG secondary rows are hidden behind "Show all 12
-            # stats" and are not exposed by proxy text readers. Preserve
-            # previously verified values for those missing rows instead of
-            # silently turning them into zero-weight stats.
-            previous_secondary = source.get("secondary_focus_avg", {})
-            for stat, value in previous_secondary.items():
-                parsed["secondary_focus_avg"].setdefault(stat, value)
-
-            sources.append(parsed)
-            print(
-                f"  sety={len(parsed['set_combinations'])}, "
-                f"primary={sum(len(v) for v in parsed['primary_pct'].values())}, "
-                f"secondary={len(parsed['secondary_focus_avg'])}"
-            )
-
-        profile = build_profile(existing, sources)
-        validate_profile(profile)
-        new_profiles[base_id] = profile
-
-    new_data = dict(data)
-    new_data["profiles"] = new_profiles
-    PROFILE_FILE.write_text(
-        json.dumps(new_data, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
+    profiles, statuses = ensure_profiles(
+        requested, read_roster_names(), max_age_days=max(0, args.max_age_days)
     )
-    print("OK: mod_profiles.json odświeżony")
+    for base_id, status in statuses.items():
+        print("{}: {}".format(base_id, status))
+    unavailable = [base_id for base_id, status in statuses.items() if status == "unavailable"]
+    if unavailable:
+        raise RuntimeError("Brak profilu nawet po próbie pobrania: {}".format(", ".join(unavailable)))
+    print("OK: lokalna baza zawiera {} profili".format(len(profiles)))
 
 
 if __name__ == "__main__":
