@@ -14,7 +14,7 @@ INPUT_FILE = "mods.csv"
 OUTPUT_CSV = "mod_analysis.csv"
 OUTPUT_MD = "mod_analysis.md"
 PROFILE_FILE = "mod_profiles.json"
-ANALYZER_VERSION = "2026-11-10-profile-first-set-audit-v8-profile-cache-v1"
+ANALYZER_VERSION = "2026-11-10-profile-first-set-audit-v9-raw-roll-scale-fix"
 
 R5 = {
     "Critical Chance %": (1.125, 2.25), "Defense": (4.9, 9.8),
@@ -88,10 +88,14 @@ def rolls(row, i):
             raw_value = float(item)
         except ValueError:
             continue
+        # unscaledRollValue uses a different scale from statValueDecimal:
+        # flat stats are in 1/100000 units and percentage stats in 1/1000.
+        # The previous divisors were 10x too small and saturated almost every
+        # roll at 100% quality, corrupting modValue and donor-patch ranking.
         if stat in {"Health","Protection","Offense","Defense","Speed"}:
-            values.append(raw_value / 10000.0)
+            values.append(raw_value / 100000.0)
         else:
-            values.append(raw_value / 100.0)
+            values.append(raw_value / 1000.0)
     if not values and count:
         values = [value / count] * count
     return stat, value, count, values
