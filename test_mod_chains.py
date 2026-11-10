@@ -147,6 +147,24 @@ class TransferChainTests(unittest.TestCase):
         self.assertFalse(result["safe"])
         self.assertTrue(any("brak wykonalnego łańcucha" in reason for _, reason in result["failed"]))
 
+    def test_two_independent_inventory_patches_do_not_conflict(self):
+        selected_arrow = make_mod("selected-arrow", DONOR, True, slot="Arrow", value=20)
+        selected_square = make_mod("selected-square", DONOR_B, True, slot="Square", value=20)
+        arrow_patch = make_mod("arrow-patch", slot="Arrow", value=15)
+        square_patch = make_mod("square-patch", slot="Square", value=15)
+        result = apply_optimizer_replacements(
+            [selected_arrow, selected_square, arrow_patch, square_patch],
+            {"TARGET": {"mods": [selected_arrow, selected_square]}},
+            {"TARGET"},
+            aliases={TARGET: "TARGET", DONOR: "DONOR", DONOR_B: "DONOR_B"},
+        )
+        self.assertTrue(result["safe"], result["failed"])
+        self.assertEqual(len(result["plans"]), 2)
+        self.assertEqual(
+            {plan["mod"]["id"] for plan in result["plans"]},
+            {"selected-arrow", "selected-square"},
+        )
+
     def test_same_inventory_mod_cannot_be_assigned_to_two_targets(self):
         target_b = "target-b-instance"
         shared = make_mod("shared-mod")
