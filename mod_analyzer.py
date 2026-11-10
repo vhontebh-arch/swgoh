@@ -14,7 +14,7 @@ INPUT_FILE = "mods.csv"
 OUTPUT_CSV = "mod_analysis.csv"
 OUTPUT_MD = "mod_analysis.md"
 PROFILE_FILE = "mod_profiles.json"
-ANALYZER_VERSION = "2026-11-10-profile-first-set-audit-v11-user-report"
+ANALYZER_VERSION = "2026-11-10-profile-first-set-audit-v12-user-report-owner-fix"
 
 R5 = {
     "Critical Chance %": (1.125, 2.25), "Defense": (4.9, 9.8),
@@ -1543,6 +1543,9 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
     def rid(row):
         return str(row.get("id", "") or "")
 
+    def mod_owner(row):
+        return str(row.get("assignedTo", "") or "") if is_true(row.get("equipped")) else ""
+
     def owner_base(row):
         owner_id = str(row.get("assignedTo", "") or "")
         return aliases.get(owner_id, owner_id)
@@ -1557,7 +1560,7 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
     for plan in chain_result.get("plans", []):
         if plan.get("target_owner"):
             affected_owners.add(plan["target_owner"])
-        selected_owner = owner(plan.get("mod", {}))
+        selected_owner = mod_owner(plan.get("mod", {}))
         if selected_owner:
             affected_owners.add(selected_owner)
         affected_owners.update(move.get("owner") for move in plan.get("moves", []) if move.get("owner"))
@@ -1656,7 +1659,7 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
                 continue
             current = current_by_slot.get(slot)
             unchanged = current is not None and rid(current) == rid(mod)
-            source_id = owner(mod)
+            source_id = mod_owner(mod)
             source_name = display_name(source_id) if source_id else "MAGAZYN"
             if unchanged:
                 lines.append("- **{} — POZOSTAJE:** {}".format(slot, mod_description(mod)))
@@ -1683,7 +1686,7 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
                 if not plan:
                     continue
                 selected = plan["mod"]
-                selected_source = owner(selected)
+                selected_source = mod_owner(selected)
                 selected_source_name = display_name(selected_source) if selected_source else "MAGAZYN"
                 lines.append("{}. **{} — załóż na {}** mod z {}: {}".format(
                     step, slot, target_name, selected_source_name, mod_description(selected)
@@ -1700,7 +1703,7 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
                     if displaced and rid(replacement) == rid(displaced):
                         replacement_source = "MAGAZYN (mod zdjęty przed chwilą z {})".format(target_name)
                     elif is_true(replacement.get("equipped")):
-                        replacement_source = display_name(owner(replacement))
+                        replacement_source = display_name(mod_owner(replacement))
                     else:
                         replacement_source = "MAGAZYN"
                     lines.append("{}. **PATCH — załóż na {}** mod z {}: {}".format(
