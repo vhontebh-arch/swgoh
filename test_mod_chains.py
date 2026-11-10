@@ -98,7 +98,7 @@ class TransferChainTests(unittest.TestCase):
         self.assertEqual(len(moves), 1)
         self.assertEqual(moves[0]["replacement"]["id"], "stronger-patch")
 
-    def test_preserving_completed_set_outranks_higher_mod_value_patch(self):
+    def test_profile_first_fallback_prefers_higher_fit_before_set_preservation(self):
         selected = make_mod("selected-mod", DONOR, True, value=10, mod_set="Speed")
         other_set_pieces = [
             make_mod("donor-circle", DONOR, True, slot="Circle", value=10, mod_set="Speed"),
@@ -114,11 +114,14 @@ class TransferChainTests(unittest.TestCase):
         )
         self.assertTrue(result["safe"], result["failed"])
         move = result["plans"][0]["moves"][0]
+        # With no donor profiles available, the documented fallback is modValue.
+        # In v8 donor fit/value ranks ahead of set preservation, so the larger
+        # fallback gain wins and the set loss must remain visible in the audit.
         self.assertEqual(
-            move["replacement"]["id"], "set-preserving-patch",
+            move["replacement"]["id"], "higher-value-patch",
             "chosen move={!r}".format(move),
         )
-        self.assertEqual(move["set_delta"], 0)
+        self.assertEqual(move["set_delta"], -1)
 
     def test_inventory_patch_is_currently_preferred_to_another_donor(self):
         selected = make_mod("selected-mod", DONOR, True, value=20)
