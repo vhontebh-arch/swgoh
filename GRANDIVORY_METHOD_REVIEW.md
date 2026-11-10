@@ -1,0 +1,69 @@
+# Analiza metod Grandivory i adaptacja w optimizer-v2
+
+**Repozytorium źródłowe:** https://github.com/grandivory/mods-optimizer  
+**Przeanalizowany plik:** `public/workers/optimizer.js` (gałąź `develop`)  
+**Licencja repozytorium:** MIT (potwierdzona w metadanych GitHub).  
+**Status:** niezależna implementacja wybranych metod w `mod_analyzer.py`; bez kopiowania kodu źródłowego.
+
+## Co robi Grandivory
+
+1. **Ocenia cały zestaw sześciu modów.** `scoreModSet()` najpierw sumuje statystyki z modów i bonusów setów, a następnie ocenia wynik według wag statystyk celu. Nie traktuje sześciu modów wyłącznie jako sześciu niezależnych rankingów.
+2. **Przelicza bonusy setów na statystyki postaci.** `getSetBonusStatsFromModSet()` rozróżnia pełny bonus od połowy bonusu zależnej od poziomu modów. `flattenStatValues()` zamienia bonus procentowy na wartość bezwzględną z użyciem bazowych statystyk postaci.
+3. **Buduje kompletne kombinacje setów.** Generator łączy warianty 4+2 oraz 2+2+2, sprawdza możliwe przypisania setów do slotów i dopuszcza rozluźnienie ograniczeń, gdy nie ma wykonalnego zestawu.
+4. **Uwzględnia modyfikacje prognozowane.** `getUpgradedMod()` może symulować podniesienie moda do poziomu 15 oraz slice 5A→6E, w tym zmianę primary i secondary.
+5. **Rozstrzyga remisy na korzyść mniejszej liczby zmian.** Przy takim samym wyniku preferowany jest build, który zachowuje więcej modów już przypisanych do optymalizowanej postaci.
+6. **Optymalizuje postacie sekwencyjnie.** Po przydzieleniu modów jednej postaci usuwa je z puli dostępnej dla kolejnych postaci. To podejście jest proste, ale wynik zależy od kolejności optymalizacji i samo w sobie nie rozwiązuje globalnego problemu dawców.
+
+## Co zostało zaimplementowane w optimizer-v2
+
+Nowa funkcja `optimize_target_build()`:
+
+- ocenia sześć slotów jako jeden build;
+- oddziela punktację primary i secondary od preferencji setów;
+- uwzględnia wszystkie dostępne statystyki secondary i liczbę ich rolli;
+- dolicza bonusy ukończonych setów, także wielokrotne sety 2-elementowe;
+- rozróżnia pełny i połowiczny bonus w zależności od poziomu modów;
+- porównuje kompletne kombinacje setów przez DP po licznikach setów;
+- nie stosuje wcześniejszych arbitralnych limitów 12 modów na set i 48 modów na slot;
+- przy równym wyniku preferuje build zachowujący więcej modów na postaci docelowej;
+- używa preferencji setów jako kryterium rozstrzygającego remis, a nie jako sztucznej premii dodawanej do każdego moda.
+
+### Redukcja kandydatów bez arbitralnego top-K
+
+Dla danego slotu i danego setu zachowujemy najlepszego kandydata. Przy obecnym modelu punktacji każdy mod z tej samej pary slot+set daje identyczny bonus setu, a jego własny wynik nie zależy od pozostałych modów. Słabszy mod z tej samej pary nie może więc poprawić wyniku żadnej kombinacji. To dokładna redukcja przestrzeni wyszukiwania, a nie przycięcie do arbitralnej liczby kandydatów.
+
+DP przechowuje liczbę elementów każdego setu aż do maksymalnej liczby pełnych grup możliwych na sześciu slotach: trzy grupy dla setu 2-elementowego lub jedną dla setu 4-elementowego. Nie stosuje wcześniejszego limitu beam 2000 stanów.
+
+### Skala punktacji
+
+- 20 punktów: statystyki główne, równomiernie rozłożone na sześć slotów;
+- 80 punktów: secondary, znormalizowane względem maksymalnie 24 rolli;
+- bonus setu: równoważnik maksymalnych rolli odpowiedniej statystyki, pomnożony przez jej preferencję w profilu.
+
+To zachowuje prosty model profili oparty na preferencjach statystyk i setów. Nie wprowadzono targetów wartości statystyk z Grandivory.
+
+## Ograniczenie danych — ważne
+
+Grandivory może przeliczać procentowe bonusy setów na dokładne wartości bezwzględne, ponieważ jego model postaci zawiera `baseStats`. Obecne pliki wejściowe naszego projektu (`mods.csv`, `roster.csv` i eksport C-3PO) nie dostarczają wprost kompletnego zestawu bazowych statystyk postaci w formacie wymaganym do takiego przeliczenia.
+
+Dlatego obecna implementacja używa równoważników maksymalnych rolli secondary:
+- dla bonusów procentowych, które mają odpowiednik procentowej statystyki secondary, stosunek bonusu setu do maksymalnego rolla jest niezależny od bazowej wartości statystyki;
+- Speed Set przelicza procent bazowej szybkości na punkty Speed, używając `profile.base_stats.Speed`, jeśli pole istnieje, a w przeciwnym razie jawnej wartości referencyjnej 150.
+
+To jest jawne przybliżenie, a nie pełna reprodukcja dokładnego przeliczenia statystyk Grandivory. Nie należy przedstawiać wyniku bonusu Speed jako dokładnego dla każdej postaci, dopóki nie dostarczymy jej bazowej szybkości.
+
+## Czego ta zmiana jeszcze nie obejmuje
+
+- Symulacji levelowania modów poniżej 15 i slice 5A→6E w rankingu kandydatów. Aktualna pula kandydatów nadal wymaga poziomu 15 i co najmniej 5★.
+- Pełnej globalnej optymalizacji wielu celów jednocześnie.
+- Nowego algorytmu łańcuchów MOD/PATCH i pełnego bilansu końcowego dawców. To pozostaje osobnym etapem; wybór buildów jest na razie wirtualnym wyborem najlepszych modów.
+- Automatycznego chronienia wszystkich dawców ani automatycznych testów.
+
+Te ograniczenia są celowe i widoczne: nie udajemy, że samo przeniesienie metody doboru buildów rozwiązuje problemy łańcuchów i bilansu całego rosteru.
+
+## Decyzje projektowe zachowane z ustaleń użytkownika
+
+- Profile pozostają oparte na priorytetach statystyk i setów, bez obowiązkowych targetów wartości statystyk.
+- Popularność konfiguracji jest wskazówką profilu, a nie automatycznym nakazem.
+- Wybór sześciu modów jest oceniany jako komplet.
+- Nowa implementacja znajduje się wyłącznie na `optimizer-v2`; gałęzie bazowej i `main` nie zmieniano.
