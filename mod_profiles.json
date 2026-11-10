@@ -207,10 +207,12 @@
             "name": "Top 1000 Kyber GAC",
             "url": "https://swgoh.gg/units/jedi-knight-revan/best-mods/",
             "set_combinations": {
-              "Speed + Health": 73.8,
+              "Speed + Health": 73.84,
+              "Speed": 4.61,
               "Speed + Crit Chance": 4.2,
-              "Offense + Crit Chance": 3.7,
-              "Speed + Defense": 3.6
+              "Offense + Crit Chance": 3.79,
+              "Speed + Defense": 3.69,
+              "Speed + Tenacity": 2.35
             },
             "primary_pct": {
               "Arrow": {
@@ -259,11 +261,11 @@
             "name": "Top 100 Guilds",
             "url": "https://swgoh.gg/units/jedi-knight-revan/best-mods/?s=GUILDTOP100",
             "set_combinations": {
-              "Speed + Health": 64.5,
-              "Speed + Crit Chance": 6.9,
-              "Offense + Crit Chance": 5.8,
-              "Speed": 5.5,
-              "Speed + Tenacity": 2.4
+              "Speed + Health": 64.53,
+              "Speed + Crit Chance": 6.94,
+              "Offense + Crit Chance": 5.85,
+              "Speed": 5.53,
+              "Speed + Tenacity": 2.45
             },
             "primary_pct": {
               "Arrow": {
@@ -311,20 +313,20 @@
         ]
       },
       "set_combinations": {
-        "Speed + Health": 69.15,
-        "Speed + Crit Chance": 5.55,
-        "Offense + Crit Chance": 4.75,
-        "Speed + Defense": 1.8,
-        "Speed": 2.75,
-        "Speed + Tenacity": 1.2
+        "Speed + Health": 69.185,
+        "Speed": 5.07,
+        "Speed + Crit Chance": 5.57,
+        "Offense + Crit Chance": 4.82,
+        "Speed + Defense": 1.845,
+        "Speed + Tenacity": 2.4
       },
       "set_preferences": {
         "Speed": 1,
-        "Health": 0.8595,
-        "Crit Chance": 0.128,
-        "Offense": 0.059,
-        "Defense": 0.0224,
-        "Tenacity": 0.0149
+        "Health": 0.8229,
+        "Crit Chance": 0.1236,
+        "Offense": 0.0573,
+        "Defense": 0.0219,
+        "Tenacity": 0.0285
       },
       "primary_preferences": {
         "Arrow": {
