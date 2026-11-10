@@ -195,6 +195,601 @@
         "Critical Avoidance %": 0,
         "Accuracy": 0
       }
+    },
+    "000": {
+      "name": "0-0-0",
+      "role": "support",
+      "source_model": {
+        "method": "direct SWGOH.GG Best Mods page read by ChatGPT",
+        "sources": [
+          {
+            "name": "Top 1000 Kyber GAC",
+            "url": "https://swgoh.gg/units/0-0-0/best-mods/",
+            "units_fully_modded": 939,
+            "set_combinations_pct": {
+              "Speed + Potency": 64.85,
+              "Speed + Health": 17.9,
+              "Speed + Defense": 2.9,
+              "Speed + Tenacity": 2,
+              "Speed": 1.9
+            },
+            "primary_pct": {
+              "Arrow": {
+                "Speed": 97.7,
+                "Offense": 0.82,
+                "Protection": 0.65,
+                "Critical Avoidance": 0.49
+              },
+              "Triangle": {
+                "Offense": 44.17,
+                "Protection": 28.89,
+                "Health": 9.68,
+                "Critical Damage": 8.7
+              },
+              "Circle": {
+                "Protection": 69.12,
+                "Health": 30.87
+              },
+              "Cross": {
+                "Potency": 73.23,
+                "Protection": 10.18,
+                "Offense": 9.85,
+                "Health": 3.94
+              }
+            },
+            "secondary_focus": {
+              "Speed": {
+                "average": 17.6,
+                "focus_pct": 20.75
+              },
+              "Potency": {
+                "average": 5.28,
+                "focus_pct": 9.8
+              },
+              "Offense": {
+                "average": 79.7,
+                "focus_pct": 7.73
+              },
+              "Protection": {
+                "average": 1407.3,
+                "focus_pct": 7.38
+              }
+            }
+          },
+          {
+            "name": "Top 100 Guilds",
+            "url": "https://swgoh.gg/units/0-0-0/best-mods/?s=GUILDTOP100",
+            "units_fully_modded": 4946,
+            "set_combinations_pct": {
+              "Speed + Potency": 63.1,
+              "Speed + Health": 14.7,
+              "Speed": 4,
+              "Speed + Defense": 2.4,
+              "Triple Health": 1.7
+            },
+            "primary_pct": {
+              "Arrow": {
+                "Speed": 97.14,
+                "Protection": 0.76,
+                "Offense": 0.67,
+                "Critical Avoidance": 0.6
+              },
+              "Triangle": {
+                "Offense": 51.58,
+                "Protection": 20.28,
+                "Health": 9.38,
+                "Critical Damage": 8.17
+              },
+              "Circle": {
+                "Protection": 63.98,
+                "Health": 36.01
+              },
+              "Cross": {
+                "Potency": 68.15,
+                "Health": 9.09,
+                "Offense": 8.39,
+                "Protection": 8.04
+              }
+            },
+            "secondary_focus": {
+              "Speed": {
+                "average": 15.3,
+                "focus_pct": 20.72
+              },
+              "Potency": {
+                "average": 4.91,
+                "focus_pct": 9.43
+              },
+              "Offense": {
+                "average": 79.8,
+                "focus_pct": 7.82
+              },
+              "Protection": {
+                "average": 1391.2,
+                "focus_pct": 7.55
+              }
+            }
+          }
+        ],
+        "refreshed_at_utc": "2026-11-10T17:46:00Z",
+        "note": "Raw source data integrated into the main profile database. Derived optimizer preferences are intentionally not generated yet."
+      }
+    },
+    "4LOM": {
+      "name": "4-LOM",
+      "role": "support",
+      "source_model": {
+        "method": "direct SWGOH.GG Best Mods page read by ChatGPT",
+        "sources": [
+          {
+            "name": "Top 1000 Kyber GAC",
+            "url": "https://swgoh.gg/units/4-lom/best-mods/",
+            "units_fully_modded": 938,
+            "set_combinations_pct": {
+              "Speed + Tenacity": 39.87,
+              "Speed + Potency": 19.9,
+              "Speed + Health": 16.2,
+              "Offense + Health": 4.4,
+              "Speed": 2.1
+            },
+            "primary_pct": {
+              "Arrow": {
+                "Speed": 95.45,
+                "Offense": 2.94,
+                "Critical Avoidance": 0.8,
+                "Protection": 0.53
+              },
+              "Triangle": {
+                "Offense": 53.74,
+                "Protection": 14.7,
+                "Critical Damage": 13.1,
+                "Health": 12.56
+              },
+              "Circle": {
+                "Protection": 72.45,
+                "Health": 27.54
+              },
+              "Cross": {
+                "Tenacity": 67.11,
+                "Offense": 13.63,
+                "Protection": 8.82,
+                "Potency": 6.68
+              }
+            },
+            "secondary_focus": {
+              "Speed": {
+                "average": 18.3,
+                "focus_pct": 20.72
+              },
+              "Tenacity": {
+                "average": 5.03,
+                "focus_pct": 9.38
+              },
+              "Offense": {
+                "average": 80.2,
+                "focus_pct": 7.74
+              },
+              "Potency": {
+                "average": 4.7,
+                "focus_pct": 7.55
+              }
+            }
+          },
+          {
+            "name": "Top 100 Guilds",
+            "url": "https://swgoh.gg/units/4-lom/best-mods/?s=GUILDTOP100",
+            "units_fully_modded": 4862,
+            "set_combinations_pct": {
+              "Speed + Tenacity": 47.47,
+              "Speed + Health": 12.4,
+              "Speed + Potency": 12.1,
+              "Triple Health": 3.8,
+              "Speed": 3.7
+            },
+            "primary_pct": {
+              "Arrow": {
+                "Speed": 96.14,
+                "Offense": 1.55,
+                "Health": 0.64,
+                "Critical Avoidance": 0.64
+              },
+              "Triangle": {
+                "Offense": 43.97,
+                "Health": 19.36,
+                "Protection": 15.94,
+                "Critical Damage": 10.78
+              },
+              "Circle": {
+                "Protection": 71.18,
+                "Health": 28.81
+              },
+              "Cross": {
+                "Tenacity": 62.91,
+                "Potency": 12.47,
+                "Offense": 9.74,
+                "Protection": 7.66
+              }
+            },
+            "secondary_focus": {
+              "Speed": {
+                "average": 15.2,
+                "focus_pct": 20.69
+              },
+              "Tenacity": {
+                "average": 4.73,
+                "focus_pct": 9.42
+              },
+              "Offense": {
+                "average": 78.5,
+                "focus_pct": 7.9
+              },
+              "Potency": {
+                "average": 4.39,
+                "focus_pct": 7.38
+              }
+            }
+          }
+        ],
+        "refreshed_at_utc": "2026-11-10T17:46:00Z",
+        "note": "Raw source data integrated into the main profile database. Derived optimizer preferences are intentionally not generated yet."
+      }
+    },
+    "VELSARTHA": {
+      "name": "Vel Sartha",
+      "role": "support",
+      "source_model": {
+        "method": "direct SWGOH.GG Best Mods page read by ChatGPT",
+        "sources": [
+          {
+            "name": "Top 1000 Kyber GAC",
+            "url": "https://swgoh.gg/units/vel-sartha/best-mods/",
+            "units_fully_modded": 936,
+            "set_combinations_pct": {
+              "Double Health + Defense": 30.3,
+              "Double Defense + Health": 16.8,
+              "Triple Health": 14.3,
+              "Triple Defense": 14.3,
+              "Offense + Crit Chance": 4.9
+            },
+            "primary_pct": {
+              "Arrow": {
+                "Protection": 43.3,
+                "Speed": 42.6,
+                "Health": 9.15,
+                "Critical Avoidance": 2.46
+              },
+              "Triangle": {
+                "Protection": 69.71,
+                "Health": 18.3,
+                "Defense": 8.09,
+                "Offense": 2.46
+              },
+              "Circle": {
+                "Protection": 75,
+                "Health": 25
+              },
+              "Cross": {
+                "Protection": 71.47,
+                "Health": 18.3,
+                "Defense": 5.98,
+                "Potency": 2.46
+              }
+            },
+            "secondary_focus": {
+              "Speed": {
+                "average": 17.1,
+                "focus_pct": 23.01
+              },
+              "Defense %": {
+                "average": 6.6,
+                "focus_pct": 8.28
+              },
+              "Health %": {
+                "average": 3.28,
+                "focus_pct": 7.95
+              },
+              "Tenacity": {
+                "average": 4.29,
+                "focus_pct": 7.73
+              }
+            }
+          },
+          {
+            "name": "Top 100 Guilds",
+            "url": "https://swgoh.gg/units/vel-sartha/best-mods/?s=GUILDTOP100",
+            "units_fully_modded": 4865,
+            "set_combinations_pct": {
+              "Double Health + Defense": 28.2,
+              "Triple Health": 13.6,
+              "Offense + Crit Chance": 12.7,
+              "Double Defense + Health": 8.5,
+              "Triple Defense": 7.4
+            },
+            "primary_pct": {
+              "Arrow": {
+                "Protection": 50.1,
+                "Speed": 40.07,
+                "Health": 5.23,
+                "Defense": 3.05
+              },
+              "Triangle": {
+                "Protection": 76.43,
+                "Health": 10.54,
+                "Defense": 8.65,
+                "Critical Chance": 1.96
+              },
+              "Circle": {
+                "Protection": 82.69,
+                "Health": 17.3
+              },
+              "Cross": {
+                "Protection": 76.07,
+                "Health": 9.74,
+                "Defense": 8.65,
+                "Tenacity": 2.1
+              }
+            },
+            "secondary_focus": {
+              "Speed": {
+                "average": 16.1,
+                "focus_pct": 23.19
+              },
+              "Health %": {
+                "average": 3.12,
+                "focus_pct": 7.78
+              },
+              "Defense %": {
+                "average": 6.11,
+                "focus_pct": 7.65
+              },
+              "Defense": {
+                "average": 22.2,
+                "focus_pct": 7.63
+              }
+            }
+          }
+        ],
+        "refreshed_at_utc": "2026-11-10T17:46:00Z",
+        "note": "Raw source data integrated into the main profile database. Derived optimizer preferences are intentionally not generated yet."
+      }
+    },
+    "MERRIN": {
+      "name": "Merrin",
+      "role": "support",
+      "source_model": {
+        "method": "direct SWGOH.GG Best Mods page read by ChatGPT",
+        "sources": [
+          {
+            "name": "Top 1000 Kyber GAC",
+            "url": "https://swgoh.gg/units/merrin/best-mods/",
+            "units_fully_modded": 969,
+            "set_combinations_pct": {
+              "Triple Tenacity": 42.6,
+              "Health + Potency + Tenacity": 8.4,
+              "Double Tenacity + Health": 8,
+              "Triple Health": 6.5,
+              "Double Health + Potency": 5.1
+            },
+            "primary_pct": {
+              "Arrow": {
+                "Protection": 70.94,
+                "Speed": 9.68,
+                "Health": 8.47,
+                "Critical Avoidance": 8.23
+              },
+              "Triangle": {
+                "Protection": 84.26,
+                "Health": 9.68,
+                "Defense": 2.42,
+                "Critical Damage": 1.93
+              },
+              "Circle": {
+                "Protection": 88.13,
+                "Health": 11.86
+              },
+              "Cross": {
+                "Tenacity": 87.65,
+                "Protection": 7.5,
+                "Potency": 2.9,
+                "Health": 1.45
+              }
+            },
+            "secondary_focus": {
+              "Speed": {
+                "average": 12.5,
+                "focus_pct": 21.49
+              },
+              "Tenacity": {
+                "average": 6.21,
+                "focus_pct": 13.98
+              },
+              "Protection": {
+                "average": 1477.2,
+                "focus_pct": 7.82
+              },
+              "Potency": {
+                "average": 4.69,
+                "focus_pct": 7.79
+              }
+            }
+          },
+          {
+            "name": "Top 100 Guilds",
+            "url": "https://swgoh.gg/units/merrin/best-mods/?s=GUILDTOP100",
+            "units_fully_modded": 4955,
+            "set_combinations_pct": {
+              "Triple Tenacity": 25.2,
+              "Health + Potency + Tenacity": 15.4,
+              "Triple Health": 9.9,
+              "Double Health + Potency": 8.1,
+              "Double Tenacity + Health": 6.9
+            },
+            "primary_pct": {
+              "Arrow": {
+                "Protection": 60.17,
+                "Speed": 20.19,
+                "Health": 9.01,
+                "Critical Avoidance": 7.5
+              },
+              "Triangle": {
+                "Protection": 73.02,
+                "Health": 15.8,
+                "Defense": 3.91,
+                "Critical Damage": 2.87
+              },
+              "Circle": {
+                "Protection": 80.44,
+                "Health": 19.55
+              },
+              "Cross": {
+                "Tenacity": 75.57,
+                "Potency": 11.57,
+                "Protection": 7.1,
+                "Health": 3.35
+              }
+            },
+            "secondary_focus": {
+              "Speed": {
+                "average": 12.8,
+                "focus_pct": 21.22
+              },
+              "Tenacity": {
+                "average": 5.54,
+                "focus_pct": 12.42
+              },
+              "Protection": {
+                "average": 1434.8,
+                "focus_pct": 7.99
+              },
+              "Potency": {
+                "average": 4.47,
+                "focus_pct": 7.76
+              }
+            }
+          }
+        ],
+        "refreshed_at_utc": "2026-11-10T17:46:00Z",
+        "note": "Raw source data integrated into the main profile database. Derived optimizer preferences are intentionally not generated yet."
+      }
+    },
+    "RC1262SCORCH": {
+      "name": "RC-1262 \"Scorch\"",
+      "role": "tank",
+      "source_model": {
+        "method": "direct SWGOH.GG Best Mods page read by ChatGPT",
+        "sources": [
+          {
+            "name": "Top 1000 Kyber GAC",
+            "url": "https://swgoh.gg/units/rc-1262-scorch/best-mods/",
+            "units_fully_modded": 958,
+            "set_combinations_pct": {
+              "Double Health + Defense": 48,
+              "Double Defense + Health": 18.8,
+              "Triple Health": 12.8,
+              "Triple Defense": 7.6,
+              "Speed + Health": 3
+            },
+            "primary_pct": {
+              "Arrow": {
+                "Protection": 67.6,
+                "Speed": 26.3,
+                "Health": 4.13,
+                "Critical Avoidance": 0.86
+              },
+              "Triangle": {
+                "Protection": 84.56,
+                "Health": 10.86,
+                "Defense": 4.13,
+                "Offense": 0.21
+              },
+              "Circle": {
+                "Protection": 88.47,
+                "Health": 11.52
+              },
+              "Cross": {
+                "Protection": 88.04,
+                "Health": 5.21,
+                "Defense": 4.34,
+                "Tenacity": 1.08
+              }
+            },
+            "secondary_focus": {
+              "Speed": {
+                "average": 18.1,
+                "focus_pct": 23.07
+              },
+              "Defense %": {
+                "average": 7.92,
+                "focus_pct": 9.73
+              },
+              "Health %": {
+                "average": 3.76,
+                "focus_pct": 8.12
+              },
+              "Protection": {
+                "average": 1570.4,
+                "focus_pct": 8.06
+              }
+            }
+          },
+          {
+            "name": "Top 100 Guilds",
+            "url": "https://swgoh.gg/units/rc-1262-scorch/best-mods/?s=GUILDTOP100",
+            "units_fully_modded": 4935,
+            "set_combinations_pct": {
+              "Double Health + Defense": 49.8,
+              "Triple Health": 15.9,
+              "Double Defense + Health": 14.5,
+              "Triple Defense": 5.3,
+              "Speed + Health": 2.1
+            },
+            "primary_pct": {
+              "Arrow": {
+                "Protection": 56.59,
+                "Speed": 37.1,
+                "Health": 2.68,
+                "Critical Avoidance": 1.91
+              },
+              "Triangle": {
+                "Protection": 74.24,
+                "Health": 17.69,
+                "Defense": 5.65,
+                "Critical Damage": 0.97
+              },
+              "Circle": {
+                "Protection": 78.88,
+                "Health": 21.11
+              },
+              "Cross": {
+                "Protection": 83.07,
+                "Defense": 6.71,
+                "Health": 6.67,
+                "Tenacity": 1.7
+              }
+            },
+            "secondary_focus": {
+              "Speed": {
+                "average": 17.8,
+                "focus_pct": 23.13
+              },
+              "Defense %": {
+                "average": 7.79,
+                "focus_pct": 8.34
+              },
+              "Protection": {
+                "average": 1659,
+                "focus_pct": 8.31
+              },
+              "Health": {
+                "average": 928,
+                "focus_pct": 8
+              }
+            }
+          }
+        ],
+        "refreshed_at_utc": "2026-11-10T17:46:00Z",
+        "note": "Raw source data integrated into the main profile database. Derived optimizer preferences are intentionally not generated yet."
+      }
     }
   },
   "profile_status": {
@@ -346,6 +941,96 @@
         }
       ],
       "note": "Oba źródła zawierają wymagane TOP 4 statystyki drugorzędne, zachowane w oryginalnej kolejności źródła wraz ze średnią i focus_pct. Pozostałe statystyki drugorzędne nie są wymagane. Profil pochodny optymalizatora nie został jeszcze wyliczony."
+    },
+    "000": {
+      "status": "refreshed",
+      "checked_at_utc": "2026-11-10T17:46:00Z",
+      "fetched_at_utc": "2026-11-10T17:46:00Z",
+      "source": "SWGOH.GG direct page read by ChatGPT; raw source slices retained; derived optimizer preferences pending",
+      "sources": [
+        {
+          "name": "Top 1000 Kyber GAC",
+          "url": "https://swgoh.gg/units/0-0-0/best-mods/",
+          "units_fully_modded": 939
+        },
+        {
+          "name": "Top 100 Guilds",
+          "url": "https://swgoh.gg/units/0-0-0/best-mods/?s=GUILDTOP100",
+          "units_fully_modded": 4946
+        }
+      ]
+    },
+    "4LOM": {
+      "status": "refreshed",
+      "checked_at_utc": "2026-11-10T17:46:00Z",
+      "fetched_at_utc": "2026-11-10T17:46:00Z",
+      "source": "SWGOH.GG direct page read by ChatGPT; raw source slices retained; derived optimizer preferences pending",
+      "sources": [
+        {
+          "name": "Top 1000 Kyber GAC",
+          "url": "https://swgoh.gg/units/4-lom/best-mods/",
+          "units_fully_modded": 938
+        },
+        {
+          "name": "Top 100 Guilds",
+          "url": "https://swgoh.gg/units/4-lom/best-mods/?s=GUILDTOP100",
+          "units_fully_modded": 4862
+        }
+      ]
+    },
+    "VELSARTHA": {
+      "status": "refreshed",
+      "checked_at_utc": "2026-11-10T17:46:00Z",
+      "fetched_at_utc": "2026-11-10T17:46:00Z",
+      "source": "SWGOH.GG direct page read by ChatGPT; raw source slices retained; derived optimizer preferences pending",
+      "sources": [
+        {
+          "name": "Top 1000 Kyber GAC",
+          "url": "https://swgoh.gg/units/vel-sartha/best-mods/",
+          "units_fully_modded": 936
+        },
+        {
+          "name": "Top 100 Guilds",
+          "url": "https://swgoh.gg/units/vel-sartha/best-mods/?s=GUILDTOP100",
+          "units_fully_modded": 4865
+        }
+      ]
+    },
+    "MERRIN": {
+      "status": "refreshed",
+      "checked_at_utc": "2026-11-10T17:46:00Z",
+      "fetched_at_utc": "2026-11-10T17:46:00Z",
+      "source": "SWGOH.GG direct page read by ChatGPT; raw source slices retained; derived optimizer preferences pending",
+      "sources": [
+        {
+          "name": "Top 1000 Kyber GAC",
+          "url": "https://swgoh.gg/units/merrin/best-mods/",
+          "units_fully_modded": 969
+        },
+        {
+          "name": "Top 100 Guilds",
+          "url": "https://swgoh.gg/units/merrin/best-mods/?s=GUILDTOP100",
+          "units_fully_modded": 4955
+        }
+      ]
+    },
+    "RC1262SCORCH": {
+      "status": "refreshed",
+      "checked_at_utc": "2026-11-10T17:46:00Z",
+      "fetched_at_utc": "2026-11-10T17:46:00Z",
+      "source": "SWGOH.GG direct page read by ChatGPT; raw source slices retained; derived optimizer preferences pending",
+      "sources": [
+        {
+          "name": "Top 1000 Kyber GAC",
+          "url": "https://swgoh.gg/units/rc-1262-scorch/best-mods/",
+          "units_fully_modded": 958
+        },
+        {
+          "name": "Top 100 Guilds",
+          "url": "https://swgoh.gg/units/rc-1262-scorch/best-mods/?s=GUILDTOP100",
+          "units_fully_modded": 4935
+        }
+      ]
     }
   }
 }
