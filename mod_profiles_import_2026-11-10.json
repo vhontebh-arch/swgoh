@@ -1,6 +1,6 @@
 {
   "schema": "raw_swgh_gg_profile_batch",
-  "collected_at_utc": "2026-11-10T18:00:00Z",
+  "collected_at_utc": "2026-11-10T18:10:00Z",
   "note": "Źródłowe dane odczytane bezpośrednio ze stron SWGOH.GG. Zawiera wymagane sekcje dla dwóch źródeł. Nie wyliczono pól pochodnych optymalizatora. Rozszerzono o kolejne postacie z pełnego katalogu SWGOH.GG.",
   "profiles": {
     "000": {
@@ -821,6 +821,121 @@
               "Protection": {
                 "average": 1387.3,
                 "focus_pct": 7.19
+              }
+            }
+          }
+        ]
+      }
+    },
+    "AAYLASECURA": {
+      "name": "Aayla Secura",
+      "role": "support",
+      "source_model": {
+        "method": "direct SWGOH.GG Best Mods page read by ChatGPT",
+        "sources": [
+          {
+            "name": "Top 1000 Kyber GAC",
+            "url": "https://swgoh.gg/units/aayla-secura/best-mods/",
+            "units_fully_modded": 965,
+            "set_combinations_pct": {
+              "Double Crit Chance + Potency": 15.75,
+              "Crit Damage + Potency": 11.08,
+              "Speed + Potency": 9.74,
+              "Speed + Health": 6.63,
+              "Triple Defense": 5.59
+            },
+            "primary_pct": {
+              "Arrow": {
+                "Speed": 98.93,
+                "Offense": 1.06
+              },
+              "Triangle": {
+                "Critical Damage": 64.89,
+                "Critical Chance": 15.95,
+                "Offense": 9.57,
+                "Protection": 4.25
+              },
+              "Circle": {
+                "Health": 63.82,
+                "Protection": 36.17
+              },
+              "Cross": {
+                "Potency": 48.93,
+                "Offense": 38.29,
+                "Health": 7.44,
+                "Protection": 4.25
+              }
+            },
+            "secondary_focus": {
+              "Speed": {
+                "average": 17.1,
+                "focus_pct": 20.87
+              },
+              "Potency": {
+                "average": 5.13,
+                "focus_pct": 11.7
+              },
+              "Critical Chance %": {
+                "average": 4.08,
+                "focus_pct": 8.51
+              },
+              "Offense": {
+                "average": 82.2,
+                "focus_pct": 7.66
+              }
+            }
+          },
+          {
+            "name": "Top 100 Guilds",
+            "url": "https://swgoh.gg/units/aayla-secura/best-mods/?s=GUILDTOP100",
+            "units_fully_modded": 4926,
+            "set_combinations_pct": {
+              "Double Crit Chance + Potency": 21.57,
+              "Speed + Potency": 7.51,
+              "Speed + Health": 6.86,
+              "Double Potency + Crit Chance": 6.71,
+              "Crit Damage + Potency": 5.37
+            },
+            "primary_pct": {
+              "Arrow": {
+                "Speed": 94.07,
+                "Offense": 3.19,
+                "Protection": 1.22,
+                "Health": 0.84
+              },
+              "Triangle": {
+                "Critical Damage": 50.04,
+                "Critical Chance": 29.63,
+                "Offense": 8.65,
+                "Protection": 5.83
+              },
+              "Circle": {
+                "Protection": 50.04,
+                "Health": 49.95
+              },
+              "Cross": {
+                "Potency": 52.02,
+                "Protection": 19.28,
+                "Offense": 17.49,
+                "Health": 5.55
+              }
+            },
+            "secondary_focus": {
+              "Speed": {
+                "average": 14.6,
+                "focus_pct": 20.44
+              },
+              "Critical Chance %": {
+                "average": 4.03,
+                "focus_pct": 9.5
+              },
+              "Potency": {
+                "average": 4.71,
+                "focus_pct": 8.83
+              },
+              "Offense": {
+                "average": 79.9,
+                "focus_pct": 7.69
               }
             }
           }
