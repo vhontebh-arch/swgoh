@@ -6,6 +6,8 @@
 
 Ten dokument jest obowiązkową specyfikacją dla każdej ręcznej lub automatycznej optymalizacji modów. Jeżeli propozycja nie przechodzi kontroli opisanych niżej, nie wolno przedstawiać jej jako gotowej rekomendacji.
 
+**Procedura nadrzędna:** przed rozpoczęciem pracy stosuj `OPTIMIZER_WORK_PROTOCOL.md`. Określa ona granice zlecenia, kolejność sprawdzania dokumentacji i zasadę uzyskania zgody przed rozszerzeniem zakresu. W przypadku rozbieżności dotyczących pobierania profili obowiązuje `MOD_PROFILE_REFRESH.md` (TTL 5 dni).
+
 ## 1. Źródła danych i kontrola wejścia
 
 Przed każdą analizą należy pobrać najnowsze dostępne eksporty:
