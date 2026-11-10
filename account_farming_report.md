@@ -1,33 +1,26 @@
 # Account Farming Report
 
-- **JARJARBINKS**: G13 → G13, R5 → R5
+- **VEL**: G13 → G0, R4 → R0
 
 ## Łączne braki
 
-| ID | Przedmiot | Wymagane | Posiadane | Brakuje |
-|---|---|---:|---:|---:|
-| `172Salvage` | Mk 7 Kyrotech Shock Prod Prototype Salvage | 100 | 46 | **54** |
-| `170PrototypeSalvage` | Mk 12 ArmaTek Holo Lens Prototype Salvage | 50 | 0 | **50** |
+Brak braków.
 
 ## Szczegóły
 
-### JARJARBINKS
+### VEL
 
-Gear: **G13 → G13** Relic: **R5 → R5**
+Gear: **G13 → G0** Relic: **R4 → R0**
 
 #### Bezpośredni wymagany gear
 
-- `G12Finisher_JARJARBINKS_C` × 1 — Power Cell Injector (Ionic) - Jar Jar Binks
 
 #### Materiały relic
 
 
 #### Braki
 
-| ID | Przedmiot | Brakuje |
-|---|---|---:|
-| `172Salvage` | Mk 7 Kyrotech Shock Prod Prototype Salvage | **54** |
-| `170PrototypeSalvage` | Mk 12 ArmaTek Holo Lens Prototype Salvage | **50** |
+Brak braków.
 
 ## Informacje techniczne
 
