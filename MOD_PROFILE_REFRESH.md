@@ -8,14 +8,16 @@
 2. ChatGPT otwiera stronę SWGOH.GG Best Mods dla tej postaci i odczytuje dostępne dane źródłowe.
 3. Należy rozdzielić co najmniej dwa źródła/slice, jeżeli profil ma być zbudowany z Kyber GAC i Top 100 Guilds. Nie wolno zastępować brakującego slice domysłem ani powielać danych z pierwszej strony.
 4. Każdy odczyt zapisuje się osobno w `source_model.sources[]`, wraz z dokładnym URL, nazwą slice, liczbą analizowanych jednostek (jeśli jest podana) oraz wartościami faktycznie widocznymi na stronie.
-5. Profil pochodny (set_combinations, set_preferences, primary_preferences, secondary_preferences) można wyliczyć dopiero po odczytaniu i walidacji wymaganych sekcji.
-6. ChatGPT aktualizuje `mod_profiles.json` bezpośrednio na branchu `optimizer-v2`, zachowując pozostałe profile bez zmian.
-7. Po zapisie ponownie odczytuje plik z GitHuba i sprawdza JSON, BASE_ID, źródła, timestamp oraz niezmienność pozostałych profili.
+5. **Secondary Stat Focus: wymagane są wyłącznie cztery najwyżej sklasyfikowane statystyki (TOP 4) z każdego źródła.** Dla każdej z nich zapisujemy nazwę, `focus_pct` i `average`, zachowując dokładną kolejność podaną przez SWGOH.GG. Nie kopiujemy ani nie wymagamy pozycji 5–12. TOP 4 odczytujemy niezależnie dla każdego slice — listy mogą zawierać inne statystyki lub inną kolejność.
+6. Pozostałe wymagane sekcje (kombinacje setów i primary stats) odczytuje się normalnie dla każdego źródła.
+7. Profil pochodny (set_combinations, set_preferences, primary_preferences, secondary_preferences) można wyliczyć dopiero po odczytaniu i walidacji wymaganych sekcji. Przy wyliczaniu preferencji drugorzędnych należy korzystać z dostępnych TOP 4 obu źródeł; brakujące pozycje poza TOP 4 nie mogą być uzupełniane domysłem.
+8. ChatGPT aktualizuje `mod_profiles.json` bezpośrednio na branchu `optimizer-v2`, zachowując pozostałe profile bez zmian.
+9. Po zapisie ponownie odczytuje plik z GitHuba i sprawdza JSON, BASE_ID, źródła, timestamp oraz niezmienność pozostałych profili.
 
 ## Statusy
 
 - `refreshed`: wymagane dane źródłowe odczytane, sparsowane, zweryfikowane i zapisane; commit potwierdzony odczytem zwrotnym.
-- `partial`: strona dostępna, ale co najmniej jedna wymagana sekcja lub slice jest niepełna. Nie używać takiego profilu jako kompletnego celu optymalizacji.
+- `partial`: strona dostępna, ale co najmniej jedna wymagana sekcja lub slice jest niepełna. W przypadku Secondary Stat Focus wystarczy poprawne TOP 4; brak pozycji 5–12 nie oznacza niekompletności.
 - `unavailable`: nie udało się wiarygodnie odczytać wymaganych danych.
 - `cached`: używany jest wcześniejszy profil; nie oznacza świeżego odczytu.
 
