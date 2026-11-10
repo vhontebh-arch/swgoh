@@ -11,6 +11,11 @@ on:
       - "test_mod_chains.py"
       - "update_mod_profiles.py"
       - "test_mod_profile_cache.py"
+      - "mod_profiles.json"
+      - "OPTIMIZER_WORK_PROTOCOL.md"
+      - "MOD_OPTIMIZATION_RULES.md"
+      - "MOD_PROFILE_REFRESH.md"
+      - "GRANDIVORY_METHOD_REVIEW.md"
       - ".github/workflows/test-mod-chains.yml"
   workflow_dispatch:
 
@@ -27,5 +32,11 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Run preflight and optimizer regression tests
+      - name: Run Vel Sartha preflight
+        run: >-
+          python optimizer_preflight.py
+          --target "Vel Sartha"
+          --donor "Merrin"
+          --donor 'RC-1262 "Scorch"'
+      - name: Run optimizer regression tests
         run: python -m unittest -v test_optimizer_preflight test_mod_chains test_mod_profile_cache
