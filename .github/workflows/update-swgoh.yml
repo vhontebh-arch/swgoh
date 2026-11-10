@@ -12,6 +12,10 @@ on:
   schedule:
     - cron: "0 6 * * *"
 
+concurrency:
+  group: swgoh-optimizer-v2-data
+  cancel-in-progress: false
+
 permissions:
   contents: write
 
