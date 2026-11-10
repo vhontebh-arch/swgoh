@@ -1380,6 +1380,9 @@ def main():
         base_id = aliases.get(owner_id, owner_id)
         return names.get(owner_id) or names.get(base_id) or base_id or "nieznana"
 
+    def rid(row):
+        return str(row.get("id", "") or "")
+
     optimizer = optimize_target_build(rows, {t.get("baseId") for t in targets}, profiles, aliases, names, protected_owners)
     # Mark the physical mods selected by the complete six-slot optimizer.
     # These values describe the full-build result, not a single-slot swap;
