@@ -313,6 +313,63 @@
         ],
         "refreshed_at_utc": "2026-11-10T17:46:00Z",
         "note": "Raw source data integrated into the main profile database. Derived optimizer preferences are intentionally not generated yet."
+      },
+      "set_combinations": {
+        "Speed + Potency": 63.975,
+        "Speed + Health": 16.3,
+        "Speed + Defense": 2.65,
+        "Speed + Tenacity": 1,
+        "Speed": 2.95,
+        "Triple Health": 0.85
+      },
+      "set_preferences": {
+        "Speed": 1,
+        "Potency": 0.7364,
+        "Health": 0.1876,
+        "Defense": 0.0305,
+        "Tenacity": 0.0115,
+        "Triple Health": 0.0098
+      },
+      "primary_preferences": {
+        "Arrow": {
+          "Speed": 0.9799,
+          "Offense": 0.0075,
+          "Protection": 0.0071,
+          "Critical Avoidance": 0.0055
+        },
+        "Triangle": {
+          "Offense": 0.5294,
+          "Protection": 0.2719,
+          "Health": 0.1054,
+          "Critical Damage": 0.0933
+        },
+        "Circle": {
+          "Protection": 0.6656,
+          "Health": 0.3344
+        },
+        "Cross": {
+          "Potency": 0.7407,
+          "Protection": 0.0955,
+          "Offense": 0.0956,
+          "Health": 0.0683
+        }
+      },
+      "secondary_preferences": {
+        "Speed": 1,
+        "Potency": 0.4637,
+        "Offense": 0.375,
+        "Protection": 0.36,
+        "Protection %": 0,
+        "Health": 0,
+        "Health %": 0,
+        "Offense %": 0,
+        "Defense": 0,
+        "Defense %": 0,
+        "Tenacity %": 0,
+        "Critical Chance %": 0,
+        "Critical Damage %": 0,
+        "Critical Avoidance %": 0,
+        "Accuracy": 0
       }
     },
     "4LOM": {
@@ -432,6 +489,65 @@
         ],
         "refreshed_at_utc": "2026-11-10T17:46:00Z",
         "note": "Raw source data integrated into the main profile database. Derived optimizer preferences are intentionally not generated yet."
+      },
+      "set_combinations": {
+        "Speed + Tenacity": 43.67,
+        "Speed + Potency": 16,
+        "Speed + Health": 14.3,
+        "Offense + Health": 2.2,
+        "Speed": 2.9,
+        "Triple Health": 1.9
+      },
+      "set_preferences": {
+        "Speed": 1,
+        "Tenacity": 0.5681,
+        "Potency": 0.2081,
+        "Health": 0.2146,
+        "Offense": 0.0286,
+        "Triple Health": 0.0247
+      },
+      "primary_preferences": {
+        "Arrow": {
+          "Speed": 0.9643,
+          "Offense": 0.0226,
+          "Critical Avoidance": 0.0072,
+          "Protection": 0.0027,
+          "Health": 0.0032
+        },
+        "Triangle": {
+          "Offense": 0.5306,
+          "Protection": 0.1664,
+          "Critical Damage": 0.1297,
+          "Health": 0.1733
+        },
+        "Circle": {
+          "Protection": 0.7182,
+          "Health": 0.2818
+        },
+        "Cross": {
+          "Tenacity": 0.6879,
+          "Offense": 0.1236,
+          "Protection": 0.0872,
+          "Potency": 0.1013
+        }
+      },
+      "secondary_preferences": {
+        "Speed": 1,
+        "Tenacity": 0.454,
+        "Offense": 0.3777,
+        "Potency": 0.3605,
+        "Protection": 0,
+        "Protection %": 0,
+        "Health": 0,
+        "Health %": 0,
+        "Offense %": 0,
+        "Defense": 0,
+        "Defense %": 0,
+        "Tenacity %": 0,
+        "Critical Chance %": 0,
+        "Critical Damage %": 0,
+        "Critical Avoidance %": 0,
+        "Accuracy": 0
       }
     },
     "VELSARTHA": {
@@ -551,6 +667,68 @@
         ],
         "refreshed_at_utc": "2026-11-10T17:46:00Z",
         "note": "Raw source data integrated into the main profile database. Derived optimizer preferences are intentionally not generated yet."
+      },
+      "set_combinations": {
+        "Double Health + Defense": 29.25,
+        "Double Defense + Health": 12.65,
+        "Triple Health": 13.95,
+        "Triple Defense": 10.85,
+        "Offense + Crit Chance": 8.8
+      },
+      "set_preferences": {
+        "Double Health": 1,
+        "Defense": 1,
+        "Double Defense": 0.4325,
+        "Health": 0.4325,
+        "Triple Health": 0.4769,
+        "Triple Defense": 0.3709,
+        "Offense": 0.3009,
+        "Crit Chance": 0.3009
+      },
+      "primary_preferences": {
+        "Arrow": {
+          "Protection": 0.4766,
+          "Speed": 0.4219,
+          "Health": 0.0734,
+          "Critical Avoidance": 0.0126,
+          "Defense": 0.0156
+        },
+        "Triangle": {
+          "Protection": 0.7451,
+          "Health": 0.147,
+          "Defense": 0.0853,
+          "Offense": 0.0125,
+          "Critical Chance": 0.01
+        },
+        "Circle": {
+          "Protection": 0.7885,
+          "Health": 0.2115
+        },
+        "Cross": {
+          "Protection": 0.7575,
+          "Health": 0.144,
+          "Defense": 0.0751,
+          "Potency": 0.0126,
+          "Tenacity": 0.0108
+        }
+      },
+      "secondary_preferences": {
+        "Speed": 1,
+        "Defense %": 0.3448,
+        "Health %": 0.3405,
+        "Tenacity": 0.1673,
+        "Defense": 0.1652,
+        "Potency": 0,
+        "Protection": 0,
+        "Protection %": 0,
+        "Health": 0,
+        "Offense": 0,
+        "Offense %": 0,
+        "Tenacity %": 0,
+        "Critical Chance %": 0,
+        "Critical Damage %": 0,
+        "Critical Avoidance %": 0,
+        "Accuracy": 0
       }
     },
     "MERRIN": {
@@ -670,6 +848,64 @@
         ],
         "refreshed_at_utc": "2026-11-10T17:46:00Z",
         "note": "Raw source data integrated into the main profile database. Derived optimizer preferences are intentionally not generated yet."
+      },
+      "set_combinations": {
+        "Triple Tenacity": 33.9,
+        "Health + Potency + Tenacity": 11.9,
+        "Double Tenacity + Health": 7.45,
+        "Triple Health": 8.2,
+        "Double Health + Potency": 6.6
+      },
+      "set_preferences": {
+        "Triple Tenacity": 1,
+        "Health": 0.5708,
+        "Potency": 0.5457,
+        "Tenacity": 0.351,
+        "Double Tenacity": 0.2198,
+        "Triple Health": 0.2419,
+        "Double Health": 0.1947
+      },
+      "primary_preferences": {
+        "Arrow": {
+          "Protection": 0.6752,
+          "Speed": 0.1538,
+          "Health": 0.09,
+          "Critical Avoidance": 0.081
+        },
+        "Triangle": {
+          "Protection": 0.8112,
+          "Health": 0.1314,
+          "Defense": 0.0326,
+          "Critical Damage": 0.0248
+        },
+        "Circle": {
+          "Protection": 0.8429,
+          "Health": 0.1571
+        },
+        "Cross": {
+          "Tenacity": 0.8281,
+          "Protection": 0.0741,
+          "Potency": 0.0734,
+          "Health": 0.0244
+        }
+      },
+      "secondary_preferences": {
+        "Speed": 1,
+        "Tenacity": 0.6181,
+        "Protection": 0.3702,
+        "Potency": 0.3641,
+        "Protection %": 0,
+        "Health": 0,
+        "Health %": 0,
+        "Offense": 0,
+        "Offense %": 0,
+        "Defense": 0,
+        "Defense %": 0,
+        "Tenacity %": 0,
+        "Critical Chance %": 0,
+        "Critical Damage %": 0,
+        "Critical Avoidance %": 0,
+        "Accuracy": 0
       }
     },
     "RC1262SCORCH": {
@@ -789,6 +1025,64 @@
         ],
         "refreshed_at_utc": "2026-11-10T17:46:00Z",
         "note": "Raw source data integrated into the main profile database. Derived optimizer preferences are intentionally not generated yet."
+      },
+      "set_combinations": {
+        "Double Health + Defense": 48.9,
+        "Double Defense + Health": 16.65,
+        "Triple Health": 14.35,
+        "Triple Defense": 6.45,
+        "Speed + Health": 2.55
+      },
+      "set_preferences": {
+        "Double Health": 1,
+        "Defense": 1,
+        "Double Defense": 0.3405,
+        "Health": 0.3926,
+        "Triple Health": 0.2935,
+        "Triple Defense": 0.1319,
+        "Speed": 0.0521
+      },
+      "primary_preferences": {
+        "Arrow": {
+          "Protection": 0.6299,
+          "Speed": 0.3215,
+          "Health": 0.0345,
+          "Critical Avoidance": 0.014
+        },
+        "Triangle": {
+          "Protection": 0.8008,
+          "Health": 0.144,
+          "Defense": 0.0493,
+          "Offense": 0.0011,
+          "Critical Damage": 0.0049
+        },
+        "Circle": {
+          "Protection": 0.8368,
+          "Health": 0.1632
+        },
+        "Cross": {
+          "Protection": 0.8694,
+          "Health": 0.0604,
+          "Defense": 0.0561,
+          "Tenacity": 0.0141
+        }
+      },
+      "secondary_preferences": {
+        "Speed": 1,
+        "Defense %": 0.3911,
+        "Health %": 0.1758,
+        "Protection": 0.3543,
+        "Health": 0.1732,
+        "Potency": 0,
+        "Protection %": 0,
+        "Offense": 0,
+        "Offense %": 0,
+        "Defense": 0,
+        "Tenacity %": 0,
+        "Critical Chance %": 0,
+        "Critical Damage %": 0,
+        "Critical Avoidance %": 0,
+        "Accuracy": 0
       }
     }
   },
