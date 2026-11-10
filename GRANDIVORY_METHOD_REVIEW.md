@@ -87,7 +87,7 @@ To jest jawne przybliżenie, a nie pełna reprodukcja dokładnego przeliczenia s
 - Projekcji 5A→6E dla modów innych niż 5A na poziomie 15; nie zakładamy, że można pominąć wcześniejsze etapy slice.
 - Pełnej globalnej optymalizacji wielu celów jednocześnie.
 - Globalnego wyszukiwania i optymalizacji alternatywnych łańcuchów wielodawcowych. Obecna wersja ma fizyczną walidację i bilans końcowy, ale nie gwarantuje najlepszego łańcucha ani nie eksploruje wszystkich alternatyw.
-- Automatycznego chronienia wszystkich dawców ani automatycznych testów.
+- Automatycznego chronienia wszystkich dawców; bilans pozostaje jawny, a decyzja o akceptacji transferu należy do użytkownika.
 
 Te ograniczenia są celowe i widoczne: nie udajemy, że samo przeniesienie metody doboru buildów rozwiązuje problemy łańcuchów i bilansu całego rosteru.
 
