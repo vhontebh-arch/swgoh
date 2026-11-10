@@ -136,31 +136,6 @@ PATCH-y używają tego samego slotu i setu co mod zabrany ze źródła, więc li
 | 1 | MOD | JEDIKNIGHTREVAN → JARJARBINKS | Arrow / Speed / Protection % 24% / secondary: Health 770, Defense % 9.48%, Protection 1035, Speed 24 / 6★ A lvl15 | SAFE |
 | 2 | PATCH | MAGAZYN → JEDIKNIGHTREVAN | Arrow / Speed / Health % 5.88% / secondary: Speed 9, Protection % 1.65%, Protection 1028, Offense 61 / 5★ B lvl15 | SAFE |
 
-## Jar Jar Binks — kandydaci
-
-Analiza porównuje mody wyposażone z kandydatami z inventory dla każdego slotu.
-
-| Akcja | Mod | Źródło | Slot | Set | Tier | Lvl | Fit | Set Δ | Fit po secie | Wkład moda | Pełny build Δ | Łańcuch |
-|---|---|---|---|---|---|---|---:|---:|---:|---:|---:|---:|
-| REPLACE | Arrow Protection % 24% | POSTAĆ: JEDIKNIGHTREVAN | Arrow | Speed | 6A | 15 | 42.7% | 0.00 | 42.7 | 16.0 | 0.0 | MOD: JEDIKNIGHTREVAN -> JARJARBINKS; PATCH: MAGAZYN -> JEDIKNIGHTREVAN |
-| PATCH | Arrow Health % 5.88% | MAGAZYN | Arrow | Speed | 5B | 15 | 43.4% | 0.00 | 43.4 | 7.5 | 7.5 | MOD: JEDIKNIGHTREVAN -> JARJARBINKS; PATCH: MAGAZYN -> JEDIKNIGHTREVAN |
-| CALIBRATE | Cross Health % 16% | POSTAĆ: JEDIKNIGHTREVAN | Cross | Health | 6A | 15 | 49.6% | 0.00 | 49.6 | 0.0 | 0.0 | — |
-| CALIBRATE | Circle Protection % 24% | POSTAĆ: JARJARBINKS | Circle | Speed | 6A | 15 | 49.5% | 0.00 | 49.5 | 18.6 | 0.0 | — |
-| CALIBRATE | Diamond Defense % 20% | POSTAĆ: SEVENTHSISTER | Diamond | Speed | 6A | 15 | 46.8% | 0.00 | 46.8 | 0.0 | 0.0 | — |
-| CALIBRATE | Square Offense % 8.5% | POSTAĆ: JARJARBINKS | Square | Speed | 6A | 15 | 46.8% | 0.00 | 46.8 | 17.6 | 0.0 | — |
-| CALIBRATE | Circle Protection % 24% | POSTAĆ: VADER | Circle | Critical Chance | 6A | 15 | 45.2% | 0.00 | 45.2 | 0.0 | 0.0 | — |
-| CALIBRATE | Cross Potency % 30% | POSTAĆ: JARJARBINKS | Cross | Potency | 6A | 15 | 44.9% | 0.00 | 44.9 | 16.8 | 0.0 | — |
-| CALIBRATE | Arrow Speed 32 | POSTAĆ: JARJARBINKS | Arrow | Speed | 6A | 15 | 44.7% | 0.00 | 44.7 | 0.0 | 0.0 | — |
-| CALIBRATE | Diamond Defense % 20% | POSTAĆ: GLREY | Diamond | Offense | 6A | 15 | 44.6% | 0.00 | 44.6 | 0.0 | 0.0 | — |
-| CALIBRATE | Triangle Critical Chance % 20% | POSTAĆ: JARJARBINKS | Triangle | Speed | 6A | 15 | 44.6% | 0.00 | 44.6 | 16.7 | 0.0 | — |
-| CALIBRATE | Circle Health % 16% | POSTAĆ: ENFYSNEST | Circle | Tenacity | 6A | 15 | 44.6% | 0.00 | 44.6 | 0.0 | 0.0 | — |
-| CALIBRATE | Cross Potency % 30% | POSTAĆ: VADER | Cross | Critical Damage | 6A | 15 | 44.5% | 0.00 | 44.5 | 0.0 | 0.0 | — |
-| CALIBRATE | Circle Protection % 24% | POSTAĆ: HOTHLEIA | Circle | Critical Chance | 6A | 15 | 44.3% | 0.00 | 44.3 | 0.0 | 0.0 | — |
-| CALIBRATE | Square Offense % 8.5% | POSTAĆ: GLREY | Square | Offense | 6A | 15 | 42.8% | 0.00 | 42.8 | 0.0 | 0.0 | — |
-| CALIBRATE | Diamond Defense % 20% | POSTAĆ: JARJARBINKS | Diamond | Potency | 6A | 15 | 42.2% | 0.00 | 42.2 | 15.8 | 0.0 | — |
-| CALIBRATE | Circle Health % 16% | POSTAĆ: GLREY | Circle | Health | 6A | 15 | 42.1% | 0.00 | 42.1 | 0.0 | 0.0 | — |
-| CALIBRATE | Diamond Defense % 20% | POSTAĆ: GRANDADMIRALTHRAWN | Diamond | Speed | 6A | 15 | 41.0% | 0.00 | 41.0 | 0.0 | 0.0 | — |
-
 ## Definicje
 
 - **Quality** — jakość wykonanych rolli względem zakresu dla 5-dot/6-dot.
