@@ -1067,6 +1067,15 @@ jobs:
 
           head -n 15 mod_analysis.md
 
+      - name: Upload isolated Vel Sartha mod analysis
+        uses: actions/upload-artifact@v4
+        with:
+          name: vel-sartha-mod-analysis
+          path: |
+            mod_analysis.md
+            mod_analysis.csv
+          if-no-files-found: error
+
       # ============================================================
       # SHIP ANALYSIS
       # ============================================================
