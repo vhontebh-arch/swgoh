@@ -72,6 +72,32 @@ class TransferChainTests(unittest.TestCase):
         self.assertEqual(moves[0]["replacement"]["id"], "target-current")
         self.assertIsNone(moves[0]["removed"])
 
+    def test_selected_mod_must_be_in_its_declared_source_slot(self):
+        source_row = make_mod("selected-mod", DONOR, True, slot="Triangle", value=20)
+        selected_copy = dict(source_row, slot="Arrow")
+        patch = make_mod("inventory-patch", slot="Arrow", value=15)
+        result = run_plan(
+            [source_row, patch],
+            selected_copy,
+            {TARGET: "TARGET", DONOR: "DONOR"},
+        )
+        self.assertFalse(result["safe"])
+        self.assertTrue(any("nie znajduje się w slocie Arrow" in reason for _, reason in result["failed"]))
+
+    def test_inventory_patch_is_currently_preferred_to_another_donor(self):
+        selected = make_mod("selected-mod", DONOR, True, value=20)
+        other_donor = make_mod("other-donor-mod", DONOR_B, True, value=12)
+        inventory_patch = make_mod("inventory-patch", value=15)
+        result = run_plan(
+            [selected, other_donor, inventory_patch],
+            selected,
+            {TARGET: "TARGET", DONOR: "DONOR", DONOR_B: "DONOR_B"},
+        )
+        self.assertTrue(result["safe"], result["failed"])
+        moves = result["plans"][0]["moves"]
+        self.assertEqual(len(moves), 1)
+        self.assertEqual(moves[0]["replacement"]["id"], "inventory-patch")
+
     def test_unrepairable_source_is_rejected(self):
         selected = make_mod("selected-mod", DONOR, True, value=20)
         result = run_plan(
