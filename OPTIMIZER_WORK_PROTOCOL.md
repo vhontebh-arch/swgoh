@@ -79,3 +79,21 @@ Brak sprzeciwu, wcześniejsza zgoda na inne zadanie ani techniczna możliwość 
 ## 7. Krótka reguła operacyjna do stosowania w każdej rozmowie
 
 **Najpierw sprawdź procedury. Następnie wykonaj wyłącznie zlecone zadanie. Profile pobieraj tylko dla celu i dawców aktualnego łańcucha, według TTL 5 dni. Każde rozszerzenie zakresu wymaga wcześniejszej zgody użytkownika.**
+
+
+## 8. Techniczny preflight przed analizą
+
+Przed każdą analizą modów uruchom w katalogu repozytorium:
+
+```bash
+python optimizer_preflight.py --target "Nazwa celu" --donor "Dawca 1" --donor "Dawca 2"
+```
+
+- `--target` jest wymagany i występuje dokładnie raz.
+- Każdy `--donor` oznacza wyłącznie rzeczywistego dawcę aktualnego łańcucha; parametr można powtórzyć.
+- Nie wpisuj całego rosteru ani postaci rozważanych hipotetycznie. Po zmianie łańcucha uruchom kontrolę ponownie z nową, rzeczywistą listą.
+- Preflight sprawdza branch `optimizer-v2`, obecność czterech obowiązujących dokumentów, kompletność obu źródeł profilu i wymaganych sekcji oraz TTL 5 dni.
+- Brak profilu, niekompletność lub przekroczenie TTL blokuje analizę do czasu ręcznego uzupełnienia/odświeżenia zgodnie z `MOD_PROFILE_REFRESH.md`.
+- `checked_at_utc` nie odnawia TTL.
+- Narzędzie jest wyłącznie odczytowe: nie pobiera stron SWGOH.GG, nie aktualizuje profili, nie modyfikuje CSV ani kodu analizatora.
+- Sukces preflightu potwierdza wyłącznie warunki wejściowe; nie zastępuje walidacji łańcucha transferów ani kontroli końcowego raportu.
