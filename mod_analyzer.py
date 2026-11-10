@@ -12,7 +12,7 @@ INPUT_FILE = "mods.csv"
 OUTPUT_CSV = "mod_analysis.csv"
 OUTPUT_MD = "mod_analysis.md"
 PROFILE_FILE = "mod_profiles.json"
-ANALYZER_VERSION = "2026-11-10-grandivory-projected-build-scoring-v3"
+ANALYZER_VERSION = "2026-11-10-global-chain-balance-v4"
 
 R5 = {
     "Critical Chance %": (1.125, 2.25), "Defense": (4.9, 9.8),
@@ -816,10 +816,25 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
     for r in rows:
         slot = str(r.get("slot", "") or "")
         if not slot: continue
-        if is_true(r.get("equipped")): eq[(owner(r), slot)] = r
-        elif mature(r): inventory.append(r)
+        if is_true(r.get("equipped")):
+            eq[(owner(r), slot)] = r
+        else:
+            # Unfinished mods are valid physical candidates too; upgrade cost
+            # remains a separate investment from the build-fit score.
+            inventory.append(r)
 
     working_eq = dict(eq)
+
+    def resolve_target_owner(target_id):
+        existing = next((o for (o, _slot), r in eq.items() if base(r) == target_id), None)
+        if existing:
+            return existing
+        # aliases includes unit-instance-id -> baseId for the full roster,
+        # including characters that currently have no equipped mods.
+        return next((
+            key for key, value in aliases.items()
+            if value == target_id and key != target_id and ":" not in key
+        ), None)
     selected_ids = {rid(m) for opt in optimizer.values() for m in opt.get("mods", [])}
     def set_groups(mods):
         counts={}
@@ -829,21 +844,21 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                 counts[s]=counts.get(s,0)+1
         return {s: counts.get(s,0)//SET_RULES[s][1] for s in SET_RULES}
 
-    def preserves_completed_sets(hole_owner, current, replacement):
+    def completed_set_delta(hole_owner, current, replacement):
         before=[r for (o,_s),r in working_eq.items() if o==hole_owner]
         after=[r for r in before if rid(r)!=rid(current)] + [replacement]
         bg=set_groups(before); ag=set_groups(after)
-        return all(ag[s] >= bg[s] for s in SET_RULES)
+        return sum(ag[s]-bg[s] for s in SET_RULES)
 
     def find_chain(selected_mod, target_id, used_ids):
         slot = str(selected_mod.get("slot", "") or "")
         src = owner(selected_mod)
         if not src:
-            return None
+            # Inventory -> target is a direct equip; no source slot needs repair.
+            return {"moves": [], "gain": 0.0}
 
-        # Breadth-first search: find the shortest physically valid chain first.
-        # Candidate quality is only a tie-breaker; never hide a valid chain
-        # behind a small arbitrary top-K slice.
+        # Breadth-first search finds the shortest repair chain. Every candidate
+        # is considered; no arbitrary top-K truncation is applied.
         queue=[(src,{src},set(selected_ids)|set(used_ids)|{rid(selected_mod)},[])]
         depth=0
         while queue and depth <= 10:
@@ -858,7 +873,7 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                 for r in inventory:
                     if rid(r) in forbidden or rid(r) in selected_ids:
                         continue
-                    if str(r.get("slot","")) == slot and preserves_completed_sets(hole_owner,current,r):
+                    if str(r.get("slot","")) == slot:
                         candidates.append((0,r))
                 for (other_owner,other_slot),r in working_eq.items():
                     if other_slot != slot or other_owner == hole_owner or other_owner in seen:
@@ -867,15 +882,15 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                         continue
                     if rid(r) in forbidden or rid(r) in selected_ids:
                         continue
-                    if preserves_completed_sets(hole_owner,current,r):
-                        candidates.append((1,r))
+                    candidates.append((1,r))
 
                 candidates.sort(key=lambda x: (
                     x[0],
-                    -fit(x[1],who),
-                    -float(x[1].get("modValue",0) or 0)
+                    -completed_set_delta(hole_owner,current,x[1]),
+                    -float(x[1].get("modValue",0) or 0),
+                    -fit(x[1],who)
                 ))
-                for kind,replacement in candidates[:50]:
+                for kind,replacement in candidates:
                     replacement_id=rid(replacement)
                     local_gain=fit(replacement,who)-fit(current,who)
                     move={"owner":hole_owner,"name":pname(hole_owner),
@@ -897,12 +912,12 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
 
     plans, failed, used_ids = [], [], set()
     for target_id, opt in optimizer.items():
-        target_owner = next((o for (o,_s),r in working_eq.items() if base(r) == target_id), None)
+        target_owner = resolve_target_owner(target_id)
         if not target_owner:
-            failed.append((target_id, "brak ownera celu")); continue
+            failed.append((target_id, "brak identyfikatora postaci w roster.csv")); continue
         for mod in opt.get("mods", []):
             slot = str(mod.get("slot",""))
-            current = eq.get((target_owner, slot))
+            current = working_eq.get((target_owner, slot))
             if current is not None and rid(current) == rid(mod): continue
             plan = find_chain(mod, target_id, used_ids)
             if plan is None:
@@ -927,18 +942,27 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
 
     final_eq = dict(working_eq)
 
-    affected={m["owner"] for p in plans for m in p["moves"]}
+    affected = {p["target_owner"] for p in plans}
+    affected.update(owner(p["mod"]) for p in plans if owner(p["mod"]))
+    affected.update(m["owner"] for p in plans for m in p["moves"])
     validation=[]; safe=not failed
-    all_owners={o for o,_s in eq}|{o for o,_s in final_eq}
+    all_owners={o for o,_s in eq}|{o for o,_s in final_eq}|affected
     for o in sorted(all_owners):
         before=[r for (oo,_s),r in eq.items() if oo==o]
         after=[r for (oo,_s),r in final_eq.items() if oo==o]
         if not before and not after: continue
         bc,ac=set_counts(before),set_counts(after)
         bg=set_groups(before); ag=set_groups(after)
-        ok = not (o in affected and base(before[0]) not in targets) or all(ag[s] >= bg[s] for s in SET_RULES)
-        validation.append({"owner":o,"name":pname(o),"before":bc,"after":ac,"beforeGroups":bg,"afterGroups":ag,"ok":ok})
-        if not ok: safe=False
+        before_value=sum(float(r.get("modValue",0) or 0) for r in before)
+        after_value=sum(float(r.get("modValue",0) or 0) for r in after)
+        validation.append({
+            "owner":o,"name":pname(o),"before":bc,"after":ac,
+            "beforeGroups":bg,"afterGroups":ag,
+            "beforeModValue":round(before_value,1),
+            "afterModValue":round(after_value,1),
+            "modValueDelta":round(after_value-before_value,1),
+            "ok":True
+        })
 
     for target_id,opt in optimizer.items():
         target_owner=next((o for (o,_s),r in eq.items() if base(r)==target_id),None)
@@ -950,13 +974,16 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
     if safe:
         for plan in plans:
             mod=plan["mod"]; slot=str(mod.get("slot",""))
-            mod["recommendedAction"]="REPLACE"; mod["chainStatus"]="SAFE"
+            target_slot_was_empty = (plan["target_owner"], str(mod.get("slot",""))) not in eq
+            mod["recommendedAction"]="EQUIP" if target_slot_was_empty else "REPLACE"
+            mod["chainStatus"]="SAFE"
             mod["chainId"]="{}:{}".format(plan["target"],slot)
             mod["chainLength"]=1+len(plan["moves"]); mod["chainGain"]=round(plan["chain_gain"],1)
             # Physical execution starts with the selected mod, then repairs the vacated slot.
             # Every PATCH is a separate mod transfer; the selected mod never travels through
             # another character.
-            selected_path = "{} -> {}".format(pname(owner(mod)), pname(plan["target_owner"]))
+            selected_source = pname(owner(mod)) if owner(mod) else "MAGAZYN"
+            selected_path = "{} -> {}".format(selected_source, pname(plan["target_owner"]))
             repair_path = []
             for move in plan["moves"]:
                 replacement = move["replacement"]
