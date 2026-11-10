@@ -87,7 +87,7 @@ To jest jawne przybliżenie, a nie pełna reprodukcja dokładnego przeliczenia s
 - Dokładnego przeliczenia primary dla poziomów poniżej 15. Primary pozostaje na wartości z eksportu, ponieważ wejściowe dane nie zawierają tabeli przyrostu primary na każdym poziomie.
 - Projekcji 5A→6E dla modów innych niż 5A na poziomie 15; nie zakładamy, że można pominąć wcześniejsze etapy slice.
 - Pełnej globalnej optymalizacji wielu celów jednocześnie.
-- Globalnego optimum po wszystkich możliwych długościach łańcucha. Wersja v7 porównuje wszystkie wykonalne warianty na najkrótszym poziomie BFS; wybiera maksymalny łączny fit dawców, następnie zmianę liczby pełnych setów i sumy modValue. Dłuższe łańcuchy są rozważane tylko wtedy, gdy na krótszym poziomie nie ma żadnego wykonalnego zakończenia. To świadomy priorytet prostoty transferu, a nie dowód globalnego optimum po wszystkich długościach.
+- Globalnego optimum po wszystkich możliwych długościach łańcucha. Wersja v7 porównuje wszystkie wykonalne warianty na najkrótszym poziomie BFS; wybiera najpierw najlepszą zmianę liczby pełnych setów, następnie łączny fit dawców i sumę `modValue`. Dłuższe łańcuchy są rozważane tylko wtedy, gdy na krótszym poziomie nie ma żadnego wykonalnego zakończenia. To świadomy priorytet prostoty transferu, a nie dowód globalnego optimum po wszystkich długościach.
 - Automatycznego chronienia wszystkich dawców; bilans pozostaje jawny, a decyzja o akceptacji transferu należy do użytkownika.
 
 Te ograniczenia są celowe i widoczne: nie udajemy, że samo przeniesienie metody doboru buildów rozwiązuje problemy łańcuchów i bilansu całego rosteru.
