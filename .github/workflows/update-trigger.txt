@@ -9,3 +9,5 @@ rerun-after-donor-profiles-and-profile-normalization-2026-11-10T20:00+01:00
 rerun-after-zaalbar-profile-2026-11-10T20:03+01:00
 
 rerun-after-user-facing-report-generator-2026-11-10T20:05+01:00
+
+rerun-after-report-owner-fix-2026-11-10T20:07+01:00
