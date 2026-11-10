@@ -205,21 +205,150 @@
       "source": "local_cache"
     },
     "JEDIKNIGHTREVAN": {
-      "status": "source_available",
+      "status": "partial",
       "checked_at_utc": "2026-11-10T16:00:00+01:00",
       "fetched_at_utc": null,
       "source": "SWGOH.GG direct page read by ChatGPT",
       "sources": [
         {
-          "name": "Kyber GAC",
-          "url": "https://swgoh.gg/units/jedi-knight-revan/best-mods/"
+          "name": "Kyber GAC (Top 1000)",
+          "url": "https://swgoh.gg/units/jedi-knight-revan/best-mods/",
+          "units_fully_modded": 975,
+          "updated_label": "18m ago at read time",
+          "set_combinations_pct": {
+            "Speed + Health": 73.84,
+            "Speed": 4.61,
+            "Speed + Crit Chance": 4.2,
+            "Offense + Crit Chance": 3.79,
+            "Speed + Defense": 3.69,
+            "Speed + Tenacity": 2.35,
+            "Speed + Potency": 1.74,
+            "Health": 1.64,
+            "Offense + Health": 0.92
+          },
+          "primary_pct": {
+            "Arrow": {
+              "Speed": 95.69,
+              "Health": 3.19,
+              "Protection": 0.55,
+              "Offense": 0.41
+            },
+            "Triangle": {
+              "Health": 53.19,
+              "Protection": 18.75,
+              "Offense": 11.38,
+              "Critical Damage": 11.25
+            },
+            "Circle": {
+              "Health": 67.77,
+              "Protection": 32.22
+            },
+            "Cross": {
+              "Health": 56.8,
+              "Protection": 21.8,
+              "Offense": 14.72,
+              "Defense": 2.22
+            }
+          },
+          "secondary_focus_top4": {
+            "Speed": {
+              "average": 23.4,
+              "focus_pct": 21.01
+            },
+            "Health": {
+              "average": 851.2,
+              "focus_pct": 8.18
+            },
+            "Protection": {
+              "average": 1472.3,
+              "focus_pct": 7.73
+            },
+            "Protection %": {
+              "average": 5.37,
+              "focus_pct": 7.6
+            }
+          },
+          "average_stats": {
+            "relic": 8.26,
+            "health": 83612,
+            "protection": 43307,
+            "speed": 327,
+            "potency": 48,
+            "tenacity": 55.32
+          }
         },
         {
           "name": "Top 100 Guilds",
-          "url": "https://swgoh.gg/units/jedi-knight-revan/best-mods/?s=GUILDTOP100"
+          "url": "https://swgoh.gg/units/jedi-knight-revan/best-mods/?s=GUILDTOP100",
+          "units_fully_modded": 4966,
+          "updated_label": "4h ago at read time",
+          "set_combinations_pct": {
+            "Speed + Health": 64.53,
+            "Speed + Crit Chance": 6.94,
+            "Offense + Crit Chance": 5.85,
+            "Speed": 5.53,
+            "Speed + Tenacity": 2.45,
+            "Speed + Potency": 2.23,
+            "Health": 1.93,
+            "Speed + Defense": 1.77,
+            "Offense + Health": 1.38
+          },
+          "primary_pct": {
+            "Arrow": {
+              "Speed": 97.5,
+              "Health": 1.59,
+              "Offense": 0.37,
+              "Protection": 0.28
+            },
+            "Triangle": {
+              "Health": 45.14,
+              "Critical Damage": 19.18,
+              "Offense": 14.63,
+              "Protection": 10.95
+            },
+            "Circle": {
+              "Health": 67.08,
+              "Protection": 32.91
+            },
+            "Cross": {
+              "Health": 50.23,
+              "Offense": 19.87,
+              "Protection": 17.16,
+              "Defense": 4.77
+            }
+          },
+          "secondary_focus_top4": {
+            "Speed": {
+              "average": 21.7,
+              "focus_pct": 20.91
+            },
+            "Health": {
+              "average": 880.6,
+              "focus_pct": 8.12
+            },
+            "Offense": {
+              "average": 85.4,
+              "focus_pct": 7.94
+            },
+            "Protection": {
+              "average": 1495.4,
+              "focus_pct": 7.91
+            }
+          },
+          "average_stats": {
+            "relic": 7.69,
+            "health": 78551,
+            "protection": 40903,
+            "speed": 318,
+            "potency": 49.47,
+            "tenacity": 56.99
+          }
         }
       ],
-      "note": "Oba źródła są dostępne do bezpośredniego odczytu. Profil nie został jeszcze zbudowany i zapisany jako kompletne dane optymalizatora."
+      "missing": [
+        "Pełne 12 statystyk drugorzędnych — strona Best Mods pokazuje domyślnie tylko 4; pozostałe wymagają rozwinięcia kontrolki Show all 12 stats, której tekstowy odczyt nie udostępnia."
+      ],
+      "note": "Odczytano oba slice'y i komplet widocznych zestawów oraz statystyk głównych. Nie zbudowano profilu optymalizatora, ponieważ dane drugorzędne są niekompletne."
     }
   }
 }
