@@ -390,7 +390,8 @@ def score_profile(row, profile):
     set_name = row.get("set", "")
     set_fit = float(profile.get("set_preferences", {}).get(set_name, 0.0)) * 100.0
 
-    fit_score = 0.20 * primary_fit + 0.15 * set_fit + 0.65 * secondary_fit
+    # Set preference is evaluated once at complete-build level, not per mod.
+    fit_score = 0.20 * primary_fit + 0.80 * secondary_fit
     return {
         "fitScore": round(fit_score, 1),
         "primaryFit": round(primary_fit, 1),
@@ -977,178 +978,205 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
     return {"safe":safe,"plans":plans,"validation":validation,"failed":failed}
 
 
+
 def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, names=None, protected_owners=None):
-    """Global virtual optimizer: all mature mods are treated as available.
-    Optimizes the complete six-slot build, including set bonuses, then leaves
-    physical ownership/chain execution to apply_replacements().
-    """
+    """Independently implemented full-build optimizer inspired by Grandivory."""
     profiles = profiles or {}
     aliases = aliases or {}
     names = names or {}
     protected_owners = set(protected_owners or set())
     slots = ("Square", "Diamond", "Circle", "Arrow", "Triangle", "Cross")
-    SET_REFERENCE_BASE_SPEED = 150.0
-    SET_BONUS_MAX_SECONDARY = {
-        "Critical Chance %": 2.25,
-        "Defense %": 1.70,
-        "Health %": 1.125,
-        "Offense %": 0.563,
-        "Potency %": 2.25,
-        "Tenacity %": 2.25,
-        "Critical Damage %": 36.0,
+    primary_points, secondary_points, max_rolls = 20.0, 80.0, 24.0
+    speed_reference = 150.0
+    set_max_roll = {
+        "Critical Chance %": 2.25, "Critical Damage %": 36.0,
+        "Defense %": 1.70, "Health %": 1.125, "Offense %": 0.563,
+        "Potency %": 2.25, "Speed": 6.0, "Tenacity %": 2.25,
     }
 
-    def rid(r):
-        return str(r.get("id", "") or "")
+    def rid(row):
+        return str(row.get("id", "") or "")
 
-    def score(r, who):
-        profile = profiles.get(who)
-        if profile:
-            return float(score_profile(r, profile)["fitScore"])
-        return float(r.get("modValue", 0) or 0)
+    def base(row):
+        owner_id = str(row.get("assignedTo", "") or "")
+        return aliases.get(owner_id, owner_id)
 
-    def set_bonus_score(mods):
-        # Value complete sets as set completions, using the character profile
-        # preference. This keeps the optimizer focused on set identity rather
-        # than raw-unit conversion (e.g. Speed percentage into speed points).
+    def mod_score(row, profile):
+        slot = str(row.get("slot", "") or "")
+        primary = str(row.get("primaryStat", "") or "")
+        primary_fit = max(0.0, min(1.0, float(
+            profile.get("primary_preferences", {}).get(slot, {}).get(primary, 0.0)
+        )))
+        weighted_rolls = 0.0
+        for index in range(1, 5):
+            stat_data = rolls(row, index)
+            if stat_data is None:
+                continue
+            stat, value, count, values = stat_data
+            if count <= 0:
+                continue
+            q = quality(stat, value, count, values, integer(row.get("dots")))
+            pref = max(0.0, float(profile.get("secondary_preferences", {}).get(stat, 0.0)))
+            weighted_rolls += q * pref * count
+        return (
+            primary_fit * primary_points / len(slots)
+            + weighted_rolls * secondary_points / max_rolls
+        )
+
+    def set_bonus_score(mods, profile):
         grouped = {}
         for mod in mods:
-            set_name = str(mod.get("set", "") or "")
-            if set_name in SET_RULES:
-                grouped.setdefault(set_name, []).append(mod)
+            name = str(mod.get("set", "") or "")
+            if name in SET_RULES:
+                grouped.setdefault(name, []).append(mod)
 
-        total = 0.0
-        for set_name, members in grouped.items():
-            _, required, minimum, maximum = SET_RULES[set_name]
-            complete_groups = len(members) // required
-            preference = float(profile.get("set_preferences", {}).get(set_name, 0.0))
-            for group_index in range(complete_groups):
-                group = members[group_index * required:(group_index + 1) * required]
-                level_factor = 1.0 if all(integer(m.get("level")) >= 15 for m in group) else 0.5
-                total += 20.0 * preference * level_factor
-        return total
+        total, preference_tiebreak, breakdown = 0.0, 0.0, {}
+        secondary_prefs = profile.get("secondary_preferences", {})
+        for name, members in grouped.items():
+            stat, required, small_bonus, max_bonus = SET_RULES[name]
+            count = len(members)
+            max_count = sum(1 for m in members if integer(m.get("level")) >= 15)
+            full_groups = max_count // required
+            half_groups = (count - full_groups * required) // required
+            if not full_groups and not half_groups:
+                continue
 
-    target_ids = set(target_base_ids)
+            set_pref = max(0.0, float(profile.get("set_preferences", {}).get(name, 0.0)))
+            preference_tiebreak += (full_groups + half_groups) * set_pref
+            stat_pref = max(0.0, float(secondary_prefs.get(stat, 0.0)))
+            max_roll = R5.get(stat, (0.0, 0.0))[1] or set_max_roll.get(stat)
+            if not max_roll or not stat_pref:
+                continue
+
+            if stat == "Speed":
+                base_speed = number(profile.get("base_stats", {}).get("Speed", speed_reference), speed_reference)
+                full_units = max_bonus * base_speed / 100.0
+                half_units = small_bonus * base_speed / 100.0
+            else:
+                # The set and secondary are both expressed in percentage points.
+                full_units, half_units = max_bonus, small_bonus
+
+            equivalents = (full_groups * full_units + half_groups * half_units) / max_roll
+            points = equivalents * stat_pref * secondary_points / max_rolls
+            total += points
+            breakdown[name] = {
+                "fullGroups": full_groups, "halfGroups": half_groups,
+                "stat": stat, "equivalentRolls": equivalents, "score": points,
+            }
+        return total, preference_tiebreak, breakdown
+
+    def build_score(mods, profile):
+        base_score = sum(mod_score(m, profile) for m in mods)
+        set_score, set_pref, breakdown = set_bonus_score(mods, profile)
+        return {
+            "total": base_score + set_score, "base": base_score,
+            "setBonus": set_score, "setPreference": set_pref,
+            "setBreakdown": breakdown,
+        }
+
     results = {}
-
-    # One character at a time. If a target has a known profile, use it.
-    for target_id in target_ids:
+    for target_id in sorted(set(target_base_ids)):
         profile = profiles.get(target_id)
         if not profile:
             continue
 
-        # The same mod can only occupy one slot, so uniqueness across slots is
-        # automatic. Keep a bounded pool per (slot,set): set bonus is identical
-        # for all members of a set, therefore only the strongest candidates need
-        # to enter the global search.
+        current = [r for r in rows if is_true(r.get("equipped")) and base(r) == target_id]
+        current_by_slot = {str(r.get("slot", "")): r for r in current}
+        current_score = build_score(current, profile)
+
+        # For a fixed slot and set, only the highest-scoring candidate can win:
+        # every such candidate has the same set-bonus effect. This is an exact
+        # reduction, unlike the old arbitrary top-12/top-48 candidate limits.
         pools = {}
         for slot in slots:
-            candidates = [r for r in rows
-                          if str(r.get("slot", "")) == slot
-                          and integer(r.get("level")) >= 15
-                          and integer(r.get("dots")) >= 5
-                          and (not is_true(r.get("equipped")) or aliases.get(str(r.get("assignedTo", "") or ""), str(r.get("assignedTo", "") or "")) not in protected_owners)]
-            by_set = {}
-            for r in candidates:
-                by_set.setdefault(str(r.get("set", "")), []).append(r)
+            best_by_set = {}
+            for row in rows:
+                if str(row.get("slot", "")) != slot:
+                    continue
+                if integer(row.get("level")) < 15 or integer(row.get("dots")) < 5:
+                    continue
+                if is_true(row.get("equipped")) and base(row) in protected_owners:
+                    continue
+                name = str(row.get("set", "") or "")
+                unchanged = slot in current_by_slot and rid(current_by_slot[slot]) == rid(row)
+                key = (
+                    mod_score(row, profile), 1 if unchanged else 0,
+                    float(row.get("potentialCeiling", 0) or 0),
+                    float(row.get("modValue", 0) or 0),
+                )
+                if name not in best_by_set or key > best_by_set[name][0]:
+                    best_by_set[name] = (key, row, unchanged)
+            pools[slot] = [(v[1], v[2]) for v in best_by_set.values()]
 
-            selected = []
-            for set_name, members in by_set.items():
-                members.sort(key=lambda r: score(r, target_id), reverse=True)
-                selected.extend(members[:12])
-            selected.sort(key=lambda r: score(r, target_id), reverse=True)
-            pools[slot] = selected[:48]
+        if any(not pools[slot] for slot in slots):
+            continue
 
-        # DP state: (counts of each set, number of chosen slots) -> best path.
-        # Counts are capped at the set's required size because additional
-        # incomplete members do not change the set bonus.
+        # Exact DP over set counts. Two-piece sets may complete three groups;
+        # four-piece sets may complete one. No beam truncation is used.
         set_names = tuple(SET_RULES.keys())
-        requirements = {name: SET_RULES[name][1] for name in set_names}
-        initial = (0,) * len(set_names)
-        states = {initial: (0.0, [])}
-
+        caps = {
+            name: SET_RULES[name][1] * (len(slots) // SET_RULES[name][1])
+            for name in set_names
+        }
+        states = {(0,) * len(set_names): (0.0, 0, [])}
         for slot in slots:
             next_states = {}
-            for counts, (base_score, chosen) in states.items():
-                for mod in pools[slot]:
-                    set_name = str(mod.get("set", "") or "")
-                    idx = set_names.index(set_name) if set_name in requirements else None
+            for counts, (score_so_far, unchanged_so_far, chosen) in states.items():
+                for row, unchanged in pools[slot]:
+                    name = str(row.get("set", "") or "")
                     new_counts = list(counts)
-                    if idx is not None:
-                        new_counts[idx] = min(requirements[set_name], new_counts[idx] + 1)
+                    if name in caps:
+                        index = set_names.index(name)
+                        new_counts[index] = min(caps[name], new_counts[index] + 1)
                     new_counts = tuple(new_counts)
-
-                    new_score = base_score + score(mod, target_id)
-                    candidate = (new_score, chosen + [mod])
-
-                    # For identical capped set-count state at this point,
-                    # retain the higher raw profile score. Set bonuses are
-                    # applied after all six slots have been selected.
+                    candidate = (
+                        score_so_far + mod_score(row, profile),
+                        unchanged_so_far + (1 if unchanged else 0),
+                        chosen + [row],
+                    )
                     old = next_states.get(new_counts)
-                    if old is None or candidate[0] > old[0]:
+                    if old is None or candidate[0] > old[0] + 1e-9 or (
+                        abs(candidate[0] - old[0]) <= 1e-9 and candidate[1] > old[1]
+                    ):
                         next_states[new_counts] = candidate
             states = next_states
-            # Beam limit keeps the global six-slot search bounded. Set-count
-            # state is retained, and within that state only the strongest
-            # profile-score path is needed.
-            if len(states) > 2000:
-                ranked_states = sorted(
-                    states.items(),
-                    key=lambda item: item[1][0],
-                    reverse=True
-                )[:2000]
-                states = dict(ranked_states)
 
         best = None
-        for counts, (base_score, chosen) in states.items():
-            total_score = base_score + set_bonus_score(chosen)
-            if best is None or total_score > best["totalScore"]:
+        for _counts, (base_score, unchanged_count, chosen) in states.items():
+            set_score, set_pref, breakdown = set_bonus_score(chosen, profile)
+            total = base_score + set_score
+            key = (total, unchanged_count, set_pref)
+            if best is None or key > best["key"]:
                 best = {
-                    "totalScore": total_score,
-                    "baseScore": base_score,
-                    "setBonusScore": total_score - base_score,
+                    "key": key, "totalScore": total, "baseScore": base_score,
+                    "setBonusScore": set_score, "setPreferenceScore": set_pref,
+                    "setBreakdown": breakdown, "unchangedCount": unchanged_count,
                     "mods": chosen,
                 }
-
         if not best:
             continue
 
-        # Current six-mod state for comparison.
-        current = []
-        for r in rows:
-            if not is_true(r.get("equipped")):
-                continue
-            owner = str(r.get("assignedTo", "") or "")
-            if aliases.get(owner, owner) == target_id:
-                current.append(r)
-        current_by_slot = {str(r.get("slot", "")): r for r in current}
-        current_score = sum(score(current_by_slot[s], target_id) for s in slots
-                            if s in current_by_slot)
-        current_set_score = set_bonus_score(current)
-        current_total = current_score + current_set_score
-
-        # Build readable target-optimized recommendation rows.
         for mod in best["mods"]:
             mod["optimizerTarget"] = target_id
-            mod["optimizerScore"] = round(score(mod, target_id), 1)
-            mod["optimizerTotalScore"] = round(best["totalScore"], 1)
-            mod["optimizerBaseScore"] = round(best["baseScore"], 1)
+            mod["optimizerScore"] = round(mod_score(mod, profile), 2)
+            mod["optimizerTotalScore"] = round(best["totalScore"], 2)
+            mod["optimizerBaseScore"] = round(best["baseScore"], 2)
             mod["optimizerSetBonusScore"] = round(best["setBonusScore"], 2)
-            mod["optimizerCurrentScore"] = round(current_total, 1)
-            mod["optimizerGain"] = round(best["totalScore"] - current_total, 1)
+            mod["optimizerSetPreferenceScore"] = round(best["setPreferenceScore"], 3)
+            mod["optimizerCurrentScore"] = round(current_score["total"], 2)
+            mod["optimizerGain"] = round(best["totalScore"] - current_score["total"], 2)
             mod["optimizerSource"] = source_label(mod, aliases, names)
 
         results[target_id] = {
-            "mods": best["mods"],
-            "totalScore": best["totalScore"],
-            "baseScore": best["baseScore"],
-            "setBonusScore": best["setBonusScore"],
-            "currentScore": current_total,
-            "gain": best["totalScore"] - current_total,
+            "mods": best["mods"], "totalScore": best["totalScore"],
+            "baseScore": best["baseScore"], "setBonusScore": best["setBonusScore"],
+            "setPreferenceScore": best["setPreferenceScore"],
+            "setBreakdown": best["setBreakdown"], "unchangedCount": best["unchangedCount"],
+            "currentScore": current_score["total"], "currentBaseScore": current_score["base"],
+            "currentSetBonusScore": current_score["setBonus"],
+            "gain": best["totalScore"] - current_score["total"],
         }
-
     return results
-
 
 def main():
     if not os.path.exists(INPUT_FILE):
