@@ -925,7 +925,7 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                             ))
             if terminal_solutions:
                 # Lexicographic objective: shortest chain (BFS layer), then
-                # maximum total donor fit gain, completed-set delta, and
+                # maximum completed-set delta, total donor fit gain, and
                 # total equipped modValue delta. IDs break exact ties only.
                 terminal_solutions.sort(key=lambda solution: (
                     solution["set_delta"],
