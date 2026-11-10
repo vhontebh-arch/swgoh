@@ -5,6 +5,7 @@ on:
   push:
     paths:
       - "mod_analyzer.py"
+      - "update_mod_profiles.py"
       - "mod_profiles.json"
       - "generate_mods.py"
       - "targets.json"
@@ -1131,6 +1132,7 @@ jobs:
             mods.csv \
             mod_analysis.csv \
             mod_analysis.md \
+            mod_profiles.json \
             account_farming_report.md \
             ship_analysis.md \
             fleet_analysis.md
