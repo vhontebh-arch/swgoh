@@ -1,6 +1,8 @@
 import unittest
 
-from mod_analyzer import (apply_optimizer_replacements, rolls, quality,\n                          profile_primary_preference, profile_secondary_preference,\n                          profile_set_preferences)
+from mod_analyzer import (apply_optimizer_replacements, rolls, quality,
+                          profile_primary_preference, profile_secondary_preference,
+                          profile_set_preferences)
 
 
 TARGET = "target-instance"
