@@ -84,6 +84,20 @@ class TransferChainTests(unittest.TestCase):
         self.assertFalse(result["safe"])
         self.assertTrue(any("nie znajduje się w slocie Arrow" in reason for _, reason in result["failed"]))
 
+    def test_best_patch_is_selected_from_all_inventory_candidates(self):
+        selected = make_mod("selected-mod", DONOR, True, value=10)
+        weaker = make_mod("weaker-patch", value=12)
+        stronger = make_mod("stronger-patch", value=30)
+        result = run_plan(
+            [selected, weaker, stronger],
+            selected,
+            {TARGET: "TARGET", DONOR: "DONOR"},
+        )
+        self.assertTrue(result["safe"], result["failed"])
+        moves = result["plans"][0]["moves"]
+        self.assertEqual(len(moves), 1)
+        self.assertEqual(moves[0]["replacement"]["id"], "stronger-patch")
+
     def test_inventory_patch_is_currently_preferred_to_another_donor(self):
         selected = make_mod("selected-mod", DONOR, True, value=20)
         other_donor = make_mod("other-donor-mod", DONOR_B, True, value=12)
