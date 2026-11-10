@@ -98,6 +98,25 @@ class TransferChainTests(unittest.TestCase):
         self.assertEqual(len(moves), 1)
         self.assertEqual(moves[0]["replacement"]["id"], "stronger-patch")
 
+    def test_preserving_completed_set_outranks_higher_mod_value_patch(self):
+        selected = make_mod("selected-mod", DONOR, True, value=10, mod_set="Speed")
+        other_set_pieces = [
+            make_mod("donor-circle", DONOR, True, slot="Circle", value=10, mod_set="Speed"),
+            make_mod("donor-cross", DONOR, True, slot="Cross", value=10, mod_set="Speed"),
+            make_mod("donor-triangle", DONOR, True, slot="Triangle", value=10, mod_set="Speed"),
+        ]
+        higher_value = make_mod("higher-value-patch", value=30, mod_set="Critical Chance")
+        set_preserving = make_mod("set-preserving-patch", value=12, mod_set="Speed")
+        result = run_plan(
+            [selected, *other_set_pieces, higher_value, set_preserving],
+            selected,
+            {TARGET: "TARGET", DONOR: "DONOR"},
+        )
+        self.assertTrue(result["safe"], result["failed"])
+        move = result["plans"][0]["moves"][0]
+        self.assertEqual(move["replacement"]["id"], "set-preserving-patch")
+        self.assertEqual(move["set_delta"], 0)
+
     def test_inventory_patch_is_currently_preferred_to_another_donor(self):
         selected = make_mod("selected-mod", DONOR, True, value=20)
         other_donor = make_mod("other-donor-mod", DONOR_B, True, value=12)
