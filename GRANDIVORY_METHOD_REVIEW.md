@@ -3,7 +3,7 @@
 **Repozytorium źródłowe:** https://github.com/grandivory/mods-optimizer  
 **Przeanalizowany plik:** `public/workers/optimizer.js` (gałąź `develop`)  
 **Licencja repozytorium:** MIT (potwierdzona w metadanych GitHub).  
-**Status:** niezależna implementacja wybranych metod w `mod_analyzer.py`; bez kopiowania kodu źródłowego. Aktualny analizator: `2026-11-10-global-chain-balance-v4`.
+**Status:** niezależna implementacja wybranych metod w `mod_analyzer.py`; bez kopiowania kodu źródłowego. Aktualny analizator: `2026-11-10-profile-first-set-audit-v8`.
 
 ## Co robi Grandivory
 
@@ -87,7 +87,7 @@ To jest jawne przybliżenie, a nie pełna reprodukcja dokładnego przeliczenia s
 - Dokładnego przeliczenia primary dla poziomów poniżej 15. Primary pozostaje na wartości z eksportu, ponieważ wejściowe dane nie zawierają tabeli przyrostu primary na każdym poziomie.
 - Projekcji 5A→6E dla modów innych niż 5A na poziomie 15; nie zakładamy, że można pominąć wcześniejsze etapy slice.
 - Pełnej globalnej optymalizacji wielu celów jednocześnie.
-- Globalnego optimum po wszystkich możliwych długościach łańcucha. Wersja v7 porównuje wszystkie wykonalne warianty na najkrótszym poziomie BFS; wybiera najpierw najlepszą zmianę liczby pełnych setów, następnie łączny fit dawców i sumę `modValue`. Dłuższe łańcuchy są rozważane tylko wtedy, gdy na krótszym poziomie nie ma żadnego wykonalnego zakończenia. To świadomy priorytet prostoty transferu, a nie dowód globalnego optimum po wszystkich długościach.
+- Globalnego optimum po wszystkich możliwych długościach łańcucha. Wersja v8 porównuje wszystkie wykonalne warianty na najkrótszym poziomie BFS; wybiera najpierw najlepszy łączny fit profilu dawców, następnie zmianę liczby pełnych setów i sumę `modValue`. Dłuższe łańcuchy są rozważane tylko wtedy, gdy na krótszym poziomie nie ma żadnego wykonalnego zakończenia. To świadomy priorytet prostoty transferu, a nie dowód globalnego optimum po wszystkich długościach.
 - Automatycznego chronienia wszystkich dawców; bilans pozostaje jawny, a decyzja o akceptacji transferu należy do użytkownika.
 
 Te ograniczenia są celowe i widoczne: nie udajemy, że samo przeniesienie metody doboru buildów rozwiązuje problemy łańcuchów i bilansu całego rosteru.
@@ -98,3 +98,14 @@ Te ograniczenia są celowe i widoczne: nie udajemy, że samo przeniesienie metod
 - Popularność konfiguracji jest wskazówką profilu, a nie automatycznym nakazem.
 - Wybór sześciu modów jest oceniany jako komplet.
 - Nowa implementacja znajduje się wyłącznie na `optimizer-v2`; gałęzie bazowej i `main` nie zmieniano.
+
+
+## Priorytet profilu i audyt przebudowy setów — v8
+
+- Kompletny build celu jest oceniany przede wszystkim według profilu postaci: primary, secondary oraz bonusów setów ważonych preferencjami setów z profilu SWGOH.GG.
+- Waga bonusu setu wynosi od 10% do 100% jego wartości statystycznej: set nieobecny w profilu nie jest zakazany, ale set z preferencją 100% ma pełną wagę. Zachowanie aktualnie założonych modów jest dopiero tie-breakiem po wyniku buildu i preferencji setów.
+- W łańcuchu transferów fit dawcy ma pierwszeństwo przed zachowaniem jego dotychczasowych pełnych setów. Sety nie są twardą blokadą; ich zmiana musi być jednak jawna.
+- Walidacja zapisuje dla każdej dotkniętej postaci liczbę modów każdego setu oraz liczbę pełnych grup przed i po operacji. Raport wyświetla każdą zmianę jako: `ROZBITO` (ubyła pełna grupa), `BUDOWANY` (przybył mod do niepełnego setu), `UKOŃCZONO` (powstała pełna grupa) lub `OSŁABIONY` (zmiana liczebności bez tych dwóch zdarzeń).
+- Raport obejmuje cel, źródło moda i każdego dawcę PATCH w łańcuchu. Nie ogranicza się do postaci docelowej.
+- Profil SWGOH.GG opisuje popularność/priorytety buildów w wybranej populacji, a nie bezwzględny wymóg. Nadal jest to miękki model preferencji, nie nakaz kopiowania jednego szablonu.
+- Ograniczenie danych pozostaje istotne: w aktualnym pliku `mod_profiles.json` może brakować profili wielu postaci. Dla dawcy bez profilu algorytm nie potrafi ocenić jego rzeczywistego dopasowania; stosuje jawny fallback `modValue`. Raport musi ten brak ujawniać, a nie sugerować, że fit dawcy został oceniony profilowo.
