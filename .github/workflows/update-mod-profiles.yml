@@ -2,15 +2,11 @@ name: Refresh SWGOH mod profiles
 
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - "update_mod_profiles.py"
-      - ".github/workflows/update-mod-profiles.yml"
-      - ".github/workflows/update-trigger.txt"
-  schedule:
-    # 05:15 UTC = 07:15 CEST / 06:15 CET.
-    # Kept separate from the main 06:00 UTC account-data workflow.
-    - cron: "15 5 * * *"
+    inputs:
+      base_ids:
+        description: "Opcjonalna lista baseId oddzielona przecinkami; puste = wszystkie zapisane profile"
+        required: false
+        type: string
 
 permissions:
   contents: write
@@ -34,7 +30,7 @@ jobs:
           set -e
           cp mod_profiles.json mod_profiles.previous.json
 
-          python update_mod_profiles.py
+          python update_mod_profiles.py --units "${{ inputs.base_ids }}"
 
           test -s mod_profiles.json
           python -m json.tool mod_profiles.json >/dev/null
