@@ -12,7 +12,7 @@ INPUT_FILE = "mods.csv"
 OUTPUT_CSV = "mod_analysis.csv"
 OUTPUT_MD = "mod_analysis.md"
 PROFILE_FILE = "mod_profiles.json"
-ANALYZER_VERSION = "2026-11-10-global-chain-balance-v7"
+ANALYZER_VERSION = "2026-11-10-profile-first-set-audit-v8"
 
 R5 = {
     "Critical Chance %": (1.125, 2.25), "Defense": (4.9, 9.8),
@@ -924,12 +924,12 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                                 new_moves,False
                             ))
             if terminal_solutions:
-                # Lexicographic objective: shortest chain (BFS layer), then
-                # maximum completed-set delta, total donor fit gain, and
-                # total equipped modValue delta. IDs break exact ties only.
+                # Lexicographic objective: shortest executable chain (BFS layer),
+                # then donor profile-fit gain, set transition, and modValue.
+                # Existing sets are not protected at the expense of profile fit.
                 terminal_solutions.sort(key=lambda solution: (
-                    solution["set_delta"],
                     solution["gain"],
+                    solution["set_delta"],
                     solution["mod_value_delta"],
                     tuple(rid(m["replacement"]) for m in solution["moves"])
                 ), reverse=True)
@@ -1064,8 +1064,33 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
         bg=set_groups(before); ag=set_groups(after)
         before_value=sum(float(r.get("modValue",0) or 0) for r in before)
         after_value=sum(float(r.get("modValue",0) or 0) for r in after)
+        before_counts=set_counts(before)
+        after_counts=set_counts(after)
+        set_changes=[]
+        for set_name in SET_RULES:
+            required=SET_RULES[set_name][1]
+            before_count=before_counts.get(set_name,0)
+            after_count=after_counts.get(set_name,0)
+            before_full=bg.get(set_name,0)
+            after_full=ag.get(set_name,0)
+            if before_count != after_count or before_full != after_full:
+                if after_full > before_full:
+                    status="UKOŃCZONO"
+                elif before_full > after_full:
+                    status="ROZBITO"
+                elif after_count > before_count:
+                    status="BUDOWANY"
+                else:
+                    status="OSŁABIONY"
+                set_changes.append({
+                    "set":set_name,"status":status,
+                    "beforeCount":before_count,"afterCount":after_count,
+                    "required":required,"beforeFull":before_full,"afterFull":after_full
+                })
         validation.append({
             "owner":o,"name":pname(o),"before":bc,"after":ac,
+            "beforeCounts":before_counts,"afterCounts":after_counts,
+            "setChanges":set_changes,
             "beforeGroups":bg,"afterGroups":ag,
             "beforeModValue":round(before_value,1),
             "afterModValue":round(after_value,1),
@@ -1314,9 +1339,10 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
                 full_units, half_units = max_bonus, small_bonus
 
             equivalents = (full_groups * full_units + half_groups * half_units) / max_roll
-            # Meta set prevalence is a soft prior, not a hard restriction:
-            # even an unlisted set retains 25% of its stat-derived value.
-            set_weight = 0.25 + 0.75 * min(1.0, set_pref)
+            # Profile alignment is the primary objective. A set absent from
+            # the profile retains only a small 10% floor; a fully preferred
+            # set receives full weight. Existing ownership is only a tie-break.
+            set_weight = 0.10 + 0.90 * min(1.0, set_pref)
             points = equivalents * stat_pref * set_weight * secondary_points / max_rolls
             total += points
             breakdown[name] = {
@@ -1412,7 +1438,9 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
             projected_chosen = [project_mod_for_build(m, profile) for m in chosen]
             set_score, set_pref, breakdown = set_bonus_score(projected_chosen, profile)
             total = base_score + set_score
-            key = (total, unchanged_count, set_pref)
+            # Profile set preference outranks preserving the current assignment.
+            # Keeping an existing mod is only the final tie-break.
+            key = (total, set_pref, unchanged_count)
             if best is None or key > best["key"]:
                 best = {
                     "key": key, "totalScore": total, "baseScore": base_score,
@@ -1552,7 +1580,7 @@ def main():
         "- PATCH: **{}**".format(counts.get("PATCH",0)),
         "- KEEP: **{}**".format(counts.get("KEEP",0)), "",
         "## Globalny optimizer 6-slotowy", "",
-        "Ocena kompletnego buildu: 40 pkt za statystyki główne, 60 pkt za maksymalnie 24 rolle secondary oraz wartość bonusów setów przeliczoną na równoważniki maksymalnych rolli i ważoną profilem setu. Preferencja setu jest miękką wskazówką (25–100%), nie blokadą; przy równym wyniku preferowane są mody pozostające już na celu.", "",
+        "Ocena kompletnego buildu: 40 pkt za statystyki główne, 60 pkt za maksymalnie 24 rolle secondary oraz bonusy setów ważone profilem postaci. Zgodność z profilem ma pierwszeństwo przed zachowaniem aktualnie założonych modów. Set nieobecny w profilu zachowuje 10% bazowej wagi bonusu; set z preferencją 100% otrzymuje pełną wagę. Zachowanie modów na celu jest dopiero końcowym tie-breakiem.", "",
         "Ranking kandydujących buildów używa oddzielnej projekcji: brakujące rolle do limitu aktualnego tieru są optymistycznie przypisywane do najwyżej preferowanej statystyki profilu; mod 5A na poziomie 15 jest dodatkowo przeliczany do 6E. To górna granica potencjału, nie prognoza RNG ani rzeczywiste statystyki moda. Primary pozostaje na wartości z eksportu, ponieważ nie mamy w danych tabeli jego przyrostu dla każdego poziomu. Raport pokazuje osobno wynik aktualny i wynik po projekcji.", "",
         "Bonus Speed Set używa bazowej szybkości 150, jeśli profil nie zawiera pola base_stats.Speed. Pozostałe bonusy procentowe są normalizowane względem maksymalnego rolla odpowiedniej statystyki.", "",
         "## Najważniejsi kandydaci", "",
@@ -1590,7 +1618,7 @@ def main():
     if chain_result.get("safe"):
         lines.append("**STATUS: OK — transfery są fizycznie wykonalne i nie dublują modów.**")
         lines.append("Bilans pokazuje sumę modValue wyposażonych modów oraz pełne sety przed i po transferze. modValue jest wskaźnikiem jakości samych modów, a nie indywidualnym wynikiem buildu dawcy. Utrata wartości lub setu u dawcy nie blokuje ruchu; to jawna informacja do ręcznej decyzji.")
-        lines.append("Wariant łańcucha wybierany jest najpierw według zachowania lub poprawy pełnych setów, następnie łącznego fit dawców i sumy modValue. Porównywane są wszystkie warianty na najkrótszym wykonalnym poziomie; dłuższe łańcuchy nie są preferowane, jeśli istnieje krótsze rozwiązanie. Dla dawców bez własnego profilu fit korzysta z ogólnego modValue.")
+        lines.append("Wariant łańcucha wybierany jest na najkrótszym wykonalnym poziomie według fit profilu dawcy, następnie zmiany pełnych setów i sumy modValue. Istniejące sety nie są twardą ochroną. Każda zmiana liczby modów w secie i liczby pełnych grup jest wyszczególniona niżej dla każdej postaci w łańcuchu. Dla dawców bez własnego profilu fit korzysta z ogólnego modValue.")
     else:
         lines.append("**STATUS: BLOKADA — nie wygenerowano bezpiecznej listy ruchów.**")
         for target_id, reason in chain_result.get("failed", []):
@@ -1609,6 +1637,21 @@ def main():
             lines.append("| {} | {:.1f} | {:.1f} | {:+.1f} | {} | {} |".format(
                 item["name"], item["beforeModValue"], item["afterModValue"],
                 item["modValueDelta"], before_groups, after_groups))
+    lines += ["", "### Zmiany setów — każda postać w łańcuchu", "",
+              "ROZBITO oznacza utratę co najmniej jednej pełnej grupy. BUDOWANY oznacza zwiększenie liczby modów danego setu bez ukończenia kolejnej grupy. UKOŃCZONO oznacza powstanie dodatkowej pełnej grupy. OSŁABIONY oznacza zmianę liczebności bez ukończenia lub rozbicia pełnej grupy.", "",
+              "| Postać | Set | Zmiana liczby modów | Pełne sety | Status |",
+              "|---|---|---:|---:|---|"]
+    for item in chain_result.get("validation", []):
+        if item.get("owner") not in affected_owners:
+            continue
+        for change in item.get("setChanges", []):
+            lines.append("| {} | {} | {}/{} → {}/{} | {} → {} | {} |".format(
+                item["name"], change["set"],
+                change["beforeCount"], change["required"],
+                change["afterCount"], change["required"],
+                change["beforeFull"], change["afterFull"], change["status"]))
+    if not any(item.get("setChanges") for item in chain_result.get("validation", []) if item.get("owner") in affected_owners):
+        lines.append("| — | — | — | — | Bez zmian |")
     lines += ["", "### Ruchy — kolejność fizyczna", "",
               "**Ważne:** każdy mod jest przenoszony tylko raz. Najpierw właściwy mod z `Źródło` trafia **bezpośrednio** do celu. Dopiero potem wykonujemy PATCH-y. Ponieważ wyszukiwanie po postaci nie jest dostępne, każda operacja zawiera slot, set, primary, wszystkie dostępne secondary, liczbę gwiazdek, tier i poziom.", "",
               "| Krok | Typ | Operacja | Mod — parametry wyszukiwalne | Status |", "|---:|---|---|---|---|"]
