@@ -2,7 +2,7 @@ import unittest
 
 from mod_analyzer import (apply_optimizer_replacements, rolls, quality,
                           profile_primary_preference, profile_secondary_preference,
-                          profile_set_preferences)
+                          profile_set_preferences, render_user_report)
 
 
 TARGET = "target-instance"
@@ -91,6 +91,71 @@ class ProfileNormalizationTests(unittest.TestCase):
         self.assertAlmostEqual(prefs["Speed"], 0.2)
         self.assertAlmostEqual(prefs["Offense"], 0.1)
         self.assertAlmostEqual(prefs["Critical Chance"], 0.1)
+
+
+class UserReportTests(unittest.TestCase):
+    def test_report_is_actionable_and_marks_donor_set_loss_as_compromise(self):
+        current = {
+            "id": "current-square", "assignedTo": "target-instance", "equipped": True,
+            "slot": "Square", "set": "Health", "primaryStat": "Offense %",
+            "primaryValue": "8.5%", "dots": "6", "tierName": "C", "level": "15",
+            "secondary1Stat": "Speed", "secondary1Value": "11",
+        }
+        selected = {
+            "id": "selected-square", "assignedTo": "", "equipped": False,
+            "slot": "Square", "set": "Defense", "primaryStat": "Offense %",
+            "primaryValue": "5.88%", "dots": "5", "tierName": "A", "level": "15",
+            "secondary1Stat": "Speed", "secondary1Value": "5",
+        }
+        patch = {
+            "id": "patch-square", "assignedTo": "", "equipped": False,
+            "slot": "Square", "set": "Health", "primaryStat": "Offense %",
+            "primaryValue": "0.63%", "dots": "5", "tierName": "D", "level": "1",
+            "secondary1Stat": "Speed", "secondary1Value": "4",
+        }
+        aliases = {"target-instance": "VEL", "donor-instance": "DONOR"}
+        names = {"VEL": "Vel Sartha", "DONOR": "Dawca"}
+        def display_name(owner_id):
+            base = aliases.get(owner_id, owner_id)
+            return names.get(owner_id) or names.get(base) or base or "MAGAZYN"
+
+        report = render_user_report(
+            rows=[current],
+            optimizer={"VEL": {"mods": [selected], "gain": 5.1}},
+            chain_result={
+                "safe": True,
+                "plans": [{
+                    "target": "VEL", "target_owner": "target-instance",
+                    "mod": selected, "target_current": current,
+                    "moves": [{
+                        "owner": "donor-instance", "name": "Dawca",
+                        "replacement": patch, "removed": None, "gain": 1.0,
+                    }],
+                }],
+                "validation": [{
+                    "owner": "donor-instance", "name": "Dawca",
+                    "beforeModValue": 10.0, "afterModValue": 12.0,
+                    "modValueDelta": 2.0,
+                    "setChanges": [{
+                        "set": "Defense", "status": "ROZBITO",
+                        "beforeFull": 1, "afterFull": 0,
+                    }],
+                }],
+                "failed": [],
+            },
+            profiles={"VEL": {"source_model": {"sources": [
+                {"name": "Kyber", "units_fully_modded": 10},
+                {"name": "Top 100 Guilds", "units_fully_modded": 20},
+            ]}}},
+            aliases=aliases, names=names, target_ids={"VEL"},
+            profile_fetch_status={"VEL": "cached", "DONOR": "cached"},
+            display_name=display_name,
+        )
+        self.assertIn("KOMPROMIS", report)
+        self.assertIn("Kolejność przekładania", report)
+        self.assertIn("PATCH", report)
+        self.assertIn("Vel Sartha", report)
+        self.assertNotIn("UPGRADE:", report)
 
 
 class TransferChainTests(unittest.TestCase):

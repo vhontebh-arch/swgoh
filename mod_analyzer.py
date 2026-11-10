@@ -14,7 +14,7 @@ INPUT_FILE = "mods.csv"
 OUTPUT_CSV = "mod_analysis.csv"
 OUTPUT_MD = "mod_analysis.md"
 PROFILE_FILE = "mod_profiles.json"
-ANALYZER_VERSION = "2026-11-10-profile-first-set-audit-v12-user-report-owner-fix"
+ANALYZER_VERSION = "2026-11-10-profile-first-set-audit-v13-user-report-actual-donors"
 
 R5 = {
     "Critical Chance %": (1.125, 2.25), "Defense": (4.9, 9.8),
@@ -1749,9 +1749,22 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
             lines.append("- Nie wykryto strat u dawców.")
         lines.append("")
 
-    if profile_fetch_status:
+    used_profile_ids = set(target_ids)
+    for plan in chain_result.get("plans", []):
+        selected_mod = plan.get("mod", {})
+        if is_true(selected_mod.get("equipped")):
+            selected_owner = str(selected_mod.get("assignedTo", "") or "")
+            if selected_owner:
+                used_profile_ids.add(aliases.get(selected_owner, selected_owner))
+        for move in plan.get("moves", []):
+            replacement = move.get("replacement", {})
+            if is_true(replacement.get("equipped")):
+                donor_owner = str(replacement.get("assignedTo", "") or "")
+                if donor_owner:
+                    used_profile_ids.add(aliases.get(donor_owner, donor_owner))
+    if used_profile_ids:
         lines += ["## Kontrola profili użytych w łańcuchu", ""]
-        for base_id in sorted(profile_fetch_status):
+        for base_id in sorted(used_profile_ids):
             if base_id in profiles:
                 source_count = len(profiles[base_id].get("source_model", {}).get("sources", []))
                 lines.append("- {}: profil dostępny, {} źródła.".format(
@@ -1759,7 +1772,7 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
                 ))
             else:
                 lines.append("- {}: brak profilu ({}).".format(
-                    display_name(base_id), profile_fetch_status[base_id]
+                    display_name(base_id), profile_fetch_status.get(base_id, "unavailable")
                 ))
         lines.append("")
 
@@ -1878,8 +1891,13 @@ def main():
 
     # Every selected equipped source and every equipped PATCH source must have
     # a verified cached profile. Inventory mods have no donor owner.
-    required_profile_units = set(target_ids) | set(selected_donor_ids)
+    required_profile_units = set(target_ids)
     for plan in chain_result.get("plans", []):
+        selected_mod = plan.get("mod", {})
+        if is_true(selected_mod.get("equipped")):
+            selected_owner = str(selected_mod.get("assignedTo", "") or "")
+            if selected_owner:
+                required_profile_units.add(aliases.get(selected_owner, selected_owner))
         for move in plan.get("moves", []):
             patch_mod = move.get("replacement", {})
             if is_true(patch_mod.get("equipped")):
