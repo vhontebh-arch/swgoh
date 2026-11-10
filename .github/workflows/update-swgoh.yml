@@ -1133,6 +1133,7 @@ jobs:
             mod_analysis.csv \
             mod_analysis.md \
             mod_profiles.json \
+            mod_profiles.json \
             account_farming_report.md \
             ship_analysis.md \
             fleet_analysis.md
