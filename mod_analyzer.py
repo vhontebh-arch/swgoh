@@ -121,6 +121,28 @@ def profile_primary_preference(profile, slot, stat):
     return 0.0
 
 
+def profile_set_combo_support(profile, set_name):
+    """Percentage of observed builds whose set combination contains set_name."""
+    combinations = profile.get("set_combinations", {}) or {}
+    total = 0.0
+    aliases = {"Crit Damage": "Critical Damage", "Crit Chance": "Critical Chance"}
+    for combination, frequency in combinations.items():
+        names = []
+        for token in str(combination).split("+"):
+            name = token.strip()
+            for prefix in ("Double ", "Triple "):
+                if name.startswith(prefix):
+                    name = name[len(prefix):].strip()
+                    break
+            names.append(aliases.get(name, name))
+        if set_name in names:
+            try:
+                total += float(frequency or 0.0)
+            except (TypeError, ValueError):
+                pass
+    return min(100.0, total)
+
+
 def profile_set_preferences(profile):
     """Derive base-set preferences from averaged set-combination frequencies."""
     combinations = profile.get("set_combinations", {}) or {}
@@ -1574,12 +1596,35 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
         }:
             donor_costs.append(item)
 
-    donor_compromise = any(
-        float(item.get("modValueDelta", 0.0) or 0.0) < -0.05
-        or any(change.get("status") in ("ROZBITO", "OSŁABIONY")
-               for change in item.get("setChanges", []))
-        for item in donor_costs
-    )
+    # A broken set is material only when it is a meaningful part of that
+    # donor's observed SWGOH.GG build profile. 20% is the explicit threshold
+    # for a common build pattern; below it the change remains informational.
+    donor_assessments = {}
+    donor_compromise = False
+    for item in donor_costs:
+        owner = str(item.get("owner", "") or "")
+        base_id = aliases.get(owner, owner)
+        profile = profiles.get(base_id, {})
+        material_set_losses = []
+        minor_set_changes = []
+        for change in item.get("setChanges", []):
+            if change.get("status") not in ("ROZBITO", "OSŁABIONY"):
+                continue
+            set_name = str(change.get("set", "") or "")
+            support = profile_set_combo_support(profile, set_name) if profile else None
+            if support is None or support >= 20.0:
+                material_set_losses.append((set_name, support))
+            else:
+                minor_set_changes.append((set_name, support))
+        value_delta = float(item.get("modValueDelta", 0.0) or 0.0)
+        material = value_delta < -0.05 or bool(material_set_losses)
+        donor_assessments[owner] = {
+            "material": material,
+            "value_delta": value_delta,
+            "material_set_losses": material_set_losses,
+            "minor_set_changes": minor_set_changes,
+        }
+        donor_compromise = donor_compromise or material
     donor_compromise = donor_compromise or any(
         float(move.get("gain", 0.0) or 0.0) < -0.05
         for plan in chain_result.get("plans", [])
@@ -1735,6 +1780,7 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
                     float(item.get("afterModValue", 0.0) or 0.0),
                     float(item.get("modValueDelta", 0.0) or 0.0),
                 ))
+                assessment_detail = donor_assessments.get(str(item.get("owner", "") or ""), {})
                 for change in item.get("setChanges", []):
                     lines.append("  - {}: {} pełnych setów ({} → {}).".format(
                         change.get("set", "set"),
@@ -1742,6 +1788,17 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
                         change.get("beforeFull", 0),
                         change.get("afterFull", 0),
                     ))
+                    if change.get("status") in ("ROZBITO", "OSŁABIONY"):
+                        set_name = str(change.get("set", "") or "")
+                        minor = next((x for x in assessment_detail.get("minor_set_changes", []) if x[0] == set_name), None)
+                        major = next((x for x in assessment_detail.get("material_set_losses", []) if x[0] == set_name), None)
+                        if major:
+                            support = "brak profilu" if major[1] is None else "{:.1f}% kombinacji".format(major[1])
+                            lines.append("    - ISTOTNA STRATA: set występuje w {} profilu SWGOH.GG.".format(support))
+                        elif minor:
+                            lines.append("    - ZMIANA NIEISTOTNA WG PROFILU: set występuje w {:.1f}% kombinacji SWGOH.GG.".format(minor[1]))
+                if assessment_detail.get("value_delta", 0.0) < -0.05:
+                    lines.append("  - ISTOTNY SPADEK wartości modów u dawcy.")
         else:
             lines.append("- Nie wykryto strat u dawców.")
         lines.append("")
