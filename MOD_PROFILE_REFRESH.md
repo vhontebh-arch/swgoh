@@ -24,6 +24,19 @@
 8. ChatGPT aktualizuje `mod_profiles.json` bezpośrednio na branchu `optimizer-v2`, zachowując pozostałe profile bez zmian.
 9. Po zapisie ponownie odczytuje plik z GitHuba i sprawdza JSON, BASE_ID, źródła, timestamp oraz niezmienność pozostałych profili.
 
+## Dokładny algorytm profilu pochodnego
+
+Obowiązuje algorytm odtworzony z wcześniejszej implementacji `build_profile()` i zweryfikowany na istniejącym profilu `JARJARBINKS`. Nie należy zastępować go nową heurystyką.
+
+1. **Agregacja źródeł:** dla każdej wartości liczbowej w kombinacjach setów, primary stats i Secondary Stat Focus liczymy średnią równoważoną 50/50: `(Kyber + Top 100 Guilds) / 2`. Jeśli klucz nie występuje w jednym ze źródeł, jego wkład w tym źródle wynosi 0. Dla Secondary Stat Focus osobno uśredniamy `average` i `focus_pct`. Nie dopisujemy brakujących danych do surowych źródeł.
+2. **`set_combinations`:** mapa średnich częstości kombinacji z obu źródeł.
+3. **`set_preferences`:** sumujemy częstości wszystkich kombinacji zawierających dany set (np. Speed + Potency zwiększa wynik obu setów); następnie dzielimy każdy wynik przez najwyższy wynik pojedynczego setu. Maksimum = 1.
+4. **`primary_preferences`:** w obrębie każdego slotu (Arrow, Triangle, Circle, Cross) dzielimy średnią wartość każdego primary przez sumę średnich wartości wszystkich primary tego slotu. Suma preferencji slotu = 1.
+5. **`secondary_preferences`:** bierzemy uśrednione `focus_pct` z TOP 4 każdego źródła, dzielimy je przez najwyższe uśrednione `focus_pct`. Maksimum = 1. Pozostałe statystyki z ustalonego słownika statystyk otrzymują 0; nie oznacza to odczytanego zera na stronie, tylko brak wartości w wymaganym zakresie TOP 4.
+6. **Precyzja:** wartości pochodne zaokrąglamy do 4 miejsc po przecinku. Kolejność surowych pozycji TOP 4 pozostaje bez zmian; sortowanie map pochodnych nie jest kryterium preferencji.
+
+Weryfikacja algorytmu na `JARJARBINKS` odtworzyła wszystkie zapisane wartości pochodne (różnice dotyczyły wyłącznie kolejności kluczy JSON). Wagi scoringowe analizatora (obecnie 20% primary / 80% secondary) są osobną warstwą i nie zmieniają powyższego algorytmu agregacji źródeł.
+
 ## Statusy
 
 - `refreshed`: wymagane dane źródłowe odczytane, sparsowane, zweryfikowane i zapisane; commit potwierdzony odczytem zwrotnym.
