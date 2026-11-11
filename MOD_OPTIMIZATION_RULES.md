@@ -166,6 +166,8 @@ Raport nie może zostać wygenerowany jako gotowa rekomendacja, dopóki wszystki
 
 Raport ma być konkretny i operacyjny, zgodny z zaakceptowanym stylem raportów modów (np. Vel Sarthy i Cinta Kaz).
 
+**Kontrola blokująca formatu:** `mod_analysis.md` jest raportem dla użytkownika, nie zrzutem diagnostycznym. Generator musi wywołać wspólny renderer raportu użytkowego. Workflow musi odrzucić wynik, jeśli brakuje choć jednego z sześciu slotów z opisem moda obecnego i proponowanego, sekcji MOD/PATCH, dokładnej kolejności, kosztu u dawców lub statusu walidacji. Test regresyjny ma dodatkowo odrzucać dawny techniczny dashboard nawet wtedy, gdy zawiera build 6/6. Nie uznawać analizy za zakończoną, dopóki walidator raportu nie przejdzie.
+
 Wymagane sekcje:
 1. **Cel i profil docelowy** — zestawy, główne statystyki i priorytety.
 2. **MOD** — sześć modów docelowych, każdy opisany pełnym zestawem cech.
