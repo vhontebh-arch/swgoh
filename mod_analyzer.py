@@ -1370,8 +1370,9 @@ def project_mod_for_build(row, profile):
     - do not assume which secondary receives a future roll: use the mean profile
       preference across new secondary additions and later improvements, using equal weights because no verified roll probabilities are available;
     - never project slicing or calibration into the build score.
-    Existing secondary values and dots remain unchanged. Primary is projected to
-    the verified level-15 maximum for its current dot tier; no slicing is assumed.
+    Existing secondary values, primary value and dots remain unchanged. Primary
+    is taken directly from the export because it depends on the current dot tier,
+    not on the assumed level-15 upgrade; no slicing is assumed.
     """
     projected = dict(row)
     dots = integer(row.get("dots"))
@@ -1416,14 +1417,11 @@ def project_mod_for_build(row, profile):
         expected_new_preference_sum
         + rolls_after_four_stats * expected_four_stat_mean
     )
-    primary_name = str(row.get("primaryStat", "") or "").replace("%", "").strip()
-    primary_max = PRIMARY_MAX_BY_DOTS.get(dots, {}).get(primary_name)
-    if primary_max is not None:
-        primary_suffix = "%" if "%" in str(row.get("primaryStat", "")) else ""
-        projected["primaryValue"] = "{}{}".format(primary_max, primary_suffix)
-        projected["projectionPrimaryProjected"] = True
-    else:
-        projected["projectionPrimaryProjected"] = False
+    # Primary is already determined by the mod's current dot tier in the
+    # export. Taking the mod to level 15 does not change its primary value.
+    # Keep the exact exported value; only secondary rolls are projected.
+    projected["projectionPrimaryProjected"] = False
+    projected["projectionPrimaryBasis"] = "wartość z eksportu; zależna od gwiazdek"
 
     projected["projectionExpectedRolls"] = missing_rolls
     projected["projectionExpectedSecondaryFit"] = expected_fit
@@ -1969,7 +1967,7 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
         "- Poziom 15 jest traktowany jako osiągalny bez ograniczenia materiałami.",
         "- Brakujące secondary są liczone jako wartość średnia rolla, a nie maksymalna; ich przyszły przydział do statystyk jest uśredniony według profilu zamiast przypisywany do najlepszego secondary.",
         "- Slice i calibration nie wpływają na ranking ani wynik buildu. Mogą pojawić się wyłącznie jako osobne sugestie inwestycyjne i można je pominąć.",
-        "- Primary jest projektowane do potwierdzonej wartości maksymalnej poziomu 15 dla obecnej liczby gwiazdek; nie zakładamy slice 5★ → 6★.",
+        "- Primary pozostaje dokładnie na wartości z eksportu; zależy od obecnej liczby gwiazdek, a podniesienie moda do poziomu 15 go nie zmienia. Nie zakładamy slice 5★ → 6★.",
         "",
         "## Jak czytać opisy modów",
         "",
