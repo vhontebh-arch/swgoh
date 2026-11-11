@@ -11,10 +11,11 @@ import os
 from update_mod_profiles import ensure_profiles
 
 INPUT_FILE = "mods.csv"
-OUTPUT_CSV = "mod_analysis.csv"
-OUTPUT_MD = "mod_analysis.md"
+OUTPUT_CSV = os.environ.get("SWGOH_OUTPUT_CSV", "mod_analysis.csv")
+OUTPUT_MD = os.environ.get("SWGOH_OUTPUT_MD", "mod_analysis.md")
 PROFILE_FILE = "mod_profiles.json"
-ANALYZER_VERSION = "2026-11-11-average-level15-primary-tier-audit-v18"
+SET_COMBO_MODE = os.environ.get("SWGOH_SET_COMBO_MODE", "base").strip().lower()
+ANALYZER_VERSION = "2026-11-11-exact-set-combo-audit-v19"
 
 R5 = {
     "Critical Chance %": (1.125, 2.25), "Defense": (4.9, 9.8),
@@ -159,6 +160,85 @@ def profile_set_combo_support(profile, set_name):
             except (TypeError, ValueError):
                 pass
     return min(100.0, total)
+
+def _normalize_set_name(name):
+    aliases = {"Crit Damage": "Critical Damage", "Crit Chance": "Critical Chance"}
+    value = str(name or "").strip()
+    return aliases.get(value, value)
+
+
+def _canonical_set_combo_from_counts(counts):
+    if sum(int(value) for value in counts.values()) != 6:
+        return None
+    tokens = []
+    for raw_name, raw_count in counts.items():
+        name = _normalize_set_name(raw_name)
+        rule = SET_RULES.get(name)
+        if not rule:
+            return None
+        required, count = int(rule[1]), int(raw_count)
+        if required <= 0 or count % required:
+            return None
+        groups = count // required
+        if groups not in (1, 2, 3):
+            return None
+        prefix = "" if groups == 1 else ("Double " if groups == 2 else "Triple ")
+        tokens.append((name, prefix + name))
+    return " + ".join(label for _name, label in sorted(tokens, key=lambda item: item[0]))
+
+
+def canonical_set_combo_from_mods(mods):
+    counts = {}
+    for mod in mods or []:
+        name = _normalize_set_name(mod.get("set", ""))
+        if not name or name not in SET_RULES:
+            return None
+        counts[name] = counts.get(name, 0) + 1
+    return _canonical_set_combo_from_counts(counts)
+
+
+def _canonical_set_combo_from_profile_label(label):
+    counts = {}
+    for raw_token in str(label or "").split("+"):
+        token = raw_token.strip()
+        groups = 1
+        for prefix, multiplier in (("Double ", 2), ("Triple ", 3)):
+            if token.startswith(prefix):
+                token = token[len(prefix):].strip()
+                groups = multiplier
+                break
+        name = _normalize_set_name(token)
+        rule = SET_RULES.get(name)
+        if not rule:
+            return None
+        counts[name] = counts.get(name, 0) + groups * int(rule[1])
+    return _canonical_set_combo_from_counts(counts)
+
+
+def profile_set_combo_match(profile, mods):
+    """Exact observed combo frequency, normalized to the most common combo."""
+    target_key = canonical_set_combo_from_mods(mods)
+    combinations = profile.get("set_combinations", {}) or {}
+    if not target_key or not isinstance(combinations, dict) or not combinations:
+        return None
+    frequencies = {}
+    for label, raw_frequency in combinations.items():
+        key = _canonical_set_combo_from_profile_label(label)
+        if not key:
+            continue
+        try:
+            frequency = max(0.0, float(raw_frequency or 0.0))
+        except (TypeError, ValueError):
+            continue
+        frequencies[key] = frequencies.get(key, 0.0) + frequency
+    if target_key not in frequencies:
+        return None
+    maximum = max(frequencies.values(), default=0.0)
+    if maximum <= 0:
+        return None
+    frequency = frequencies[target_key]
+    return {"key": target_key, "frequency": round(frequency, 4),
+            "preference": round(frequency / maximum, 6)}
 
 
 def profile_set_preferences(profile):
@@ -1435,12 +1515,16 @@ def project_mod_for_build(row, profile):
     return projected
 
 
-def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, names=None, protected_owners=None):
-    """Independently implemented full-build optimizer inspired by Grandivory."""
+def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, names=None,
+                          protected_owners=None, set_combo_mode="base"):
+    """Optimize a full build using base-set or exact observed-combo scoring."""
     profiles = profiles or {}
     aliases = aliases or {}
     names = names or {}
     protected_owners = set(protected_owners or set())
+    set_combo_mode = str(set_combo_mode or "base").strip().lower()
+    if set_combo_mode not in {"base", "exact"}:
+        raise ValueError("set_combo_mode musi być 'base' albo 'exact'")
     slots = ("Square", "Diamond", "Circle", "Arrow", "Triangle", "Cross")
     primary_points, secondary_points, max_rolls = 40.0, 60.0, 24.0
     speed_reference = 150.0
@@ -1498,6 +1582,9 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
 
         total, preference_tiebreak, breakdown = 0.0, 0.0, {}
         secondary_prefs = profile.get("secondary_preferences", {})
+        combo_match = profile_set_combo_match(profile, mods) if set_combo_mode == "exact" else None
+        if combo_match:
+            preference_tiebreak = 3.0 * combo_match["preference"]
         for name, members in grouped.items():
             stat, required, small_bonus, max_bonus = SET_RULES[name]
             count = len(members)
@@ -1508,7 +1595,8 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
                 continue
 
             set_pref = max(0.0, float(profile_set_preferences(profile).get(name, 0.0)))
-            preference_tiebreak += (full_groups + half_groups) * set_pref
+            if not combo_match:
+                preference_tiebreak += (full_groups + half_groups) * set_pref
             stat_pref = max(0.0, profile_secondary_preference(profile, stat))
             max_roll = R5.get(stat, (0.0, 0.0))[1] or set_max_roll.get(stat)
             if not max_roll or not stat_pref:
@@ -1526,7 +1614,10 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
             # Profile alignment is the primary objective. A set absent from
             # the profile retains only a small 10% floor; a fully preferred
             # set receives full weight. Existing ownership is only a tie-break.
-            set_weight = 0.10 + 0.90 * min(1.0, set_pref)
+            set_weight = (
+                0.10 + 0.90 * combo_match["preference"]
+                if combo_match else 0.10 + 0.90 * min(1.0, set_pref)
+            )
             points = equivalents * stat_pref * set_weight * secondary_points / max_rolls
             total += points
             breakdown[name] = {
@@ -1542,10 +1633,14 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
         ]
         base_score = sum(mod_score(m, profile) for m in scored_mods)
         set_score, set_pref, breakdown = set_bonus_score(scored_mods, profile)
+        combo_match = profile_set_combo_match(profile, scored_mods) if set_combo_mode == "exact" else None
         return {
             "total": base_score + set_score, "base": base_score,
             "setBonus": set_score, "setPreference": set_pref,
             "setBreakdown": breakdown,
+            "setComboKey": combo_match["key"] if combo_match else None,
+            "setComboFrequency": combo_match["frequency"] if combo_match else None,
+            "setComboPreference": combo_match["preference"] if combo_match else None,
         }
 
     results = {}
@@ -1626,10 +1721,14 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
             # Keeping an existing mod is only the final tie-break.
             key = (total, set_pref, unchanged_count)
             if best is None or key > best["key"]:
+                combo_match = profile_set_combo_match(profile, projected_chosen) if set_combo_mode == "exact" else None
                 best = {
                     "key": key, "totalScore": total, "baseScore": base_score,
                     "setBonusScore": set_score, "setPreferenceScore": set_pref,
                     "setBreakdown": breakdown, "unchangedCount": unchanged_count,
+                    "setComboKey": combo_match["key"] if combo_match else None,
+                    "setComboFrequency": combo_match["frequency"] if combo_match else None,
+                    "setComboPreference": combo_match["preference"] if combo_match else None,
                     "mods": chosen,
                 }
         if not best:
@@ -1649,6 +1748,9 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
             mod["optimizerBaseScore"] = round(best["baseScore"], 2)
             mod["optimizerSetBonusScore"] = round(best["setBonusScore"], 2)
             mod["optimizerSetPreferenceScore"] = round(best["setPreferenceScore"], 3)
+            mod["optimizerSetComboMode"] = set_combo_mode
+            mod["optimizerSetComboKey"] = best.get("setComboKey") or ""
+            mod["optimizerSetComboFrequency"] = best.get("setComboFrequency")
             mod["optimizerCurrentScore"] = round(current_score["total"], 2)
             mod["optimizerCurrentProjectedScore"] = round(current_projected_score["total"], 2)
             mod["optimizerGain"] = round(best["totalScore"] - current_projected_score["total"], 2)
@@ -1659,6 +1761,10 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
             "baseScore": best["baseScore"], "setBonusScore": best["setBonusScore"],
             "setPreferenceScore": best["setPreferenceScore"],
             "setBreakdown": best["setBreakdown"], "unchangedCount": best["unchangedCount"],
+            "setComboMode": set_combo_mode,
+            "setComboKey": best.get("setComboKey"),
+            "setComboFrequency": best.get("setComboFrequency"),
+            "setComboPreference": best.get("setComboPreference"),
             "currentScore": current_score["total"],
             "currentProjectedScore": current_projected_score["total"],
             "currentBaseScore": current_score["base"],
@@ -1789,6 +1895,13 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
             lines.append("- Najczęstsze kombinacje: {}".format(
                 "; ".join("{} ({:.1f}%)".format(k, float(v)) for k, v in top_combos)
             ))
+        if opt.get("setComboMode") == "exact":
+            if opt.get("setComboKey"):
+                lines.append("- **Dopasowanie dokładnej kombinacji:** {} — {:.2f}% profilu.".format(
+                    opt["setComboKey"], float(opt.get("setComboFrequency") or 0.0)
+                ))
+            else:
+                lines.append("- **Dokładna kombinacja nieobecna w profilu:** zastosowano dotychczasowy fallback preferencji pojedynczych setów.")
         secondary = profile.get("secondary_preferences", {}) or {}
         top_secondary = sorted(secondary.items(), key=lambda item: float(item[1] or 0), reverse=True)[:4]
         if top_secondary:
@@ -2026,7 +2139,10 @@ def main():
     def rid(row):
         return str(row.get("id", "") or "")
 
-    optimizer = optimize_target_build(rows, target_ids, profiles, aliases, names, protected_owners)
+    optimizer = optimize_target_build(
+        rows, target_ids, profiles, aliases, names, protected_owners,
+        set_combo_mode=SET_COMBO_MODE,
+    )
 
     # A selected mod's equipped owner is already a real donor candidate even
     # when the physical planner cannot yet construct a complete chain. Load
@@ -2081,7 +2197,10 @@ def main():
         for row in rows:
             fit = character_fit(row, targets, profiles, aliases)
             row.update(fit)
-        optimizer = optimize_target_build(rows, target_ids, profiles, aliases, names, protected_owners)
+        optimizer = optimize_target_build(
+        rows, target_ids, profiles, aliases, names, protected_owners,
+        set_combo_mode=SET_COMBO_MODE,
+    )
 
     # Every selected equipped source and every equipped PATCH source must have
     # a verified cached profile. Inventory mods have no donor owner.
