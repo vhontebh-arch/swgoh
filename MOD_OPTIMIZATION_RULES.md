@@ -184,6 +184,20 @@ Nie używać samych ID modów. Nie pomijać drugorzędnych statystyk. Nie opisyw
 - Nie pomijać żadnego PATCH potrzebnego do fizycznego zamknięcia łańcucha. Poziom oznacza odległość dawcy od głównej postaci, a nie kolejność slotów ani kolejność znalezienia moda.
 - Jeśli kilka niezależnych łańcuchów ma ten sam poziom, można zachować kolejność slotów głównej postaci, aby raport był łatwy do wykonania.
 
+### Obowiązkowa procedura w odpowiedzi dla użytkownika
+
+Po każdej zakończonej analizie pełna sekcja **„Kolejność przekładania”** musi być podana bezpośrednio w odpowiedzi ChatGPT. Nie wystarczy umieścić jej wyłącznie w pliku `mod_analysis.md`, podać linku ani opisać samego wyniku.
+
+Sekcja w odpowiedzi musi być wiernym, kompletnym odwzorowaniem końcowego planu:
+1. wszystkie mody dla głównej postaci, w kolejności slotów: Arrow, Square, Diamond, Triangle, Circle, Cross;
+2. wszystkie operacje PATCH dla dawców poziomu 1;
+3. wszystkie operacje PATCH dla dawców poziomu 2;
+4. kolejne poziomy aż do pełnego zamknięcia łańcucha.
+
+Każdy krok ma podawać postać, slot i pełną identyfikację moda (zestaw, gwiazdki, poziom/tier, statystyka główna i wszystkie drugorzędne). Wszystkie kroki danego poziomu należy zgrupować razem. Nie wolno pomijać żadnego zamiennika ani naprawy dawcy pośredniego. Nie wypisuje się osobnych czynności zdejmowania moda — założenie nowego moda automatycznie przenosi poprzedni do magazynu.
+
+Jeżeli plan nie przeszedł walidacji albo łańcuch jest niekompletny, nie przedstawiaj go jako wykonalnej procedury. Wskaż wyraźnie, które kroki są zablokowane lub czego brakuje.
+
 ## 10. Zmiany po stronie użytkownika i zatwierdzanie
 
 - Analiza jest propozycją, a nie zgodą na automatyczne przeniesienie modów.
