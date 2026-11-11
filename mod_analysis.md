@@ -5,14 +5,14 @@ Model rozdziela **jakość obecnych rolli**, **potencjał dalszego rozwoju**, **
 W raportach przeznaczonych do ręcznego wykonania mod identyfikowany jest wyłącznie przez slot, set, primary, secondary, gwiazdki, tier i poziom; wewnętrzne ID nie są pokazywane.
 
 - Modów: **2194**
-- Cel(e) optymalizacji: **JARJARBINKS** (źródło: targets.json)
+- Cel(e) optymalizacji: **50RT** (źródło: parametr --target)
 - UPGRADE: **30**
 - SLICE: **1156**
-- SLICE_6E: **238**
-- CALIBRATE: **103**
+- SLICE_6E: **239**
+- CALIBRATE: **104**
 - EQUIP: **0**
-- REPLACE: **1**
-- PATCH: **1**
+- REPLACE: **0**
+- PATCH: **0**
 - KEEP: **665**
 
 ## Profile SWGOH.GG — lokalna baza
@@ -21,8 +21,8 @@ Profile są przechowywane lokalnie i odświeżane tylko dla celu oraz dawców fa
 
 | Postać (baseId) | Status |
 |---|---|
-| JARJARBINKS | cached |
-| JEDIKNIGHTREVAN | cached |
+| 50RT | cached |
+| GLREY | unavailable |
 
 Dla dawców bez lokalnego profilu po próbie pobrania używany jest fallback modValue; nie jest to ocena dopasowania do indywidualnego profilu.
 
@@ -38,13 +38,6 @@ Bonus Speed Set używa bazowej szybkości 150, jeśli profil nie zawiera pola ba
 
 | Akcja | Mod | Źródło | Set | Tier | Lvl | Quality | Value | Fit | 6E proj. | Speed | Potencjał | Inwestycja |
 |---|---|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---|
-| REPLACE | Arrow Protection % 24% | POSTAĆ: JEDIKNIGHTREVAN | Speed | 6A | 15 | 100.0% | 68.2% | 43.5% | 0.0% | 80.0% | 68.2% | calibration |
-| PATCH | Arrow Health % 5.88% | MAGAZYN | Critical Chance | 5A | 15 | 100.0% | 87.2% | 0.0% | 51.2% | 83.3% | 87.2% | 6-dot |
-| CALIBRATE | Cross Health % 16% | POSTAĆ: JEDIKNIGHTREVAN | Health | 6A | 15 | 100.0% | 78.2% | 47.3% | 0.0% | 66.7% | 78.2% | calibration |
-| CALIBRATE | Triangle Health % 16% | POSTAĆ: JEDIKNIGHTREVAN | Speed | 6A | 15 | 100.0% | 58.0% | 34.4% | 0.0% | 79.2% | 58.0% | calibration |
-| CALIBRATE | Circle Health % 16% | POSTAĆ: JEDIKNIGHTREVAN | Health | 6A | 15 | 100.0% | 62.5% | 33.3% | 0.0% | 80.0% | 62.5% | calibration |
-| CALIBRATE | Diamond Defense % 20% | POSTAĆ: JEDIKNIGHTREVAN | Speed | 6A | 15 | 100.0% | 56.8% | 22.5% | 0.0% | 72.2% | 56.8% | calibration |
-| CALIBRATE | Square Offense % 8.5% | POSTAĆ: JEDIKNIGHTREVAN | Speed | 6A | 15 | 100.0% | 59.2% | 19.5% | 0.0% | 75.0% | 59.2% | calibration |
 | CALIBRATE | Triangle Critical Damage % 42% | POSTAĆ: BOOMADIER | Speed | 6A | 15 | 100.0% | 84.2% | 0.0% | 0.0% | 83.3% | 84.2% | calibration |
 | CALIBRATE | Circle Protection % 24% | POSTAĆ: GRANDADMIRALTHRAWN | Speed | 6A | 15 | 100.0% | 83.5% | 0.0% | 0.0% | 75.0% | 83.5% | calibration |
 | CALIBRATE | Circle Protection % 24% | POSTAĆ: VANGUARDTEMPLEGUARD | Speed | 6A | 15 | 100.0% | 82.3% | 0.0% | 0.0% | 75.0% | 82.3% | calibration |
@@ -56,6 +49,7 @@ Bonus Speed Set używa bazowej szybkości 150, jeśli profil nie zawiera pola ba
 | CALIBRATE | Diamond Defense % 20% | POSTAĆ: OPERATIVE | Speed | 6A | 15 | 100.0% | 78.5% | 0.0% | 0.0% | 79.2% | 78.5% | calibration |
 | CALIBRATE | Triangle Critical Damage % 42% | POSTAĆ: MARAJADE | Potency | 6A | 15 | 100.0% | 78.3% | 0.0% | 0.0% | 70.0% | 78.3% | calibration |
 | CALIBRATE | Circle Health % 16% | POSTAĆ: HERMITYODA | Speed | 6A | 15 | 100.0% | 78.3% | 0.0% | 0.0% | 91.7% | 78.3% | calibration |
+| CALIBRATE | Cross Health % 16% | POSTAĆ: JEDIKNIGHTREVAN | Health | 6A | 15 | 100.0% | 78.2% | 0.0% | 0.0% | 66.7% | 78.2% | calibration |
 | CALIBRATE | Triangle Protection % 24% | POSTAĆ: GRANDADMIRALTHRAWN | Health | 6A | 15 | 100.0% | 77.0% | 0.0% | 0.0% | 72.2% | 77.0% | calibration |
 | CALIBRATE | Square Offense % 8.5% | POSTAĆ: GLREY | Offense | 6A | 15 | 100.0% | 76.7% | 0.0% | 0.0% | 80.0% | 76.7% | calibration |
 | CALIBRATE | Circle Protection % 24% | POSTAĆ: COMMANDERLUKESKYWALKER | Offense | 6A | 15 | 100.0% | 76.0% | 0.0% | 0.0% | 80.0% | 76.0% | calibration |
@@ -84,6 +78,7 @@ Bonus Speed Set używa bazowej szybkości 150, jeśli profil nie zawiera pola ba
 | CALIBRATE | Circle Health % 16% | POSTAĆ: REYJEDITRAINING | Health | 6A | 15 | 100.0% | 68.3% | 0.0% | 0.0% | 100.0% | 68.3% | calibration |
 | CALIBRATE | Square Offense % 8.5% | POSTAĆ: ENFYSNEST | Tenacity | 6A | 15 | 100.0% | 68.3% | 0.0% | 0.0% | 88.9% | 68.3% | calibration |
 | CALIBRATE | Diamond Defense % 20% | POSTAĆ: JARJARBINKS | Potency | 6A | 15 | 100.0% | 68.2% | 0.0% | 0.0% | 75.0% | 68.2% | calibration |
+| CALIBRATE | Arrow Protection % 24% | POSTAĆ: JEDIKNIGHTREVAN | Speed | 6A | 15 | 100.0% | 68.2% | 0.0% | 0.0% | 80.0% | 68.2% | calibration |
 | CALIBRATE | Cross Potency % 30% | POSTAĆ: MARAJADE | Speed | 6A | 15 | 100.0% | 68.2% | 0.0% | 0.0% | 79.2% | 68.2% | calibration |
 | CALIBRATE | Square Offense % 8.5% | POSTAĆ: NINTHSISTER | Tenacity | 6A | 15 | 100.0% | 68.0% | 0.0% | 0.0% | 77.8% | 68.0% | calibration |
 | CALIBRATE | Cross Potency % 30% | POSTAĆ: VADER | Critical Damage | 6A | 15 | 100.0% | 67.3% | 0.0% | 0.0% | 75.0% | 67.3% | calibration |
@@ -113,6 +108,11 @@ Bonus Speed Set używa bazowej szybkości 150, jeśli profil nie zawiera pola ba
 | CALIBRATE | Cross Defense % 20% | POSTAĆ: HOTHLEIA | Critical Damage | 6A | 15 | 100.0% | 63.7% | 0.0% | 0.0% | 83.3% | 63.7% | calibration |
 | CALIBRATE | Diamond Defense % 20% | POSTAĆ: BB8 | Speed | 6A | 15 | 100.0% | 63.7% | 0.0% | 0.0% | 77.8% | 63.7% | calibration |
 | CALIBRATE | Square Offense % 8.5% | POSTAĆ: JARJARBINKS | Speed | 6A | 15 | 100.0% | 63.5% | 0.0% | 0.0% | 86.7% | 63.5% | calibration |
+| CALIBRATE | Triangle Critical Chance % 20% | POSTAĆ: COMMANDERLUKESKYWALKER | Tenacity | 6A | 15 | 100.0% | 63.2% | 0.0% | 0.0% | 94.4% | 63.2% | calibration |
+| CALIBRATE | Cross Tenacity % 35% | POSTAĆ: REY | Critical Damage | 6A | 15 | 100.0% | 63.0% | 0.0% | 0.0% | 83.3% | 63.0% | calibration |
+| CALIBRATE | Square Offense % 8.5% | POSTAĆ: SEVENTHSISTER | Speed | 6A | 15 | 100.0% | 63.0% | 0.0% | 0.0% | 91.7% | 63.0% | calibration |
+| CALIBRATE | Cross Potency % 30% | MAGAZYN | Health | 6A | 15 | 100.0% | 62.8% | 0.0% | 0.0% | 83.3% | 62.8% | calibration |
+| CALIBRATE | Triangle Health % 16% | POSTAĆ: OPERATIVE | Speed | 6A | 15 | 100.0% | 62.8% | 0.0% | 0.0% | 66.7% | 62.8% | calibration |
 
 ## BEZPIECZNY ŁAŃCUCH — walidacja globalna
 
