@@ -1711,6 +1711,7 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
         "## Status",
         "",
         "- **Wykonalność fizyczna:** {}".format("POTWIERDZONA" if chain_result.get("safe") else "ZABLOKOWANA"),
+        "- **Odtworzenie dokładnej kolejności z raportu:** {}".format("POTWIERDZONE" if chain_result.get("report_order_validated") else "NIEPOTWIERDZONE"),
         "- **Ocena:** {}".format(assessment),
         "- **Liczba modów docelowych:** {}/6".format(
             min(6, max((len(opt.get("mods", [])) for opt in optimizer.values()), default=0))
@@ -1802,8 +1803,13 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
             for plan in target_plans:
                 selected = plan["mod"]
                 slot = str(selected.get("slot", ""))
-                selected_source = mod_owner(selected)
-                selected_source_name = display_name(selected_source) if selected_source else "MAGAZYN"
+                if selected.get("executionSourceInventory"):
+                    selected_source_name = "MAGAZYN"
+                elif selected.get("executionSourceOwner"):
+                    selected_source_name = display_name(selected.get("executionSourceOwner"))
+                else:
+                    selected_source = mod_owner(selected)
+                    selected_source_name = display_name(selected_source) if selected_source else "MAGAZYN"
                 lines.append("{}. **{} — załóż na {}** mod z {}: {}".format(
                     step, slot, target_name, selected_source_name, mod_description(selected)
                 ))
@@ -1822,7 +1828,11 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
                 for plan, move in patch_levels[depth]:
                     replacement = move["replacement"]
                     displaced = plan.get("target_current")
-                    if displaced and rid(replacement) == rid(displaced):
+                    if move.get("executionSourceInventory"):
+                        replacement_source = "MAGAZYN (dostępny po wcześniejszym kroku)"
+                    elif move.get("executionSourceOwner"):
+                        replacement_source = display_name(move.get("executionSourceOwner"))
+                    elif displaced and rid(replacement) == rid(displaced):
                         replacement_source = "MAGAZYN (mod automatycznie wyparty z {})".format(target_name)
                     elif is_true(replacement.get("equipped")):
                         replacement_source = display_name(mod_owner(replacement))
