@@ -96,6 +96,91 @@ def rolls(row, i):
         values = [value / count] * count
     return stat, value, count, values
 
+def _normalize_set_name(name):
+    aliases = {"Crit Damage": "Critical Damage", "Crit Chance": "Critical Chance"}
+    value = str(name or "").strip()
+    return aliases.get(value, value)
+
+
+
+def _canonical_set_combo_from_counts(counts):
+    if sum(int(value) for value in counts.values()) != 6:
+        return None
+    tokens = []
+    for raw_name, raw_count in counts.items():
+        name = _normalize_set_name(raw_name)
+        rule = SET_RULES.get(name)
+        if not rule:
+            return None
+        required, count = int(rule[1]), int(raw_count)
+        if required <= 0 or count % required:
+            return None
+        groups = count // required
+        if groups not in (1, 2, 3):
+            return None
+        prefix = "" if groups == 1 else ("Double " if groups == 2 else "Triple ")
+        tokens.append((-count, name, prefix + name))
+    return " + ".join(label for _groups, _name, label in sorted(tokens))
+
+
+
+def canonical_set_combo_from_mods(mods):
+    counts = {}
+    for mod in mods or []:
+        name = _normalize_set_name(mod.get("set", ""))
+        if not name or name not in SET_RULES:
+            return None
+        counts[name] = counts.get(name, 0) + 1
+    return _canonical_set_combo_from_counts(counts)
+
+
+
+def _canonical_set_combo_from_profile_label(label):
+    counts = {}
+    for raw_token in str(label or "").split("+"):
+        token = raw_token.strip()
+        groups = 1
+        for prefix, multiplier in (("Double ", 2), ("Triple ", 3)):
+            if token.startswith(prefix):
+                token = token[len(prefix):].strip()
+                groups = multiplier
+                break
+        name = _normalize_set_name(token)
+        rule = SET_RULES.get(name)
+        if not rule:
+            return None
+        counts[name] = counts.get(name, 0) + groups * int(rule[1])
+    return _canonical_set_combo_from_counts(counts)
+
+
+
+def profile_set_combo_match(profile, mods):
+    """Exact observed combo frequency, normalized to the most common combo."""
+    target_key = canonical_set_combo_from_mods(mods)
+    combinations = profile.get("set_combinations", {}) or {}
+    if not target_key or not isinstance(combinations, dict) or not combinations:
+        return None
+    frequencies = {}
+    for label, raw_frequency in combinations.items():
+        key = _canonical_set_combo_from_profile_label(label)
+        if not key:
+            continue
+        try:
+            frequency = max(0.0, float(raw_frequency or 0.0))
+        except (TypeError, ValueError):
+            continue
+        frequencies[key] = frequencies.get(key, 0.0) + frequency
+    if target_key not in frequencies:
+        return None
+    maximum = max(frequencies.values(), default=0.0)
+    if maximum <= 0:
+        return None
+    frequency = frequencies[target_key]
+    return {"key": target_key, "frequency": round(frequency, 4),
+            "preference": round(frequency / maximum, 6)}
+
+
+
 def mod_description(row):
     """Human-searchable mod identification; never relies on the current owner."""
     secondary = []
@@ -804,6 +889,10 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
     def fit(r, who):
         profile = profiles.get(who)
         return float(score_profile(r, profile)["fitScore"]) if profile else float(r.get("modValue", 0) or 0)
+
+    def exact_combo_frequency(profile, mods):
+        match = profile_set_combo_match(profile or {}, mods)
+        return float(match.get("frequency", 0.0)) if match else 0.0
     def set_counts(mods):
         out = {}
         for m in mods:
@@ -897,10 +986,14 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                     replacement_id=rid(replacement)
                     local_gain=fit(replacement,who)-fit(current,who)
                     set_delta=completed_set_delta(hole_owner,current,replacement)
+                    donor_profile = profiles.get(aliases.get(hole_owner, hole_owner), {}) or {}
+                    before_mods = [r for (o, _slot), r in working_eq.items() if o == hole_owner]
+                    after_mods = [r for r in before_mods if rid(r) != rid(current)] + [replacement]
+                    combo_delta = exact_combo_frequency(donor_profile, after_mods) - exact_combo_frequency(donor_profile, before_mods)
                     move={"owner":hole_owner,"name":pname(hole_owner),
                           "removed":None if initial_hole else current,
                           "replacement":replacement,"gain":local_gain,
-                          "set_delta":set_delta}
+                          "set_delta":set_delta,"combo_delta":combo_delta}
                     new_moves=moves+[move]
                     next_forbidden=forbidden|{rid(current),replacement_id}
                     if kind==0:
@@ -913,6 +1006,7 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                         terminal_solutions.append({
                             "moves":new_moves,
                             "gain":sum(x["gain"] for x in new_moves),
+                            "combo_delta":sum(x.get("combo_delta", 0.0) for x in new_moves),
                             "set_delta":sum(x["set_delta"] for x in new_moves),
                             "mod_value_delta":mod_value_delta
                         })
@@ -930,6 +1024,7 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                 # then donor profile-fit gain, set transition, and modValue.
                 # Existing sets are not protected at the expense of profile fit.
                 terminal_solutions.sort(key=lambda solution: (
+                    solution.get("combo_delta", 0.0),
                     solution["gain"],
                     solution["set_delta"],
                     solution["mod_value_delta"],
@@ -1089,8 +1184,15 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                     "beforeCount":before_count,"afterCount":after_count,
                     "required":required,"beforeFull":before_full,"afterFull":after_full
                 })
+        donor_profile = profiles.get(aliases.get(o, o), {}) or {}
+        before_combo = profile_set_combo_match(donor_profile, before)
+        after_combo = profile_set_combo_match(donor_profile, after)
         validation.append({
             "owner":o,"name":pname(o),"before":bc,"after":ac,
+            "beforeComboKey":before_combo.get("key", "") if before_combo else "",
+            "beforeComboFrequency":before_combo.get("frequency") if before_combo else None,
+            "afterComboKey":after_combo.get("key", "") if after_combo else "",
+            "afterComboFrequency":after_combo.get("frequency") if after_combo else None,
             "beforeCounts":before_counts,"afterCounts":after_counts,
             "setChanges":set_changes,
             "beforeGroups":bg,"afterGroups":ag,
