@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - optimizer-v2
-      - optimizer-v2-integration-donor-combo
     paths:
       - "optimizer_preflight.py"
       - "test_optimizer_preflight.py"
@@ -34,7 +33,6 @@ jobs:
         with:
           python-version: "3.12"
       - name: Run Vel Sartha preflight
-        if: github.ref_name == 'optimizer-v2'
         run: >-
           python optimizer_preflight.py
           --target "Vel Sartha"
