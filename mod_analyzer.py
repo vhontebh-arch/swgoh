@@ -2198,9 +2198,9 @@ def main():
             fit = character_fit(row, targets, profiles, aliases)
             row.update(fit)
         optimizer = optimize_target_build(
-        rows, target_ids, profiles, aliases, names, protected_owners,
-        set_combo_mode=SET_COMBO_MODE,
-    )
+            rows, target_ids, profiles, aliases, names, protected_owners,
+            set_combo_mode=SET_COMBO_MODE,
+        )
 
     # Every selected equipped source and every equipped PATCH source must have
     # a verified cached profile. Inventory mods have no donor owner.
