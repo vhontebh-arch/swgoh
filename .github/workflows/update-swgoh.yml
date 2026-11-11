@@ -20,6 +20,7 @@ on:
       - "generate_mods.py"
       - "targets.json"
       - "mod_analysis_target.json"
+      - "mod_analysis.trigger"
       - ".github/workflows/update-trigger.txt"
       - ".github/scripts/sync-c3po.sh"
   schedule:
