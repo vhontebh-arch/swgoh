@@ -245,3 +245,13 @@ Przed przedstawieniem:
 - [ ] Uczciwie sklasyfikowałem wynik.
 
 Jeśli nie można zaznaczyć wszystkich wymaganych pól, wynik pozostaje roboczy — nie jest rekomendacją.
+
+## Eksperymentalne punktowanie dokładnej kombinacji setów — v19
+
+Na gałęzi `vel-sartha-analysis-20261110` dostępny jest wariant porównawczy `set_combo_mode="exact"`. Domyślny tryb `base` pozostaje bez zmian i stanowi punkt odniesienia.
+
+- Wariant exact zachowuje liczebność setów: rozróżnia np. `Double Health + Defense` od `Double Defense + Health`, a także poprawnie uwzględnia sety 4-elementowe, takie jak Speed i Offense.
+- Pełny build sześciu modów jest dopasowywany do dokładnej kombinacji zapisanej w profilu. Częstość kombinacji jest normalizowana względem najczęstszej kombinacji tego profilu.
+- Dla rozpoznanej kombinacji waga bonusów setów wynosi `0.10 + 0.90 × znormalizowana częstość`; ta sama preferencja jest używana jako tie-break.
+- Jeżeli kombinacji nie ma w profilu albo build nie zawiera kompletu sześciu modów, wariant exact wraca do dotychczasowych preferencji pojedynczych setów.
+- Jest to eksperyment porównawczy, a nie zmiana zatwierdzonego algorytmu. Nie przenosić go do stabilnej gałęzi bez osobnej oceny wyników na identycznym snapshotcie C-3PO.
