@@ -122,3 +122,7 @@ Te ograniczenia są celowe i widoczne: nie udajemy, że samo przeniesienie metod
 - Jeżeli odświeżenie starego profilu się nie powiedzie, można użyć ostatniej poprawnej kopii wyłącznie z jawnym oznaczeniem jej jako nieaktualnej; raport nie może przedstawiać jej jako świeżego profilu. Jeżeli profilu nigdy nie było, stosuje się jawny fallback `modValue` i ujawnia brak oceny profilowej.
 - Odczyt profili wykonuje ChatGPT bezpośrednio ze stron SWGOH.GG na żądanie użytkownika. GitHub Actions i skrypty repozytorium nie są używane do pobierania profili SWGOH.GG.
 - Szczegółowy przebieg odczytu, walidacji dwóch źródeł, zapisu i read-back opisuje `MOD_PROFILE_REFRESH.md`.
+
+## Dodatkowa kontrola łańcuchów dawców
+
+Wersja integracyjna uwzględnia dokładną sześciomodową kombinację setów dawcy przy wyborze PATCH-a. Jest to kryterium porządkujące kandydatów o tej samej długości łańcucha, przed lokalnym fitem pojedynczego moda. Nie zmienia punktacji docelowego buildu. Jeżeli profil nie zawiera danej kombinacji, stosowany jest dotychczasowy fallback.
