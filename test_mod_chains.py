@@ -246,7 +246,7 @@ class UserReportTests(unittest.TestCase):
         self.assertEqual(report.count("**PATCH — załóż na"), 3)
 
 
-    def test_report_preserves_validated_plan_order(self):
+    def test_report_orders_target_mods_by_slot_before_donor_repairs(self):
         def mod(mid, slot, equipped, assigned_to, set_name):
             return {
                 "id": mid, "slot": slot, "equipped": equipped,
@@ -284,9 +284,10 @@ class UserReportTests(unittest.TestCase):
             profile_fetch_status={"VEL": "cached"}, display_name=display_name,
         )
         self.assertLess(
-            report.index("**Circle — załóż na Vel Sartha"),
             report.index("**Square — załóż na Vel Sartha"),
+            report.index("**Circle — załóż na Vel Sartha"),
         )
+        self.assertNotIn("Zdejmij", report)
 
 
 class TransferChainTests(unittest.TestCase):
