@@ -59,6 +59,24 @@ class ExpectedLevel15ProjectionTests(unittest.TestCase):
         self.assertEqual(projected["secondary1Rolls"], "1")
         self.assertEqual(projected.get("secondary2Stat", ""), row.get("secondary2Stat", ""))
 
+    def test_primary_is_projected_to_level15_max_for_current_dot_tier(self):
+        five_dot = {
+            "dots": "5", "tier": "5", "level": "3",
+            "primaryStat": "Offense %", "primaryValue": "2.8%",
+        }
+        six_dot = {
+            "dots": "6", "tier": "1", "level": "3",
+            "primaryStat": "Speed", "primaryValue": "18",
+        }
+        projected_five = project_mod_for_build(five_dot, {})
+        projected_six = project_mod_for_build(six_dot, {})
+        self.assertEqual(projected_five["primaryValue"], "5.88%")
+        self.assertEqual(projected_six["primaryValue"], "32.0")
+        self.assertEqual(projected_five["dots"], "5")
+        self.assertFalse(projected_five["projectionSliceApplied"])
+        self.assertTrue(projected_five["projectionPrimaryProjected"])
+        self.assertTrue(projected_six["projectionPrimaryProjected"])
+
     def test_five_a_is_not_sliced_in_build_projection(self):
         row = {
             "id": "five-a", "dots": "5", "tier": "5", "level": "15",
