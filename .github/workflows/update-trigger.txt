@@ -25,3 +25,5 @@ Retry after previous push race; verify regenerated report.
 rerun-after-tiered-user-report-2026-11-11T12:50+01:00
 
 rerun-after-target-first-tiered-test-fix-2026-11-11T12:55+01:00
+
+rerun-after-test-order-correction-2026-11-11T12:58+01:00
