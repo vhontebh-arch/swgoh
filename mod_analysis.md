@@ -4,9 +4,9 @@
 
 ## Status
 
-- **Wykonalność fizyczna:** ZABLOKOWANA
+- **Wykonalność fizyczna:** POTWIERDZONA
 - **Odtworzenie dokładnej kolejności z raportu:** POTWIERDZONE
-- **Ocena:** BLOKADA — nie wykonuj przekładek
+- **Ocena:** KOMPROMIS — łańcuch wykonalny, ale osłabia co najmniej jednego dawcę
 - **Liczba modów docelowych:** 6/6
 
 ## Docelowy zestaw — VEL
@@ -37,18 +37,28 @@
   - Źródło: SCORCH
 - **Cross — POZOSTAJE:** Cross / Defense / Protection % 23.5% / secondary: Health % 2.48%, Critical Chance % 1.73%, Speed 11, Health 648 / 5★ A lvl15
 
-- **Zmiana oczekiwanej oceny buildu po podniesieniu do 15:** +19.8 pkt (średnia dla przyszłych rolli; bez slice i calibration).
+- **Zmiana oczekiwanej oceny buildu po podniesieniu do 15:** +19.6 pkt (średnia dla przyszłych rolli; bez slice i calibration).
 
 ## Kolejność przekładania
 
-**Nie wykonuj jeszcze żadnej przekładki.** Poniższy build jest wariantem roboczym; walidacja nie zatwierdziła pełnego łańcucha.
+1. **Arrow — załóż na VEL** mod z MAGAZYN: Arrow / Defense / Offense % 5.88% / secondary: Defense % 1.37%, Speed 21, Protection 712, Tenacity % 2.79% / 5★ A lvl15
+2. **Square — załóż na VEL** mod z SCORCH: Square / Health / Offense % 8.5% / secondary: Defense 36, Potency % 4.16%, Health % 4.18%, Speed 22 / 6★ A lvl15
+3. **Diamond — załóż na VEL** mod z SCORCH: Diamond / Defense / Defense % 20% / secondary: Defense 57, Health % 1.78%, Critical Chance % 4.4%, Speed 15 / 6★ B lvl15
+4. **Triangle — załóż na VEL** mod z FINN: Triangle / Health / Protection % 23.5% / secondary: Tenacity % 1.85%, Speed 11, Critical Chance % 1.15%, Defense % 2.47% / 5★ C lvl15
+5. **Circle — załóż na VEL** mod z SCORCH: Circle / Defense / Protection % 24% / secondary: Defense 13, Speed 16, Tenacity % 7.97%, Defense % 12.54% / 6★ A lvl15
 
-### Co blokuje zatwierdzenie
+### Uzupełnienie dawców — poziom 1
 
-- **profil dawcy:** FINN — brak zweryfikowanego profilu; łańcuch nie może być zatwierdzony
+6. **PATCH — załóż na SCORCH** mod z MAGAZYN (dostępny po wcześniejszym kroku): Square / Health / Offense % 0.63% / secondary: Speed 4 / 5★ D lvl1
+7. **PATCH — załóż na SCORCH** mod z MAGAZYN (dostępny po wcześniejszym kroku): Diamond / Health / Defense % 11.75% / secondary: Critical Chance % 1.88%, Speed 11, Health % 0.95%, Protection 658 / 5★ D lvl15
+8. **PATCH — załóż na FINN** mod z MAGAZYN (dostępny po wcześniejszym kroku): Triangle / Health / Protection % 2.5% / secondary: Speed 5, Offense % 0.43%, Protection 653 / 5★ B lvl1
+9. **PATCH — załóż na SCORCH** mod z MAGAZYN (dostępny po wcześniejszym kroku): Circle / Health / Protection % 23.5% / secondary: Speed 10, Defense % 1.25%, Tenacity % 1.36%, Health 567 / 5★ C lvl15
+
+Zakładanie moda automatycznie przenosi poprzedni mod ze slotu do magazynu. Wszystkie powyższe kroki zostały sprawdzone na pełnym stanie slotów i magazynu.
+
 ## Wpływ na postacie-dawców
 
-- **FINN:** modValue 204.8 → 227.4 (+22.6).
+- **FINN:** modValue 204.8 → 225.0 (+20.2).
 - **SCORCH:** modValue 201.9 → 239.2 (+37.3).
   - Defense: ROZBITO pełnych setów (1 → 0).
     - ISTOTNA STRATA: set występuje w 72.0% kombinacji profilu SWGOH.GG.
@@ -56,7 +66,7 @@
 
 ## Kontrola profili użytych w łańcuchu
 
-- FINN: brak profilu (unavailable).
+- FINN: profil dostępny, 2 źródła.
 - SCORCH: profil dostępny, 2 źródła.
 - VEL: profil dostępny, 2 źródła.
 
@@ -65,7 +75,7 @@
 - Poziom 15 jest traktowany jako osiągalny bez ograniczenia materiałami.
 - Brakujące secondary są liczone jako wartość średnia rolla, a nie maksymalna; ich przyszły przydział do statystyk jest uśredniony według profilu zamiast przypisywany do najlepszego secondary.
 - Slice i calibration nie wpływają na ranking ani wynik buildu. Mogą pojawić się wyłącznie jako osobne sugestie inwestycyjne i można je pominąć.
-- Primary jest projektowane do potwierdzonej wartości maksymalnej poziomu 15 dla obecnej liczby gwiazdek; nie zakładamy slice 5★ → 6★.
+- Primary pozostaje dokładnie na wartości z eksportu; zależy od obecnej liczby gwiazdek, a podniesienie moda do poziomu 15 go nie zmienia. Nie zakładamy slice 5★ → 6★.
 
 ## Jak czytać opisy modów
 
