@@ -111,3 +111,12 @@ Po zakończeniu analizy modów ChatGPT musi przedstawić użytkownikowi w odpowi
 - Treść sekcji w odpowiedzi musi odpowiadać dokładnie kolejności z raportu wygenerowanego przez optymalizator. Raport w repozytorium pozostaje trwałym zapisem, ale nie zastępuje podania procedury bezpośrednio w rozmowie.
 
 **Reguła końcowa:** użytkownik ma móc wykonać całą operację wyłącznie na podstawie sekcji „Kolejność przekładania” w odpowiedzi, bez konieczności otwierania pliku lub odtwarzania kolejności z kilku sekcji.
+
+## 10. Wspólny snapshot C-3PO dla wszystkich wersji
+
+- Kanonicznym źródłem jest wyłącznie `main/c3po.json`; eksporty należy wgrywać na `main`.
+- Każdy workflow generujący dane optymalizatora uruchamia `.github/scripts/sync-c3po.sh` przed generowaniem `mods.csv`.
+- Analiza musi korzystać z pliku pobranego z konkretnego commita `main`, a log musi zawierać commit źródłowy, Git blob SHA i SHA-256.
+- Porównując wersje algorytmu, należy uruchomić je z tym samym `c3po_source_commit` w `workflow_dispatch`; porównanie jest ważne tylko przy zgodnych identyfikatorach snapshotu.
+- Lokalna kopia `c3po.json` na innej gałęzi nie jest źródłem danych i nie może zastępować synchronizacji.
+- Szczegóły: `C3PO_DATA_SOURCE.md`.
