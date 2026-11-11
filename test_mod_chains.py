@@ -8,46 +8,67 @@ DONOR = "donor-instance"
 DONOR_B = "donor-b-instance"
 
 
-def make_mod(mod_id, owner="", equipped=False, slot="Arrow", value=10, mod_set="Speed"):
-    return {
-        "id": mod_id,
-        "assignedTo": owner,
+def make_mod(mod_id, owner="", equipped=False, slot="Arrow", value=10, mod_set="Speed", speed_roll=None):
+    row = {
+        "id": mod_id, "assignedTo": owner,
         "equipped": "True" if equipped else "False",
-        "slot": slot,
-        "set": mod_set,
-        "modValue": str(value),
+        "slot": slot, "set": mod_set, "modValue": str(value),
+        "dots": "5", "tier": "5", "level": "15",
     }
+    if speed_roll is not None:
+        row.update({"secondary1Stat": "Speed", "secondary1Value": str(speed_roll),
+                    "secondary1Rolls": "1",
+                    "secondary1RawRolls": str(int(float(speed_roll) * 10000))})
+    return row
 
 
-def run_plan(rows, selected, aliases=None):
+def run_plan(rows, selected, aliases=None, profiles=None):
     aliases = aliases or {TARGET: "TARGET"}
     return apply_optimizer_replacements(
-        rows,
-        {"TARGET": {"mods": [selected]}},
-        {"TARGET"},
-        aliases=aliases,
+        rows, {"TARGET": {"mods": [selected]}}, {"TARGET"},
+        aliases=aliases, profiles=profiles,
     )
 
 
 class TransferChainTests(unittest.TestCase):
-    def test_exact_donor_combo_frequency_is_reported_without_changing_target_score(self):
-        from mod_analyzer import profile_set_combo_match, canonical_set_combo_from_mods
-        mods = [
-            make_mod("a", slot="Arrow", mod_set="Health"),
-            make_mod("b", slot="Square", mod_set="Health"),
-            make_mod("c", slot="Diamond", mod_set="Defense"),
-            make_mod("d", slot="Triangle", mod_set="Health"),
-            make_mod("e", slot="Circle", mod_set="Health"),
-            make_mod("f", slot="Cross", mod_set="Defense"),
+    def test_donor_combo_changes_patch_choice_and_is_rendered_in_report(self):
+        from mod_analyzer import append_donor_combo_report
+
+        # The donor starts with the common 4 Health + 2 Defense combination.
+        # The higher-fit Health patch breaks it; the lower-fit Defense patch preserves it.
+        selected = make_mod("selected-defense-arrow", DONOR, True, "Arrow", 10, "Defense", 3)
+        donor_mods = [
+            make_mod("donor-square", DONOR, True, "Square", 10, "Health"),
+            make_mod("donor-diamond", DONOR, True, "Diamond", 10, "Health"),
+            make_mod("donor-triangle", DONOR, True, "Triangle", 10, "Health"),
+            make_mod("donor-circle", DONOR, True, "Circle", 10, "Health"),
+            make_mod("donor-cross", DONOR, True, "Cross", 10, "Defense"),
         ]
-        profile = {"set_combinations": {
-            "Double Health + Defense": 48.9,
-            "Double Defense + Health": 20.0,
-        }}
-        self.assertEqual(canonical_set_combo_from_mods(mods), "Double Health + Defense")
-        match = profile_set_combo_match(profile, mods)
-        self.assertEqual(match["frequency"], 48.9)
-        self.assertEqual(match["preference"], 1.0)
+        high_fit_breaking_patch = make_mod("health-patch-high-fit", value=30, mod_set="Health", speed_roll=6)
+        preserving_patch = make_mod("defense-patch-lower-fit", value=10, mod_set="Defense", speed_roll=3)
+        profile = {
+            "set_combinations": {"Double Health + Defense": 48.9, "Double Defense + Health": 20.0},
+            "secondary_preferences": {"Speed": 1.0},
+        }
+        result = run_plan(
+            [selected, *donor_mods, high_fit_breaking_patch, preserving_patch],
+            selected, {TARGET: "TARGET", DONOR: "DONOR"}, {"DONOR": profile},
+        )
+        self.assertTrue(result["safe"], result["failed"])
+        move = result["plans"][0]["moves"][0]
+        self.assertEqual(move["replacement"]["id"], "defense-patch-lower-fit")
+        donor = next(item for item in result["validation"] if item["owner"] == DONOR)
+        self.assertEqual(donor["beforeComboKey"], "Double Health + Defense")
+        self.assertEqual(donor["afterComboKey"], "Double Health + Defense")
+        self.assertEqual(donor["beforeComboFrequency"], 48.9)
+        self.assertEqual(donor["afterComboFrequency"], 48.9)
+
+        lines = []
+        append_donor_combo_report(lines, result["validation"], {DONOR})
+        report = "\n".join(lines)
+        self.assertIn("Dokładna kombinacja setów dawców", report)
+        self.assertIn("Double Health + Defense", report)
+        self.assertIn("48.9%", report)
 
     def test_inventory_to_empty_target(self):
         selected = make_mod("inventory-mod")
