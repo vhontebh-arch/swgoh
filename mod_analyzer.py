@@ -1791,6 +1791,22 @@ def main():
             lines.append("| {} | {:.1f} | {:.1f} | {:+.1f} | {} | {} |".format(
                 item["name"], item["beforeModValue"], item["afterModValue"],
                 item["modValueDelta"], before_groups, after_groups))
+    lines += ["", "### Dokładna kombinacja setów dawców", "",
+              "| Postać | Przed | Częstość | Po | Częstość |",
+              "|---|---|---:|---|---:|"]
+    for item in chain_result.get("validation", []):
+        if item.get("owner") not in affected_owners:
+            continue
+        before_key = item.get("beforeComboKey") or "brak w profilu"
+        after_key = item.get("afterComboKey") or "brak w profilu"
+        before_freq = item.get("beforeComboFrequency")
+        after_freq = item.get("afterComboFrequency")
+        before_pct = "—" if before_freq is None else "{:.1f}%".format(float(before_freq))
+        after_pct = "—" if after_freq is None else "{:.1f}%".format(float(after_freq))
+        lines.append("| {} | {} | {} | {} | {} |".format(
+            item["name"], before_key, before_pct, after_key, after_pct))
+    if not affected_owners:
+        lines.append("| — | — | — | — | — |")
     lines += ["", "### Zmiany setów — każda postać w łańcuchu", "",
               "ROZBITO oznacza utratę co najmniej jednej pełnej grupy. BUDOWANY oznacza zwiększenie liczby modów danego setu bez ukończenia kolejnej grupy. UKOŃCZONO oznacza powstanie dodatkowej pełnej grupy. OSŁABIONY oznacza zmianę liczebności bez ukończenia lub rozbicia pełnej grupy.", "",
               "| Postać | Set | Zmiana liczby modów | Pełne sety | Status |",
