@@ -33,6 +33,7 @@ def validate_report(report: str, targets: list[str]) -> list[str]:
         "### Sześć modów docelowych",
         "## MOD — mody przenoszone na cel",
         "## PATCH — uzupełnienie dawców",
+        "## PATCH — uzupełnienie dawców",
         "## Kolejność przekładania",
         "## Wpływ na postacie-dawców",
         "## Założenia projekcji",
@@ -55,7 +56,7 @@ def validate_report(report: str, targets: list[str]) -> list[str]:
             if "**Proponowany mod:**" not in slot_text:
                 errors.append("{}: brak pełnego opisu proponowanego moda.".format(slot))
 
-    if "## Kolejność przekładania" in report and "**NIE WYKONUJ" not in report:
+    if "## Kolejność przekładania" in report and "**Wykonalność fizyczna:** POTWIERDZONA" in report:
         order = report.split("## Kolejność przekładania", 1)[1]
         if not re.search(r"(?m)^\s*1\.\s+\*\*", order):
             errors.append("Brak ponumerowanej, konkretnej kolejności wykonania.")
