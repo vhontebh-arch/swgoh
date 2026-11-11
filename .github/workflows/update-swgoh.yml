@@ -1076,6 +1076,17 @@ jobs:
 
           head -n 15 mod_analysis.md
 
+      - name: Generate exact set-combination comparison
+        env:
+          SWGOH_SET_COMBO_MODE: exact
+          SWGOH_OUTPUT_MD: mod_analysis_exact_combo.md
+          SWGOH_OUTPUT_CSV: mod_analysis_exact_combo.csv
+        run: |
+          set -e
+          python mod_analyzer.py
+          test -s mod_analysis_exact_combo.md
+          test -s mod_analysis_exact_combo.csv
+
       - name: Upload isolated Vel Sartha mod analysis
         uses: actions/upload-artifact@v4
         with:
@@ -1083,6 +1094,8 @@ jobs:
           path: |
             mod_analysis.md
             mod_analysis.csv
+            mod_analysis_exact_combo.md
+            mod_analysis_exact_combo.csv
           if-no-files-found: error
 
       # ============================================================
