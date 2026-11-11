@@ -53,7 +53,7 @@ class ExpectedLevel15ProjectionTests(unittest.TestCase):
             0.5 * expected_mean_preference * 4,
         )
         self.assertEqual(projected["secondary1Rolls"], "1")
-        self.assertEqual(projected["secondary2Stat"], row.get("secondary2Stat", ""))
+        self.assertEqual(projected.get("secondary2Stat", ""), row.get("secondary2Stat", ""))
 
     def test_five_a_is_not_sliced_in_build_projection(self):
         row = {
