@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - optimizer-v2
+      - optimizer-v2-integration-donor-combo
     paths:
       - "optimizer_preflight.py"
       - "test_optimizer_preflight.py"
