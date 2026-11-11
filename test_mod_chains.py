@@ -2,7 +2,8 @@ import unittest
 
 from mod_analyzer import (apply_optimizer_replacements, rolls, quality,
                           profile_primary_preference, profile_secondary_preference,
-                          profile_set_preferences, profile_set_combo_support, render_user_report)
+                          profile_set_preferences, profile_set_combo_support, render_user_report,
+                          project_mod_for_build)
 
 
 TARGET = "target-instance"
@@ -30,6 +31,43 @@ def run_plan(rows, selected, aliases=None):
         aliases=aliases,
     )
 
+
+
+
+
+class ExpectedLevel15ProjectionTests(unittest.TestCase):
+    def test_missing_rolls_use_average_expected_profile_fit_not_best_stat(self):
+        row = {
+            "id": "unfinished", "dots": "5", "tier": "2", "level": "6",
+            "secondary1Stat": "Speed", "secondary1Value": "6",
+            "secondary1Rolls": "1", "secondary1RawRolls": "600000",
+        }
+        profile = {"secondary_preferences": {"Speed": 1.0, "Offense %": 0.5}}
+        projected = project_mod_for_build(row, profile)
+        expected_mean_preference = 1.5 / 12.0
+        self.assertEqual(projected["level"], "15")
+        self.assertEqual(projected["dots"], "5")
+        self.assertEqual(projected["projectionExpectedRolls"], 4)
+        self.assertAlmostEqual(
+            projected["projectionExpectedSecondaryFit"],
+            0.5 * expected_mean_preference * 4,
+        )
+        self.assertEqual(projected["secondary1Rolls"], "1")
+        self.assertEqual(projected["secondary2Stat"], row.get("secondary2Stat", ""))
+
+    def test_five_a_is_not_sliced_in_build_projection(self):
+        row = {
+            "id": "five-a", "dots": "5", "tier": "5", "level": "15",
+            "secondary1Stat": "Speed", "secondary1Value": "20",
+            "secondary1Rolls": "4", "secondary1RawRolls": "500000|500000|500000|500000",
+        }
+        projected = project_mod_for_build(row, {"secondary_preferences": {"Speed": 1.0}})
+        self.assertEqual(projected["dots"], "5")
+        self.assertEqual(projected["projectionDots"], 5)
+        self.assertEqual(projected["projectionType"], "15 (średnia)")
+        self.assertFalse(projected["projectionSliceApplied"])
+        self.assertFalse(projected["projectionCalibrationApplied"])
+        self.assertEqual(projected["secondary1Value"], "20")
 
 
 class RawRollScaleTests(unittest.TestCase):
@@ -425,6 +463,24 @@ class TransferChainTests(unittest.TestCase):
             {plan["mod"]["id"] for plan in result["plans"]},
             {"selected-arrow", "selected-square"},
         )
+
+    def test_exact_report_order_replay_places_all_target_mods_before_patches(self):
+        selected_arrow = make_mod("selected-arrow", DONOR, True, slot="Arrow", value=20)
+        selected_square = make_mod("selected-square", DONOR_B, True, slot="Square", value=20)
+        arrow_patch = make_mod("arrow-patch", slot="Arrow", value=15)
+        square_patch = make_mod("square-patch", slot="Square", value=15)
+        result = apply_optimizer_replacements(
+            [selected_arrow, selected_square, arrow_patch, square_patch],
+            {"TARGET": {"mods": [selected_arrow, selected_square]}},
+            {"TARGET"},
+            aliases={TARGET: "TARGET", DONOR: "DONOR", DONOR_B: "DONOR_B"},
+        )
+        self.assertTrue(result["safe"], result["failed"])
+        self.assertTrue(result["report_order_validated"])
+        actions = result["report_execution_order"]
+        self.assertEqual([item["action"] for item in actions], ["MOD", "MOD", "PATCH", "PATCH"])
+        self.assertEqual([item["slot"] for item in actions], ["Arrow", "Square", "Arrow", "Square"])
+        self.assertTrue(all(item["depth"] == 1 for item in actions[2:]))
 
     def test_same_inventory_mod_cannot_be_assigned_to_two_targets(self):
         target_b = "target-b-instance"
