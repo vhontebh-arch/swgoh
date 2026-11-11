@@ -97,3 +97,17 @@ python optimizer_preflight.py --target "Nazwa celu" --donor "Dawca 1" --donor "D
 - `checked_at_utc` nie odnawia TTL.
 - Narzędzie jest wyłącznie odczytowe: nie pobiera stron SWGOH.GG, nie aktualizuje profili, nie modyfikuje CSV ani kodu analizatora.
 - Sukces preflightu potwierdza wyłącznie warunki wejściowe; nie zastępuje walidacji łańcucha transferów ani kontroli końcowego raportu.
+
+## 9. Obowiązkowa prezentacja pełnej procedury w rozmowie
+
+Po zakończeniu analizy modów ChatGPT musi przedstawić użytkownikowi w odpowiedzi **całą procedurę wykonania**, a nie tylko podsumowanie zmian lub link do raportu w repozytorium.
+
+- W odpowiedzi musi znaleźć się wyraźna sekcja **„Kolejność przekładania”**.
+- Sekcja ma zawierać wszystkie rzeczywiste kroki z końcowego, zwalidowanego łańcucha: najpierw wszystkie mody zakładane na postać docelową w kolejności slotów Arrow, Square, Diamond, Triangle, Circle, Cross; następnie wszystkie naprawy dawców poziomu 1; potem poziomu 2 i kolejnych.
+- W obrębie jednego poziomu grupuj razem wszystkie operacje PATCH. Nie przeplataj poziomów.
+- Każdy krok musi wskazywać postać, slot oraz pełny opis moda pozwalający rozpoznać go w grze. Zachowuj ustalony format raportu; nie zastępuj opisów samymi ID.
+- Nie dodawaj osobnych kroków „zdejmij mod”. Założenie moda na slot automatycznie przenosi dotychczasowy mod do magazynu.
+- Nie skracaj procedury przez pomijanie napraw dawców pośrednich. Jeśli łańcuch jest niekompletny lub niewykonalny, oznacz wynik jako roboczy/zablokowany i nie przedstawiaj go jako gotowej instrukcji.
+- Treść sekcji w odpowiedzi musi odpowiadać dokładnie kolejności z raportu wygenerowanego przez optymalizator. Raport w repozytorium pozostaje trwałym zapisem, ale nie zastępuje podania procedury bezpośrednio w rozmowie.
+
+**Reguła końcowa:** użytkownik ma móc wykonać całą operację wyłącznie na podstawie sekcji „Kolejność przekładania” w odpowiedzi, bez konieczności otwierania pliku lub odtwarzania kolejności z kilku sekcji.
