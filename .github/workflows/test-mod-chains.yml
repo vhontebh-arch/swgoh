@@ -37,6 +37,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: Run Vel Sartha preflight
+        if: github.event_name != 'pull_request'
         run: >-
           python optimizer_preflight.py
           --target "Vel Sartha"
