@@ -30,7 +30,7 @@ def validate_report(report: str, targets: list[str]) -> list[str]:
     errors = []
     required_sections = (
         "## Status",
-        "## Sześć modów docelowych",
+        "### Sześć modów docelowych",
         "## MOD — mody przenoszone na cel",
         "## PATCH — uzupełnienie dawców",
         "## Kolejność przekładania",
@@ -41,8 +41,8 @@ def validate_report(report: str, targets: list[str]) -> list[str]:
         if heading not in report:
             errors.append("Brak wymaganej sekcji raportu użytkowego: {}".format(heading))
 
-    if "## Sześć modów docelowych" in report:
-        section = report.split("## Sześć modów docelowych", 1)[1]
+    if "### Sześć modów docelowych" in report:
+        section = report.split("### Sześć modów docelowych", 1)[1]
         for slot in SLOTS:
             match = re.search(r"^#### " + re.escape(slot) + r"\s*$", section, re.MULTILINE)
             if not match:
