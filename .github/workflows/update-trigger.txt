@@ -1,3 +1,4 @@
 Run experimental roster refresh and mod-quality audit using the synchronized C3PO export.
 
 rerun-after-finn-profile-and-real-roster-quality-audit-2026-11-11T12:40Z
+canonical-c3po-and-exact-set-combo-v19
