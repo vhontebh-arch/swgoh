@@ -9,6 +9,7 @@ on:
       - "test_optimizer_preflight.py"
       - "mod_analyzer.py"
       - "test_mod_chains.py"
+      - "test_target_selection.py"
       - "update_mod_profiles.py"
       - "test_mod_profile_cache.py"
       - "mod_profiles.json"
@@ -17,6 +18,9 @@ on:
       - "MOD_PROFILE_REFRESH.md"
       - "GRANDIVORY_METHOD_REVIEW.md"
       - ".github/workflows/test-mod-chains.yml"
+  pull_request:
+    branches:
+      - optimizer-v2
   workflow_dispatch:
 
 permissions:
@@ -33,10 +37,11 @@ jobs:
         with:
           python-version: "3.12"
       - name: Run Vel Sartha preflight
+        if: github.event_name != 'pull_request'
         run: >-
           python optimizer_preflight.py
           --target "Vel Sartha"
           --donor "Merrin"
           --donor 'RC-1262 "Scorch"'
       - name: Run optimizer regression tests
-        run: python -m unittest -v test_optimizer_preflight test_mod_chains test_mod_profile_cache
+        run: python -m unittest -v test_optimizer_preflight test_mod_chains test_mod_profile_cache test_target_selection
