@@ -47,7 +47,7 @@ To zachowuje prosty model profili oparty na preferencjach statystyk i setów. Ni
 
 - Projekcja rankingu zakłada, że mod może zostać podniesiony do poziomu 15.
 - Brakujące rolle do limitu aktualnego tieru otrzymują wartość średnią z zakresu danego secondary (środek przedziału), a nie wartość maksymalną.
-- Nieznany przyszły przydział rolli nie jest przypisywany do jednej, najwyżej preferowanej statystyki. Jego oczekiwany wkład jest liczony jako średnia preferencji profilu po możliwych secondary przy równych wagach, pomnożona przez średnią jakość rolla (50% zakresu). Równe wagi są jawnym uproszczeniem, ponieważ nie mamy zweryfikowanego rozkładu prawdopodobieństwa rolli.
+- Nieznany przyszły przydział rolli nie jest przypisywany do jednej, najwyżej preferowanej statystyki. Jego oczekiwany wkład rozdziela dwa etapy: dodawanie brakujących typów secondary aż do czterech, a następnie ulepszanie jednego z tych czterech. W obu etapach stosuje się równe wagi możliwych wyników i średnią jakość rolla (50% zakresu). Równe wagi są jawnym uproszczeniem, ponieważ nie mamy zweryfikowanego rozkładu prawdopodobieństwa rolli.
 - Istniejące wartości secondary, liczba gwiazdek i tier pozostają bez zmian. Mod 5A nie jest automatycznie przeliczany na 6E.
 - Slice i calibration nie wchodzą do punktacji ani rankingu buildu. Mogą być pokazane osobno jako sugestie inwestycyjne, które użytkownik może pominąć.
 - Bonus setu jest liczony jak dla poziomu 15, ale bez zakładania ulepszenia 5★ → 6★.
