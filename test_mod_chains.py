@@ -192,6 +192,32 @@ class TransferChainTests(unittest.TestCase):
         self.assertFalse(result["safe"])
         self.assertTrue(any("brak wykonalnego łańcucha" in reason for _, reason in result["failed"]))
 
+    def test_independent_donor_chains_do_not_conflict_on_empty_removed_marker(self):
+        donor_a = "donor-a-instance"
+        donor_b = "donor-b-instance"
+        selected_a = make_mod("selected-a", donor_a, True, slot="Arrow", value=20)
+        selected_b = make_mod("selected-b", donor_b, True, slot="Circle", value=20)
+        patch_a = make_mod("patch-a", slot="Arrow", value=15)
+        patch_b = make_mod("patch-b", slot="Circle", value=15)
+
+        result = apply_optimizer_replacements(
+            [selected_a, selected_b, patch_a, patch_b],
+            {"TARGET": {"mods": [selected_a, selected_b]}},
+            {"TARGET"},
+            aliases={
+                TARGET: "TARGET",
+                donor_a: "DONOR_A",
+                donor_b: "DONOR_B",
+            },
+        )
+
+        self.assertTrue(result["safe"], result["failed"])
+        self.assertEqual(len(result["plans"]), 2)
+        self.assertEqual(
+            {plan["mod"]["id"] for plan in result["plans"]},
+            {"selected-a", "selected-b"},
+        )
+
     def test_same_inventory_mod_cannot_be_assigned_to_two_targets(self):
         target_b = "target-b-instance"
         shared = make_mod("shared-mod")

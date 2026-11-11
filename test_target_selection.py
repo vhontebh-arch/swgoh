@@ -5,7 +5,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from mod_analyzer import load_targets, optimize_target_build, unavailable_profile_ids
+from mod_analyzer import load_targets, load_protected_owners, optimize_target_build, unavailable_profile_ids
 
 
 class TargetSelectionTests(unittest.TestCase):
@@ -40,6 +40,33 @@ class TargetSelectionTests(unittest.TestCase):
                 "builtins.open", side_effect=lambda name, *args, **kwargs: path.open(*args, **kwargs)
             ):
                 self.assertEqual(load_targets(), expected)
+
+    def test_mandatory_donor_exclusions_are_always_protected(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "protected_owners.json"
+            path.write_text(
+                json.dumps({"protectedOwners": ["CUSTOM_PROTECTED"]}),
+                encoding="utf-8",
+            )
+            with patch("os.path.exists", return_value=True), patch(
+                "builtins.open",
+                side_effect=lambda name, *args, **kwargs: path.open(*args, **kwargs),
+            ):
+                protected = load_protected_owners()
+
+        self.assertTrue({
+            "JARJARBINKS",
+            "GRANDINQUISITOR",
+            "SECONDSISTER",
+            "THIRDSISTER",
+            "FIFTHBROTHER",
+            "SEVENTHSISTER",
+            "EIGHTHBROTHER",
+            "NINTHSISTER",
+            "GRANDMOFFTARKIN",
+            "HONDO",
+            "CUSTOM_PROTECTED",
+        }.issubset(protected))
 
     def test_unavailable_donor_profile_is_classified_for_protection(self):
         status = {
