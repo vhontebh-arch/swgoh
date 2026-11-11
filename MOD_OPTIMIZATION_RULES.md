@@ -209,3 +209,8 @@ Przed przedstawieniem:
 - [ ] Uczciwie sklasyfikowałem wynik.
 
 Jeśli nie można zaznaczyć wszystkich wymaganych pól, wynik pozostaje roboczy — nie jest rekomendacją.
+
+
+## Ochrona dokładnej kombinacji setów dawcy
+
+Podczas wyboru PATCH-a optymalizator porównuje sześciomodową kombinację setów dawcy przed i po naprawie. Jeśli profil SWGOH.GG zawiera dokładną kombinację, jej zmiana jest kryterium rozstrzygającym przed lokalnym fitem pojedynczego moda. Wyszukiwanie nadal preferuje najkrótszy wykonalny łańcuch. Brak rozpoznanej kombinacji nie blokuje transferu — wtedy działa dotychczasowy ranking fitu, pełnych setów i modValue. Raport powinien pokazywać kombinację i jej częstość przed/po.

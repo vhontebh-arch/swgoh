@@ -106,3 +106,8 @@ python optimizer_preflight.py --target "Nazwa celu" --donor "Dawca 1" --donor "D
 - Porównując wersje algorytmu, należy uruchomić je z tym samym `c3po_source_commit` w `workflow_dispatch`; porównanie jest ważne tylko przy zgodnych identyfikatorach snapshotu.
 - Lokalna kopia `c3po.json` na innej gałęzi nie jest źródłem danych i nie może zastępować synchronizacji.
 - Szczegóły: `C3PO_DATA_SOURCE.md`.
+
+
+## Kontrola kombinacji setów dawców
+
+Przy planowaniu łańcucha transferów porównuj dokładną kombinację sześciu setów dawcy przed i po każdej naprawie. Najpierw wybieraj najkrótszy wykonalny łańcuch; w ramach tej samej długości preferuj zachowanie częstej kombinacji z profilu dawcy, a następnie dotychczasowe kryteria fitu, pełnych setów i modValue. Brak kombinacji w profilu nie jest blokadą. Wynik raportuj jawnie jako kombinację i częstość przed/po.
