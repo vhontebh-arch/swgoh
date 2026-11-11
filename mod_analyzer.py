@@ -397,15 +397,34 @@ def load_targets(target_overrides=None):
 
 PROTECTED_OWNERS_FILE = "protected_owners.json"
 
+# Account-level donor exclusions from MOD_OPTIMIZATION_RULES.md.
+# These are mandatory policy constraints, separate from the user-editable list.
+MANDATORY_PROTECTED_DONOR_BASE_IDS = {
+    "JARJARBINKS",
+    "GRANDINQUISITOR",
+    "SECONDSISTER",
+    "THIRDSISTER",
+    "FIFTHBROTHER",
+    "SEVENTHSISTER",
+    "EIGHTHBROTHER",
+    "NINTHSISTER",
+    "GRANDMOFFTARKIN",
+    "HONDO",
+}
+
 def load_protected_owners():
-    if not os.path.exists(PROTECTED_OWNERS_FILE):
-        return set()
-    try:
-        with open(PROTECTED_OWNERS_FILE, encoding="utf-8") as f:
-            data = json.load(f)
-        return {str(x).strip() for x in data.get("protectedOwners", []) if str(x).strip()}
-    except Exception:
-        return set()
+    configured = set()
+    if os.path.exists(PROTECTED_OWNERS_FILE):
+        try:
+            with open(PROTECTED_OWNERS_FILE, encoding="utf-8") as f:
+                data = json.load(f)
+            configured = {
+                str(x).strip() for x in data.get("protectedOwners", [])
+                if str(x).strip()
+            }
+        except Exception:
+            configured = set()
+    return configured | MANDATORY_PROTECTED_DONOR_BASE_IDS
 
 def load_profiles():
     if not os.path.exists(PROFILE_FILE):
@@ -1100,7 +1119,11 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
             if plan is None:
                 failed.append((target_id, "brak wykonalnego łańcucha dla {} / {}".format(slot,mod.get("set","")))); continue
             physical = {rid(mod)}
-            for move in plan["moves"]: physical.update((rid(move["removed"]),rid(move["replacement"])))
+            for move in plan["moves"]:
+                physical.update((rid(move["removed"]), rid(move["replacement"])))
+            # The first PATCH fills the physical hole left by MOD and has no
+            # removed mod. Empty IDs are sentinels, not shared resources.
+            physical.discard("")
             if physical & used_ids:
                 failed.append((target_id, "konflikt modów dla {} / {}".format(slot,mod.get("set","")))); continue
             used_ids.update(physical)
