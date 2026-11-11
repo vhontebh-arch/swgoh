@@ -7,6 +7,10 @@ on:
         description: "Optional main commit SHA pinning the canonical c3po.json snapshot; empty uses latest main"
         required: false
         type: string
+      mod_analysis_targets:
+        description: "Optional mod-analysis BASE_ID(s), comma-separated; empty uses targets.json. Does not change farming targets."
+        required: false
+        type: string
   push:
     paths:
       - "mod_analyzer.py"
@@ -1063,10 +1067,16 @@ jobs:
       # ============================================================
 
       - name: Generate mod analysis
+        env:
+          MOD_ANALYSIS_TARGETS: ${{ inputs.mod_analysis_targets }}
         run: |
           set -e
 
-          python mod_analyzer.py
+          if [ -n "$MOD_ANALYSIS_TARGETS" ]; then
+            python mod_analyzer.py --target "$MOD_ANALYSIS_TARGETS"
+          else
+            python mod_analyzer.py
+          fi
 
           test -s mod_analysis.csv
           test -s mod_analysis.md
