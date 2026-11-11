@@ -178,7 +178,72 @@ class UserReportTests(unittest.TestCase):
         self.assertIn("PATCH", report)
         self.assertIn("Vel Sartha", report)
         self.assertNotIn("UPGRADE:", report)
+        self.assertNotIn("Zdejmij", report)
+        self.assertNotIn("Zdejmowany z Vel", report)
+        self.assertLess(report.index("**Square — załóż na Vel Sartha"), report.index("**PATCH — załóż na Dawca"))
 
+
+
+    def test_report_groups_all_target_mods_before_tiered_donor_repairs(self):
+        def mod(mid, slot, owner_id="", equipped=False):
+            return {
+                "id": mid, "slot": slot, "equipped": equipped,
+                "assignedTo": owner_id, "set": "Defense",
+                "primaryStat": "Protection %", "primaryValue": "24%",
+                "dots": "6", "tierName": "A", "level": "15",
+                "secondary1Stat": "Speed", "secondary1Value": "10",
+            }
+
+        target_arrow = mod("target-arrow", "Arrow", "target-instance", True)
+        target_square = mod("target-square", "Square", "target-instance", True)
+        donor_one_mod = mod("donor-one-mod", "Square", "donor-one", True)
+        donor_two_mod = mod("donor-two-mod", "Square", "donor-two", True)
+        inventory_patch = mod("inventory-patch", "Square")
+        donor_two_patch = mod("donor-two-patch", "Square", "donor-three", True)
+        aliases = {
+            "target-instance": "VEL", "donor-one": "DONOR_ONE",
+            "donor-two": "DONOR_TWO", "donor-three": "DONOR_THREE",
+        }
+        names = {
+            "VEL": "Vel Sartha", "DONOR_ONE": "Dawca pierwszy",
+            "DONOR_TWO": "Dawca drugi", "DONOR_THREE": "Dawca trzeci",
+        }
+        def display_name(owner_id):
+            base_id = aliases.get(owner_id, owner_id)
+            return names.get(owner_id) or names.get(base_id) or base_id or "MAGAZYN"
+
+        plans = [
+            {"target": "VEL", "target_owner": "target-instance", "mod": target_square,
+             "target_current": mod("old-square", "Square", "target-instance", True),
+             "moves": [
+                 {"owner": "donor-one", "name": "Dawca pierwszy",
+                  "replacement": donor_one_mod},
+                 {"owner": "donor-two", "name": "Dawca drugi",
+                  "replacement": donor_two_patch},
+             ]},
+            {"target": "VEL", "target_owner": "target-instance", "mod": target_arrow,
+             "target_current": mod("old-arrow", "Arrow", "target-instance", True),
+             "moves": [
+                 {"owner": "donor-two", "name": "Dawca drugi",
+                  "replacement": inventory_patch},
+             ]},
+        ]
+        report = render_user_report(
+            rows=[target_arrow, target_square],
+            optimizer={"VEL": {"mods": [target_arrow, target_square], "gain": 1.0}},
+            chain_result={"safe": True, "plans": plans, "validation": [], "failed": []},
+            profiles={"VEL": {"source_model": {"sources": []}}},
+            aliases=aliases, names=names, target_ids={"VEL"},
+            profile_fetch_status={"VEL": "cached"}, display_name=display_name,
+        )
+        first_patch = report.index("**PATCH — załóż na")
+        last_target_mod = report.rindex("— załóż na Vel Sartha")
+        level_one = report.index("### Uzupełnienie dawców — poziom 1")
+        level_two = report.index("### Uzupełnienie dawców — poziom 2")
+        self.assertLess(last_target_mod, first_patch)
+        self.assertLess(level_one, level_two)
+        self.assertNotIn("Zdejmij", report)
+        self.assertEqual(report.count("**PATCH — załóż na"), 3)
 
 
     def test_report_preserves_validated_plan_order(self):
