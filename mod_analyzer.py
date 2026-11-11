@@ -1352,7 +1352,7 @@ def project_mod_for_build(row, profile):
     - assume the player can always take the mod to level 15;
     - complete the remaining secondary rolls at the midpoint of each roll range;
     - do not assume which secondary receives a future roll: use the mean profile
-      preference across all possible secondary stats, using equal weights because no verified roll probabilities are available;
+      preference across new secondary additions and later improvements, using equal weights because no verified roll probabilities are available;
     - never project slicing or calibration into the build score.
     Existing secondary values and dots remain unchanged. Primary progression is
     intentionally left at the exported value until its level curve is verified.
@@ -1368,17 +1368,40 @@ def project_mod_for_build(row, profile):
     missing_rolls = max(0, max_rolls - current_rolls)
 
     stat_ranges = R6 if dots >= 6 else R5
-    possible_stats = tuple(stat_ranges.keys())
-    mean_preference = (
-        sum(profile_secondary_preference(profile, stat) for stat in possible_stats)
-        / len(possible_stats)
-        if possible_stats else 0.0
+    existing_stats = [
+        str(row.get("secondary{}Stat".format(index), "") or "").strip()
+        for index in range(1, 5)
+        if str(row.get("secondary{}Stat".format(index), "") or "").strip()
+    ]
+    possible_new_stats = [stat for stat in stat_ranges if stat not in existing_stats]
+    # Game upgrades first add missing secondary types until the mod has four;
+    # later rolls improve one of those four. We do not know the random outcome,
+    # so use equal-probability expected preferences for each stage.
+    new_stat_rolls = min(missing_rolls, max(0, 4 - len(existing_stats)))
+    mean_new_preference = (
+        sum(profile_secondary_preference(profile, stat) for stat in possible_new_stats)
+        / len(possible_new_stats)
+        if possible_new_stats else 0.0
     )
-    # A midpoint roll has 50% quality by definition. Since its destination
-    # stat is unknown, score its expected fit under an explicit equal-probability assumption instead of assigning every roll
-    # to the single highest-priority stat (the old optimistic behavior).
+    expected_new_preference_sum = new_stat_rolls * mean_new_preference
+    rolls_after_four_stats = missing_rolls - new_stat_rolls
+    if len(existing_stats) + new_stat_rolls >= 4:
+        expected_four_stat_mean = (
+            sum(profile_secondary_preference(profile, stat) for stat in existing_stats)
+            + expected_new_preference_sum
+        ) / 4.0
+    else:
+        expected_four_stat_mean = 0.0
+
+    # A midpoint roll has 50% quality by definition. Future stat additions
+    # and improvements are averaged separately; no roll is assigned to the
+    # single highest-priority stat (the old optimistic behavior).
+    expected_fit = 0.5 * (
+        expected_new_preference_sum
+        + rolls_after_four_stats * expected_four_stat_mean
+    )
     projected["projectionExpectedRolls"] = missing_rolls
-    projected["projectionExpectedSecondaryFit"] = 0.5 * mean_preference * missing_rolls
+    projected["projectionExpectedSecondaryFit"] = expected_fit
     projected["projectionLevel"] = 15
     projected["projectionDots"] = dots
     projected["projectionAssumedRolls"] = missing_rolls
