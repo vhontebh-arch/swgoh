@@ -2,6 +2,11 @@ name: Update SWGOH data
 
 on:
   workflow_dispatch:
+    inputs:
+      c3po_source_commit:
+        description: "Optional main commit SHA pinning the canonical c3po.json snapshot; empty uses latest main"
+        required: false
+        type: string
   push:
     paths:
       - "mod_analyzer.py"
@@ -9,6 +14,7 @@ on:
       - "generate_mods.py"
       - "targets.json"
       - ".github/workflows/update-trigger.txt"
+      - ".github/scripts/sync-c3po.sh"
   schedule:
     - cron: "0 6 * * *"
 
@@ -32,6 +38,11 @@ jobs:
 
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Sync canonical C3PO snapshot
+        env:
+          C3PO_SOURCE_COMMIT: ${{ inputs.c3po_source_commit }}
+        run: bash .github/scripts/sync-c3po.sh
 
       # ============================================================
       # PYTHON
