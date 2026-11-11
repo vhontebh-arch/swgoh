@@ -464,6 +464,25 @@ class TransferChainTests(unittest.TestCase):
             {"selected-arrow", "selected-square"},
         )
 
+    def test_exact_report_order_replay_validates_multilevel_donor_chain(self):
+        selected = make_mod("selected-mod", DONOR, True, slot="Arrow", value=20)
+        donor_two_mod = make_mod("donor-two-mod", DONOR_B, True, slot="Arrow", value=15)
+        inventory_patch = make_mod("inventory-patch", slot="Arrow", value=12)
+        result = apply_optimizer_replacements(
+            [selected, donor_two_mod, inventory_patch],
+            {"TARGET": {"mods": [selected]}},
+            {"TARGET"},
+            aliases={TARGET: "TARGET", DONOR: "DONOR", DONOR_B: "DONOR_B"},
+        )
+        self.assertTrue(result["safe"], result["failed"])
+        self.assertTrue(result["report_order_validated"])
+        actions = result["report_execution_order"]
+        self.assertEqual([item["action"] for item in actions], ["MOD", "PATCH", "PATCH"])
+        self.assertEqual([item.get("depth") for item in actions[1:]], [1, 2])
+        self.assertEqual([item["mod_id"] for item in actions], [
+            "selected-mod", "donor-two-mod", "inventory-patch"
+        ])
+
     def test_exact_report_order_replay_places_all_target_mods_before_patches(self):
         selected_arrow = make_mod("selected-arrow", DONOR, True, slot="Arrow", value=20)
         selected_square = make_mod("selected-square", DONOR_B, True, slot="Square", value=20)
