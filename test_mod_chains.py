@@ -45,13 +45,16 @@ class ExpectedLevel15ProjectionTests(unittest.TestCase):
         }
         profile = {"secondary_preferences": {"Speed": 1.0, "Offense %": 0.5}}
         projected = project_mod_for_build(row, profile)
-        expected_mean_preference = 1.5 / 12.0
+        mean_new_preference = 0.5 / 11.0
+        expected_added_preference = 3 * mean_new_preference
+        expected_final_four_mean = (1.0 + expected_added_preference) / 4.0
+        expected_fit = 0.5 * (expected_added_preference + expected_final_four_mean)
         self.assertEqual(projected["level"], "15")
         self.assertEqual(projected["dots"], "5")
         self.assertEqual(projected["projectionExpectedRolls"], 4)
         self.assertAlmostEqual(
             projected["projectionExpectedSecondaryFit"],
-            0.5 * expected_mean_preference * 4,
+            expected_fit,
         )
         self.assertEqual(projected["secondary1Rolls"], "1")
         self.assertEqual(projected.get("secondary2Stat", ""), row.get("secondary2Stat", ""))
