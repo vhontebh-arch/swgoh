@@ -50,19 +50,16 @@
 ### Uzupełnienie dawców — poziom 1
 
 6. **PATCH — załóż na SCORCH** mod z MAGAZYN (dostępny po wcześniejszym kroku): Square / Health / Offense % 0.63% / secondary: Speed 4 / 5★ D lvl1
-7. **PATCH — załóż na SCORCH** mod z MAGAZYN (dostępny po wcześniejszym kroku): Diamond / Health / Defense % 11.75% / secondary: Critical Chance % 1.88%, Speed 11, Health % 0.95%, Protection 658 / 5★ D lvl15
+7. **PATCH — załóż na SCORCH** mod z MAGAZYN (dostępny po wcześniejszym kroku): Diamond / Defense / Defense % 11.75% / secondary: Speed 10, Offense 36, Protection 789, Health 249 / 5★ D lvl15
 8. **PATCH — załóż na FINN** mod z MAGAZYN (dostępny po wcześniejszym kroku): Triangle / Health / Protection % 2.5% / secondary: Speed 5, Offense % 0.43%, Protection 653 / 5★ B lvl1
-9. **PATCH — załóż na SCORCH** mod z MAGAZYN (dostępny po wcześniejszym kroku): Circle / Health / Protection % 23.5% / secondary: Speed 10, Defense % 1.25%, Tenacity % 1.36%, Health 567 / 5★ C lvl15
+9. **PATCH — załóż na SCORCH** mod z MAGAZYN (dostępny po wcześniejszym kroku): Circle / Defense / Health % 5.88% / secondary: Protection 1579, Protection % 1.17%, Health 647, Speed 10 / 5★ B lvl15
 
 Zakładanie moda automatycznie przenosi poprzedni mod ze slotu do magazynu. Wszystkie powyższe kroki zostały sprawdzone na pełnym stanie slotów i magazynu.
 
 ## Wpływ na postacie-dawców
 
 - **FINN:** modValue 204.8 → 225.0 (+20.2).
-- **SCORCH:** modValue 201.9 → 239.2 (+37.3).
-  - Defense: ROZBITO pełnych setów (1 → 0).
-    - ISTOTNA STRATA: set występuje w 72.0% kombinacji profilu SWGOH.GG.
-  - Health: UKOŃCZONO pełnych setów (2 → 3).
+- **SCORCH:** modValue 201.9 → 244.0 (+42.1).
 
 ## Kontrola profili użytych w łańcuchu
 
