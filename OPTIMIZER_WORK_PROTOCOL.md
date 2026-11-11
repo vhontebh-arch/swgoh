@@ -120,3 +120,10 @@ Po zakończeniu analizy modów ChatGPT musi przedstawić użytkownikowi w odpowi
 - Porównując wersje algorytmu, należy uruchomić je z tym samym `c3po_source_commit` w `workflow_dispatch`; porównanie jest ważne tylko przy zgodnych identyfikatorach snapshotu.
 - Lokalna kopia `c3po.json` na innej gałęzi nie jest źródłem danych i nie może zastępować synchronizacji.
 - Szczegóły: `C3PO_DATA_SOURCE.md`.
+
+## 11. Porównanie częstości kombinacji bez zmiany punktacji
+
+- Tryb eksperymentalny `tie_break` nie zmienia `baseScore`, `setBonusScore` ani dotychczasowej preferencji setów.
+- Częstość dokładnej kombinacji sześciu modów może wpływać wyłącznie na wybór między buildami, które remisują na dotychczasowych kryteriach wyniku i preferencji setów.
+- W raporcie trzeba oznaczyć ją jako kryterium rozstrzygające remis, a nie jako dodatkowe punkty.
+- Porównanie `base` kontra `tie_break` musi korzystać z identycznego snapshotu C-3PO.
