@@ -76,7 +76,7 @@ Wirtualny build jest oceniany przy założeniu, że użytkownik może podnieść
 3. W rankingu nie zakładaj slice 5★ → 6★ ani calibration. Nie zmieniaj liczby gwiazdek, wartości istniejących secondary ani tieru w projekcji buildu.
 4. Slice i calibration mogą występować w raporcie jako osobne sugestie inwestycyjne. Nie są warunkiem wykonalności moda ani warunkiem jego uwzględnienia w analizie; użytkownik może je pominąć.
 5. Bonus setu licz dla poziomu 15, ale nie zakładaj bonusu 6-dot dla moda 5★.
-6. Jeśli brak zweryfikowanej tabeli przyrostu primary dla poziomów moda, nie wymyślaj wartości. Pozostaw primary z eksportu i jawnie oznacz to ograniczenie projekcji.
+6. Primary projektuj do potwierdzonej wartości maksymalnej poziomu 15 dla aktualnej liczby gwiazdek (5★ lub 6★). Nie przeliczaj moda 5★ na wartości 6★ — to wymagałoby opcjonalnego slice.
 
 Raport musi nazywać ten wynik oczekiwaną oceną po poziomie 15, a nie maksymalnym potencjałem ani gwarantowaną wartością w grze.
 
