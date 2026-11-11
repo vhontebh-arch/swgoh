@@ -14,7 +14,7 @@ INPUT_FILE = "mods.csv"
 OUTPUT_CSV = "mod_analysis.csv"
 OUTPUT_MD = "mod_analysis.md"
 PROFILE_FILE = "mod_profiles.json"
-ANALYZER_VERSION = "2026-11-10-profile-first-set-audit-v14-preserve-validated-plan-order"
+ANALYZER_VERSION = "2026-11-11-user-report-tiered-transfer-steps-v15"
 
 R5 = {
     "Critical Chance %": (1.125, 2.25), "Defense": (4.9, 9.8),
@@ -1709,10 +1709,7 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
                 lines.append("- **{} — DO ZAŁOŻENIA**".format(slot))
                 lines.append("  - Nowy mod: {}".format(mod_description(mod)))
                 lines.append("  - Źródło: {}".format(source_name))
-                if current:
-                    lines.append("  - Zdejmowany z Vel: {}".format(mod_description(current)))
-                else:
-                    lines.append("  - Slot Vel jest pusty.")
+
         gain = float(opt.get("gain", 0.0) or 0.0)
         lines += [
             "",
@@ -1722,30 +1719,43 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
 
         if chain_result.get("safe"):
             lines += ["## Kolejność przekładania", ""]
+            target_plans = [
+                plan for plan in chain_result.get("plans", [])
+                if plan.get("target") == target_id or plan.get("target_owner") == target_owner
+            ]
+            slot_order = ["Arrow", "Square", "Diamond", "Triangle", "Circle", "Cross"]
+            target_plans.sort(key=lambda plan: (
+                slot_order.index(str(plan.get("mod", {}).get("slot", "")))
+                if str(plan.get("mod", {}).get("slot", "")) in slot_order else len(slot_order)
+            ))
+
+            # Phase 1: equip every selected mod on the main target first.
             step = 1
-            # Preserve the exact plan order validated by the physical simulator.
-            # Sorting by slot here could reorder dependent donor repairs.
-            for plan in chain_result.get("plans", []):
-                if plan.get("target") != target_id and plan.get("target_owner") != target_owner:
-                    continue
-                slot = str(plan.get("mod", {}).get("slot", ""))
+            for plan in target_plans:
                 selected = plan["mod"]
+                slot = str(selected.get("slot", ""))
                 selected_source = mod_owner(selected)
                 selected_source_name = display_name(selected_source) if selected_source else "MAGAZYN"
                 lines.append("{}. **{} — załóż na {}** mod z {}: {}".format(
                     step, slot, target_name, selected_source_name, mod_description(selected)
                 ))
                 step += 1
-                displaced = plan.get("target_current")
-                if displaced:
-                    lines.append("{}. Zdejmij dotychczasowy mod z {} do MAGAZYNU: {}".format(
-                        step, target_name, mod_description(displaced)
-                    ))
-                    step += 1
-                for move in plan.get("moves", []):
+
+            # Phase 2+: repair donors by dependency depth. A move at index 0
+            # repairs a direct donor of the main target (level 1); its next
+            # move repairs the donor that supplied that patch (level 2), etc.
+            patch_levels = {}
+            for plan in target_plans:
+                for depth, move in enumerate(plan.get("moves", []), start=1):
+                    patch_levels.setdefault(depth, []).append((plan, move))
+
+            for depth in sorted(patch_levels):
+                lines += ["", "### Uzupełnienie dawców — poziom {}".format(depth), ""]
+                for plan, move in patch_levels[depth]:
                     replacement = move["replacement"]
+                    displaced = plan.get("target_current")
                     if displaced and rid(replacement) == rid(displaced):
-                        replacement_source = "MAGAZYN (mod zdjęty przed chwilą z {})".format(target_name)
+                        replacement_source = "MAGAZYN (mod automatycznie wyparty z {})".format(target_name)
                     elif is_true(replacement.get("equipped")):
                         replacement_source = display_name(mod_owner(replacement))
                     else:
@@ -1755,7 +1765,8 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
                         replacement_source, mod_description(replacement)
                     ))
                     step += 1
-            lines += ["", "Wszystkie powyższe kroki zostały sprawdzone na pełnym stanie slotów i magazynu.", ""]
+            lines += ["", "Zakładanie moda automatycznie przenosi poprzedni mod ze slotu do magazynu. "
+                      "Wszystkie powyższe kroki zostały sprawdzone na pełnym stanie slotów i magazynu.", ""]
         else:
             lines += [
                 "## Kolejność przekładania",
