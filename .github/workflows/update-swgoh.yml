@@ -19,6 +19,7 @@ on:
       - "update_mod_profiles.py"
       - "generate_mods.py"
       - "targets.json"
+      - "mod_analysis_target.json"
       - ".github/workflows/update-trigger.txt"
       - ".github/scripts/sync-c3po.sh"
   schedule:
@@ -1075,13 +1076,40 @@ jobs:
           set -e
 
           if [ -n "$MOD_ANALYSIS_TARGETS" ]; then
-            python mod_analyzer.py --target "$MOD_ANALYSIS_TARGETS"
+            TARGETS="$MOD_ANALYSIS_TARGETS"
+            echo "Cel modów: parametr workflow_dispatch"
           else
-            python mod_analyzer.py
+            TARGETS="$(python - <<'PY'
+          import json
+          with open("mod_analysis_target.json", encoding="utf-8") as f:
+              config = json.load(f)
+          targets = config.get("targets")
+          if not isinstance(targets, list) or not targets:
+              raise SystemExit("mod_analysis_target.json: pole targets musi być niepustą listą BASE_ID.")
+          normalized = []
+          for value in targets:
+              base_id = str(value or "").strip().upper()
+              if not base_id or not base_id.replace("_", "").isalnum():
+                  raise SystemExit(f"Nieprawidłowy BASE_ID celu: {value!r}")
+              if base_id not in normalized:
+                  normalized.append(base_id)
+          print(",".join(normalized))
+          PY
+          )"
+            echo "Cel modów: mod_analysis_target.json"
           fi
+
+          if [ -z "$TARGETS" ]; then
+            echo "ERROR: nie wybrano celu optymalizacji modów."
+            exit 1
+          fi
+
+          python mod_analyzer.py --target "$TARGETS"
 
           test -s mod_analysis.csv
           test -s mod_analysis.md
+
+          python validate_mod_target_report.py --targets "$TARGETS" --report mod_analysis.md
 
           echo ""
           echo "=============================================="
