@@ -255,3 +255,15 @@ Na gałęzi `vel-sartha-analysis-20261110` dostępny jest wariant porównawczy `
 - Dla rozpoznanej kombinacji waga bonusów setów wynosi `0.10 + 0.90 × znormalizowana częstość`; ta sama preferencja jest używana jako tie-break.
 - Jeżeli kombinacji nie ma w profilu albo build nie zawiera kompletu sześciu modów, wariant exact wraca do dotychczasowych preferencji pojedynczych setów.
 - Jest to eksperyment porównawczy, a nie zmiana zatwierdzonego algorytmu. Nie przenosić go do stabilnej gałęzi bez osobnej oceny wyników na identycznym snapshotcie C-3PO.
+
+## Eksperyment score-neutral exact-combo tie-break — v20
+
+Tryb `set_combo_mode="tie_break"` zachowuje dotychczasową punktację bez zmian:
+- wynik modów (`baseScore`) pozostaje identyczny;
+- bonusy setów nadal są liczone według dotychczasowych preferencji pojedynczych setów (`setBonusScore`);
+- dotychczasowa preferencja setów (`setPreferenceScore`) nadal jest wcześniejszym kryterium rozstrzygającym;
+- częstość dokładnej kombinacji z profilu SWGOH.GG jest używana dopiero po remisie wyniku całego buildu i preferencji pojedynczych setów, przed ostatnim tie-breakiem zachowania aktualnego przypisania.
+
+W ten sposób częstość konfiguracji nie może podnieść wyniku buildu ani zmienić wartości bonusu setu. Może jedynie wybrać częściej obserwowaną konfigurację, jeśli wcześniejsze kryteria nie rozróżniają kandydatów. Gdy kombinacji nie ma w profilu, to dodatkowe kryterium jest pomijane.
+
+Workflow eksperymentalny porównuje teraz `base` z `tie_break` na tym samym snapshotcie C-3PO. Poprzedni wariant `exact` (częstość wpływa na wagę bonusów) pozostaje w kodzie jako osobny eksperyment, ale nie jest używany w bieżącym porównaniu. Żaden wariant nie jest przenoszony do stabilnego `optimizer-v2` bez osobnej zgody.
