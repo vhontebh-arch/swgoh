@@ -57,6 +57,11 @@ class TransferChainTests(unittest.TestCase):
         self.assertTrue(result["safe"], result["failed"])
         move = result["plans"][0]["moves"][0]
         self.assertEqual(move["replacement"]["id"], "defense-patch-lower-fit")
+        from mod_analyzer import score_profile
+        self.assertGreater(
+            score_profile(high_fit_breaking_patch, profile)["fitScore"],
+            score_profile(preserving_patch, profile)["fitScore"],
+        )
         donor = next(item for item in result["validation"] if item["owner"] == DONOR)
         self.assertEqual(donor["beforeComboKey"], "Double Health + Defense")
         self.assertEqual(donor["afterComboKey"], "Double Health + Defense")
