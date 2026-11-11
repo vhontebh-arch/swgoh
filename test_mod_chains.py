@@ -165,6 +165,72 @@ class RawRollScaleTests(unittest.TestCase):
 
 
 
+class ExactSetComboTests(unittest.TestCase):
+    def make_six_mods(self, counts):
+        slots = ["Arrow", "Square", "Diamond", "Triangle", "Circle", "Cross"]
+        remaining = []
+        for set_name, count in counts.items():
+            remaining.extend([set_name] * count)
+        self.assertEqual(len(remaining), 6)
+        return [{
+            "id": slot + "-" + set_name, "slot": slot, "set": set_name,
+            "dots": "6", "tier": "5", "level": "15",
+            "equipped": "False", "assignedTo": "",
+            "primaryStat": "Protection %", "primaryValue": "24", "modValue": "0",
+        } for slot, set_name in zip(slots, remaining)]
+
+    def test_exact_combo_frequency_preserves_double_and_triple_multiplicity(self):
+        from mod_analyzer import profile_set_combo_match, canonical_set_combo_from_mods
+        profile = {"set_combinations": {
+            "Double Health + Defense": 30.0,
+            "Health + Double Defense": 12.0,
+            "Triple Health": 9.0,
+        }}
+        common = self.make_six_mods({"Health": 4, "Defense": 2})
+        less_common = self.make_six_mods({"Health": 2, "Defense": 4})
+        self.assertEqual(canonical_set_combo_from_mods(common), "Double Health + Defense")
+        self.assertEqual(canonical_set_combo_from_mods(less_common), "Double Defense + Health")
+        self.assertEqual(profile_set_combo_match(profile, common)["frequency"], 30.0)
+        self.assertEqual(profile_set_combo_match(profile, common)["preference"], 1.0)
+        self.assertEqual(profile_set_combo_match(profile, less_common)["frequency"], 12.0)
+        self.assertAlmostEqual(profile_set_combo_match(profile, less_common)["preference"], 0.4)
+
+    def test_exact_combo_aliases_are_canonicalized_and_unknown_combo_falls_back(self):
+        from mod_analyzer import profile_set_combo_match, canonical_set_combo_from_mods
+        profile = {"set_combinations": {"Offense + Crit Chance": 25.0, "Triple Health": 10.0}}
+        mods = self.make_six_mods({"Offense": 4, "Critical Chance": 2})
+        self.assertEqual(canonical_set_combo_from_mods(mods), "Critical Chance + Offense")
+        self.assertEqual(profile_set_combo_match(profile, mods)["frequency"], 25.0)
+        self.assertIsNone(profile_set_combo_match(profile, self.make_six_mods({"Health": 4, "Defense": 2})))
+
+    def test_exact_mode_prefers_the_most_frequent_observed_combo(self):
+        profile = {
+            "set_combinations": {
+                "Double Health + Defense": 60.0, "Double Defense + Health": 20.0,
+                "Triple Health": 10.0, "Triple Defense": 10.0,
+            },
+            "secondary_preferences": {},
+            "set_preferences": {"Health": 1.0, "Defense": 1.0},
+        }
+        rows = []
+        for slot in ["Square", "Diamond", "Circle", "Arrow", "Triangle", "Cross"]:
+            for set_name in ["Health", "Defense"]:
+                rows.append({
+                    "id": slot + "-" + set_name, "slot": slot, "set": set_name,
+                    "dots": "6", "tier": "5", "level": "15",
+                    "equipped": "False", "assignedTo": "",
+                    "primaryStat": "Protection %", "primaryValue": "24", "modValue": "0",
+                })
+        result = optimize_target_build(rows, {"TARGET"}, profiles={"TARGET": profile},
+                                       set_combo_mode="exact")["TARGET"]
+        counts = {}
+        for mod in result["mods"]:
+            counts[mod["set"]] = counts.get(mod["set"], 0) + 1
+        self.assertEqual(counts, {"Health": 4, "Defense": 2})
+        self.assertEqual(result["setComboKey"], "Double Health + Defense")
+        self.assertEqual(result["setComboFrequency"], 60.0)
+
+
 class ProfileNormalizationTests(unittest.TestCase):
     def test_percent_primary_matches_swgoh_gg_label_without_percent(self):
         profile = {"primary_preferences": {"Triangle": {"Critical Damage": 0.82}}}
