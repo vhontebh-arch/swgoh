@@ -417,6 +417,13 @@ def load_profiles():
         return {}
 
 
+def merge_profiles(existing, additional):
+    """Add newly requested donor profiles without dropping target profiles."""
+    merged = dict(existing or {})
+    merged.update(additional or {})
+    return merged
+
+
 def load_player_aliases():
     aliases = {}
 
@@ -1714,7 +1721,8 @@ def main(argv=None):
         if not missing_attempts:
             break
 
-        profiles, donor_profile_status = ensure_profiles(missing_attempts, names)
+        additional_profiles, donor_profile_status = ensure_profiles(missing_attempts, names)
+        profiles = merge_profiles(profiles, additional_profiles)
         profile_fetch_status.update(donor_profile_status)
         attempted_profile_units.update(missing_attempts)
 
