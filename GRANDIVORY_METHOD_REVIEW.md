@@ -51,7 +51,7 @@ To zachowuje prosty model profili oparty na preferencjach statystyk i setów. Ni
 - Istniejące wartości secondary, liczba gwiazdek i tier pozostają bez zmian. Mod 5A nie jest automatycznie przeliczany na 6E.
 - Slice i calibration nie wchodzą do punktacji ani rankingu buildu. Mogą być pokazane osobno jako sugestie inwestycyjne, które użytkownik może pominąć.
 - Bonus setu jest liczony jak dla poziomu 15, ale bez zakładania ulepszenia 5★ → 6★.
-- Primary jest projektowane do potwierdzonej wartości maksymalnej poziomu 15 dla aktualnej liczby gwiazdek (5★ lub 6★). Mod 5★ nie otrzymuje wartości primary 6★, ponieważ slice pozostaje opcjonalny.
+- Primary pozostaje dokładnie na wartości z eksportu, zależnej od aktualnej liczby gwiazdek. Podniesienie moda do poziomu 15 nie zmienia primary; mod 5★ nie otrzymuje wartości primary 6★, ponieważ slice pozostaje opcjonalny.
 - Wynik i różnica gain oznaczają oczekiwaną ocenę buildu po samym podniesieniu do poziomu 15; nie są gwarantowanym wynikiem RNG ani wynikiem po slice/calibration.
 ## Łańcuchy transferów i bilans dawców — v4
 
@@ -86,7 +86,7 @@ To jest jawne przybliżenie, a nie pełna reprodukcja dokładnego przeliczenia s
 
 - Dokładnego przewidywania rzeczywistego przydziału przyszłych rolli; bieżący model liczy ich wartość oczekiwaną przez średnią wartość rolla i średnie dopasowanie profilu, a nie konkretny losowy wynik.
 - Dokładnego przeliczenia primary dla poziomów poniżej 15. Primary pozostaje na wartości z eksportu, ponieważ wejściowe dane nie zawierają tabeli przyrostu primary na każdym poziomie.
-- Nie modelujemy pośredniej wartości primary na każdym poziomie; ranking używa potwierdzonego punktu końcowego poziomu 15 dla obecnej liczby gwiazdek.
+- Primary nie wymaga projekcji poziomu: ranking używa wartości z eksportu, ponieważ zależy ona od liczby gwiazdek, a nie od poziomu moda.
 - Pełnej globalnej optymalizacji wielu celów jednocześnie.
 - Globalnego optimum po wszystkich możliwych długościach łańcucha. Wersja v8 porównuje wszystkie wykonalne warianty na najkrótszym poziomie BFS; wybiera najpierw najlepszy łączny fit profilu dawców, następnie zmianę liczby pełnych setów i sumę `modValue`. Dłuższe łańcuchy są rozważane tylko wtedy, gdy na krótszym poziomie nie ma żadnego wykonalnego zakończenia. To świadomy priorytet prostoty transferu, a nie dowód globalnego optimum po wszystkich długościach.
 - Automatycznego chronienia wszystkich dawców; bilans pozostaje jawny, a decyzja o akceptacji transferu należy do użytkownika.
