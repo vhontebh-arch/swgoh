@@ -1769,7 +1769,7 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
         "## Status",
         "",
         "- **Wykonalność fizyczna:** {}".format("POTWIERDZONA" if chain_result.get("safe") else "ZABLOKOWANA"),
-        "- **Odtworzenie dokładnej kolejności z raportu:** {}".format("POTWIERDZONE" if chain_result.get("report_order_validated") else "NIEPOTWIERDZONE"),
+        "- **Walidacja fizyczna całego łańcucha:** {}".format("POTWIERDZONA" if chain_result.get("safe") else "ZABLOKOWANA"),
         "- **Ocena:** {}".format(assessment),
         "- **Liczba modów docelowych:** {}/6".format(
             min(6, max((len(opt.get("mods", [])) for opt in optimizer.values()), default=0))
