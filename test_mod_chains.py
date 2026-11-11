@@ -352,13 +352,17 @@ class UserReportTests(unittest.TestCase):
                     "mod": selected, "target_current": current,
                     "moves": [{
                         "owner": "donor-instance", "name": "Dawca",
-                        "replacement": patch, "removed": None, "gain": 1.0,
+                        "replacement": patch, "removed": None, "gain": -1.0,
                     }],
                 }],
                 "validation": [{
                     "owner": "donor-instance", "name": "Dawca",
                     "beforeModValue": 10.0, "afterModValue": 12.0,
                     "modValueDelta": 2.0,
+                    "beforeComboKey": "Double Health + Defense",
+                    "beforeComboFrequency": 50.0,
+                    "afterComboKey": "Triple Health",
+                    "afterComboFrequency": 15.0,
                     "setChanges": [{
                         "set": "Defense", "status": "ROZBITO",
                         "beforeFull": 1, "afterFull": 0,
@@ -378,6 +382,8 @@ class UserReportTests(unittest.TestCase):
         self.assertIn("Kolejność przekładania", report)
         self.assertIn("PATCH", report)
         self.assertIn("Vel Sartha", report)
+        self.assertIn("Kombinacja setów: Double Health + Defense (50.0%) → Triple Health (15.0%)", report)
+        self.assertIn("Fit pojedynczych modów wg profilu dawcy: Square -1.0 pkt", report)
         self.assertNotIn("UPGRADE:", report)
         self.assertNotIn("Zdejmij", report)
         self.assertNotIn("Zdejmowany z Vel", report)

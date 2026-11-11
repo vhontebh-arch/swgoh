@@ -1378,6 +1378,9 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
         bg=set_groups(before); ag=set_groups(after)
         before_value=sum(float(r.get("modValue",0) or 0) for r in before)
         after_value=sum(float(r.get("modValue",0) or 0) for r in after)
+        donor_profile = profiles.get(base(o), {}) or {}
+        before_combo = profile_set_combo_match(donor_profile, before)
+        after_combo = profile_set_combo_match(donor_profile, after)
         before_counts=set_counts(before)
         after_counts=set_counts(after)
         set_changes=[]
@@ -1409,6 +1412,10 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
             "beforeModValue":round(before_value,1),
             "afterModValue":round(after_value,1),
             "modValueDelta":round(after_value-before_value,1),
+            "beforeComboKey":before_combo.get("key","") if before_combo else "",
+            "beforeComboFrequency":before_combo.get("frequency") if before_combo else None,
+            "afterComboKey":after_combo.get("key","") if after_combo else "",
+            "afterComboFrequency":after_combo.get("frequency") if after_combo else None,
             "ok":True
         })
 
@@ -2060,6 +2067,28 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
                     float(item.get("afterModValue", 0.0) or 0.0),
                     float(item.get("modValueDelta", 0.0) or 0.0),
                 ))
+                before_combo_key = str(item.get("beforeComboKey", "") or "")
+                after_combo_key = str(item.get("afterComboKey", "") or "")
+                if before_combo_key or after_combo_key:
+                    before_combo_frequency = item.get("beforeComboFrequency")
+                    after_combo_frequency = item.get("afterComboFrequency")
+                    before_label = before_combo_key or "kombinacja nieujęta w profilu"
+                    after_label = after_combo_key or "kombinacja nieujęta w profilu"
+                    before_pct = "—" if before_combo_frequency is None else "{:.1f}%".format(float(before_combo_frequency))
+                    after_pct = "—" if after_combo_frequency is None else "{:.1f}%".format(float(after_combo_frequency))
+                    lines.append("  - Kombinacja setów: {} ({}) → {} ({}).".format(
+                        before_label, before_pct, after_label, after_pct
+                    ))
+                donor_moves = [
+                    (str(plan.get("mod", {}).get("slot", "") or ""), float(move.get("gain", 0.0) or 0.0))
+                    for plan in chain_result.get("plans", [])
+                    for move in plan.get("moves", [])
+                    if str(move.get("owner", "") or "") == str(item.get("owner", "") or "")
+                ]
+                if donor_moves:
+                    lines.append("  - Fit pojedynczych modów wg profilu dawcy: {}.".format(
+                        "; ".join("{} {:+.1f} pkt".format(slot, gain) for slot, gain in donor_moves)
+                    ))
                 assessment_detail = donor_assessments.get(str(item.get("owner", "") or ""), {})
                 for change in item.get("setChanges", []):
                     lines.append("  - {}: {} pełnych setów ({} → {}).".format(
