@@ -131,7 +131,8 @@ Zamiennik ocenia się względem moda zabranego **w kontekście całej konfigurac
 - zmianę statystyki głównej;
 - zmianę wszystkich istotnych statystyk drugorzędnych;
 - gwiazdki, poziom i tier;
-- wpływ na rolę i użyteczność dawcy.
+- wpływ na rolę i użyteczność dawcy;
+- zmianę częstości dokładnej kombinacji sześciu modów dawcy, jeśli jego aktualny profil SWGOH.GG zawiera rozpoznaną kombinację przed i po transferze. Należy preferować warianty zachowujące lub poprawiające częstość tej konfiguracji przed samym zyskiem fit pojedynczego moda.
 
 Nie wolno przedstawiać zamiennika jako równoważnego, jeśli jest wyraźnie słabszy. Jeżeli donor po zamianie traci bonus zestawu lub istotne statystyki, musi to być pokazane w bilansie. Sam fakt, że mod zastępczy pochodzi z magazynu, nie oznacza, że operacja jest bezkosztowa.
 

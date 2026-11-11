@@ -560,6 +560,50 @@ class TransferChainTests(unittest.TestCase):
         self.assertEqual(len(moves), 1)
         self.assertEqual(moves[0]["replacement"]["id"], "stronger-patch")
 
+    def test_profile_exact_combo_preservation_precedes_higher_local_fit(self):
+        selected = make_mod("selected-circle", DONOR, True, slot="Circle", value=10, mod_set="Defense")
+        donor_mods = [
+            make_mod("donor-arrow", DONOR, True, slot="Arrow", mod_set="Health"),
+            make_mod("donor-square", DONOR, True, slot="Square", mod_set="Health"),
+            make_mod("donor-diamond", DONOR, True, slot="Diamond", mod_set="Defense"),
+            make_mod("donor-triangle", DONOR, True, slot="Triangle", mod_set="Health"),
+            make_mod("donor-cross", DONOR, True, slot="Cross", mod_set="Health"),
+        ]
+        health_patch = make_mod("health-patch", value=30, slot="Circle", mod_set="Health")
+        health_patch.update({
+            "dots": "6", "primaryStat": "Protection %", "primaryValue": "24%",
+            "secondary1Stat": "Speed", "secondary1Value": "30",
+            "secondary1Rolls": "5",
+        })
+        defense_patch = make_mod("defense-patch", value=10, slot="Circle", mod_set="Defense")
+        defense_patch.update({
+            "dots": "6", "primaryStat": "Protection %", "primaryValue": "24%",
+            "secondary1Stat": "Defense", "secondary1Value": "8",
+            "secondary1Rolls": "1",
+        })
+        profile = {
+            "set_combinations": {
+                "Double Health + Defense": 50.0,
+                "Triple Health": 15.0,
+            },
+            "primary_preferences": {"Circle": {"Protection": 1.0}},
+            "secondary_preferences": {"Speed": 1.0},
+        }
+        result = apply_optimizer_replacements(
+            [selected, *donor_mods, health_patch, defense_patch],
+            {"TARGET": {"mods": [selected]}},
+            {"TARGET"},
+            profiles={"DONOR": profile},
+            aliases={TARGET: "TARGET", DONOR: "DONOR"},
+        )
+        self.assertTrue(result["safe"], result["failed"])
+        move = result["plans"][0]["moves"][0]
+        # Health has a better individual fit, but it would destroy the donor's
+        # observed Double Health + Defense six-mod combination.
+        self.assertEqual(move["replacement"]["id"], "defense-patch")
+        self.assertEqual(move["combo_delta"], 0.0)
+        self.assertEqual(move["set_delta"], 0)
+
     def test_profile_first_fallback_prefers_higher_fit_before_set_preservation(self):
         selected = make_mod("selected-mod", DONOR, True, value=10, mod_set="Speed")
         other_set_pieces = [

@@ -127,3 +127,12 @@ Po zakończeniu analizy modów ChatGPT musi przedstawić użytkownikowi w odpowi
 - Częstość dokładnej kombinacji sześciu modów może wpływać wyłącznie na wybór między buildami, które remisują na dotychczasowych kryteriach wyniku i preferencji setów.
 - W raporcie trzeba oznaczyć ją jako kryterium rozstrzygające remis, a nie jako dodatkowe punkty.
 - Porównanie `base` kontra `tie_break` musi korzystać z identycznego snapshotu C-3PO.
+
+
+## 12. Preferencja dokładnej kombinacji setów u dawców
+
+- Przy wyborze PATCH porównuj pełną sześciomodową kombinację setów dawcy przed i po zmianie, nie tylko liczbę ukończonych setów.
+- Jeśli profil dawcy zawiera rozpoznaną kombinację przed i po transferze, pierwszeństwo ma wariant z większą zmianą częstości tej konfiguracji; dopiero potem fit profilu, liczba pełnych setów i suma `modValue`.
+- Jeśli kombinacja nie jest rozpoznana lub profil nie istnieje, jej wkład wynosi zero i działa jawny fallback do dotychczasowych kryteriów.
+- Nie jest to twarda blokada transferu. Raport nadal pokazuje pełny bilans i pozostawia decyzję użytkownikowi.
+- Przy porównaniu wariantów algorytmu używaj tego samego snapshotu C-3PO.

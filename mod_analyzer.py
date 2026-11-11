@@ -15,7 +15,7 @@ OUTPUT_CSV = os.environ.get("SWGOH_OUTPUT_CSV", "mod_analysis.csv")
 OUTPUT_MD = os.environ.get("SWGOH_OUTPUT_MD", "mod_analysis.md")
 PROFILE_FILE = "mod_profiles.json"
 SET_COMBO_MODE = os.environ.get("SWGOH_SET_COMBO_MODE", "base").strip().lower()
-ANALYZER_VERSION = "2026-11-11-exact-set-combo-audit-v19"
+ANALYZER_VERSION = "2026-11-11-donor-exact-combo-chain-v20"
 
 R5 = {
     "Critical Chance %": (1.125, 2.25), "Defense": (4.9, 9.8),
@@ -979,6 +979,13 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
     def fit(r, who):
         profile = profiles.get(who)
         return float(score_profile(r, profile)["fitScore"]) if profile else float(r.get("modValue", 0) or 0)
+
+    def exact_combo_frequency(profile, mods):
+        if not profile:
+            return 0.0
+        match = profile_set_combo_match(profile, mods)
+        return float(match.get("frequency", 0.0)) if match else 0.0
+
     def set_counts(mods):
         out = {}
         for m in mods:
@@ -1072,10 +1079,22 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                     replacement_id=rid(replacement)
                     local_gain=fit(replacement,who)-fit(current,who)
                     set_delta=completed_set_delta(hole_owner,current,replacement)
+                    donor_profile = profiles.get(who) or {}
+                    before_mods = [
+                        r for (o, _slot), r in working_eq.items()
+                        if o == hole_owner
+                    ]
+                    after_mods = [
+                        r for r in before_mods if rid(r) != rid(current)
+                    ] + [replacement]
+                    combo_delta = (
+                        exact_combo_frequency(donor_profile, after_mods)
+                        - exact_combo_frequency(donor_profile, before_mods)
+                    )
                     move={"owner":hole_owner,"name":pname(hole_owner),
                           "removed":None if initial_hole else current,
                           "replacement":replacement,"gain":local_gain,
-                          "set_delta":set_delta}
+                          "set_delta":set_delta,"combo_delta":combo_delta}
                     new_moves=moves+[move]
                     next_forbidden=forbidden|{rid(current),replacement_id}
                     if kind==0:
@@ -1088,6 +1107,7 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                         terminal_solutions.append({
                             "moves":new_moves,
                             "gain":sum(x["gain"] for x in new_moves),
+                            "combo_delta":sum(x.get("combo_delta", 0.0) for x in new_moves),
                             "set_delta":sum(x["set_delta"] for x in new_moves),
                             "mod_value_delta":mod_value_delta
                         })
@@ -1102,9 +1122,12 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                             ))
             if terminal_solutions:
                 # Lexicographic objective: shortest executable chain (BFS layer),
-                # then donor profile-fit gain, set transition, and modValue.
-                # Existing sets are not protected at the expense of profile fit.
+                # then preserve/improve the donor's exact observed six-mod combo,
+                # then donor profile-fit gain, completed-set transition and modValue.
+                # If either combo is absent from the donor profile, its frequency is
+                # zero and the previous fit/set/value fallback remains effective.
                 terminal_solutions.sort(key=lambda solution: (
+                    solution["combo_delta"],
                     solution["gain"],
                     solution["set_delta"],
                     solution["mod_value_delta"],
