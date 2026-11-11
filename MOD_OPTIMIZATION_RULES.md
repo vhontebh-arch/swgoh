@@ -72,7 +72,7 @@ W raporcie użytkowym mod identyfikujemy opisowo: **slot + zestaw + gwiazdki + p
 Wirtualny build jest oceniany przy założeniu, że użytkownik może podnieść wybrane mody do poziomu 15. Projekcja ma być oczekiwana, a nie maksymalna:
 
 1. Brakujące rolle do limitu aktualnego tieru wyceniaj wartością średnią z zakresu danego secondary (środek przedziału), nie maksymalnym rollem.
-2. Nie przypisuj wszystkich przyszłych rolli do najwyżej preferowanej statystyki profilu. Ponieważ nie znamy przyszłego rozkładu rolli, używaj oczekiwanej wartości dopasowania — średniej preferencji profilu po możliwych secondary przy równych wagach. To jawne uproszczenie, dopóki nie mamy zweryfikowanych prawdopodobieństw losowania poszczególnych statystyk.
+2. Nie przypisuj wszystkich przyszłych rolli do najwyżej preferowanej statystyki profilu. Ponieważ nie znamy przyszłego rozkładu rolli, używaj oczekiwanej wartości dopasowania: najpierw modeluj dodawanie brakujących typów secondary aż do czterech, a pozostałe rolle jako ulepszenia jednego z tych czterech. W obu etapach stosuj równe wagi możliwych wyników, ponieważ nie mamy zweryfikowanych prawdopodobieństw losowania poszczególnych statystyk.
 3. W rankingu nie zakładaj slice 5★ → 6★ ani calibration. Nie zmieniaj liczby gwiazdek, wartości istniejących secondary ani tieru w projekcji buildu.
 4. Slice i calibration mogą występować w raporcie jako osobne sugestie inwestycyjne. Nie są warunkiem wykonalności moda ani warunkiem jego uwzględnienia w analizie; użytkownik może je pominąć.
 5. Bonus setu licz dla poziomu 15, ale nie zakładaj bonusu 6-dot dla moda 5★.
