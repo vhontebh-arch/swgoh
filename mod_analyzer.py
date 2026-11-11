@@ -1352,7 +1352,7 @@ def project_mod_for_build(row, profile):
     - assume the player can always take the mod to level 15;
     - complete the remaining secondary rolls at the midpoint of each roll range;
     - do not assume which secondary receives a future roll: use the mean profile
-      preference across all possible secondary stats as expected contribution;
+      preference across all possible secondary stats, using equal weights because no verified roll probabilities are available;
     - never project slicing or calibration into the build score.
     Existing secondary values and dots remain unchanged. Primary progression is
     intentionally left at the exported value until its level curve is verified.
@@ -1375,7 +1375,7 @@ def project_mod_for_build(row, profile):
         if possible_stats else 0.0
     )
     # A midpoint roll has 50% quality by definition. Since its destination
-    # stat is unknown, score its expected fit instead of assigning every roll
+    # stat is unknown, score its expected fit under an explicit equal-probability assumption instead of assigning every roll
     # to the single highest-priority stat (the old optimistic behavior).
     projected["projectionExpectedRolls"] = missing_rolls
     projected["projectionExpectedSecondaryFit"] = 0.5 * mean_preference * missing_rolls
