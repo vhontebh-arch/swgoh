@@ -43,15 +43,16 @@ DP przechowuje liczbę elementów każdego setu aż do maksymalnej liczby pełny
 To zachowuje prosty model profili oparty na preferencjach statystyk i setów. Nie wprowadzono targetów wartości statystyk z Grandivory.
 
 
-## Projekcja rozwoju modów — v3
+## Projekcja rozwoju modów — v4 (oczekiwana)
 
-- `project_mod_for_build()` tworzy kopię moda do oceny; nie zmienia danych źródłowych ani bieżących statystyk w rosterze.
-- Dla moda poniżej 15 poziomu dopisuje brakujące rolle do limitu wynikającego z aktualnego tieru. Wartość założonego rolla to środek zakresu dla danej statystyki; jego przypisanie do najlepiej ocenianej statystyki profilu jest optymistycznym założeniem.
-- Dla moda 5★ na poziomie 15 i tierze A przelicza każdy secondary do odpowiedniego zakresu 6-dot, tworząc wariant 6E. Roll count pozostaje bez zmian.
-- Ranking pełnych buildów i bonusy setów są liczone na kopiach po projekcji. Wynik aktualny i wynik po projekcji są raportowane oddzielnie. `gain` oznacza różnicę między najlepszym buildem po projekcji a obecnym buildem po tej samej projekcji — nie jest to zysk już osiągnięty ani zatwierdzony transfer.
-- Wartość primary pozostaje taka jak w eksporcie; nie jest sztucznie podbijana w projekcji poziomu.
-
-
+- Projekcja rankingu zakłada, że mod może zostać podniesiony do poziomu 15.
+- Brakujące rolle do limitu aktualnego tieru otrzymują wartość średnią z zakresu danego secondary (środek przedziału), a nie wartość maksymalną.
+- Nieznany przyszły przydział rolli nie jest przypisywany do jednej, najwyżej preferowanej statystyki. Jego oczekiwany wkład jest liczony jako średnia preferencji profilu po możliwych secondary, pomnożona przez średnią jakość rolla (50% zakresu).
+- Istniejące wartości secondary, liczba gwiazdek i tier pozostają bez zmian. Mod 5A nie jest automatycznie przeliczany na 6E.
+- Slice i calibration nie wchodzą do punktacji ani rankingu buildu. Mogą być pokazane osobno jako sugestie inwestycyjne, które użytkownik może pominąć.
+- Bonus setu jest liczony jak dla poziomu 15, ale bez zakładania ulepszenia 5★ → 6★.
+- Wartość primary pozostaje taka jak w eksporcie. Nie mamy jeszcze zweryfikowanej tabeli przyrostów primary dla każdego poziomu, więc nie wolno udawać, że ta część projekcji jest dokładna.
+- Wynik i różnica gain oznaczają oczekiwaną ocenę buildu po samym podniesieniu do poziomu 15; nie są gwarantowanym wynikiem RNG ani wynikiem po slice/calibration.
 ## Łańcuchy transferów i bilans dawców — v4
 
 - Cel jest rozpoznawany również wtedy, gdy nie ma obecnie żadnego założonego moda: identyfikator instancji postaci jest odtwarzany z mapowania rosteru.
@@ -83,9 +84,9 @@ To jest jawne przybliżenie, a nie pełna reprodukcja dokładnego przeliczenia s
 
 ## Czego ta zmiana jeszcze nie obejmuje
 
-- Dokładnego przewidywania wyniku levelowania, ponieważ nie znamy przyszłych losowych rolli. Projekcja w `project_mod_for_build()` jest jawnie optymistycznym wariantem: brakujące rolle do limitu aktualnego tieru przypisuje do najwyżej preferowanej statystyki profilu. Nie jest to średnia statystyczna ani gwarantowany wynik.
+- Dokładnego przewidywania rzeczywistego przydziału przyszłych rolli; bieżący model liczy ich wartość oczekiwaną przez średnią wartość rolla i średnie dopasowanie profilu, a nie konkretny losowy wynik.
 - Dokładnego przeliczenia primary dla poziomów poniżej 15. Primary pozostaje na wartości z eksportu, ponieważ wejściowe dane nie zawierają tabeli przyrostu primary na każdym poziomie.
-- Projekcji 5A→6E dla modów innych niż 5A na poziomie 15; nie zakładamy, że można pominąć wcześniejsze etapy slice.
+- Dokładnej projekcji primary do poziomu 15; pozostaje ono na wartości eksportowej do czasu potwierdzenia tabeli przyrostów.
 - Pełnej globalnej optymalizacji wielu celów jednocześnie.
 - Globalnego optimum po wszystkich możliwych długościach łańcucha. Wersja v8 porównuje wszystkie wykonalne warianty na najkrótszym poziomie BFS; wybiera najpierw najlepszy łączny fit profilu dawców, następnie zmianę liczby pełnych setów i sumę `modValue`. Dłuższe łańcuchy są rozważane tylko wtedy, gdy na krótszym poziomie nie ma żadnego wykonalnego zakończenia. To świadomy priorytet prostoty transferu, a nie dowód globalnego optimum po wszystkich długościach.
 - Automatycznego chronienia wszystkich dawców; bilans pozostaje jawny, a decyzja o akceptacji transferu należy do użytkownika.
@@ -97,7 +98,7 @@ Te ograniczenia są celowe i widoczne: nie udajemy, że samo przeniesienie metod
 - Profile pozostają oparte na priorytetach statystyk i setów, bez obowiązkowych targetów wartości statystyk.
 - Popularność konfiguracji jest wskazówką profilu, a nie automatycznym nakazem.
 - Wybór sześciu modów jest oceniany jako komplet.
-- Nowa implementacja znajduje się wyłącznie na `optimizer-v2`; gałęzie bazowej i `main` nie zmieniano.
+- Stabilna gałąź `optimizer-v2` i `main` pozostają nietknięte. Eksperymentalna implementacja i testy są prowadzone na gałęzi `vel-sartha-analysis-20261110`.
 
 
 ## Priorytet profilu i audyt przebudowy setów — v8
@@ -122,3 +123,9 @@ Te ograniczenia są celowe i widoczne: nie udajemy, że samo przeniesienie metod
 - Jeżeli odświeżenie starego profilu się nie powiedzie, można użyć ostatniej poprawnej kopii wyłącznie z jawnym oznaczeniem jej jako nieaktualnej; raport nie może przedstawiać jej jako świeżego profilu. Jeżeli profilu nigdy nie było, stosuje się jawny fallback `modValue` i ujawnia brak oceny profilowej.
 - Odczyt profili wykonuje ChatGPT bezpośrednio ze stron SWGOH.GG na żądanie użytkownika. GitHub Actions i skrypty repozytorium nie są używane do pobierania profili SWGOH.GG.
 - Szczegółowy przebieg odczytu, walidacji dwóch źródeł, zapisu i read-back opisuje `MOD_PROFILE_REFRESH.md`.
+## Audyt kolejności wykonania — v16
+
+- Niezależny symulator odtwarza teraz dokładnie kolejność pokazywaną w raporcie: w obrębie celu najpierw wszystkie operacje MOD w kolejności slotów, a następnie wszystkie PATCH-e według głębokości łańcucha.
+- Symulacja kontroluje rzeczywiste położenie każdego moda w chwili wykonania, zawartość slotu docelowego, brak duplikatów oraz zachowanie pełnego zbioru modów.
+- Raport pokazuje faktyczne źródło moda w chwili danego kroku; jeśli wcześniejszy krok przeniósł go do magazynu, źródłem jest magazyn, a nie pierwotny właściciel.
+- Nieudana symulacja dokładnej kolejności blokuje status bezpiecznego łańcucha.
