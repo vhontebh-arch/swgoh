@@ -4,6 +4,7 @@ Input: mods.csv from generate_mods.py
 Output: mod_analysis.csv and mod_analysis.md
 """
 
+import argparse
 import csv
 import json
 import os
@@ -14,7 +15,7 @@ INPUT_FILE = "mods.csv"
 OUTPUT_CSV = "mod_analysis.csv"
 OUTPUT_MD = "mod_analysis.md"
 PROFILE_FILE = "mod_profiles.json"
-ANALYZER_VERSION = "2026-11-11-donor-exact-combo-integration-v2"
+ANALYZER_VERSION = "2026-11-11-donor-exact-combo-target-override-v1"
 
 R5 = {
     "Critical Chance %": (1.125, 2.25), "Defense": (4.9, 9.8),
@@ -370,7 +371,22 @@ def analyze(row):
     })
     return out
 
-def load_targets():
+def load_targets(target_overrides=None):
+    """Load mod-analysis targets without mutating the shared farming targets.json.
+
+    Explicit CLI targets replace the targets used by the mod analyzer only.
+    With no override, preserve the existing targets.json behavior.
+    """
+    if target_overrides:
+        target_ids = []
+        for value in target_overrides:
+            target_ids.extend(
+                part.strip().upper()
+                for part in str(value or "").split(",")
+                if part.strip()
+            )
+        return [{"baseId": target_id} for target_id in dict.fromkeys(target_ids)]
+
     if not os.path.exists("targets.json"):
         return []
     try:
@@ -1606,7 +1622,18 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
         }
     return results
 
-def main():
+def main(argv=None):
+    parser = argparse.ArgumentParser(
+        description="Analiza mody bez zmieniania konfiguracji farmy targets.json."
+    )
+    parser.add_argument(
+        "--target",
+        action="append",
+        default=[],
+        help="BASE_ID postaci do optymalizacji modów; można powtórzyć lub podać listę rozdzieloną przecinkami.",
+    )
+    args = parser.parse_args(argv)
+
     if not os.path.exists(INPUT_FILE):
         raise FileNotFoundError(INPUT_FILE)
 
@@ -1615,13 +1642,22 @@ def main():
     if not source:
         raise RuntimeError("mods.csv jest pusty.")
 
-    targets = load_targets()
+    targets = load_targets(args.target)
     profiles = load_profiles()
     aliases = load_player_aliases()
     names = load_player_names()
     protected_owners = load_protected_owners()
     protected_owners = {aliases.get(owner_id, owner_id) for owner_id in protected_owners}
     target_ids = {t.get("baseId") for t in targets if t.get("baseId")}
+    known_roster_ids = {value for value in aliases.values() if value}
+    unknown_target_ids = target_ids - known_roster_ids
+    if unknown_target_ids:
+        raise ValueError(
+            "Nie znaleziono BASE_ID w aktualnym rosterze: {}".format(
+                ", ".join(sorted(unknown_target_ids))
+            )
+        )
+    target_source = "parametr --target" if args.target else "targets.json"
     profile_fetch_status = {}
 
     # Fetch target profiles first: without them the first full-build ranking
@@ -1740,6 +1776,9 @@ def main():
         "**dopasowanie do postaci** i **rodzaj następnej inwestycji**.", "",
         "W raportach przeznaczonych do ręcznego wykonania mod identyfikowany jest wyłącznie przez slot, set, primary, secondary, gwiazdki, tier i poziom; wewnętrzne ID nie są pokazywane.", "",
         "- Modów: **{}**".format(len(rows)),
+        "- Cel(e) optymalizacji: **{}** (źródło: {})".format(
+            ", ".join(sorted(target_ids)) or "brak", target_source
+        ),
         "- UPGRADE: **{}**".format(counts.get("UPGRADE",0)),
         "- SLICE: **{}**".format(counts.get("SLICE",0)),
         "- SLICE_6E: **{}**".format(counts.get("SLICE_6E",0)),
