@@ -37,7 +37,7 @@ class TargetSelectionTests(unittest.TestCase):
             expected = [{"baseId": "JARJARBINKS", "targetGearTier": 13, "targetRelicTier": 5}]
             path.write_text(json.dumps({"targets": expected}), encoding="utf-8")
             with patch("os.path.exists", side_effect=lambda p: p == "targets.json"), patch(
-                "builtins.open", side_effect=lambda name, *args, **kwargs: open(path, *args, **kwargs)
+                "builtins.open", side_effect=lambda name, *args, **kwargs: path.open(*args, **kwargs)
             ):
                 self.assertEqual(load_targets(), expected)
 
