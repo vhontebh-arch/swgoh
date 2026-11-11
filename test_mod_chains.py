@@ -30,6 +30,25 @@ def run_plan(rows, selected, aliases=None):
 
 
 class TransferChainTests(unittest.TestCase):
+    def test_exact_donor_combo_frequency_is_reported_without_changing_target_score(self):
+        from mod_analyzer import profile_set_combo_match, canonical_set_combo_from_mods
+        mods = [
+            make_mod("a", slot="Arrow", mod_set="Health"),
+            make_mod("b", slot="Square", mod_set="Health"),
+            make_mod("c", slot="Diamond", mod_set="Defense"),
+            make_mod("d", slot="Triangle", mod_set="Health"),
+            make_mod("e", slot="Circle", mod_set="Health"),
+            make_mod("f", slot="Cross", mod_set="Defense"),
+        ]
+        profile = {"set_combinations": {
+            "Double Health + Defense": 48.9,
+            "Double Defense + Health": 20.0,
+        }}
+        self.assertEqual(canonical_set_combo_from_mods(mods), "Double Health + Defense")
+        match = profile_set_combo_match(profile, mods)
+        self.assertEqual(match["frequency"], 48.9)
+        self.assertEqual(match["preference"], 1.0)
+
     def test_inventory_to_empty_target(self):
         selected = make_mod("inventory-mod")
         result = run_plan([selected], selected)
