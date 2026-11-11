@@ -424,6 +424,14 @@ def merge_profiles(existing, additional):
     return merged
 
 
+def unavailable_profile_ids(status):
+    """Owners without a cached profile cannot be treated as safe mod donors."""
+    return {
+        str(base_id) for base_id, result in (status or {}).items()
+        if str(result).strip().lower() == "unavailable"
+    }
+
+
 def load_player_aliases():
     aliases = {}
 
@@ -1705,10 +1713,17 @@ def main(argv=None):
             rows, optimizer, target_ids, profiles, aliases, names, protected_owners
         )
         chain_donor_ids = set()
+
+        # Inspect every selected source, not only successfully planned transfers.
+        # A donor can be the reason a chain is blocked; it still needs a profile
+        # check so an unavailable profile can trigger a safer alternative build.
+        for opt in optimizer.values():
+            for selected_mod in opt.get("mods", []):
+                selected_owner = str(selected_mod.get("assignedTo", "") or "")
+                if selected_owner:
+                    chain_donor_ids.add(aliases.get(selected_owner, selected_owner))
+
         for plan in chain_result.get("plans", []):
-            selected_owner = str(plan.get("mod", {}).get("assignedTo", "") or "")
-            if selected_owner:
-                chain_donor_ids.add(aliases.get(selected_owner, selected_owner))
             for move in plan.get("moves", []):
                 replacement_mod = move.get("replacement", {})
                 if is_true(replacement_mod.get("equipped")):
@@ -1725,6 +1740,17 @@ def main(argv=None):
         profiles = merge_profiles(profiles, additional_profiles)
         profile_fetch_status.update(donor_profile_status)
         attempted_profile_units.update(missing_attempts)
+
+        # Without a profile, donor impact cannot be evaluated. Protect that
+        # owner for this run and rebuild the target from the remaining pool.
+        newly_unavailable = unavailable_profile_ids(donor_profile_status) - protected_owners
+        if newly_unavailable:
+            protected_owners.update(newly_unavailable)
+            labels = ", ".join(display_name(owner_id) for owner_id in sorted(newly_unavailable))
+            print(
+                "PROFILE GUARD: {} — brak profilu; postać wyłączona z puli dawców, "
+                "ponowne wyszukiwanie modów.".format(labels)
+            )
 
         # Re-score every mod and rebuild the target build with newly cached
         # donor profiles before validating the next physical chain.
