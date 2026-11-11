@@ -1660,6 +1660,370 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
         }
     return results
 
+
+def profile_set_combo_support(profile, set_name):
+    """Percentage of observed builds whose set combination contains set_name."""
+    combinations = profile.get("set_combinations", {}) or {}
+    if not combinations:
+        return None
+    total = 0.0
+    aliases = {"Crit Damage": "Critical Damage", "Crit Chance": "Critical Chance"}
+    for combination, frequency in combinations.items():
+        names = []
+        for token in str(combination).split("+"):
+            name = token.strip()
+            for prefix in ("Double ", "Triple "):
+                if name.startswith(prefix):
+                    name = name[len(prefix):].strip()
+                    break
+            names.append(aliases.get(name, name))
+        if set_name in names:
+            try:
+                total += float(frequency or 0.0)
+            except (TypeError, ValueError):
+                pass
+    return min(100.0, total)
+
+def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
+                       target_ids, profile_fetch_status, display_name):
+    """Create a short, executable report for the player; CSV remains technical."""
+    if not optimizer:
+        return "# Raport modów\n\n**STATUS: BLOKADA** — brak kompletnego buildu. Nie wykonuj przekładek.\n"
+
+    def rid(row):
+        return str(row.get("id", "") or "")
+
+    def mod_owner(row):
+        return str(row.get("assignedTo", "") or "") if is_true(row.get("equipped")) else ""
+
+    def owner_base(row):
+        owner_id = str(row.get("assignedTo", "") or "")
+        return aliases.get(owner_id, owner_id)
+
+    lines = [
+        "# Raport modów — {}".format(", ".join(display_name(x) for x in sorted(optimizer))),
+        "",
+        "**Raport użytkowy.** Pokazuje wyłącznie docelowe mody, kolejność przekładek i wpływ na dawców.",
+        "",
+    ]
+    affected_owners = set()
+    for plan in chain_result.get("plans", []):
+        if plan.get("target_owner"):
+            affected_owners.add(plan["target_owner"])
+        selected_owner = mod_owner(plan.get("mod", {}))
+        if selected_owner:
+            affected_owners.add(selected_owner)
+        affected_owners.update(move.get("owner") for move in plan.get("moves", []) if move.get("owner"))
+
+    donor_costs = []
+    for item in chain_result.get("validation", []):
+        if item.get("owner") in affected_owners and item.get("owner") not in {
+            next((str(r.get("assignedTo", "") or "") for r in rows
+                  if is_true(r.get("equipped")) and owner_base(r) == target_id), target_id)
+            for target_id in optimizer
+        }:
+            donor_costs.append(item)
+
+    # A broken set is material only when it is a meaningful part of that
+    # donor's observed SWGOH.GG build profile. 20% is the explicit threshold
+    # for a common build pattern; below it the change remains informational.
+    donor_assessments = {}
+    donor_compromise = False
+    for item in donor_costs:
+        owner = str(item.get("owner", "") or "")
+        base_id = aliases.get(owner, owner)
+        profile = profiles.get(base_id, {})
+        material_set_losses = []
+        minor_set_changes = []
+        for change in item.get("setChanges", []):
+            if change.get("status") not in ("ROZBITO", "OSŁABIONY"):
+                continue
+            set_name = str(change.get("set", "") or "")
+            support = profile_set_combo_support(profile, set_name) if profile else None
+            if support is None or support >= 20.0:
+                material_set_losses.append((set_name, support))
+            else:
+                minor_set_changes.append((set_name, support))
+        value_delta = float(item.get("modValueDelta", 0.0) or 0.0)
+        material = value_delta < -0.05 or bool(material_set_losses)
+        donor_assessments[owner] = {
+            "material": material,
+            "value_delta": value_delta,
+            "material_set_losses": material_set_losses,
+            "minor_set_changes": minor_set_changes,
+        }
+        donor_compromise = donor_compromise or material
+    donor_compromise = donor_compromise or any(
+        float(move.get("gain", 0.0) or 0.0) < -0.05
+        for plan in chain_result.get("plans", [])
+        for move in plan.get("moves", [])
+    )
+    if not chain_result.get("safe"):
+        assessment = "BLOKADA — nie wykonuj przekładek"
+    elif donor_compromise:
+        assessment = "KOMPROMIS — łańcuch wykonalny, ale osłabia co najmniej jednego dawcę"
+    else:
+        assessment = "REKOMENDACJA — łańcuch wykonalny bez wykrytego kosztu u dawców"
+
+    lines += [
+        "## Status",
+        "",
+        "- **Wykonalność fizyczna:** {}".format("POTWIERDZONA" if chain_result.get("safe") else "ZABLOKOWANA"),
+        "- **Odtworzenie dokładnej kolejności z raportu:** {}".format("POTWIERDZONE" if chain_result.get("report_order_validated") else "NIEPOTWIERDZONE"),
+        "- **Ocena:** {}".format(assessment),
+        "- **Liczba modów docelowych:** {}/6".format(
+            min(6, max((len(opt.get("mods", [])) for opt in optimizer.values()), default=0))
+        ),
+        "",
+    ]
+
+    for target_id, opt in optimizer.items():
+        target_owner = next(
+            (str(r.get("assignedTo", "") or "") for r in rows
+             if is_true(r.get("equipped")) and owner_base(r) == target_id),
+            target_id,
+        )
+        target_name = display_name(target_owner)
+        profile = profiles.get(target_id, {})
+        sources = profile.get("source_model", {}).get("sources", [])
+        lines += [
+            "## Docelowy zestaw — {}".format(target_name),
+            "",
+            "### Profil SWGOH.GG",
+            "",
+        ]
+        if sources:
+            for source in sources:
+                lines.append("- {} — {} postaci z kompletnymi 6 modami".format(
+                    source.get("name", "Źródło"), source.get("units_fully_modded", "—")
+                ))
+        else:
+            lines.append("- Brak kompletnego profilu celu.")
+        combos = profile.get("set_combinations", {}) or {}
+        if combos:
+            top_combos = sorted(combos.items(), key=lambda item: float(item[1] or 0), reverse=True)[:3]
+            lines.append("- Najczęstsze kombinacje: {}".format(
+                "; ".join("{} ({:.1f}%)".format(k, float(v)) for k, v in top_combos)
+            ))
+        if opt.get("setComboMode") in {"exact", "tie_break"}:
+            if opt.get("setComboKey"):
+                qualifier = "kryterium rozstrzygające remis" if opt.get("setComboMode") == "tie_break" else "element punktacji"
+                lines.append("- **Dopasowanie dokładnej kombinacji ({}):** {} — {:.2f}% profilu.".format(
+                    qualifier, opt["setComboKey"], float(opt.get("setComboFrequency") or 0.0)
+                ))
+            else:
+                lines.append("- **Dokładna kombinacja nieobecna w profilu:** brak dodatkowego kryterium; zachowano dotychczasowe preferencje pojedynczych setów.")
+        secondary = profile.get("secondary_preferences", {}) or {}
+        top_secondary = sorted(secondary.items(), key=lambda item: float(item[1] or 0), reverse=True)[:4]
+        if top_secondary:
+            lines.append("- Priorytet secondary: {}".format(
+                ", ".join(k for k, _ in top_secondary)
+            ))
+        lines += ["", "### Sześć modów docelowych", ""]
+
+        current_by_slot = {
+            str(r.get("slot", "")): r for r in rows
+            if is_true(r.get("equipped")) and owner_base(r) == target_id
+        }
+        selected_by_slot = {
+            str(mod.get("slot", "")): mod for mod in opt.get("mods", [])
+        }
+        slot_order = ["Arrow", "Square", "Diamond", "Triangle", "Circle", "Cross"]
+        for slot in slot_order:
+            mod = selected_by_slot.get(slot)
+            if not mod:
+                lines.append("- **{}:** BRAK MODA W BUILDZIE".format(slot))
+                continue
+            current = current_by_slot.get(slot)
+            unchanged = current is not None and rid(current) == rid(mod)
+            source_id = mod_owner(mod)
+            source_name = display_name(source_id) if source_id else "MAGAZYN"
+            if unchanged:
+                lines.append("- **Obecny mod:** {}".format(mod_description(current)))
+                lines.append("- **Proponowany mod:** pozostaje bez zmian — {}".format(mod_description(mod)))
+                lines.append("- **Korzyść:** zachowanie obecnej konfiguracji slotu.")
+            else:
+                lines.append("- **Obecny mod:** {}".format(mod_description(current) if current else "Pusty slot"))
+                lines.append("- **Proponowany mod:** {}".format(mod_description(mod)))
+                lines.append("- **Źródło:** {}".format(source_name))
+                if current and profile:
+                    before_fit = score_profile(current, profile)["fitScore"]
+                    after_fit = score_profile(mod, profile)["fitScore"]
+                    lines.append("  - Zmiana dopasowania do profilu: {:+.1f} pkt ({:.1f} → {:.1f}).".format(
+                        after_fit - before_fit, before_fit, after_fit))
+
+        gain = float(opt.get("gain", 0.0) or 0.0)
+        lines += [
+            "",
+            "- **Zmiana oczekiwanej oceny buildu po podniesieniu do 15:** {:+.1f} pkt (średnia dla przyszłych rolli; bez slice i calibration).".format(gain),
+            "",
+        ]
+
+        if chain_result.get("safe"):
+            lines += ["## Kolejność przekładania", ""]
+            target_plans = [
+                plan for plan in chain_result.get("plans", [])
+                if plan.get("target") == target_id or plan.get("target_owner") == target_owner
+            ]
+            slot_order = ["Arrow", "Square", "Diamond", "Triangle", "Circle", "Cross"]
+            target_plans.sort(key=lambda plan: (
+                slot_order.index(str(plan.get("mod", {}).get("slot", "")))
+                if str(plan.get("mod", {}).get("slot", "")) in slot_order else len(slot_order)
+            ))
+
+            # Phase 1: equip every selected mod on the main target first.
+            step = 1
+            for plan in target_plans:
+                selected = plan["mod"]
+                slot = str(selected.get("slot", ""))
+                selected_source = mod_owner(selected)
+                selected_source_name = display_name(selected_source) if selected_source else "MAGAZYN"
+                lines.append("{}. **{} — załóż na {}** mod z {}: {}".format(
+                    step, slot, target_name, selected_source_name, mod_description(selected)
+                ))
+                step += 1
+
+            # Phase 2+: repair donors by dependency depth. A move at index 0
+            # repairs a direct donor of the main target (level 1); its next
+            # move repairs the donor that supplied that patch (level 2), etc.
+            patch_levels = {}
+            for plan in target_plans:
+                for depth, move in enumerate(plan.get("moves", []), start=1):
+                    patch_levels.setdefault(depth, []).append((plan, move))
+
+            for depth in sorted(patch_levels):
+                lines += ["", "### Uzupełnienie dawców — poziom {}".format(depth), ""]
+                for plan, move in patch_levels[depth]:
+                    replacement = move["replacement"]
+                    displaced = plan.get("target_current")
+                    if displaced and rid(replacement) == rid(displaced):
+                        replacement_source = "MAGAZYN (mod automatycznie wyparty z {})".format(target_name)
+                    elif is_true(replacement.get("equipped")):
+                        replacement_source = display_name(mod_owner(replacement))
+                    else:
+                        replacement_source = "MAGAZYN (dostępny po wcześniejszym kroku)"
+                    lines.append("{}. **PATCH — załóż na {}** mod z {}: {}".format(
+                        step, move.get("name", display_name(move.get("owner", ""))),
+                        replacement_source, mod_description(replacement)
+                    ))
+                    step += 1
+            lines += ["", "Zakładanie moda automatycznie przenosi poprzedni mod ze slotu do magazynu. "
+                      "Wszystkie powyższe kroki zostały sprawdzone na pełnym stanie slotów i magazynu.", ""]
+        else:
+            lines += [
+                "## Kolejność przekładania",
+                "",
+                "**Nie wykonuj jeszcze żadnej przekładki.** Poniższy build jest wariantem roboczym; walidacja nie zatwierdziła pełnego łańcucha.",
+                "",
+                "### Co blokuje zatwierdzenie",
+                "",
+            ]
+            failures = chain_result.get("failed", [])
+            if failures:
+                for category, reason in failures:
+                    lines.append("- **{}:** {}".format(category, reason))
+            else:
+                lines.append("- Łańcuch nie przeszedł walidacji fizycznej.")
+
+    if chain_result.get("validation"):
+        lines += ["## Wpływ na postacie-dawców", ""]
+        if donor_costs:
+            for item in donor_costs:
+                lines.append("- **{}:** modValue {:.1f} → {:.1f} ({:+.1f}).".format(
+                    item.get("name", display_name(item.get("owner", ""))),
+                    float(item.get("beforeModValue", 0.0) or 0.0),
+                    float(item.get("afterModValue", 0.0) or 0.0),
+                    float(item.get("modValueDelta", 0.0) or 0.0),
+                ))
+                before_combo_key = str(item.get("beforeComboKey", "") or "")
+                after_combo_key = str(item.get("afterComboKey", "") or "")
+                if before_combo_key or after_combo_key:
+                    before_combo_frequency = item.get("beforeComboFrequency")
+                    after_combo_frequency = item.get("afterComboFrequency")
+                    before_label = before_combo_key or "kombinacja nieujęta w profilu"
+                    after_label = after_combo_key or "kombinacja nieujęta w profilu"
+                    before_pct = "—" if before_combo_frequency is None else "{:.1f}%".format(float(before_combo_frequency))
+                    after_pct = "—" if after_combo_frequency is None else "{:.1f}%".format(float(after_combo_frequency))
+                    lines.append("  - Kombinacja setów: {} ({}) → {} ({}).".format(
+                        before_label, before_pct, after_label, after_pct
+                    ))
+                donor_moves = [
+                    (str(plan.get("mod", {}).get("slot", "") or ""), float(move.get("gain", 0.0) or 0.0))
+                    for plan in chain_result.get("plans", [])
+                    for move in plan.get("moves", [])
+                    if str(move.get("owner", "") or "") == str(item.get("owner", "") or "")
+                ]
+                if donor_moves:
+                    lines.append("  - Fit pojedynczych modów wg profilu dawcy: {}.".format(
+                        "; ".join("{} {:+.1f} pkt".format(slot, gain) for slot, gain in donor_moves)
+                    ))
+                assessment_detail = donor_assessments.get(str(item.get("owner", "") or ""), {})
+                for change in item.get("setChanges", []):
+                    lines.append("  - {}: {} pełnych setów ({} → {}).".format(
+                        change.get("set", "set"),
+                        change.get("status", "ZMIANA"),
+                        change.get("beforeFull", 0),
+                        change.get("afterFull", 0),
+                    ))
+                    if change.get("status") in ("ROZBITO", "OSŁABIONY"):
+                        set_name = str(change.get("set", "") or "")
+                        minor = next((x for x in assessment_detail.get("minor_set_changes", []) if x[0] == set_name), None)
+                        major = next((x for x in assessment_detail.get("material_set_losses", []) if x[0] == set_name), None)
+                        if major:
+                            support = "brak profilu" if major[1] is None else "{:.1f}% kombinacji".format(major[1])
+                            lines.append("    - ISTOTNA STRATA: set występuje w {} profilu SWGOH.GG.".format(support))
+                        elif minor:
+                            lines.append("    - ZMIANA NIEISTOTNA WG PROFILU: set występuje w {:.1f}% kombinacji SWGOH.GG.".format(minor[1]))
+                if assessment_detail.get("value_delta", 0.0) < -0.05:
+                    lines.append("  - ISTOTNY SPADEK wartości modów u dawcy.")
+        else:
+            lines.append("- Nie wykryto strat u dawców.")
+        lines.append("")
+
+    used_profile_ids = set(target_ids)
+    for plan in chain_result.get("plans", []):
+        selected_mod = plan.get("mod", {})
+        if is_true(selected_mod.get("equipped")):
+            selected_owner = str(selected_mod.get("assignedTo", "") or "")
+            if selected_owner:
+                used_profile_ids.add(aliases.get(selected_owner, selected_owner))
+        for move in plan.get("moves", []):
+            replacement = move.get("replacement", {})
+            if is_true(replacement.get("equipped")):
+                donor_owner = str(replacement.get("assignedTo", "") or "")
+                if donor_owner:
+                    used_profile_ids.add(aliases.get(donor_owner, donor_owner))
+    if used_profile_ids:
+        lines += ["## Kontrola profili użytych w łańcuchu", ""]
+        for base_id in sorted(used_profile_ids):
+            if base_id in profiles:
+                source_count = len(profiles[base_id].get("source_model", {}).get("sources", []))
+                lines.append("- {}: profil dostępny, {} źródła.".format(
+                    display_name(base_id), source_count
+                ))
+            else:
+                lines.append("- {}: brak profilu ({}).".format(
+                    display_name(base_id), profile_fetch_status.get(base_id, "unavailable")
+                ))
+        lines.append("")
+
+    lines += [
+        "## Założenia projekcji",
+        "",
+        "- Poziom 15 jest traktowany jako osiągalny bez ograniczenia materiałami.",
+        "- Brakujące secondary są liczone jako wartość średnia rolla, a nie maksymalna; ich przyszły przydział do statystyk jest uśredniony według profilu zamiast przypisywany do najlepszego secondary.",
+        "- Slice i calibration nie wpływają na ranking ani wynik buildu. Mogą pojawić się wyłącznie jako osobne sugestie inwestycyjne i można je pominąć.",
+        "- Primary pozostaje dokładnie na wartości z eksportu; zależy od obecnej liczby gwiazdek, a podniesienie moda do poziomu 15 go nie zmienia. Nie zakładamy slice 5★ → 6★.",
+        "",
+        "## Jak czytać opisy modów",
+        "",
+        "Każdy opis zawiera slot, set, primary, wszystkie dostępne secondary oraz gwiazdki, tier i poziom. "
+        "Dzięki temu mod można znaleźć w grze bez korzystania z wewnętrznego ID.",
+        "",
+        "Plik CSV pozostaje technicznym zapleczem optymalizatora; nie jest instrukcją ręcznego przekładania.",
+    ]
+    return "\n".join(lines) + "\n"
+
 def main(argv=None):
     parser = argparse.ArgumentParser(
         description="Analiza mody bez zmieniania konfiguracji farmy targets.json."
@@ -1977,8 +2341,12 @@ def main(argv=None):
         "ale nie udaje, że zna wynik konkretnej próby."
     ]
 
+    user_report = render_user_report(
+        rows, optimizer, chain_result, profiles, aliases, names,
+        target_ids, profile_fetch_status, display_name
+    )
     with open(OUTPUT_MD, "w", encoding="utf-8") as f:
-        f.write("\n".join(lines) + "\n")
+        f.write(user_report if user_report.endswith("\n") else user_report + "\n")
 
     print("="*80)
     print("SWGOH MOD ANALYZER")
