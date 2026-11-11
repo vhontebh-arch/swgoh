@@ -1378,7 +1378,7 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
         bg=set_groups(before); ag=set_groups(after)
         before_value=sum(float(r.get("modValue",0) or 0) for r in before)
         after_value=sum(float(r.get("modValue",0) or 0) for r in after)
-        donor_profile = profiles.get(base(o), {}) or {}
+        donor_profile = profiles.get(aliases.get(o, o), {}) or {}
         before_combo = profile_set_combo_match(donor_profile, before)
         after_combo = profile_set_combo_match(donor_profile, after)
         before_counts=set_counts(before)
