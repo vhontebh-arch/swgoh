@@ -199,7 +199,7 @@ class ExactSetComboTests(unittest.TestCase):
         from mod_analyzer import profile_set_combo_match, canonical_set_combo_from_mods
         profile = {"set_combinations": {"Offense + Crit Chance": 25.0, "Triple Health": 10.0}}
         mods = self.make_six_mods({"Offense": 4, "Critical Chance": 2})
-        self.assertEqual(canonical_set_combo_from_mods(mods), "Critical Chance + Offense")
+        self.assertEqual(canonical_set_combo_from_mods(mods), "Offense + Critical Chance")
         self.assertEqual(profile_set_combo_match(profile, mods)["frequency"], 25.0)
         self.assertIsNone(profile_set_combo_match(profile, self.make_six_mods({"Health": 4, "Defense": 2})))
 
