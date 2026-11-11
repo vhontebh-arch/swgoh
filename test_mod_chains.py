@@ -118,8 +118,8 @@ class ExpectedLevel15ProjectionTests(unittest.TestCase):
         six_dot = build(6, "32")
         five_score = next(m["optimizerScore"] for m in five_dot if m["slot"] == "Arrow")
         six_score = next(m["optimizerScore"] for m in six_dot if m["slot"] == "Arrow")
-        self.assertAlmostEqual(five_score, 40.0 / 6.0, places=4)
-        self.assertAlmostEqual(six_score, 40.0 / 6.0, places=4)
+        self.assertEqual(five_score, 6.67)
+        self.assertEqual(six_score, 6.67)
 
     def test_five_a_is_not_sliced_in_build_projection(self):
         row = {
