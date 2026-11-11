@@ -59,7 +59,7 @@ class ExpectedLevel15ProjectionTests(unittest.TestCase):
         self.assertEqual(projected["secondary1Rolls"], "1")
         self.assertEqual(projected.get("secondary2Stat", ""), row.get("secondary2Stat", ""))
 
-    def test_primary_is_projected_to_level15_max_for_current_dot_tier(self):
+    def test_primary_is_preserved_from_export_and_depends_on_current_dot_tier(self):
         five_dot = {
             "dots": "5", "tier": "5", "level": "3",
             "primaryStat": "Offense %", "primaryValue": "2.8%",
@@ -70,12 +70,13 @@ class ExpectedLevel15ProjectionTests(unittest.TestCase):
         }
         projected_five = project_mod_for_build(five_dot, {})
         projected_six = project_mod_for_build(six_dot, {})
-        self.assertEqual(projected_five["primaryValue"], "5.88%")
-        self.assertEqual(projected_six["primaryValue"], "32.0")
+        self.assertEqual(projected_five["primaryValue"], "2.8%")
+        self.assertEqual(projected_six["primaryValue"], "18")
         self.assertEqual(projected_five["dots"], "5")
+        self.assertEqual(projected_six["dots"], "6")
         self.assertFalse(projected_five["projectionSliceApplied"])
-        self.assertTrue(projected_five["projectionPrimaryProjected"])
-        self.assertTrue(projected_six["projectionPrimaryProjected"])
+        self.assertFalse(projected_five["projectionPrimaryProjected"])
+        self.assertFalse(projected_six["projectionPrimaryProjected"])
 
     def test_five_a_is_not_sliced_in_build_projection(self):
         row = {
@@ -506,6 +507,25 @@ class TransferChainTests(unittest.TestCase):
             "selected-mod", "inventory-patch"
         ])
         self.assertEqual(actions[1]["depth"], 1)
+
+    def test_exact_report_order_replay_validates_two_dependency_depths(self):
+        selected = make_mod("selected-mod", DONOR, True, slot="Arrow", value=30)
+        donor_two_mod = make_mod("donor-two-mod", DONOR_B, True, slot="Arrow", value=20)
+        inventory_patch = make_mod("inventory-patch", slot="Arrow", value=10)
+        result = apply_optimizer_replacements(
+            [selected, donor_two_mod, inventory_patch],
+            {"TARGET": {"mods": [selected]}},
+            {"TARGET"},
+            aliases={TARGET: "TARGET", DONOR: "DONOR", DONOR_B: "DONOR_B"},
+        )
+        self.assertTrue(result["safe"], result["failed"])
+        self.assertTrue(result["report_order_validated"])
+        actions = result["report_execution_order"]
+        self.assertEqual([item["action"] for item in actions], ["MOD", "PATCH", "PATCH"])
+        self.assertEqual([item.get("depth") for item in actions], [None, 1, 2])
+        self.assertEqual([item["mod_id"] for item in actions], [
+            "selected-mod", "donor-two-mod", "inventory-patch"
+        ])
 
     def test_exact_report_order_replay_places_all_target_mods_before_patches(self):
         selected_arrow = make_mod("selected-arrow", DONOR, True, slot="Arrow", value=20)
