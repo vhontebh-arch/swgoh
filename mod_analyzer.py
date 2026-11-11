@@ -14,7 +14,7 @@ INPUT_FILE = "mods.csv"
 OUTPUT_CSV = "mod_analysis.csv"
 OUTPUT_MD = "mod_analysis.md"
 PROFILE_FILE = "mod_profiles.json"
-ANALYZER_VERSION = "2026-11-11-user-report-tiered-transfer-steps-v15"
+ANALYZER_VERSION = "2026-11-11-average-level15-report-replay-v16"
 
 R5 = {
     "Critical Chance %": (1.125, 2.25), "Defense": (4.9, 9.8),
@@ -2149,7 +2149,7 @@ def main():
         "Dla dawców bez lokalnego profilu po próbie pobrania używany jest fallback modValue; nie jest to ocena dopasowania do indywidualnego profilu.", "",
         "## Globalny optimizer 6-slotowy", "",
         "Ocena kompletnego buildu: 40 pkt za statystyki główne, 60 pkt za maksymalnie 24 rolle secondary oraz bonusy setów ważone profilem postaci. Zgodność z profilem ma pierwszeństwo przed zachowaniem aktualnie założonych modów. Set nieobecny w profilu zachowuje 10% bazowej wagi bonusu; set z preferencją 100% otrzymuje pełną wagę. Zachowanie modów na celu jest dopiero końcowym tie-breakiem.", "",
-        "Ranking kandydujących buildów używa oddzielnej projekcji: brakujące rolle do limitu aktualnego tieru są optymistycznie przypisywane do najwyżej preferowanej statystyki profilu; mod 5A na poziomie 15 jest dodatkowo przeliczany do 6E. To górna granica potencjału, nie prognoza RNG ani rzeczywiste statystyki moda. Primary pozostaje na wartości z eksportu, ponieważ nie mamy w danych tabeli jego przyrostu dla każdego poziomu. Raport pokazuje osobno wynik aktualny i wynik po projekcji.", "",
+        "Ranking kandydujących buildów używa oczekiwanej projekcji do poziomu 15: brakujące rolle mają średnią wartość, a ich dopasowanie do profilu jest uśredniane po możliwych secondary zamiast przypisywane do najlepszego statu. Slice i calibration nie wpływają na wynik ani ranking — pozostają wyłącznie sugestiami inwestycyjnymi, które można pominąć. Mod 5A pozostaje w projekcji modem 5-dot; nie zakładamy 6E. Primary pozostaje na wartości z eksportu, ponieważ nie mamy jeszcze zweryfikowanej tabeli jego przyrostu dla każdego poziomu.", "",
         "Bonus Speed Set używa bazowej szybkości 150, jeśli profil nie zawiera pola base_stats.Speed. Pozostałe bonusy procentowe są normalizowane względem maksymalnego rolla odpowiedniej statystyki.", "",
         "## Najważniejsi kandydaci", "",
         "| Akcja | Mod | Źródło | Set | Tier | Lvl | Quality | Value | Fit | 6E proj. | Speed | Potencjał | Inwestycja |",
@@ -2170,10 +2170,10 @@ def main():
     for target_id, opt in optimizer.items():
         lines += [
             "", "### {} — najlepszy wirtualny build 6/6".format(target_id), "",
-            "- Wynik buildu po projekcji: **{:.1f}** (lvl 15; 5A → 6E)".format(opt["totalScore"]),
+            "- Wynik buildu po projekcji: **{:.1f}** (lvl 15; średnie przyszłe rolle; bez slice/calibration)".format(opt["totalScore"]),
             "- Aktualny build bez projekcji: **{:.1f}**".format(opt["currentScore"]),
             "- Aktualny build po tej samej projekcji: **{:.1f}**".format(opt["currentProjectedScore"]),
-            "- Zmiana potencjału względem projekcji obecnego buildu: **{:+.1f}**".format(opt["gain"]),
+            "- Zmiana oczekiwanej oceny względem obecnego buildu po tej samej projekcji: **{:+.1f}**".format(opt["gain"]),
             "- Bonus setów w ocenie: **{:.2f}**".format(opt["setBonusScore"]),
             "| Slot | Mod — parametry wyszukiwalne | Źródło | Fit |",
             "|---|---|---|---:|"
