@@ -12,6 +12,8 @@ on:
         required: false
         type: string
   push:
+    branches:
+      - optimizer-v2
     paths:
       - "mod_analyzer.py"
       - "update_mod_profiles.py"
