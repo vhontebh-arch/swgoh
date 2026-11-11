@@ -5,6 +5,7 @@ Model rozdziela **jakość obecnych rolli**, **potencjał dalszego rozwoju**, **
 W raportach przeznaczonych do ręcznego wykonania mod identyfikowany jest wyłącznie przez slot, set, primary, secondary, gwiazdki, tier i poziom; wewnętrzne ID nie są pokazywane.
 
 - Modów: **2194**
+- Cel(e) optymalizacji: **JARJARBINKS** (źródło: targets.json)
 - UPGRADE: **30**
 - SLICE: **1156**
 - SLICE_6E: **238**
