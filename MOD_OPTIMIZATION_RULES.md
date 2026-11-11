@@ -67,6 +67,19 @@ Nie wolno:
 
 W raporcie użytkowym mod identyfikujemy opisowo: **slot + zestaw + gwiazdki + poziom/tier + statystyka główna + wszystkie drugorzędne**. ID może być używane wewnętrznie do śledzenia rekordu, ale nie zastępuje opisu.
 
+## 3A. Projekcja rozwoju moda w rankingu buildu
+
+Wirtualny build jest oceniany przy założeniu, że użytkownik może podnieść wybrane mody do poziomu 15. Projekcja ma być oczekiwana, a nie maksymalna:
+
+1. Brakujące rolle do limitu aktualnego tieru wyceniaj wartością średnią z zakresu danego secondary (środek przedziału), nie maksymalnym rollem.
+2. Nie przypisuj wszystkich przyszłych rolli do najwyżej preferowanej statystyki profilu. Ponieważ nie znamy przyszłego rozkładu rolli, używaj oczekiwanej wartości dopasowania — średniej preferencji profilu po możliwych secondary.
+3. W rankingu nie zakładaj slice 5★ → 6★ ani calibration. Nie zmieniaj liczby gwiazdek, wartości istniejących secondary ani tieru w projekcji buildu.
+4. Slice i calibration mogą występować w raporcie jako osobne sugestie inwestycyjne. Nie są warunkiem wykonalności moda ani warunkiem jego uwzględnienia w analizie; użytkownik może je pominąć.
+5. Bonus setu licz dla poziomu 15, ale nie zakładaj bonusu 6-dot dla moda 5★.
+6. Jeśli brak zweryfikowanej tabeli przyrostu primary dla poziomów moda, nie wymyślaj wartości. Pozostaw primary z eksportu i jawnie oznacz to ograniczenie projekcji.
+
+Raport musi nazywać ten wynik oczekiwaną oceną po poziomie 15, a nie maksymalnym potencjałem ani gwarantowaną wartością w grze.
+
 ## 4. Wyszukiwanie zestawu docelowego
 
 1. Rozważyć wszystkie prawidłowe kombinacje sześciu slotów z magazynu i od potencjalnych dawców.
@@ -158,6 +171,7 @@ Raport nie może zostać wygenerowany jako gotowa rekomendacja, dopóki wszystki
 - [ ] Nie naruszono jednostek i ograniczeń chronionych przez użytkownika.
 - [ ] Zmiany bonusów zestawów i downgrade'y są ujawnione.
 - [ ] Bilans obejmuje wszystkie dotknięte postacie, nie tylko cel.
+- [ ] Niezależna symulacja odtwarza dokładnie kolejność MOD/PATCH pokazaną użytkownikowi: wszystkie mody celu, następnie PATCH-y warstwami.
 - [ ] Klasyfikacja REKOMENDACJA/KOMPROMIS/BRAK ROZWIĄZANIA odpowiada wynikom kontroli.
 
 **Zasada blokująca:** niezaliczona kontrola oznacza brak gotowej rekomendacji. Można pokazać robocze warianty, ale trzeba je wyraźnie oznaczyć jako niezweryfikowane.
