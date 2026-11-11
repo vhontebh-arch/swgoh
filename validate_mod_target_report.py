@@ -26,53 +26,52 @@ def parse_targets(value: str) -> list[str]:
 
 
 def validate_report(report: str, targets: list[str]) -> list[str]:
+    """Enforce the player-facing Vel/Cinta report, not merely a technical 6/6 dump."""
     errors = []
-    for target in targets:
-        heading = "### {} — najlepszy wirtualny build 6/6".format(target)
-        start = report.find(heading)
-        if start < 0:
-            errors.append("{}: brak sekcji kompletnego buildu 6/6.".format(target))
-            continue
+    required_sections = (
+        "## Status",
+        "## Sześć modów docelowych",
+        "## MOD — mody przenoszone na cel",
+        "## PATCH — uzupełnienie dawców",
+        "## Kolejność przekładania",
+        "## Wpływ na postacie-dawców",
+        "## Założenia projekcji",
+    )
+    for heading in required_sections:
+        if heading not in report:
+            errors.append("Brak wymaganej sekcji raportu użytkowego: {}".format(heading))
 
-        section = report[start + len(heading):]
-        next_heading = re.search(r"\n###? ", section)
-        if next_heading:
-            section = section[:next_heading.start()]
-
-        table_header = "| Slot | Mod — parametry wyszukiwalne | Źródło | Fit |"
-        if table_header not in section:
-            errors.append("{}: brak tabeli sześciu modów.".format(target))
-            continue
-
-        table = section.split(table_header, 1)[1]
-        found = []
-        for line in table.splitlines():
-            if not line.startswith("|"):
-                if found:
-                    break
+    if "## Sześć modów docelowych" in report:
+        section = report.split("## Sześć modów docelowych", 1)[1]
+        for slot in SLOTS:
+            match = re.search(r"^#### " + re.escape(slot) + r"\s*$", section, re.MULTILINE)
+            if not match:
+                errors.append("Brak sekcji slotu {}.".format(slot))
                 continue
-            cells = [cell.strip() for cell in line.strip().strip("|").split("|")]
-            if len(cells) < 4 or cells[0] in {"---", "Slot"}:
-                continue
-            if cells[0] in SLOTS:
-                found.append(cells[0])
+            next_slot = re.search(r"^#### (?:Arrow|Square|Diamond|Triangle|Circle|Cross)\s*$", section[match.end():], re.MULTILINE)
+            slot_text = section[match.end():match.end() + next_slot.start()] if next_slot else section[match.end():]
+            if "**Obecny mod:**" not in slot_text:
+                errors.append("{}: brak pełnego opisu obecnego moda.".format(slot))
+            if "**Proponowany mod:**" not in slot_text:
+                errors.append("{}: brak pełnego opisu proponowanego moda.".format(slot))
 
-        if len(found) != 6 or set(found) != set(SLOTS) or len(set(found)) != 6:
-            errors.append(
-                "{}: build nie zawiera dokładnie sześciu różnych slotów; znaleziono: {}."
-                .format(target, ", ".join(found) or "brak")
-            )
+    if "## Kolejność przekładania" in report and "**NIE WYKONUJ" not in report:
+        order = report.split("## Kolejność przekładania", 1)[1]
+        if not re.search(r"(?m)^\s*1\.\s+\*\*", order):
+            errors.append("Brak ponumerowanej, konkretnej kolejności wykonania.")
+    if "**Wykonalność fizyczna:**" not in report:
+        errors.append("Brak jawnego statusu walidacji fizycznej.")
+    if "**Ocena:**" not in report:
+        errors.append("Brak klasyfikacji REKOMENDACJA/KOMPROMIS/BLOKADA.")
+    if "Brak kompletnego buildu" not in report and "## Kontrola profili użytych w łańcuchu" not in report:
+        errors.append("Brak kontroli profili uczestników łańcucha.")
 
-    chain_heading = "## BEZPIECZNY ŁAŃCUCH — walidacja globalna"
-    if chain_heading not in report:
-        errors.append("Brak sekcji walidacji łańcucha transferów.")
-    elif not (
-        "**STATUS: OK" in report or "**STATUS: BLOKADA" in report
-    ):
-        errors.append("Brak jawnego statusu walidacji łańcucha transferów.")
-
+    # Guard against accidentally publishing the former technical dashboard.
+    forbidden = ("## Globalny optimizer 6-slotowy", "## Najważniejsi kandydaci",
+                 "| Akcja | Mod | Źródło | Set | Tier |")
+    if any(token in report for token in forbidden):
+        errors.append("Wygenerowano techniczny raport zamiast raportu użytkowego Vel/Cinta.")
     return errors
-
 
 def main() -> int:
     parser = argparse.ArgumentParser()
