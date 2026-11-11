@@ -142,3 +142,13 @@ Wariant `set_combo_mode="exact"`:
 - przy kombinacji nieobecnej w profilu zachowuje dotychczasowy scoring bazowych setów.
 
 Domyślny tryb `base` pozostaje nietknięty. Workflow eksperymentalny generuje raport bazowy i raport exact na tym samym snapshotcie `c3po.json`; dopiero ich porównanie rozstrzygnie, czy dokładna częstość kombinacji daje lepsze decyzje dla Vel Sarthy. Wynik eksperymentu nie jest automatycznie przenoszony do `optimizer-v2`.
+
+## Eksperyment score-neutral exact-combo tie-break — v20
+
+Wariant `tie_break` nie zmienia punktacji modów ani bonusów setów. Klucz wyboru buildu ma kolejność:
+1. łączny wynik buildu (`baseScore + setBonusScore`),
+2. dotychczasowa preferencja pojedynczych setów,
+3. częstość dokładnej sześciomodowej kombinacji w profilu SWGOH.GG,
+4. zachowanie aktualnych przypisań.
+
+Zatem częstość kombinacji rozstrzyga wyłącznie remis na wcześniejszych kryteriach. Wariant `exact` pozostaje osobnym trybem historycznym i nadal zmienia wagę bonusów; nie jest częścią nowego testu porównawczego.
