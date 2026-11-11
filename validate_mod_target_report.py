@@ -33,7 +33,7 @@ def validate_report(report: str, targets: list[str]) -> list[str]:
         "### Sześć modów docelowych",
         "## MOD — mody przenoszone na cel",
         "## PATCH — uzupełnienie dawców",
-        "## PATCH — uzupełnienie dawców",
+        "## Kontrola profili użytych w łańcuchu",
         "## Kolejność przekładania",
         "## Wpływ na postacie-dawców",
         "## Założenia projekcji",
