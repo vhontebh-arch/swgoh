@@ -1,0 +1,29 @@
+name: Experimental mod optimizer regression tests
+
+on:
+  push:
+    branches:
+      - vel-sartha-analysis-20261110
+    paths:
+      - "mod_analyzer.py"
+      - "test_mod_chains.py"
+      - "MOD_OPTIMIZATION_RULES.md"
+      - "GRANDIVORY_METHOD_REVIEW.md"
+      - ".github/workflows/test-mod-chains-experimental.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout experimental branch
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run transfer-chain and projection regression tests
+        run: python -m unittest -v test_mod_chains
