@@ -1859,6 +1859,31 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
             "",
         ]
 
+        lines += ["## MOD — mody przenoszone na cel", ""]
+        if chain_result.get("safe"):
+            for plan in chain_result.get("plans", []):
+                selected = plan.get("mod", {})
+                source_owner = mod_owner(selected)
+                source_name = display_name(source_owner) if source_owner else "MAGAZYN"
+                lines.append("- **{} → {}:** {}".format(
+                    source_name, display_name(plan.get("target_owner", "")), mod_description(selected)))
+        else:
+            lines.append("Brak zatwierdzonych transferów MOD.")
+        lines += ["", "## PATCH — uzupełnienie dawców", ""]
+        patch_count = 0
+        if chain_result.get("safe"):
+            for plan in chain_result.get("plans", []):
+                for move in plan.get("moves", []):
+                    replacement = move.get("replacement", {})
+                    source_owner = mod_owner(replacement)
+                    source_name = display_name(source_owner) if source_owner else "MAGAZYN"
+                    lines.append("- **{} → {}:** {}".format(
+                        source_name, move.get("name", display_name(move.get("owner", ""))),
+                        mod_description(replacement)))
+                    patch_count += 1
+        if not patch_count:
+            lines.append("Nie jest wymagany żaden PATCH.")
+        lines.append("")
         if chain_result.get("safe"):
             lines += ["## Kolejność przekładania", ""]
             target_plans = [
