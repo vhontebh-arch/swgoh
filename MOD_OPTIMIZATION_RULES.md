@@ -176,6 +176,14 @@ Wymagane sekcje:
 
 Nie używać samych ID modów. Nie pomijać drugorzędnych statystyk. Nie opisywać moda skrótowo, jeśli użytkownik wymaga pełnej identyfikacji. Nie ukrywać braków danych.
 
+### Kolejność raportowania transferów
+
+- Raport nie wypisuje osobnych czynności „zdejmij mod”. Założenie nowego moda automatycznie przenosi poprzedni mod z tego slotu do magazynu.
+- Kolejność wykonania jest warstwowa: najpierw wszystkie mody docelowe na główną postać; następnie uzupełnianie dawców poziomu 1 (bezpośrednich źródeł modów celu); potem poziomu 2 (dawców, od których pochodzą zamienniki dla poziomu 1); dalej analogicznie aż do końca łańcucha.
+- Wszystkie operacje PATCH na danym poziomie należy pokazać razem, zanim raport przejdzie do kolejnego poziomu.
+- Nie pomijać żadnego PATCH potrzebnego do fizycznego zamknięcia łańcucha. Poziom oznacza odległość dawcy od głównej postaci, a nie kolejność slotów ani kolejność znalezienia moda.
+- Jeśli kilka niezależnych łańcuchów ma ten sam poziom, można zachować kolejność slotów głównej postaci, aby raport był łatwy do wykonania.
+
 ## 10. Zmiany po stronie użytkownika i zatwierdzanie
 
 - Analiza jest propozycją, a nie zgodą na automatyczne przeniesienie modów.
