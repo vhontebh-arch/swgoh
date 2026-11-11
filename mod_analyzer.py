@@ -14,7 +14,7 @@ INPUT_FILE = "mods.csv"
 OUTPUT_CSV = "mod_analysis.csv"
 OUTPUT_MD = "mod_analysis.md"
 PROFILE_FILE = "mod_profiles.json"
-ANALYZER_VERSION = "2026-11-11-donor-exact-combo-integration-v1"
+ANALYZER_VERSION = "2026-11-11-donor-exact-combo-integration-v2"
 
 R5 = {
     "Critical Chance %": (1.125, 2.25), "Defense": (4.9, 9.8),
@@ -1042,8 +1042,9 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                             ))
             if terminal_solutions:
                 # Lexicographic objective: shortest executable chain (BFS layer),
-                # then donor profile-fit gain, set transition, and modValue.
-                # Existing sets are not protected at the expense of profile fit.
+                # then preserve the donor exact set-combination frequency,
+                # followed by donor profile-fit gain, set transition, and modValue.
+                # Exact combo preservation is a preference, not a hard constraint.
                 terminal_solutions.sort(key=lambda solution: (
                     solution.get("combo_delta", 0.0),
                     solution["gain"],
