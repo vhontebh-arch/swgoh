@@ -9,7 +9,7 @@ def valid_report():
         "## Status",
         "- **Wykonalność fizyczna:** POTWIERDZONA",
         "- **Ocena:** REKOMENDACJA",
-        "## Sześć modów docelowych",
+        "### Sześć modów docelowych",
     ]
     for slot in ("Arrow", "Square", "Diamond", "Triangle", "Circle", "Cross"):
         parts += [
