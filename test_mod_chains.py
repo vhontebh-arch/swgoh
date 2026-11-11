@@ -203,6 +203,37 @@ class ExactSetComboTests(unittest.TestCase):
         self.assertEqual(profile_set_combo_match(profile, mods)["frequency"], 25.0)
         self.assertIsNone(profile_set_combo_match(profile, self.make_six_mods({"Health": 4, "Defense": 2})))
 
+    def test_tie_break_mode_keeps_scores_unchanged_and_uses_combo_only_after_existing_ties(self):
+        profile = {
+            "set_combinations": {
+                "Double Health + Defense": 60.0,
+                "Double Defense + Health": 20.0,
+                "Triple Health": 10.0,
+                "Triple Defense": 10.0,
+            },
+            "secondary_preferences": {},
+            "set_preferences": {"Health": 1.0, "Defense": 1.0},
+        }
+        rows = []
+        for slot in ["Square", "Diamond", "Circle", "Arrow", "Triangle", "Cross"]:
+            for set_name in ["Health", "Defense"]:
+                rows.append({
+                    "id": slot + "-" + set_name, "slot": slot, "set": set_name,
+                    "dots": "6", "tier": "5", "level": "15",
+                    "equipped": "False", "assignedTo": "",
+                    "primaryStat": "Protection %", "primaryValue": "24", "modValue": "0",
+                })
+        base = optimize_target_build(rows, {"TARGET"}, profiles={"TARGET": profile},
+                                     set_combo_mode="base")["TARGET"]
+        tie = optimize_target_build(rows, {"TARGET"}, profiles={"TARGET": profile},
+                                    set_combo_mode="tie_break")["TARGET"]
+        self.assertEqual(tie["totalScore"], base["totalScore"])
+        self.assertEqual(tie["baseScore"], base["baseScore"])
+        self.assertEqual(tie["setBonusScore"], base["setBonusScore"])
+        self.assertEqual(tie["setPreferenceScore"], base["setPreferenceScore"])
+        self.assertEqual(tie["setComboKey"], "Double Health + Defense")
+        self.assertEqual(tie["setComboFrequency"], 60.0)
+
     def test_exact_mode_prefers_the_most_frequent_observed_combo(self):
         profile = {
             "set_combinations": {
