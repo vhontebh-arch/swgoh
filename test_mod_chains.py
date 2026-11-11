@@ -4,7 +4,7 @@ import unittest
 from mod_analyzer import (apply_optimizer_replacements, rolls, quality,
                           profile_primary_preference, profile_secondary_preference,
                           profile_set_preferences, profile_set_combo_support, render_user_report,
-                          project_mod_for_build)
+                          project_mod_for_build, optimize_target_build)
 
 
 TARGET = "target-instance"
@@ -77,6 +77,49 @@ class ExpectedLevel15ProjectionTests(unittest.TestCase):
         self.assertFalse(projected_five["projectionSliceApplied"])
         self.assertFalse(projected_five["projectionPrimaryProjected"])
         self.assertFalse(projected_six["projectionPrimaryProjected"])
+
+    def test_primary_quality_uses_current_dot_tier_ceiling(self):
+        profile = {
+            "primary_preferences": {
+                "Arrow": {"Speed": 1.0},
+                "Square": {"Offense": 1.0},
+                "Diamond": {"Defense": 1.0},
+                "Triangle": {"Health": 1.0},
+                "Circle": {"Protection": 1.0},
+                "Cross": {"Potency": 1.0},
+            },
+            "secondary_preferences": {},
+            "set_preferences": {},
+        }
+
+        def build(arrow_dots, arrow_primary):
+            rows = []
+            specs = [
+                ("Arrow", "Speed", arrow_primary, arrow_dots),
+                ("Square", "Offense", "8.5", 6),
+                ("Diamond", "Defense", "20", 6),
+                ("Triangle", "Health", "16", 6),
+                ("Circle", "Protection", "24", 6),
+                ("Cross", "Potency", "30", 6),
+            ]
+            for slot, stat, value, dots in specs:
+                rows.append({
+                    "id": slot, "slot": slot, "set": "Critical Chance",
+                    "dots": str(dots), "tier": "5", "level": "15",
+                    "equipped": "False", "assignedTo": "",
+                    "primaryStat": stat, "primaryValue": value,
+                    "modValue": "0",
+                })
+            return optimize_target_build(
+                rows, {"TARGET"}, profiles={"TARGET": profile}
+            )["TARGET"]["mods"]
+
+        five_dot = build(5, "30")
+        six_dot = build(6, "32")
+        five_score = next(m["optimizerScore"] for m in five_dot if m["slot"] == "Arrow")
+        six_score = next(m["optimizerScore"] for m in six_dot if m["slot"] == "Arrow")
+        self.assertAlmostEqual(five_score, 40.0 / 6.0, places=4)
+        self.assertAlmostEqual(six_score, 40.0 / 6.0, places=4)
 
     def test_five_a_is_not_sliced_in_build_projection(self):
         row = {
