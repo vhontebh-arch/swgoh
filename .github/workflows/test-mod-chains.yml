@@ -12,6 +12,7 @@ on:
       - "test_target_selection.py"
       - "validate_mod_target_report.py"
       - "test_target_report_validation.py"
+      - "test_profile_merge.py"
       - "update_mod_profiles.py"
       - "test_mod_profile_cache.py"
       - "mod_profiles.json"
@@ -46,4 +47,4 @@ jobs:
           --donor "Merrin"
           --donor 'RC-1262 "Scorch"'
       - name: Run optimizer regression tests
-        run: python -m unittest -v test_optimizer_preflight test_mod_chains test_mod_profile_cache test_target_selection test_target_report_validation
+        run: python -m unittest -v test_optimizer_preflight test_mod_chains test_mod_profile_cache test_target_selection test_target_report_validation test_profile_merge
