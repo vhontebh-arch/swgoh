@@ -59,7 +59,11 @@ Zakładanie moda automatycznie przenosi poprzedni mod ze slotu do magazynu. Wszy
 ## Wpływ na postacie-dawców
 
 - **FINN:** modValue 204.8 → 225.0 (+20.2).
+  - Kombinacja setów: Triple Health (20.1%) → Triple Health (20.1%).
+  - Fit pojedynczych modów wg profilu dawcy: Triangle +8.9 pkt.
 - **SCORCH:** modValue 201.9 → 244.0 (+42.1).
+  - Kombinacja setów: Double Health + Defense (48.9%) → Double Health + Defense (48.9%).
+  - Fit pojedynczych modów wg profilu dawcy: Square +20.9 pkt; Diamond +15.2 pkt; Circle -5.6 pkt.
 
 ## Kontrola profili użytych w łańcuchu
 
