@@ -1138,6 +1138,110 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
         physical_errors.append("ten sam mod występuje jednocześnie w kilku miejscach")
     if set(all_simulated_ids) != set(initial_ids) or len(all_simulated_ids) != len(initial_ids):
         physical_errors.append("końcowy stan zgubił lub dodał mod względem pełnego stanu wejściowego")
+    # Independent replay in the exact order printed in the user report:
+    # for each target, all MOD operations first, then PATCH operations grouped
+    # by dependency depth. This is intentionally separate from the planner replay.
+    report_slots = {(o, slot): rid(mod) for (o, slot), mod in eq.items()}
+    report_inventory = {rid(mod) for mod in inventory}
+    report_order_errors = []
+    report_execution_order = []
+    report_slot_order = ("Arrow", "Square", "Diamond", "Triangle", "Circle", "Cross")
+
+    def report_take(mod_id, expected_owner=None, expected_slot=None):
+        if mod_id in report_inventory:
+            report_inventory.remove(mod_id)
+            return ("inventory", "")
+        found = next(
+            (key for key, value in report_slots.items()
+             if value == mod_id
+             and (expected_owner is None or key[0] == expected_owner)
+             and (expected_slot is None or key[1] == expected_slot)),
+            None,
+        )
+        if found is None:
+            report_order_errors.append(
+                "raportowa kolejność: mod {} nie jest dostępny w magazynie ani w oczekiwanym slocie".format(mod_id)
+            )
+            return (None, "")
+        report_slots.pop(found)
+        return ("equipped", found[0])
+
+    for target_id in optimizer:
+        target_owner = resolve_target_owner(target_id)
+        target_plans = [p for p in plans if p["target"] == target_id]
+        target_plans.sort(key=lambda p: (
+            report_slot_order.index(str(p["mod"].get("slot", "")))
+            if str(p["mod"].get("slot", "")) in report_slot_order else len(report_slot_order)
+        ))
+
+        # Phase 1: all target mods.
+        for plan in target_plans:
+            selected = plan["mod"]
+            slot = str(selected.get("slot", "") or "")
+            source_kind, source_owner = report_take(
+                rid(selected), owner(selected) if owner(selected) else None,
+                slot if owner(selected) else None,
+            )
+            if source_kind is None:
+                continue
+            selected["executionSourceInventory"] = source_kind == "inventory"
+            selected["executionSourceOwner"] = source_owner
+            report_execution_order.append({
+                "action": "MOD", "target": target_id, "slot": slot, "mod_id": rid(selected)
+            })
+            destination = (target_owner, slot)
+            displaced = report_slots.pop(destination, None)
+            if displaced:
+                report_inventory.add(displaced)
+            report_slots[destination] = rid(selected)
+
+        # Phase 2+: all donor patches at depth 1, then depth 2, etc.
+        max_depth = max((len(p.get("moves", [])) for p in target_plans), default=0)
+        for depth in range(max_depth):
+            for plan in target_plans:
+                moves = plan.get("moves", [])
+                if depth >= len(moves):
+                    continue
+                move = moves[depth]
+                replacement = move["replacement"]
+                replacement_id = rid(replacement)
+                source_kind, source_owner = report_take(replacement_id)
+                if source_kind is None:
+                    continue
+                move["executionSourceInventory"] = source_kind == "inventory"
+                move["executionSourceOwner"] = source_owner
+                report_execution_order.append({
+                    "action": "PATCH", "target": target_id,
+                    "slot": str(plan["mod"].get("slot", "")),
+                    "owner": move["owner"], "mod_id": replacement_id, "depth": depth + 1,
+                })
+                destination = (move["owner"], str(plan["mod"].get("slot", "")))
+                displaced = report_slots.pop(destination, None)
+                expected_displaced = rid(move.get("removed"))
+                if displaced != (expected_displaced or None):
+                    report_order_errors.append(
+                        "raportowa kolejność: PATCH {} dla {} oczekiwał {}, znaleziono {}".format(
+                            replacement_id, move.get("name", move["owner"]),
+                            expected_displaced or "PUSTO", displaced or "PUSTO"
+                        )
+                    )
+                if displaced:
+                    report_inventory.add(displaced)
+                report_slots[destination] = replacement_id
+
+    if report_slots != expected_slots:
+        report_order_errors.append(
+            "raportowa kolejność: końcowy stan slotów różni się od planu zwalidowanego przez planner"
+        )
+    report_all_ids = list(report_slots.values()) + list(report_inventory)
+    if len(report_all_ids) != len(set(report_all_ids)):
+        report_order_errors.append("raportowa kolejność: ten sam mod występuje w kilku miejscach")
+    if set(report_all_ids) != set(initial_ids) or len(report_all_ids) != len(initial_ids):
+        report_order_errors.append("raportowa kolejność: stan końcowy zgubił lub dodał mod")
+
+    if report_order_errors:
+        physical_errors.extend(report_order_errors)
+
     if physical_errors:
         safe = False
         failed.extend(("walidacja fizyczna", error) for error in physical_errors)
@@ -1233,7 +1337,11 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
         for r in rows:
             if r.get("optimizerTarget"): r["chainStatus"]="BLOCKED"
 
-    return {"safe":safe,"plans":plans,"validation":validation,"failed":failed}
+    return {
+        "safe": safe, "plans": plans, "validation": validation, "failed": failed,
+        "report_order_validated": not report_order_errors,
+        "report_execution_order": report_execution_order,
+    }
 
 
 
