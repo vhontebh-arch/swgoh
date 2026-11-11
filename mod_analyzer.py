@@ -1523,8 +1523,8 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
     names = names or {}
     protected_owners = set(protected_owners or set())
     set_combo_mode = str(set_combo_mode or "base").strip().lower()
-    if set_combo_mode not in {"base", "exact"}:
-        raise ValueError("set_combo_mode musi być 'base' albo 'exact'")
+    if set_combo_mode not in {"base", "exact", "tie_break"}:
+        raise ValueError("set_combo_mode musi być 'base', 'exact' albo 'tie_break'")
     slots = ("Square", "Diamond", "Circle", "Arrow", "Triangle", "Cross")
     primary_points, secondary_points, max_rolls = 40.0, 60.0, 24.0
     speed_reference = 150.0
@@ -1582,8 +1582,8 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
 
         total, preference_tiebreak, breakdown = 0.0, 0.0, {}
         secondary_prefs = profile.get("secondary_preferences", {})
-        combo_match = profile_set_combo_match(profile, mods) if set_combo_mode == "exact" else None
-        if combo_match:
+        combo_match = profile_set_combo_match(profile, mods) if set_combo_mode in {"exact", "tie_break"} else None
+        if combo_match and set_combo_mode == "exact":
             preference_tiebreak = 3.0 * combo_match["preference"]
         for name, members in grouped.items():
             stat, required, small_bonus, max_bonus = SET_RULES[name]
@@ -1595,7 +1595,7 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
                 continue
 
             set_pref = max(0.0, float(profile_set_preferences(profile).get(name, 0.0)))
-            if not combo_match:
+            if not combo_match or set_combo_mode == "tie_break":
                 preference_tiebreak += (full_groups + half_groups) * set_pref
             stat_pref = max(0.0, profile_secondary_preference(profile, stat))
             max_roll = R5.get(stat, (0.0, 0.0))[1] or set_max_roll.get(stat)
@@ -1616,7 +1616,8 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
             # set receives full weight. Existing ownership is only a tie-break.
             set_weight = (
                 0.10 + 0.90 * combo_match["preference"]
-                if combo_match else 0.10 + 0.90 * min(1.0, set_pref)
+                if combo_match and set_combo_mode == "exact"
+                else 0.10 + 0.90 * min(1.0, set_pref)
             )
             points = equivalents * stat_pref * set_weight * secondary_points / max_rolls
             total += points
@@ -1717,11 +1718,20 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
             projected_chosen = [project_mod_for_build(m, profile) for m in chosen]
             set_score, set_pref, breakdown = set_bonus_score(projected_chosen, profile)
             total = base_score + set_score
-            # Profile set preference outranks preserving the current assignment.
-            # Keeping an existing mod is only the final tie-break.
-            key = (total, set_pref, unchanged_count)
+            combo_match = (
+                profile_set_combo_match(profile, projected_chosen)
+                if set_combo_mode in {"exact", "tie_break"} else None
+            )
+            combo_tiebreak = combo_match["preference"] if combo_match else 0.0
+            # The tie_break experiment does not alter base_score or set_score.
+            # Exact combo frequency is consulted only after both existing
+            # objectives (build score and base-set preference) are tied.
+            key = (
+                (total, set_pref, combo_tiebreak, unchanged_count)
+                if set_combo_mode == "tie_break"
+                else (total, set_pref, unchanged_count)
+            )
             if best is None or key > best["key"]:
-                combo_match = profile_set_combo_match(profile, projected_chosen) if set_combo_mode == "exact" else None
                 best = {
                     "key": key, "totalScore": total, "baseScore": base_score,
                     "setBonusScore": set_score, "setPreferenceScore": set_pref,
@@ -1895,13 +1905,14 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
             lines.append("- Najczęstsze kombinacje: {}".format(
                 "; ".join("{} ({:.1f}%)".format(k, float(v)) for k, v in top_combos)
             ))
-        if opt.get("setComboMode") == "exact":
+        if opt.get("setComboMode") in {"exact", "tie_break"}:
             if opt.get("setComboKey"):
-                lines.append("- **Dopasowanie dokładnej kombinacji:** {} — {:.2f}% profilu.".format(
-                    opt["setComboKey"], float(opt.get("setComboFrequency") or 0.0)
+                qualifier = "kryterium rozstrzygające remis" if opt.get("setComboMode") == "tie_break" else "element punktacji"
+                lines.append("- **Dopasowanie dokładnej kombinacji ({}):** {} — {:.2f}% profilu.".format(
+                    qualifier, opt["setComboKey"], float(opt.get("setComboFrequency") or 0.0)
                 ))
             else:
-                lines.append("- **Dokładna kombinacja nieobecna w profilu:** zastosowano dotychczasowy fallback preferencji pojedynczych setów.")
+                lines.append("- **Dokładna kombinacja nieobecna w profilu:** brak dodatkowego kryterium; zachowano dotychczasowe preferencje pojedynczych setów.")
         secondary = profile.get("secondary_preferences", {}) or {}
         top_secondary = sorted(secondary.items(), key=lambda item: float(item[1] or 0), reverse=True)[:4]
         if top_secondary:
