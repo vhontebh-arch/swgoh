@@ -183,7 +183,7 @@ def _canonical_set_combo_from_counts(counts):
         if groups not in (1, 2, 3):
             return None
         prefix = "" if groups == 1 else ("Double " if groups == 2 else "Triple ")
-        tokens.append((-groups, name, prefix + name))
+        tokens.append((-count, name, prefix + name))
     return " + ".join(label for _groups, _name, label in sorted(tokens))
 
 
