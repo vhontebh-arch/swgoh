@@ -1634,7 +1634,7 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
         ]
         base_score = sum(mod_score(m, profile) for m in scored_mods)
         set_score, set_pref, breakdown = set_bonus_score(scored_mods, profile)
-        combo_match = profile_set_combo_match(profile, scored_mods) if set_combo_mode == "exact" else None
+        combo_match = profile_set_combo_match(profile, scored_mods) if set_combo_mode in {"exact", "tie_break"} else None
         return {
             "total": base_score + set_score, "base": base_score,
             "setBonus": set_score, "setPreference": set_pref,
