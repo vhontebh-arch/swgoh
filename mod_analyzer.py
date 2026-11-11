@@ -14,7 +14,7 @@ INPUT_FILE = "mods.csv"
 OUTPUT_CSV = "mod_analysis.csv"
 OUTPUT_MD = "mod_analysis.md"
 PROFILE_FILE = "mod_profiles.json"
-ANALYZER_VERSION = "2026-11-11-average-level15-report-replay-v17"
+ANALYZER_VERSION = "2026-11-11-average-level15-primary-tier-audit-v18"
 
 R5 = {
     "Critical Chance %": (1.125, 2.25), "Defense": (4.9, 9.8),
@@ -1444,8 +1444,6 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
     slots = ("Square", "Diamond", "Circle", "Arrow", "Triangle", "Cross")
     primary_points, secondary_points, max_rolls = 40.0, 60.0, 24.0
     speed_reference = 150.0
-    # Compare primary values against the verified 6-dot level-15 ceiling.
-    primary_max_6dot = PRIMARY_MAX_BY_DOTS[6]
     set_max_roll = {
         "Critical Chance %": 2.25, "Critical Damage %": 36.0,
         "Defense %": 1.70, "Health %": 1.125, "Offense %": 0.563,
@@ -1477,7 +1475,11 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
         weighted_rolls += float(row.get("projectionExpectedSecondaryFit", 0.0) or 0.0)
         primary_value = number(row.get("primaryValue", 0), 0.0)
         primary_base = primary.replace("%", "").strip()
-        primary_ceiling = primary_max_6dot.get(primary_base, 0.0)
+        # Primary is tied to the mod's current dot tier. Compare it with
+        # the ceiling for those dots, never with the 6-dot ceiling for every mod.
+        primary_ceiling = PRIMARY_MAX_BY_DOTS.get(
+            integer(row.get("dots")), {}
+        ).get(primary_base, 0.0)
         primary_quality = (
             max(0.0, min(1.0, primary_value / primary_ceiling))
             if primary_ceiling > 0 else 1.0
