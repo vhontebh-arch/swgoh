@@ -1830,9 +1830,12 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
         }
         slot_order = ["Arrow", "Square", "Diamond", "Triangle", "Circle", "Cross"]
         for slot in slot_order:
+            # The user-facing validator expects a distinct section for every
+            # slot so it can verify current and proposed mods independently.
+            lines.append("#### {}".format(slot))
             mod = selected_by_slot.get(slot)
             if not mod:
-                lines.append("- **{}:** BRAK MODA W BUILDZIE".format(slot))
+                lines.append("- **BRAK MODA W BUILDZIE**")
                 continue
             current = current_by_slot.get(slot)
             unchanged = current is not None and rid(current) == rid(mod)
