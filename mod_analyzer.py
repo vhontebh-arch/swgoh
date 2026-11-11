@@ -1240,88 +1240,44 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
 
 def project_mod_for_build(row, profile):
     """
-    Optimistic, explicitly separate projection:
-    - complete the rolls available at the current tier up to level 15;
-    - for a 5-dot 5A mod, project existing rolls to 6-dot 6E values.
-    Missing rolls are assigned to the highest-priority secondary in the profile.
-    This is a potential ceiling, not a prediction of RNG outcomes.
+    Expected level-15 projection, not a best-case ceiling:
+    - assume the player can always take the mod to level 15;
+    - complete the remaining secondary rolls at the midpoint of each roll range;
+    - do not assume which secondary receives a future roll: use the mean profile
+      preference across all possible secondary stats as expected contribution;
+    - never project slicing or calibration into the build score.
+    Existing secondary values and dots remain unchanged. Primary progression is
+    intentionally left at the exported value until its level curve is verified.
     """
     projected = dict(row)
     dots = integer(row.get("dots"))
     tier = integer(row.get("tier"))
-    current_level = integer(row.get("level"))
-    entries = []
-
-    for index in range(1, 5):
-        data = rolls(row, index)
-        if data is None:
-            continue
-        stat, value, count, values = data
-        if count <= 0:
-            continue
-        if not values:
-            values = [value / count] * count
-        entries.append({"stat": stat, "values": list(values)})
-
-    current_rolls = sum(len(item["values"]) for item in entries)
+    current_rolls = sum(
+        integer(row.get("secondary{}Rolls".format(index), ""))
+        for index in range(1, 5)
+    )
     max_rolls = TOTAL.get((dots, tier), current_rolls)
     missing_rolls = max(0, max_rolls - current_rolls)
 
-    candidates = [
-        (profile_secondary_preference(profile, stat), stat)
-        for stat in (R6 if dots >= 6 else R5)
-        if profile_secondary_preference(profile, stat) > 0
-    ]
-    candidates.sort(key=lambda item: (item[0], STAT_VALUE.get(item[1], 0.0)), reverse=True)
-
-    if missing_rolls and candidates:
-        best_stat = candidates[0][1]
-        existing = next((item for item in entries if item["stat"] == best_stat), None)
-        low, high = (R6 if dots >= 6 else R5)[best_stat]
-        assumed_roll = (low + high) / 2.0
-        if existing is None and len(entries) < 4:
-            existing = {"stat": best_stat, "values": []}
-            entries.append(existing)
-        if existing is not None:
-            existing["values"].extend([assumed_roll] * missing_rolls)
-
-    # A 5A -> 6E slice preserves roll count while increasing the value of
-    # each secondary roll according to the corresponding 6-dot roll range.
-    projected_dots = dots
-    if dots == 5 and tier == 5 and current_level >= 15:
-        projected_dots = 6
-        for item in entries:
-            old_range = R5.get(item["stat"])
-            new_range = R6.get(item["stat"])
-            if old_range and new_range and old_range[1]:
-                ratio = new_range[1] / old_range[1]
-                item["values"] = [value * ratio for value in item["values"]]
-
-    # Re-serialize projected secondaries in the same schema consumed by rolls().
-    for index in range(1, 5):
-        projected["secondary{}Stat".format(index)] = ""
-        projected["secondary{}Value".format(index)] = ""
-        projected["secondary{}Rolls".format(index)] = ""
-        projected["secondary{}RawRolls".format(index)] = ""
-    for index, item in enumerate(entries[:4], 1):
-        stat = item["stat"]
-        values = item["values"]
-        scale = 10000.0 if stat in {"Health", "Protection", "Offense", "Defense", "Speed"} else 100.0
-        projected["secondary{}Stat".format(index)] = stat
-        projected["secondary{}Value".format(index)] = str(sum(values))
-        projected["secondary{}Rolls".format(index)] = str(len(values))
-        projected["secondary{}RawRolls".format(index)] = "|".join(
-            str(int(round(value * scale))) for value in values
-        )
-
-    projected["dots"] = str(projected_dots)
-    projected["level"] = "15"
-    projected["projectionLevel"] = 15
-    projected["projectionDots"] = projected_dots
-    projected["projectionAssumedRolls"] = missing_rolls
-    projected["projectionType"] = (
-        "15 + 6E" if projected_dots == 6 else "15"
+    stat_ranges = R6 if dots >= 6 else R5
+    possible_stats = tuple(stat_ranges.keys())
+    mean_preference = (
+        sum(profile_secondary_preference(profile, stat) for stat in possible_stats)
+        / len(possible_stats)
+        if possible_stats else 0.0
     )
+    # A midpoint roll has 50% quality by definition. Since its destination
+    # stat is unknown, score its expected fit instead of assigning every roll
+    # to the single highest-priority stat (the old optimistic behavior).
+    projected["projectionExpectedRolls"] = missing_rolls
+    projected["projectionExpectedSecondaryFit"] = 0.5 * mean_preference * missing_rolls
+    projected["projectionLevel"] = 15
+    projected["projectionDots"] = dots
+    projected["projectionAssumedRolls"] = missing_rolls
+    projected["projectionType"] = "15 (średnia)"
+    projected["projectionSliceApplied"] = False
+    projected["projectionCalibrationApplied"] = False
+    projected["level"] = "15"
     return projected
 
 
@@ -1370,6 +1326,7 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
             q = quality(stat, value, count, values, integer(row.get("dots")))
             pref = max(0.0, profile_secondary_preference(profile, stat))
             weighted_rolls += q * pref * count
+        weighted_rolls += float(row.get("projectionExpectedSecondaryFit", 0.0) or 0.0)
         primary_value = number(row.get("primaryValue", 0), 0.0)
         primary_base = primary.replace("%", "").strip()
         primary_ceiling = primary_max_6dot.get(primary_base, 0.0)
@@ -1535,6 +1492,9 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
             mod["optimizerProjectedScore"] = round(mod_score(projected_mod, profile), 2)
             mod["optimizerProjection"] = projected_mod.get("projectionType", "15")
             mod["optimizerProjectionAssumedRolls"] = projected_mod.get("projectionAssumedRolls", 0)
+            mod["optimizerProjectionExpectedRolls"] = projected_mod.get("projectionExpectedRolls", 0)
+            mod["optimizerProjectionSliceApplied"] = False
+            mod["optimizerProjectionCalibrationApplied"] = False
             mod["optimizerTotalScore"] = round(best["totalScore"], 2)
             mod["optimizerBaseScore"] = round(best["baseScore"], 2)
             mod["optimizerSetBonusScore"] = round(best["setBonusScore"], 2)
@@ -1713,7 +1673,7 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
         gain = float(opt.get("gain", 0.0) or 0.0)
         lines += [
             "",
-            "- **Zmiana oceny modelowej buildu:** {:+.1f} pkt (projekcja potencjału, nie gwarantowany wynik w grze).".format(gain),
+            "- **Zmiana oczekiwanej oceny buildu po podniesieniu do 15:** {:+.1f} pkt (średnia dla przyszłych rolli; bez slice i calibration).".format(gain),
             "",
         ]
 
@@ -1844,6 +1804,13 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
         lines.append("")
 
     lines += [
+        "## Założenia projekcji",
+        "",
+        "- Poziom 15 jest traktowany jako osiągalny bez ograniczenia materiałami.",
+        "- Brakujące secondary są liczone jako wartość średnia rolla, a nie maksymalna; ich przyszły przydział do statystyk jest uśredniony według profilu zamiast przypisywany do najlepszego secondary.",
+        "- Slice i calibration nie wpływają na ranking ani wynik buildu. Mogą pojawić się wyłącznie jako osobne sugestie inwestycyjne i można je pominąć.",
+        "- Wartości primary pozostają na poziomie z eksportu; ich dokładna projekcja do 15 wymaga potwierdzonej tabeli przyrostów.",
+        "",
         "## Jak czytać opisy modów",
         "",
         "Każdy opis zawiera slot, set, primary, wszystkie dostępne secondary oraz gwiazdki, tier i poziom. "
