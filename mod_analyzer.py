@@ -35,6 +35,22 @@ R6 = {
 TOTAL = {(5,1):4,(5,2):5,(5,3):6,(5,4):7,(5,5):8,
          (6,1):8,(6,2):9,(6,3):10,(6,4):11,(6,5):12}
 TIER = {1:"E",2:"D",3:"C",4:"B",5:"A"}
+PRIMARY_MAX_BY_DOTS = {
+    5: {
+        "Accuracy": 12.0, "Critical Avoidance": 24.0,
+        "Critical Chance": 12.0, "Critical Damage": 36.0,
+        "Defense": 11.75, "Health": 5.88, "Offense": 5.88,
+        "Potency": 24.0, "Protection": 23.5, "Speed": 30.0,
+        "Tenacity": 24.0,
+    },
+    6: {
+        "Accuracy": 30.0, "Critical Avoidance": 35.0,
+        "Critical Chance": 20.0, "Critical Damage": 42.0,
+        "Defense": 20.0, "Health": 16.0, "Offense": 8.5,
+        "Potency": 30.0, "Protection": 24.0, "Speed": 32.0,
+        "Tenacity": 35.0,
+    },
+}
 
 STAT_VALUE = {
     "Speed": 1.00, "Offense %": 0.92, "Offense": 0.82,
@@ -1354,8 +1370,8 @@ def project_mod_for_build(row, profile):
     - do not assume which secondary receives a future roll: use the mean profile
       preference across new secondary additions and later improvements, using equal weights because no verified roll probabilities are available;
     - never project slicing or calibration into the build score.
-    Existing secondary values and dots remain unchanged. Primary progression is
-    intentionally left at the exported value until its level curve is verified.
+    Existing secondary values and dots remain unchanged. Primary is projected to
+    the verified level-15 maximum for its current dot tier; no slicing is assumed.
     """
     projected = dict(row)
     dots = integer(row.get("dots"))
@@ -1400,6 +1416,15 @@ def project_mod_for_build(row, profile):
         expected_new_preference_sum
         + rolls_after_four_stats * expected_four_stat_mean
     )
+    primary_name = str(row.get("primaryStat", "") or "").replace("%", "").strip()
+    primary_max = PRIMARY_MAX_BY_DOTS.get(dots, {}).get(primary_name)
+    if primary_max is not None:
+        primary_suffix = "%" if "%" in str(row.get("primaryStat", "")) else ""
+        projected["primaryValue"] = "{}{}".format(primary_max, primary_suffix)
+        projected["projectionPrimaryProjected"] = True
+    else:
+        projected["projectionPrimaryProjected"] = False
+
     projected["projectionExpectedRolls"] = missing_rolls
     projected["projectionExpectedSecondaryFit"] = expected_fit
     projected["projectionLevel"] = 15
@@ -1421,14 +1446,8 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
     slots = ("Square", "Diamond", "Circle", "Arrow", "Triangle", "Cross")
     primary_points, secondary_points, max_rolls = 40.0, 60.0, 24.0
     speed_reference = 150.0
-    # Level-15 primary ceilings at 6 dots: compare 5-dot and 6-dot primaries
-    # on a common scale, as Grandivory does when scoring actual stat values.
-    primary_max_6dot = {
-        "Offense": 8.50, "Defense": 20.0, "Health": 16.0,
-        "Protection": 24.0, "Speed": 32.0, "Accuracy": 30.0,
-        "Critical Avoidance": 35.0, "Critical Chance": 20.0,
-        "Critical Damage": 42.0, "Potency": 30.0, "Tenacity": 35.0,
-    }
+    # Compare primary values against the verified 6-dot level-15 ceiling.
+    primary_max_6dot = PRIMARY_MAX_BY_DOTS[6]
     set_max_roll = {
         "Critical Chance %": 2.25, "Critical Damage %": 36.0,
         "Defense %": 1.70, "Health %": 1.125, "Offense %": 0.563,
@@ -1950,7 +1969,7 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
         "- Poziom 15 jest traktowany jako osiągalny bez ograniczenia materiałami.",
         "- Brakujące secondary są liczone jako wartość średnia rolla, a nie maksymalna; ich przyszły przydział do statystyk jest uśredniony według profilu zamiast przypisywany do najlepszego secondary.",
         "- Slice i calibration nie wpływają na ranking ani wynik buildu. Mogą pojawić się wyłącznie jako osobne sugestie inwestycyjne i można je pominąć.",
-        "- Wartości primary pozostają na poziomie z eksportu; ich dokładna projekcja do 15 wymaga potwierdzonej tabeli przyrostów.",
+        "- Primary jest projektowane do potwierdzonej wartości maksymalnej poziomu 15 dla obecnej liczby gwiazdek; nie zakładamy slice 5★ → 6★.",
         "",
         "## Jak czytać opisy modów",
         "",
@@ -2172,7 +2191,7 @@ def main():
         "Dla dawców bez lokalnego profilu po próbie pobrania używany jest fallback modValue; nie jest to ocena dopasowania do indywidualnego profilu.", "",
         "## Globalny optimizer 6-slotowy", "",
         "Ocena kompletnego buildu: 40 pkt za statystyki główne, 60 pkt za maksymalnie 24 rolle secondary oraz bonusy setów ważone profilem postaci. Zgodność z profilem ma pierwszeństwo przed zachowaniem aktualnie założonych modów. Set nieobecny w profilu zachowuje 10% bazowej wagi bonusu; set z preferencją 100% otrzymuje pełną wagę. Zachowanie modów na celu jest dopiero końcowym tie-breakiem.", "",
-        "Ranking kandydujących buildów używa oczekiwanej projekcji do poziomu 15: brakujące rolle mają średnią wartość, a ich dopasowanie do profilu jest uśredniane po możliwych secondary zamiast przypisywane do najlepszego statu. Slice i calibration nie wpływają na wynik ani ranking — pozostają wyłącznie sugestiami inwestycyjnymi, które można pominąć. Mod 5A pozostaje w projekcji modem 5-dot; nie zakładamy 6E. Primary pozostaje na wartości z eksportu, ponieważ nie mamy jeszcze zweryfikowanej tabeli jego przyrostu dla każdego poziomu.", "",
+        "Ranking kandydujących buildów używa oczekiwanej projekcji do poziomu 15: brakujące rolle mają średnią wartość, a ich dopasowanie do profilu jest uśredniane po możliwych secondary zamiast przypisywane do najlepszego statu. Slice i calibration nie wpływają na wynik ani ranking — pozostają wyłącznie sugestiami inwestycyjnymi, które można pominąć. Mod 5A pozostaje w projekcji modem 5-dot; nie zakładamy 6E. Primary jest ustawiane na potwierdzoną wartość maksymalną poziomu 15 dla obecnej liczby gwiazdek; nie zakładamy slice 5★ → 6★.", "",
         "Bonus Speed Set używa bazowej szybkości 150, jeśli profil nie zawiera pola base_stats.Speed. Pozostałe bonusy procentowe są normalizowane względem maksymalnego rolla odpowiedniej statystyki.", "",
         "## Najważniejsi kandydaci", "",
         "| Akcja | Mod | Źródło | Set | Tier | Lvl | Quality | Value | Fit | 6E proj. | Speed | Potencjał | Inwestycja |",
