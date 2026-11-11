@@ -1,3 +1,4 @@
+# Regression coverage for expected level-15 scoring and executable transfer order.
 import unittest
 
 from mod_analyzer import (apply_optimizer_replacements, rolls, quality,
