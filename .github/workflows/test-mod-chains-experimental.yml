@@ -26,4 +26,4 @@ jobs:
         with:
           python-version: "3.12"
       - name: Run transfer-chain and projection regression tests
-        run: python -m unittest -v test_mod_chains
+        run: python -m unittest -v test_optimizer_preflight test_mod_chains test_mod_profile_cache
