@@ -129,3 +129,16 @@ Te ograniczenia są celowe i widoczne: nie udajemy, że samo przeniesienie metod
 - Symulacja kontroluje rzeczywiste położenie każdego moda w chwili wykonania, zawartość slotu docelowego, brak duplikatów oraz zachowanie pełnego zbioru modów.
 - Raport pokazuje faktyczne źródło moda w chwili danego kroku; jeśli wcześniejszy krok przeniósł go do magazynu, źródłem jest magazyn, a nie pierwotny właściciel.
 - Nieudana symulacja dokładnej kolejności blokuje status bezpiecznego łańcucha.
+
+## Eksperyment exact set-combo — v19
+
+Dotychczasowa wersja agregowała popularność setów bazowych, usuwając z etykiet prefiksy `Double` i `Triple`. W efekcie gubiła różnicę między układem 4+2 a układem 2+4, mimo że SWGOH.GG raportuje je jako odrębne kombinacje.
+
+Wariant `set_combo_mode="exact"`:
+- mapuje etykiety profilu na liczbę modów każdego setu, z uwzględnieniem wymaganego rozmiaru setu (2 lub 4 elementy);
+- porównuje dokładny układ sześciu modów, niezależnie od kolejności nazw w etykiecie;
+- normalizuje częstość dopasowanej kombinacji względem najczęściej występującej kombinacji profilu;
+- używa tej wartości do ważenia bonusów setów i jako tie-breaku;
+- przy kombinacji nieobecnej w profilu zachowuje dotychczasowy scoring bazowych setów.
+
+Domyślny tryb `base` pozostaje nietknięty. Workflow eksperymentalny generuje raport bazowy i raport exact na tym samym snapshotcie `c3po.json`; dopiero ich porównanie rozstrzygnie, czy dokładna częstość kombinacji daje lepsze decyzje dla Vel Sarthy. Wynik eksperymentu nie jest automatycznie przenoszony do `optimizer-v2`.
