@@ -110,6 +110,7 @@ def main() -> None:
             c3po = parsed["c3po.json"]
             manifest["snapshot"] = {
                 "published_at": published_at,
+                "player_export_acquired_at": os.environ.get("PLAYER_EXPORT_ACQUIRED_AT", ""),
                 "producer_repository": repository,
                 "producer_branch": source_branch,
                 "producer_commit": source_commit,

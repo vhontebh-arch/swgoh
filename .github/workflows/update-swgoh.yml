@@ -196,6 +196,7 @@ jobs:
           PY
 
           test -s swgoh_972824625.json
+          echo "PLAYER_EXPORT_ACQUIRED_AT=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> "$GITHUB_ENV"
 
       # ============================================================
       # DOWNLOAD CURRENT GAME DATA
