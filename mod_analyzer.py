@@ -525,37 +525,115 @@ def source_label(row, aliases, names):
     return "POSTAĆ: nieznana"
 
 
+PROFILE_PRIMARY_MAX_6DOT = {
+    "Offense": 8.50, "Defense": 20.0, "Health": 16.0,
+    "Protection": 24.0, "Speed": 32.0, "Accuracy": 30.0,
+    "Critical Avoidance": 35.0, "Critical Chance": 20.0,
+    "Critical Damage": 42.0, "Potency": 30.0, "Tenacity": 35.0,
+}
+PROFILE_PRIMARY_POINTS = 40.0
+PROFILE_SECONDARY_POINTS = 60.0
+PROFILE_MAX_ROLLS = 24.0
+
+
+def profile_mod_score_components(row, profile):
+    """Shared 40/60 per-mod scoring used by both build search and donor fit."""
+    slot = str(row.get("slot", "") or "")
+    primary = str(row.get("primaryStat", "") or "")
+    primary_pref = max(0.0, min(1.0, float(
+        profile.get("primary_preferences", {}).get(slot, {}).get(primary, 0.0)
+    )))
+    primary_value = number(row.get("primaryValue", 0), 0.0)
+    primary_base = primary.replace("%", "").strip()
+    primary_ceiling = PROFILE_PRIMARY_MAX_6DOT.get(primary_base, 0.0)
+    primary_quality = (
+        max(0.0, min(1.0, primary_value / primary_ceiling))
+        if primary_ceiling > 0 else 1.0
+    )
+    primary_fit = primary_pref * primary_quality
+
+    weighted_rolls = 0.0
+    for index in range(1, 5):
+        stat_data = rolls(row, index)
+        if stat_data is None:
+            continue
+        stat, value, count, values = stat_data
+        if count <= 0:
+            continue
+        q = quality(stat, value, count, values, integer(row.get("dots")))
+        pref = max(0.0, float(profile.get("secondary_preferences", {}).get(stat, 0.0)))
+        weighted_rolls += q * pref * count
+
+    primary_points = primary_fit * PROFILE_PRIMARY_POINTS / 6.0
+    secondary_points = weighted_rolls * PROFILE_SECONDARY_POINTS / PROFILE_MAX_ROLLS
+    return {
+        "fitScore": primary_points + secondary_points,
+        "primaryFit": primary_fit * 100.0,
+        "secondaryFit": min(100.0, weighted_rolls * 100.0 / PROFILE_MAX_ROLLS),
+        "primaryPoints": primary_points,
+        "secondaryPoints": secondary_points,
+    }
+
+
 def score_profile(row, profile):
-    primary = row.get("primaryStat", "")
-    slot = row.get("slot", "")
-    primary_pref = profile.get("primary_preferences", {}).get(slot, {})
-    primary_fit = float(primary_pref.get(primary, 0.0)) * 100.0
-
-    secs = []
-    for i in range(1, 5):
-        x = rolls(row, i)
-        if x is not None:
-            stat, value, count, values = x
-            q = quality(stat, value, count, values, integer(row.get("dots")))
-            pref = float(profile.get("secondary_preferences", {}).get(stat, 0.0))
-            secs.append((q, pref, count))
-
-    # q is already normalized to 0..1. Convert to 0..100 only once
-    # after weighting; the previous version multiplied by 100 twice.
-    weighted = sum(q * pref * max(1, count) for q, pref, count in secs)
-    max_weight = sum(max(1, count) for q, pref, count in secs) or 1
-    secondary_fit = 100.0 * weighted / max_weight
+    components = profile_mod_score_components(row, profile)
     set_name = row.get("set", "")
     set_fit = float(profile.get("set_preferences", {}).get(set_name, 0.0)) * 100.0
-
-    # Set preference is evaluated once at complete-build level, not per mod.
-    fit_score = 0.20 * primary_fit + 0.80 * secondary_fit
+    # Set bonuses are evaluated only once at complete-build level.
     return {
-        "fitScore": round(fit_score, 1),
-        "primaryFit": round(primary_fit, 1),
-        "secondaryFit": round(secondary_fit, 1),
-        "setFit": round(set_fit, 1)
+        "fitScore": round(components["fitScore"], 2),
+        "primaryFit": round(components["primaryFit"], 1),
+        "secondaryFit": round(components["secondaryFit"], 1),
+        "primaryPoints": round(components["primaryPoints"], 2),
+        "secondaryPoints": round(components["secondaryPoints"], 2),
+        "setFit": round(set_fit, 1),
     }
+
+
+def profiled_build_score(mods, profile):
+    """Score a fixed equipped build with the same mod and set model as the optimizer."""
+    base_score = sum(profile_mod_score_components(mod, profile)["fitScore"] for mod in mods)
+    grouped = {}
+    for mod in mods:
+        name = str(mod.get("set", "") or "")
+        if name in SET_RULES:
+            grouped.setdefault(name, []).append(mod)
+
+    secondary_prefs = profile.get("secondary_preferences", {})
+    set_score = 0.0
+    set_max_roll = {
+        "Critical Chance %": 2.25, "Critical Damage %": 36.0,
+        "Defense %": 1.70, "Health %": 1.125, "Offense %": 0.563,
+        "Potency %": 2.25, "Speed": 6.0, "Tenacity %": 2.25,
+    }
+    for name, members in grouped.items():
+        stat, required, small_bonus, max_bonus = SET_RULES[name]
+        count = len(members)
+        full_groups = sum(1 for m in members if integer(m.get("level")) >= 15) // required
+        half_groups = (count - full_groups * required) // required
+        if not full_groups and not half_groups:
+            continue
+        set_pref = max(0.0, float(profile.get("set_preferences", {}).get(name, 0.0)))
+        profile_stat = {
+            "Health %": "Health", "Defense %": "Defense",
+            "Offense %": "Offense", "Potency %": "Potency",
+            "Tenacity %": "Tenacity",
+        }.get(stat, stat)
+        stat_pref = max(0.0, float(secondary_prefs.get(stat, 0.0)),
+                        float(secondary_prefs.get(profile_stat, 0.0)))
+        max_roll = R5.get(stat, (0.0, 0.0))[1] or set_max_roll.get(stat)
+        if not max_roll or not stat_pref:
+            continue
+        if stat == "Speed":
+            base_speed = number(profile.get("base_stats", {}).get("Speed", 150.0), 150.0)
+            full_units = max_bonus * base_speed / 100.0
+            half_units = small_bonus * base_speed / 100.0
+        else:
+            full_units, half_units = max_bonus, small_bonus
+        equivalents = (full_groups * full_units + half_groups * half_units) / max_roll
+        set_weight = 0.10 + 0.90 * min(1.0, set_pref)
+        set_score += equivalents * stat_pref * set_weight * PROFILE_SECONDARY_POINTS / PROFILE_MAX_ROLLS
+    return base_score + set_score
 
 def character_fit(row, targets, profiles, aliases):
     assigned = row.get("assignedTo", "")
@@ -1055,11 +1133,16 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
 
                 for kind,replacement in candidates:
                     replacement_id=rid(replacement)
-                    local_gain=fit(replacement,who)-fit(current,who)
-                    set_delta=completed_set_delta(hole_owner,current,replacement)
                     donor_profile = profiles.get(aliases.get(hole_owner, hole_owner), {}) or {}
                     before_mods = [r for (o, _slot), r in working_eq.items() if o == hole_owner]
                     after_mods = [r for r in before_mods if rid(r) != rid(current)] + [replacement]
+                    if donor_profile:
+                        # Compare the donor's complete fixed build before/after,
+                        # not an isolated mod score. Missing slots remain missing.
+                        local_gain = profiled_build_score(after_mods, donor_profile) - profiled_build_score(before_mods, donor_profile)
+                    else:
+                        local_gain = fit(replacement,who)-fit(current,who)
+                    set_delta=completed_set_delta(hole_owner,current,replacement)
                     combo_delta = exact_combo_frequency(donor_profile, after_mods) - exact_combo_frequency(donor_profile, before_mods)
                     move={"owner":hole_owner,"name":pname(hole_owner),
                           "removed":None if initial_hole else current,
@@ -1422,16 +1505,8 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
     names = names or {}
     protected_owners = set(protected_owners or set())
     slots = ("Square", "Diamond", "Circle", "Arrow", "Triangle", "Cross")
-    primary_points, secondary_points, max_rolls = 40.0, 60.0, 24.0
+    primary_points, secondary_points, max_rolls = PROFILE_PRIMARY_POINTS, PROFILE_SECONDARY_POINTS, PROFILE_MAX_ROLLS
     speed_reference = 150.0
-    # Level-15 primary ceilings at 6 dots: compare 5-dot and 6-dot primaries
-    # on a common scale, as Grandivory does when scoring actual stat values.
-    primary_max_6dot = {
-        "Offense": 8.50, "Defense": 20.0, "Health": 16.0,
-        "Protection": 24.0, "Speed": 32.0, "Accuracy": 30.0,
-        "Critical Avoidance": 35.0, "Critical Chance": 20.0,
-        "Critical Damage": 42.0, "Potency": 30.0, "Tenacity": 35.0,
-    }
     set_max_roll = {
         "Critical Chance %": 2.25, "Critical Damage %": 36.0,
         "Defense %": 1.70, "Health %": 1.125, "Offense %": 0.563,
@@ -1446,33 +1521,7 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
         return aliases.get(owner_id, owner_id)
 
     def mod_score(row, profile):
-        slot = str(row.get("slot", "") or "")
-        primary = str(row.get("primaryStat", "") or "")
-        primary_fit = max(0.0, min(1.0, float(
-            profile.get("primary_preferences", {}).get(slot, {}).get(primary, 0.0)
-        )))
-        weighted_rolls = 0.0
-        for index in range(1, 5):
-            stat_data = rolls(row, index)
-            if stat_data is None:
-                continue
-            stat, value, count, values = stat_data
-            if count <= 0:
-                continue
-            q = quality(stat, value, count, values, integer(row.get("dots")))
-            pref = max(0.0, float(profile.get("secondary_preferences", {}).get(stat, 0.0)))
-            weighted_rolls += q * pref * count
-        primary_value = number(row.get("primaryValue", 0), 0.0)
-        primary_base = primary.replace("%", "").strip()
-        primary_ceiling = primary_max_6dot.get(primary_base, 0.0)
-        primary_quality = (
-            max(0.0, min(1.0, primary_value / primary_ceiling))
-            if primary_ceiling > 0 else 1.0
-        )
-        return (
-            primary_fit * primary_quality * primary_points / len(slots)
-            + weighted_rolls * secondary_points / max_rolls
-        )
+        return profile_mod_score_components(row, profile)["fitScore"]
 
     def set_bonus_score(mods, profile):
         grouped = {}
