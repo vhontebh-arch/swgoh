@@ -216,3 +216,13 @@ Jeśli nie można zaznaczyć wszystkich wymaganych pól, wynik pozostaje roboczy
 ## Ochrona dokładnej kombinacji setów dawcy
 
 Podczas wyboru PATCH-a optymalizator porównuje sześciomodową kombinację setów dawcy przed i po naprawie. Jeśli profil SWGOH.GG zawiera dokładną kombinację, jej zmiana jest kryterium rozstrzygającym przed lokalnym fitem pojedynczego moda. Wyszukiwanie nadal preferuje najkrótszy wykonalny łańcuch. Brak rozpoznanej kombinacji nie blokuje transferu — wtedy działa dotychczasowy ranking fitu, pełnych setów i modValue. Raport powinien pokazywać kombinację i jej częstość przed/po.
+
+
+## 13. Jednolita punktacja i ocena pełnego buildu dawcy
+
+- Punktacja pojedynczego moda musi pochodzić ze wspólnej funkcji używanej zarówno przez wyszukiwanie buildów, jak i ocenę dopasowania moda do profilu.
+- Obowiązuje jeden model: 40 punktów primary (równo rozłożone na sześć slotów, z uwzględnieniem preferencji i jakości primary) oraz 60 punktów secondary (maksymalnie 24 rolle, z uwzględnieniem jakości, liczby rolli i preferencji profilu).
+- Preferencja setu nie jest dodawana do punktacji pojedynczego moda. Bonus setu jest liczony tylko na poziomie kompletnego, ustalonego buildu.
+- Jeżeli profil dawcy jest dostępny, koszt PATCH należy oceniać przez porównanie punktacji jego pełnego wyposażonego buildu przed i po zmianie, z uwzględnieniem bonusów setów. Nie wolno zastępować tej oceny różnicą punktacji dwóch pojedynczych modów.
+- Jeżeli profil dawcy nie jest dostępny, dopuszczalny jest dotychczasowy fallback modValue, ale raport musi ujawniać brak oceny profilowej.
+- Testy regresyjne muszą potwierdzać identyczną punktację pojedynczego moda w analizie profilu i optymalizatorze oraz kontrolować zmianę wyniku pełnego buildu dawcy.
