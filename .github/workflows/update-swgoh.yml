@@ -15,11 +15,20 @@ on:
       - "targets.json"
       - ".github/workflows/update-trigger.txt"
       - ".github/scripts/sync-c3po.sh"
+      - "sync_optimizer_data.py"
+      - "publish_optimizer_data.py"
+      - "test_optimizer_data_sync.py"
+      - ".github/workflows/update-swgoh.yml"
   schedule:
     - cron: "0 6 * * *"
 
+concurrency:
+  group: swgoh-canonical-data-publisher
+  cancel-in-progress: false
+
 permissions:
   contents: write
+  actions: write
 
 jobs:
   update:
@@ -190,6 +199,7 @@ jobs:
           PY
 
           test -s swgoh_972824625.json
+          echo "PLAYER_EXPORT_ACQUIRED_AT=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> "$GITHUB_ENV"
 
       # ============================================================
       # DOWNLOAD CURRENT GAME DATA
@@ -1054,6 +1064,12 @@ jobs:
           echo "Pierwsze 5 rekordów:"
           head -n 6 mods.csv
 
+      - name: Sync canonical mod profiles
+        run: |
+          set -e
+          python sync_optimizer_data.py --files mod_profiles.json
+          python -m json.tool mod_profiles.json >/dev/null
+
       # ============================================================
       # MOD ANALYSIS
       # ============================================================
@@ -1194,6 +1210,20 @@ jobs:
             git push
 
           fi
+
+      - name: Publish canonical optimizer snapshot
+        run: |
+          set -e
+          python publish_optimizer_data.py
+
+      - name: Trigger optimizer-v2 consumer
+        if: github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -e
+          gh api --method POST "repos/${{ github.repository }}/actions/workflows/update-swgoh.yml/dispatches" -f ref=optimizer-v2
+          echo "Uruchomiono optimizer-v2 na właśnie opublikowanym snapshotcie."
 
       # ============================================================
       # CLEANUP
