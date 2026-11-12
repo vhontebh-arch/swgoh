@@ -8,7 +8,7 @@
 - **Walidacja fizyczna całego łańcucha:** POTWIERDZONA
 - **Ocena:** KOMPROMIS — bilans rosteru dodatni, ale co najmniej jeden dawca traci
 - **Interpretacja:** bilans obejmuje cel i wszystkich dotkniętych dawców, liczony tą samą nieprojekcyjną punktacją pełnego buildu.
-- **Łączny bilans profilu rosteru:** +42.46 pkt
+- **Łączny bilans profilu rosteru:** +39.96 pkt
 - **Liczba modów docelowych:** 6/6
 
 ## Bilans całej operacji — ta sama punktacja przed/po
@@ -17,10 +17,10 @@ Wynik każdego buildu jest liczony bez projekcji przyszłych rolli i bez założ
 
 | Postać | Rola w łańcuchu | Wynik przed | Wynik po | Zmiana |
 |---|---|---:|---:|---:|
-| CADBANE | CEL | 20.98 | 82.26 | +61.28 |
+| CADBANE | CEL | 23.48 | 82.26 | +58.78 |
 | JEDIKNIGHTREVAN | DAWCA | 88.79 | 69.98 | -18.82 |
 
-**ŁĄCZNA ZMIANA: +42.46 pkt.**
+**ŁĄCZNA ZMIANA: +39.96 pkt.**
 
 ## Docelowy zestaw — CADBANE
 
@@ -64,7 +64,7 @@ Wynik każdego buildu jest liczony bez projekcji przyszłych rolli i bez założ
 - **Źródło:** JEDIKNIGHTREVAN
   - Zmiana dopasowania do profilu: +14.7 pkt (1.1 → 15.8).
 
-- **Zmiana potencjału buildu:** +61.3 pkt (optymistyczna projekcja do 15; brakujące rolle przypisane do najwyżej preferowanej secondary; dla 5A projekcja secondary do 6E; primary pozostaje bez zmian; bez slice i calibration).
+- **Zmiana potencjału buildu:** +58.8 pkt (optymistyczna projekcja do 15; brakujące rolle przypisane do najwyżej preferowanej secondary; dla 5A projekcja secondary do 6E; primary pozostaje bez zmian; bez slice i calibration).
 
 ## MOD — mody przenoszone na cel
 
