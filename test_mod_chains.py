@@ -268,6 +268,40 @@ class ProfileSetAliasTests(unittest.TestCase):
             profiled_build_score(mods, without_preferences),
         )
 
+    def test_preferred_set_bonus_is_not_zero_when_bonus_stat_is_not_top_secondary(self):
+        from mod_analyzer import profiled_build_score
+
+        mods = [
+            make_mod("cd-1", slot="Arrow", mod_set="Critical Damage"),
+            make_mod("cd-2", slot="Square", mod_set="Critical Damage"),
+            make_mod("cd-3", slot="Diamond", mod_set="Critical Damage"),
+            make_mod("cd-4", slot="Triangle", mod_set="Critical Damage"),
+        ]
+        profile = {
+            "set_preferences": {"Crit Damage": 1.0},
+            "secondary_preferences": {"Speed": 1.0, "Offense": 0.8},
+        }
+        self.assertGreater(profiled_build_score(mods, profile), 0.0)
+
+    def test_exact_combo_match_normalizes_swgoh_gg_aliases(self):
+        from mod_analyzer import profile_set_combo_match
+
+        mods = [
+            make_mod("cd-1", slot="Arrow", mod_set="Critical Damage"),
+            make_mod("cd-2", slot="Square", mod_set="Critical Damage"),
+            make_mod("cd-3", slot="Diamond", mod_set="Critical Damage"),
+            make_mod("cd-4", slot="Triangle", mod_set="Critical Damage"),
+            make_mod("cc-1", slot="Circle", mod_set="Critical Chance"),
+            make_mod("cc-2", slot="Cross", mod_set="Critical Chance"),
+        ]
+        profile = {
+            "set_combinations": {"Crit Damage + Crit Chance": 30.45, "Crit Damage + Health": 6.2}
+        }
+        match = profile_set_combo_match(profile, mods)
+        self.assertEqual(match["key"], "Critical Damage + Critical Chance")
+        self.assertEqual(match["frequency"], 30.45)
+        self.assertEqual(match["preference"], 1.0)
+
 
 if __name__ == "__main__":
     unittest.main()
