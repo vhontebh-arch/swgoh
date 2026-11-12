@@ -234,5 +234,40 @@ class TransferChainTests(unittest.TestCase):
         self.assertTrue(any("konflikt modów" in reason for _, reason in result["failed"]))
 
 
+class ProfileSetAliasTests(unittest.TestCase):
+    def test_swgoh_gg_set_aliases_match_internal_game_names(self):
+        from mod_analyzer import profile_set_preference, score_profile
+
+        profile = {"set_preferences": {"Crit Damage": 1.0, "Crit Chance": 0.8}}
+        self.assertEqual(profile_set_preference(profile, "Critical Damage"), 1.0)
+        self.assertEqual(profile_set_preference(profile, "Critical Chance"), 0.8)
+        self.assertEqual(score_profile(make_mod("cd", mod_set="Critical Damage"), profile)["setFit"], 100.0)
+        self.assertEqual(score_profile(make_mod("cc", mod_set="Critical Chance"), profile)["setFit"], 80.0)
+
+    def test_alias_preferences_contribute_to_full_build_set_score(self):
+        from mod_analyzer import profiled_build_score
+
+        mods = [
+            make_mod("cd-1", slot="Arrow", mod_set="Critical Damage"),
+            make_mod("cd-2", slot="Square", mod_set="Critical Damage"),
+            make_mod("cd-3", slot="Diamond", mod_set="Critical Damage"),
+            make_mod("cd-4", slot="Triangle", mod_set="Critical Damage"),
+            make_mod("cc-1", slot="Circle", mod_set="Critical Chance"),
+            make_mod("cc-2", slot="Cross", mod_set="Critical Chance"),
+        ]
+        profile = {
+            "set_preferences": {"Crit Damage": 1.0, "Crit Chance": 0.8},
+            "secondary_preferences": {"Critical Damage %": 1.0, "Critical Chance %": 1.0},
+        }
+        without_preferences = {
+            "set_preferences": {},
+            "secondary_preferences": {"Critical Damage %": 1.0, "Critical Chance %": 1.0},
+        }
+        self.assertGreater(
+            profiled_build_score(mods, profile),
+            profiled_build_score(mods, without_preferences),
+        )
+
+
 if __name__ == "__main__":
     unittest.main()
