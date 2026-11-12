@@ -1727,19 +1727,23 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
             set_score, set_pref, breakdown = set_bonus_score(projected_chosen, profile)
             combo_score, combo_match = profile_set_combo_alignment_score(profile, projected_chosen)
             total = base_score + set_score + combo_score
-            # Profile set preference outranks preserving the current assignment.
-            # Keeping an existing mod is only the final tie-break.
-            key = (total, set_pref, unchanged_count)
+            # An observed complete set combination is a categorical profile
+            # preference, not a small additive bonus. Compare its normalized
+            # frequency before raw mod quality so a high-scoring but unobserved
+            # set mix cannot defeat the dominant profile combination.
+            combo_preference = float(combo_match.get("preference", 0.0)) if combo_match else 0.0
+            key = (combo_preference, total, set_pref, unchanged_count)
             if best is None or key > best["key"]:
                 best = {
                     "key": key, "totalScore": total, "baseScore": base_score,
                     "setBonusScore": set_score, "setPreferenceScore": set_pref,
                     "setBreakdown": breakdown,
                     "setComboAlignmentScore": combo_score,
+                    "setComboPreference": combo_preference,
                     "setComboMatch": combo_match,
                     "setComboKey": combo_match.get("key") if combo_match else None,
                     "setComboFrequency": combo_match.get("frequency") if combo_match else None,
-                    "setComboMode": "weighted" if combo_match else "none",
+                    "setComboMode": "profile_priority" if combo_match else "none",
                     "unchangedCount": unchanged_count,
                     "mods": chosen,
                 }
