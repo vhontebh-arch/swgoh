@@ -635,6 +635,20 @@ def profiled_build_score(mods, profile):
         set_score += equivalents * stat_pref * set_weight * PROFILE_SECONDARY_POINTS / PROFILE_MAX_ROLLS
     return base_score + set_score
 
+
+def compare_profiled_builds(before_mods, after_mods, profile):
+    """Return a comparable full-build score delta, or None without a profile."""
+    if not isinstance(profile, dict) or not profile:
+        return None
+    before_score = profiled_build_score(before_mods, profile)
+    after_score = profiled_build_score(after_mods, profile)
+    return {
+        "before": round(before_score, 2),
+        "after": round(after_score, 2),
+        "delta": round(after_score - before_score, 2),
+    }
+
+
 def character_fit(row, targets, profiles, aliases):
     assigned = row.get("assignedTo", "")
     target_ids = {t.get("baseId") for t in targets}
@@ -1344,6 +1358,7 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                     "required":required,"beforeFull":before_full,"afterFull":after_full
                 })
         donor_profile = profiles.get(aliases.get(o, o), {}) or {}
+        profile_score = compare_profiled_builds(before, after, donor_profile)
         before_combo = profile_set_combo_match(donor_profile, before)
         after_combo = profile_set_combo_match(donor_profile, after)
         validation.append({
@@ -1358,6 +1373,10 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
             "beforeModValue":round(before_value,1),
             "afterModValue":round(after_value,1),
             "modValueDelta":round(after_value-before_value,1),
+            "beforeProfileScore":profile_score["before"] if profile_score else None,
+            "afterProfileScore":profile_score["after"] if profile_score else None,
+            "profileScoreDelta":profile_score["delta"] if profile_score else None,
+            "profileScoreAvailable":profile_score is not None,
             "ok":True
         })
 
@@ -1793,20 +1812,22 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
                 material_set_losses.append((set_name, support))
             else:
                 minor_set_changes.append((set_name, support))
+        profile_delta = item.get("profileScoreDelta")
         value_delta = float(item.get("modValueDelta", 0.0) or 0.0)
-        material = value_delta < -0.05 or bool(material_set_losses)
+        # Prefer the donor's complete profile-aware build score. modValue is
+        # only a fallback when no donor profile could be obtained.
+        effective_delta = (
+            float(profile_delta) if profile_delta is not None else value_delta
+        )
+        material = effective_delta < -0.05 or bool(material_set_losses)
         donor_assessments[owner] = {
             "material": material,
-            "value_delta": value_delta,
+            "value_delta": effective_delta,
+            "profile_score_available": profile_delta is not None,
             "material_set_losses": material_set_losses,
             "minor_set_changes": minor_set_changes,
         }
         donor_compromise = donor_compromise or material
-    donor_compromise = donor_compromise or any(
-        float(move.get("gain", 0.0) or 0.0) < -0.05
-        for plan in chain_result.get("plans", [])
-        for move in plan.get("moves", [])
-    )
     if not chain_result.get("safe"):
         assessment = "BLOKADA — nie wykonuj przekładek"
     elif donor_compromise:
@@ -1820,6 +1841,7 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
         "- **Wykonalność fizyczna:** {}".format("POTWIERDZONA" if chain_result.get("safe") else "ZABLOKOWANA"),
         "- **Walidacja fizyczna całego łańcucha:** {}".format("POTWIERDZONA" if chain_result.get("safe") else "ZABLOKOWANA"),
         "- **Ocena:** {}".format(assessment),
+        "- **Interpretacja:** koszt u dawcy jest jawnie liczony i porównywany z korzyścią celu; sam fakt przeniesienia nie jest błędem optymalizacji.",
         "- **Liczba modów docelowych:** {}/6".format(
             min(6, max((len(opt.get("mods", [])) for opt in optimizer.values()), default=0))
         ),
@@ -1907,7 +1929,7 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
         gain = float(opt.get("gain", 0.0) or 0.0)
         lines += [
             "",
-            "- **Zmiana oczekiwanej oceny buildu po podniesieniu do 15:** {:+.1f} pkt (średnia dla przyszłych rolli; bez slice i calibration).".format(gain),
+            "- **Zmiana potencjału buildu:** {:+.1f} pkt (optymistyczna projekcja do 15; brakujące rolle przypisane do najwyżej preferowanej secondary; dla 5A projekcja secondary do 6E; primary pozostaje bez zmian; bez slice i calibration).".format(gain),
             "",
         ]
 
@@ -2006,8 +2028,18 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
         lines += ["## Wpływ na postacie-dawców", ""]
         if donor_costs:
             for item in donor_costs:
-                lines.append("- **{}:** modValue {:.1f} → {:.1f} ({:+.1f}).".format(
-                    item.get("name", display_name(item.get("owner", ""))),
+                donor_name = item.get("name", display_name(item.get("owner", "")))
+                profile_delta = item.get("profileScoreDelta")
+                if profile_delta is not None:
+                    lines.append("- **{} — wynik pełnego buildu wg profilu:** {:.2f} → {:.2f} ({:+.2f} pkt).".format(
+                        donor_name,
+                        float(item.get("beforeProfileScore", 0.0) or 0.0),
+                        float(item.get("afterProfileScore", 0.0) or 0.0),
+                        float(profile_delta),
+                    ))
+                else:
+                    lines.append("- **{} — wynik pełnego buildu wg profilu:** niedostępny; użyto fallback modValue.".format(donor_name))
+                lines.append("  - Σ modValue modów: {:.1f} → {:.1f} ({:+.1f}) — surowy wskaźnik jakości modów, nie wynik profilu.".format(
                     float(item.get("beforeModValue", 0.0) or 0.0),
                     float(item.get("afterModValue", 0.0) or 0.0),
                     float(item.get("modValueDelta", 0.0) or 0.0),
@@ -2031,9 +2063,15 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
                     if str(move.get("owner", "") or "") == str(item.get("owner", "") or "")
                 ]
                 if donor_moves:
-                    lines.append("  - Fit pojedynczych modów wg profilu dawcy: {}.".format(
-                        "; ".join("{} {:+.1f} pkt".format(slot, gain) for slot, gain in donor_moves)
-                    ))
+                    base_id = aliases.get(str(item.get("owner", "") or ""), str(item.get("owner", "") or ""))
+                    if profiles.get(base_id):
+                        lines.append("  - Zmiana wyniku pełnego buildu po kolejnych PATCH-ach: {}.".format(
+                            "; ".join("{} {:+.1f} pkt".format(slot, gain) for slot, gain in donor_moves)
+                        ))
+                    else:
+                        lines.append("  - Fallback — zmiana dopasowania pojedynczego moda (bez profilu dawcy): {}.".format(
+                            "; ".join("{} {:+.1f} pkt".format(slot, gain) for slot, gain in donor_moves)
+                        ))
                 assessment_detail = donor_assessments.get(str(item.get("owner", "") or ""), {})
                 for change in item.get("setChanges", []):
                     lines.append("  - {}: {} pełnych setów ({} → {}).".format(
@@ -2286,7 +2324,7 @@ def main(argv=None):
         "- PATCH: **{}**".format(counts.get("PATCH",0)),
         "- KEEP: **{}**".format(counts.get("KEEP",0)), "",
         "## Profile SWGOH.GG — lokalna baza", "",
-        "Profile są przechowywane lokalnie i odświeżane tylko dla celu oraz dawców faktycznie wyznaczonego łańcucha transferów. Po pobraniu profili dawców łańcuch jest ponownie oceniany; jeśli zmieni się dawca, jego profil również zostanie sprawdzony. Cache ma ważność 90 dni. Nieudane lub niepełne pobranie nie nadpisuje poprzedniego poprawnego profilu.", "",
+        "Profile są przechowywane lokalnie i odświeżane tylko dla celu oraz dawców faktycznie wyznaczonego łańcucha transferów. Po pobraniu profili dawców łańcuch jest ponownie oceniany; jeśli zmieni się dawca, jego profil również zostanie sprawdzony. Cache jest uznawany za świeży przez 5 dni. Nieudane lub niepełne pobranie nie nadpisuje poprzedniego poprawnego profilu.", "",
         "| Postać (baseId) | Status |",
         "|---|---|",
         *["| {} | {} |".format(unit_id, status) for unit_id, status in sorted(profile_fetch_status.items())],
