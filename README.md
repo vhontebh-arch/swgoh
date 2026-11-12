@@ -6,7 +6,7 @@ This branch is the single source of truth for every active optimizer version.
 
 - `main` / `.github/workflows/update-swgoh.yml` is the only account-data producer. It acquires the Comlink player export and C3PO inventory, downloads current game data and localization, derives the account CSV files, validates them, and publishes one atomic snapshot here.
 - `optimizer-v2` is a consumer. Its analysis workflow downloads all inputs from one immutable commit on this branch and verifies every Git blob SHA before running.
-- The profile refresh workflow is hosted on `main`, refreshes the configured two SWGOH.GG source slices every five days, and publishes only the updated shared profile cache here.
+- Mod profiles are maintained centrally using the agreed direct SWGOH.GG page-reading process (Top 1000 Kyber GAC and Top 100 Guilds). Updated profiles are published here and shared by every optimizer version; GitHub Actions does not scrape profile pages.
 - Local copies on optimizer branches are temporary runtime files. Optimizer workflows do not publish independent copies of source data.
 
 ## Snapshot files
