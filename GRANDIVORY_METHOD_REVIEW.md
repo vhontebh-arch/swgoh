@@ -126,3 +126,13 @@ Te ograniczenia są celowe i widoczne: nie udajemy, że samo przeniesienie metod
 ## Dodatkowa kontrola łańcuchów dawców
 
 Wersja integracyjna uwzględnia dokładną sześciomodową kombinację setów dawcy przy wyborze PATCH-a. Jest to kryterium porządkujące kandydatów o tej samej długości łańcucha, przed lokalnym fitem pojedynczego moda. Nie zmienia punktacji docelowego buildu. Jeżeli profil nie zawiera danej kombinacji, stosowany jest dotychczasowy fallback.
+
+
+## Wspólna punktacja modów i pełnych buildów — 2026-11-12
+
+- `profile_mod_score_components()` jest jedynym źródłem punktacji pojedynczego moda dla wyszukiwania buildów i oceny dopasowania do profilu.
+- Model zachowuje proporcję 40 punktów dla primary i 60 punktów dla secondary, z tym samym limitem 24 rolli secondary oraz tymi samymi preferencjami profilu.
+- Jakość primary jest mnożona przez preferencję primary i normalizowana do wspólnego maksimum 6-dot. Składowe są raportowane osobno jako `primaryPoints` i `secondaryPoints`.
+- `score_profile()` nie dodaje preferencji setu do pojedynczego moda. Bonus setu pozostaje oceniany wyłącznie na poziomie kompletnego buildu.
+- `profiled_build_score()` ocenia ustalony zestaw modów dawcy przed i po zmianie, z uwzględnieniem tych samych punktacji modów i bonusów setów co wyszukiwanie buildu. Jeśli profil dawcy jest dostępny, łańcuch transferów używa tej różnicy zamiast porównywania tylko pojedynczego moda. Bez profilu pozostaje jawny fallback `modValue`.
+- Testy regresyjne sprawdzają zgodność punktacji pojedynczego moda z wynikiem optymalizatora, proporcję 40/60 i wpływ pełnego zestawu dawcy.
