@@ -4,6 +4,7 @@ from mod_analyzer import (
     optimize_target_build,
     profile_mod_score_components,
     profiled_build_score,
+    compare_profiled_builds,
     score_profile,
 )
 
@@ -72,6 +73,28 @@ class UnifiedScoringTests(unittest.TestCase):
                 mod["optimizerScore"],
                 places=2,
             )
+
+    def test_donor_build_comparison_reports_full_profile_score_delta(self):
+        before = [
+            make_mod("a", "Arrow", "Speed", 32, "Speed", "Speed", 24, 4),
+            make_mod("b", "Square", "Offense", 8.5, "Speed", "Speed", 18, 3),
+            make_mod("c", "Diamond", "Defense", 20, "Speed", "Speed", 18, 3),
+            make_mod("d", "Circle", "Health", 16, "Speed", "Speed", 18, 3),
+            make_mod("e", "Triangle", "Offense", 8.5, "Health", "Speed", 12, 2),
+            make_mod("f", "Cross", "Potency", 30, "Health", "Speed", 12, 2),
+        ]
+        after = list(before)
+        after[0] = make_mod("replacement", "Arrow", "Speed", 24, "Health", "Offense %", 1.5, 1)
+        result = compare_profiled_builds(before, after, PROFILE)
+        self.assertIsNotNone(result)
+        self.assertAlmostEqual(result["before"], profiled_build_score(before, PROFILE), places=2)
+        self.assertAlmostEqual(result["after"], profiled_build_score(after, PROFILE), places=2)
+        self.assertAlmostEqual(result["delta"], result["after"] - result["before"], places=2)
+        self.assertLess(result["delta"], 0)
+
+    def test_donor_build_comparison_uses_no_profile_fallback_when_missing(self):
+        self.assertIsNone(compare_profiled_builds([], [], {}))
+        self.assertIsNone(compare_profiled_builds([], [], None))
 
     def test_profiled_donor_build_score_includes_all_equipped_mods(self):
         before = [

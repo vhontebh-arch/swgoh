@@ -26,7 +26,8 @@ def valid_report():
         "1. **MOD:** załóż mod na Vel",
         "2. **PATCH:** załóż mod na Merrin",
         "## Wpływ na postacie-dawców",
-        "- Merrin: modValue 10 → 12 (+2)",
+        "- **Merrin — wynik pełnego buildu wg profilu:** 45.00 → 44.20 (-0.80 pkt).",
+        "  - Σ modValue modów: 10 → 12 (+2) — surowy wskaźnik jakości modów, nie wynik profilu.",
         "## Założenia projekcji",
         "## Kontrola profili użytych w łańcuchu",
         "- Vel: cached",
@@ -50,6 +51,17 @@ class UserReportValidationTests(unittest.TestCase):
         errors = validate_report(report, ["VEL"])
         self.assertTrue(any("raportu użytkowego" in e for e in errors))
         self.assertTrue(any("techniczny raport" in e for e in errors))
+
+    def test_rejects_donor_section_with_only_raw_mod_value(self):
+        report = valid_report().replace(
+            "- **Merrin — wynik pełnego buildu wg profilu:** 45.00 → 44.20 (-0.80 pkt).",
+            "- Merrin: modValue 10 → 12 (+2)",
+        ).replace(
+            "  - Σ modValue modów: 10 → 12 (+2) — surowy wskaźnik jakości modów, nie wynik profilu.",
+            "",
+        )
+        errors = validate_report(report, ["VEL"])
+        self.assertTrue(any("wyniku pełnego buildu dawcy" in e for e in errors))
 
     def test_rejects_missing_current_mod_or_patch_section(self):
         report = valid_report().replace("- **Obecny mod:** Arrow / Health / primary / secondary / 5★ A lvl15\n", "")
