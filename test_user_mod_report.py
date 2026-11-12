@@ -1,6 +1,7 @@
 import unittest
 
 from validate_mod_target_report import validate_report
+from mod_analyzer import account_balance_summary
 
 
 def valid_report():
@@ -25,6 +26,9 @@ def valid_report():
         "## Kolejność przekładania",
         "1. **MOD:** załóż mod na Vel",
         "2. **PATCH:** załóż mod na Merrin",
+        "## Bilans całej operacji — ta sama punktacja przed/po",
+        "| Postać | Rola w łańcuchu | Wynik przed | Wynik po | Zmiana |",
+        "**ŁĄCZNA ZMIANA: +4.20 pkt.**",
         "## Wpływ na postacie-dawców",
         "- **Merrin — wynik pełnego buildu wg profilu:** 45.00 → 44.20 (-0.80 pkt).",
         "  - Σ modValue modów: 10 → 12 (+2) — surowy wskaźnik jakości modów, nie wynik profilu.",
@@ -33,6 +37,32 @@ def valid_report():
         "- Vel: cached",
     ]
     return "\n".join(parts)
+
+
+class AccountBalanceTests(unittest.TestCase):
+    def test_sums_target_and_all_donors_with_same_profile_score(self):
+        validation = [
+            {"owner": "VEL", "profileScoreAvailable": True, "profileScoreDelta": 12.5},
+            {"owner": "SCORCH", "profileScoreAvailable": True, "profileScoreDelta": -8.0},
+            {"owner": "SANA", "profileScoreAvailable": True, "profileScoreDelta": -1.2},
+        ]
+        items, total = account_balance_summary(
+            validation, {"VEL", "SCORCH", "SANA"},
+            {"VEL": {}, "SCORCH": {}, "SANA": {}}, {}
+        )
+        self.assertEqual(len(items), 3)
+        self.assertEqual(total, 3.3)
+
+    def test_refuses_to_mix_profile_score_with_modvalue_fallback(self):
+        validation = [
+            {"owner": "VEL", "profileScoreAvailable": True, "profileScoreDelta": 12.5},
+            {"owner": "SCORCH", "profileScoreAvailable": False, "profileScoreDelta": None},
+        ]
+        items, total = account_balance_summary(
+            validation, {"VEL", "SCORCH"}, {"VEL": {}}, {}
+        )
+        self.assertEqual(len(items), 2)
+        self.assertIsNone(total)
 
 
 class UserReportValidationTests(unittest.TestCase):
