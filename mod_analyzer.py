@@ -639,7 +639,9 @@ def profiled_build_score(mods, profile):
         # an observed set preference still values its bonus when that bonus
         # stat is absent from the profile's top secondary-focus list.
         if stat_pref <= 0.0 and set_pref > 0.0:
-            stat_pref = set_pref
+            # set_weight below already applies the observed preference;
+            # use a neutral stat multiplier here to avoid squaring it.
+            stat_pref = 1.0
         max_roll = R5.get(stat, (0.0, 0.0))[1] or set_max_roll.get(stat)
         if not max_roll or not stat_pref:
             continue
@@ -1598,7 +1600,9 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
             # observed set preference is the only direct evidence available
             # for valuing its set bonus; do not silently score it as zero.
             if stat_pref <= 0.0 and set_pref > 0.0:
-                stat_pref = set_pref
+                # set_weight below already applies the observed preference;
+                # use a neutral stat multiplier here to avoid squaring it.
+                stat_pref = 1.0
             max_roll = R5.get(stat, (0.0, 0.0))[1] or set_max_roll.get(stat)
             if not max_roll or not stat_pref:
                 continue
