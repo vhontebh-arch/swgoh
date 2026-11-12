@@ -54,9 +54,11 @@ class UserReportValidationTests(unittest.TestCase):
 
     def test_rejects_donor_section_with_only_raw_mod_value(self):
         report = valid_report().replace(
-            "- **Merrin — wynik pełnego buildu wg profilu:** 45.00 → 44.20 (-0.80 pkt).\\n"
-            "  - Σ modValue modów: 10 → 12 (+2) — surowy wskaźnik jakości modów, nie wynik profilu.",
+            "- **Merrin — wynik pełnego buildu wg profilu:** 45.00 → 44.20 (-0.80 pkt).",
             "- Merrin: modValue 10 → 12 (+2)",
+        ).replace(
+            "  - Σ modValue modów: 10 → 12 (+2) — surowy wskaźnik jakości modów, nie wynik profilu.",
+            "",
         )
         errors = validate_report(report, ["VEL"])
         self.assertTrue(any("wyniku pełnego buildu dawcy" in e for e in errors))
