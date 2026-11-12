@@ -8,6 +8,8 @@ on:
       - "optimizer_preflight.py"
       - "test_optimizer_preflight.py"
       - "mod_analyzer.py"
+      - "sync_optimizer_data.py"
+      - "test_optimizer_data_sync.py"
       - "test_mod_chains.py"
       - "test_scoring_consistency.py"
       - "test_target_selection.py"
@@ -49,4 +51,4 @@ jobs:
           --donor "Merrin"
           --donor 'RC-1262 "Scorch"'
       - name: Run optimizer regression tests
-        run: python -m unittest -v test_optimizer_preflight test_mod_chains test_scoring_consistency test_mod_profile_cache test_target_selection test_target_report_validation test_user_mod_report test_profile_merge
+        run: python -m unittest -v test_optimizer_preflight test_mod_chains test_scoring_consistency test_mod_profile_cache test_target_selection test_target_report_validation test_user_mod_report test_profile_merge test_optimizer_data_sync
