@@ -15,7 +15,7 @@ INPUT_FILE = "mods.csv"
 OUTPUT_CSV = "mod_analysis.csv"
 OUTPUT_MD = "mod_analysis.md"
 PROFILE_FILE = "mod_profiles.json"
-ANALYZER_VERSION = "2026-11-11-donor-exact-combo-target-override-v1"
+ANALYZER_VERSION = "2026-11-12-profile-combo-objective-v2"
 
 R5 = {
     "Critical Chance %": (1.125, 2.25), "Defense": (4.9, 9.8),
@@ -1588,6 +1588,12 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
                 float(secondary_prefs.get(stat, 0.0)),
                 float(secondary_prefs.get(profile_stat, 0.0)),
             )
+            # A set can be strongly preferred even when its bonus stat is not
+            # among SWGOH.GG's top secondary-focus entries. In that case the
+            # observed set preference is the only direct evidence available
+            # for valuing its set bonus; do not silently score it as zero.
+            if stat_pref <= 0.0 and set_pref > 0.0:
+                stat_pref = set_pref
             max_roll = R5.get(stat, (0.0, 0.0))[1] or set_max_roll.get(stat)
             if not max_roll or not stat_pref:
                 continue
@@ -1700,14 +1706,22 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
             projected_chosen = [project_mod_for_build(m, profile) for m in chosen]
             set_score, set_pref, breakdown = set_bonus_score(projected_chosen, profile)
             total = base_score + set_score
-            # Profile set preference outranks preserving the current assignment.
-            # Keeping an existing mod is only the final tie-break.
-            key = (total, set_pref, unchanged_count)
+            # Exact six-mod combinations are a profile-derived tie-breaker:
+            # they never outweigh a genuinely higher build score, but among
+            # equal-scoring builds the observed combination wins over an
+            # unobserved one. Existing ownership remains the final tie-break.
+            combo_match = profile_set_combo_match(profile, projected_chosen)
+            combo_preference = combo_match["preference"] if combo_match else 0.0
+            key = (total, combo_preference, set_pref, unchanged_count)
             if best is None or key > best["key"]:
                 best = {
                     "key": key, "totalScore": total, "baseScore": base_score,
                     "setBonusScore": set_score, "setPreferenceScore": set_pref,
                     "setBreakdown": breakdown, "unchangedCount": unchanged_count,
+                    "setComboMode": "tie_break" if profile.get("set_combinations") else None,
+                    "setComboKey": combo_match["key"] if combo_match else None,
+                    "setComboFrequency": combo_match["frequency"] if combo_match else None,
+                    "setComboPreference": combo_preference,
                     "mods": chosen,
                 }
         if not best:
@@ -1734,6 +1748,10 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
             "baseScore": best["baseScore"], "setBonusScore": best["setBonusScore"],
             "setPreferenceScore": best["setPreferenceScore"],
             "setBreakdown": best["setBreakdown"], "unchangedCount": best["unchangedCount"],
+            "setComboMode": best["setComboMode"],
+            "setComboKey": best["setComboKey"],
+            "setComboFrequency": best["setComboFrequency"],
+            "setComboPreference": best["setComboPreference"],
             "currentScore": current_score["total"],
             "currentProjectedScore": current_projected_score["total"],
             "currentBaseScore": current_score["base"],
