@@ -559,7 +559,7 @@ PROFILE_SECONDARY_POINTS = 60
 # Exact six-mod set-combination alignment is worth up to 15 points on the
 # same 100-point scale: strong enough to distinguish a dominant observed
 # profile combo without making it an unconditional hard constraint.
-PROFILE_COMBO_ALIGNMENT_POINTS = 15.0.0
+PROFILE_COMBO_ALIGNMENT_POINTS = 15.0
 PROFILE_MAX_ROLLS = 24.0
 
 
