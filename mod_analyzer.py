@@ -1752,6 +1752,26 @@ def profile_set_combo_support(profile, set_name):
                 pass
     return min(100.0, total)
 
+def account_balance_summary(validation, affected_owners, profiles, aliases):
+    """Sum comparable unprojected full-build deltas for target and every donor."""
+    items = [
+        item for item in validation
+        if item.get("owner") in affected_owners
+    ]
+    complete = bool(items) and all(
+        item.get("profileScoreAvailable")
+        and profiles.get(aliases.get(str(item.get("owner", "") or ""),
+                                     str(item.get("owner", "") or "")))
+        for item in items
+    )
+    if not complete:
+        return items, None
+    return items, round(sum(
+        float(item.get("profileScoreDelta", 0.0) or 0.0)
+        for item in items
+    ), 2)
+
+
 def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
                        target_ids, profile_fetch_status, display_name):
     """Create a short, executable report for the player; CSV remains technical."""
@@ -1800,20 +1820,8 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
               if is_true(r.get("equipped")) and owner_base(r) == target_id), target_id)
         for target_id in optimizer
     }
-    account_items = [
-        item for item in chain_result.get("validation", [])
-        if item.get("owner") in affected_owners
-    ]
-    account_profiles_complete = bool(account_items) and all(
-        item.get("profileScoreAvailable")
-        and profiles.get(aliases.get(str(item.get("owner", "") or ""),
-                                     str(item.get("owner", "") or "")))
-        for item in account_items
-    )
-    account_delta = (
-        round(sum(float(item.get("profileScoreDelta", 0.0) or 0.0)
-                  for item in account_items), 2)
-        if account_profiles_complete else None
+    account_items, account_delta = account_balance_summary(
+        chain_result.get("validation", []), affected_owners, profiles, aliases
     )
 
     # A broken set is material only when it is a meaningful part of that
