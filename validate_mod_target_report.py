@@ -60,6 +60,12 @@ def validate_report(report: str, targets: list[str]) -> list[str]:
         order = report.split("## Kolejność przekładania", 1)[1]
         if not re.search(r"(?m)^\s*1\.\s+\*\*", order):
             errors.append("Brak ponumerowanej, konkretnej kolejności wykonania.")
+
+    if "## Wpływ na postacie-dawców" in report:
+        donor_section = report.split("## Wpływ na postacie-dawców", 1)[1]
+        if ("Nie wykryto strat u dawców." not in donor_section
+                and "wynik pełnego buildu wg profilu" not in donor_section):
+            errors.append("Brak wyniku pełnego buildu dawcy lub jawnego fallbacku; sama wartość modValue nie wystarcza.")
     if "**Wykonalność fizyczna:**" not in report:
         errors.append("Brak jawnego statusu walidacji fizycznej.")
     if "**Ocena:**" not in report:
