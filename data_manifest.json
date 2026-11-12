@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "dataset": "vhontebh-arch/swgoh canonical optimizer data",
+  "published_on": "2026-11-12",
+  "account_ally_code": "972824625",
+  "policy": {
+    "single_source_of_truth": "optimizer-data",
+    "atomic_snapshot": "Player export and C3PO inventory must be acquired in one update run; roster.csv and mods.csv must be generated from that same acquisition before publishing.",
+    "recent_changes": "A change made within 30 minutes can legitimately differ between exports. Compare acquisition timestamps and never treat this alone as a data conflict.",
+    "profile_freshness_days": 5,
+    "consumers": "All optimizer versions must fetch these exact files from optimizer-data. Branch-local copies are runtime caches only."
+  },
+  "files": {
+    "mods.csv": {
+      "blob_sha": "3ce877ac860d466891adcf9d88c3e8fdf2fe11af",
+      "source_branch": "optimizer-v2",
+      "role": "derived mod inventory"
+    },
+    "roster.csv": {
+      "blob_sha": "30d325df591e4cb6a1c7784ce7e3b5d0997fe42b",
+      "source_branch": "optimizer-v2",
+      "role": "derived character roster"
+    },
+    "c3po.json": {
+      "blob_sha": "66965bb8feb7c5bc5aa4fc2a8f929b2807749826",
+      "source_branch": "main",
+      "role": "C3PO inventory export"
+    },
+    "mod_profiles.json": {
+      "blob_sha": "9008d3418642d317303f6e3a516c0b83cac3db04",
+      "source_branch": "optimizer-v2",
+      "role": "shared SWGOH.GG mod profiles"
+    }
+  },
+  "notes": [
+    "mods.csv was byte-identical on main and optimizer-v2 at bootstrap.",
+    "roster.csv was taken from optimizer-v2, the newer Comlink-derived snapshot. The known Major Partagaz star discrepancy reflects the recent in-game change reported on 2026-11-12 and is not treated as a conflict.",
+    "c3po.json was taken from main because optimizer-v2 already designates main as its canonical C3PO source; the prior sync step downloaded but did not persist it.",
+    "mod_profiles.json was taken from optimizer-v2 because it contains the larger current profile cache; main's copy is stale/incomplete.",
+    "The committed raw swgoh_972824625.json is excluded because it is not a reliable current snapshot and is not required by the optimizer inputs."
+  ]
+}
