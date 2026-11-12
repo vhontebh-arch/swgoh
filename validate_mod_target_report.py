@@ -35,6 +35,7 @@ def validate_report(report: str, targets: list[str]) -> list[str]:
         "## PATCH — uzupełnienie dawców",
         "## Kontrola profili użytych w łańcuchu",
         "## Kolejność przekładania",
+        "## Bilans całej operacji — ta sama punktacja przed/po",
         "## Wpływ na postacie-dawców",
         "## Założenia projekcji",
     )
@@ -66,6 +67,9 @@ def validate_report(report: str, targets: list[str]) -> list[str]:
         if ("Nie wykryto strat u dawców." not in donor_section
                 and "wynik pełnego buildu wg profilu" not in donor_section):
             errors.append("Brak wyniku pełnego buildu dawcy lub jawnego fallbacku; sama wartość modValue nie wystarcza.")
+    if "## Bilans całej operacji — ta sama punktacja przed/po" in report:
+        if "**ŁĄCZNA ZMIANA:" not in report:
+            errors.append("Brak jawnej sumy bilansu całego rosteru.")
     if "**Wykonalność fizyczna:**" not in report:
         errors.append("Brak jawnego statusu walidacji fizycznej.")
     if "**Ocena:**" not in report:

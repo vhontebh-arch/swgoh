@@ -52,3 +52,17 @@ jobs:
           --donor 'RC-1262 "Scorch"'
       - name: Run optimizer regression tests
         run: python -m unittest -v test_optimizer_preflight test_mod_chains test_scoring_consistency test_mod_profile_cache test_target_selection test_target_report_validation test_user_mod_report test_profile_merge test_optimizer_data_sync
+      - name: Generate Vel account-balance audit from cached profiles
+        if: github.event_name == 'pull_request'
+        run: |
+          python mod_analyzer.py --target VEL
+          python validate_mod_target_report.py --targets VEL
+      - name: Upload generated account-balance report
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: vel-account-balance-audit
+          path: |
+            mod_analysis.md
+            mod_analysis.csv
+          if-no-files-found: error
