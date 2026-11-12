@@ -1,16 +1,13 @@
-name: Refresh SWGOH mod profiles
+name: Refresh canonical SWGOH mod profiles
 
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - "update_mod_profiles.py"
-      - ".github/workflows/update-mod-profiles.yml"
-      - ".github/workflows/update-trigger.txt"
   schedule:
-    # 05:15 UTC = 07:15 CEST / 06:15 CET.
-    # Kept separate from the main 06:00 UTC account-data workflow.
-    - cron: "15 5 * * *"
+    - cron: "0 8 */5 * *"
+
+concurrency:
+  group: swgoh-canonical-data-publisher
+  cancel-in-progress: false
 
 permissions:
   contents: write
@@ -18,73 +15,46 @@ permissions:
 jobs:
   refresh:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
-
+    timeout-minutes: 30
     steps:
-      - name: Checkout repository
+      - name: Checkout main
         uses: actions/checkout@v4
+        with:
+          ref: main
 
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
-      - name: Refresh profiles
+      - name: Load canonical profile cache
         run: |
           set -e
-          cp mod_profiles.json mod_profiles.previous.json
-
-          python update_mod_profiles.py
-
-          test -s mod_profiles.json
+          python sync_optimizer_data.py --files mod_profiles.json
           python -m json.tool mod_profiles.json >/dev/null
 
-          # Basic sanity check: a valid refresh must contain profiles and
-          # non-empty primary/secondary preferences.
+      - name: Refresh all cached profiles from configured SWGOH.GG sources
+        run: |
+          set -e
+          python update_mod_profiles.py
+          python -m json.tool mod_profiles.json >/dev/null
           python - <<'PY'
           import json
-
-          with open("mod_profiles.json", encoding="utf-8") as f:
-              data = json.load(f)
-
-          profiles = data.get("profiles", {})
+          with open("mod_profiles.json", encoding="utf-8") as stream:
+              profiles = json.load(stream).get("profiles", {})
           if not profiles:
-              raise SystemExit("ERROR: brak profili")
-
+              raise SystemExit("ERROR: brak profili po aktualizacji")
           for base_id, profile in profiles.items():
-              if not profile.get("primary_preferences"):
-                  raise SystemExit(f"ERROR: {base_id}: brak primary_preferences")
-              if not profile.get("secondary_preferences"):
-                  raise SystemExit(f"ERROR: {base_id}: brak secondary_preferences")
-
+              for key in ("set_combinations", "primary_preferences", "secondary_preferences"):
+                  if not profile.get(key):
+                      raise SystemExit(f"ERROR: {base_id}: brak {key}")
+              sources = profile.get("source_model", {}).get("sources", [])
+              if len(sources) < 2:
+                  raise SystemExit(f"ERROR: {base_id}: wymagane są dwa źródła SWGOH.GG")
           print(f"OK: zweryfikowano {len(profiles)} profili")
           PY
 
-      - name: Show profile changes
-        run: |
-          echo "=============================================="
-          echo "MOD PROFILE DIFF"
-          echo "=============================================="
-          git diff -- mod_profiles.json || true
-
-      - name: Commit changed profiles
+      - name: Publish shared profile cache
         run: |
           set -e
-
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          git add mod_profiles.json
-
-          if git diff --cached --quiet; then
-            echo "Brak zmian w profilu."
-            exit 0
-          fi
-
-          git commit -m "Refresh SWGOH mod profiles"
-          git push
-
-      - name: Cleanup
-        if: always()
-        run: |
-          rm -f mod_profiles.previous.json
+          python publish_optimizer_data.py --profiles-only

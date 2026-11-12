@@ -15,8 +15,14 @@ on:
       - "targets.json"
       - ".github/workflows/update-trigger.txt"
       - ".github/scripts/sync-c3po.sh"
+      - "sync_optimizer_data.py"
+      - "publish_optimizer_data.py"
   schedule:
     - cron: "0 6 * * *"
+
+concurrency:
+  group: swgoh-canonical-data-publisher
+  cancel-in-progress: false
 
 permissions:
   contents: write
@@ -1054,6 +1060,12 @@ jobs:
           echo "Pierwsze 5 rekordów:"
           head -n 6 mods.csv
 
+      - name: Sync canonical mod profiles
+        run: |
+          set -e
+          python sync_optimizer_data.py --files mod_profiles.json
+          python -m json.tool mod_profiles.json >/dev/null
+
       # ============================================================
       # MOD ANALYSIS
       # ============================================================
@@ -1194,6 +1206,11 @@ jobs:
             git push
 
           fi
+
+      - name: Publish canonical optimizer snapshot
+        run: |
+          set -e
+          python publish_optimizer_data.py
 
       # ============================================================
       # CLEANUP
