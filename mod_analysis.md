@@ -27,73 +27,81 @@
   - Zmiana dopasowania do profilu: +6.3 pkt (4.5 → 10.9).
 #### Square
 - **Obecny mod:** Square / Health / Offense % 8.5% / secondary: Defense % 11.39%, Potency % 5.43%, Protection 1219, Speed 11 / 6★ C lvl15
-- **Proponowany mod:** Square / Health / Offense % 5.88% / secondary: Critical Chance % 3.35%, Protection 459, Speed 20, Potency % 1.71% / 5★ A lvl15
-- **Źródło:** MERRIN
-  - Zmiana dopasowania do profilu: +1.6 pkt (8.4 → 10.0).
+- **Proponowany mod:** Square / Defense / Offense % 5.88% / secondary: Protection % 3.36%, Speed 15, Defense % 2.69%, Health 326 / 5★ A lvl15
+- **Źródło:** QUIGGOLD
+  - Zmiana dopasowania do profilu: +0.8 pkt (8.4 → 9.2).
 #### Diamond
 - **Obecny mod:** Diamond / Defense / Defense % 20% / secondary: Offense % 3.81%, Speed 12, Protection 1558, Health % 6% / 6★ A lvl15
 - **Proponowany mod:** pozostaje bez zmian — Diamond / Defense / Defense % 20% / secondary: Offense % 3.81%, Speed 12, Protection 1558, Health % 6% / 6★ A lvl15
 - **Korzyść:** zachowanie obecnej konfiguracji slotu.
 #### Triangle
 - **Obecny mod:** Triangle / Health / Protection % 23.5% / secondary: Defense % 3.92%, Tenacity % 2.07%, Speed 8, Defense 14 / 5★ A lvl15
-- **Proponowany mod:** Triangle / Defense / Defense % 11.75% / secondary: Protection % 1.18%, Health % 1.8%, Speed 9, Tenacity % 4.27% / 5★ B lvl15
-- **Źródło:** MAGAZYN
-  - Zmiana dopasowania do profilu: -1.7 pkt (8.4 → 6.7).
+- **Proponowany mod:** Triangle / Health / Critical Damage % 42% / secondary: Protection 764, Speed 23, Protection % 4.06%, Defense % 13.03% / 6★ A lvl15
+- **Źródło:** SANASTARROS
+  - Zmiana dopasowania do profilu: +7.5 pkt (8.4 → 15.9).
 #### Circle
 - **Obecny mod:** Circle / Health / Protection % 23.5% / secondary: Offense % 0.35%, Health 636, Speed 11, Health % 2.58% / 5★ A lvl15
-- **Proponowany mod:** Circle / Health / Health % 16% / secondary: Tenacity % 7.16%, Defense 11, Speed 24, Defense % 9.53% / 6★ A lvl15
-- **Źródło:** JEDIKNIGHTREVAN
-  - Zmiana dopasowania do profilu: +8.0 pkt (7.5 → 15.5).
+- **Proponowany mod:** Circle / Defense / Protection % 24% / secondary: Defense 13, Speed 16, Tenacity % 7.97%, Defense % 12.54% / 6★ A lvl15
+- **Źródło:** SCORCH
+  - Zmiana dopasowania do profilu: +3.8 pkt (7.5 → 11.4).
 #### Cross
 - **Obecny mod:** Cross / Defense / Protection % 23.5% / secondary: Health % 2.48%, Critical Chance % 1.73%, Speed 11, Health 648 / 5★ A lvl15
-- **Proponowany mod:** Cross / Defense / Tenacity % 24% / secondary: Health % 0.96%, Speed 18, Offense 32, Defense 9 / 5★ B lvl15
-- **Źródło:** MAGAZYN
-  - Zmiana dopasowania do profilu: +3.7 pkt (7.5 → 11.3).
+- **Proponowany mod:** Cross / Health / Protection % 24% / secondary: Defense 24, Speed 22, Critical Chance % 3.97%, Health % 4.38% / 6★ A lvl15
+- **Źródło:** SCORCH
+  - Zmiana dopasowania do profilu: +8.3 pkt (7.5 → 15.9).
 
-- **Zmiana oczekiwanej oceny buildu po podniesieniu do 15:** +26.8 pkt (średnia dla przyszłych rolli; bez slice i calibration).
+- **Zmiana oczekiwanej oceny buildu po podniesieniu do 15:** +35.7 pkt (średnia dla przyszłych rolli; bez slice i calibration).
 
 ## MOD — mody przenoszone na cel
 
-- **MERRIN → VEL:** Square / Health / Offense % 5.88% / secondary: Critical Chance % 3.35%, Protection 459, Speed 20, Potency % 1.71% / 5★ A lvl15
-- **JEDIKNIGHTREVAN → VEL:** Circle / Health / Health % 16% / secondary: Tenacity % 7.16%, Defense 11, Speed 24, Defense % 9.53% / 6★ A lvl15
+- **QUIGGOLD → VEL:** Square / Defense / Offense % 5.88% / secondary: Protection % 3.36%, Speed 15, Defense % 2.69%, Health 326 / 5★ A lvl15
+- **SCORCH → VEL:** Circle / Defense / Protection % 24% / secondary: Defense 13, Speed 16, Tenacity % 7.97%, Defense % 12.54% / 6★ A lvl15
 - **MAGAZYN → VEL:** Arrow / Defense / Offense % 5.88% / secondary: Defense % 1.37%, Speed 21, Protection 712, Tenacity % 2.79% / 5★ A lvl15
-- **MAGAZYN → VEL:** Triangle / Defense / Defense % 11.75% / secondary: Protection % 1.18%, Health % 1.8%, Speed 9, Tenacity % 4.27% / 5★ B lvl15
-- **MAGAZYN → VEL:** Cross / Defense / Tenacity % 24% / secondary: Health % 0.96%, Speed 18, Offense 32, Defense 9 / 5★ B lvl15
+- **SANASTARROS → VEL:** Triangle / Health / Critical Damage % 42% / secondary: Protection 764, Speed 23, Protection % 4.06%, Defense % 13.03% / 6★ A lvl15
+- **SCORCH → VEL:** Cross / Health / Protection % 24% / secondary: Defense 24, Speed 22, Critical Chance % 3.97%, Health % 4.38% / 6★ A lvl15
 
 ## PATCH — uzupełnienie dawców
 
-- **MAGAZYN → MERRIN:** Square / Health / Offense % 5.88% / secondary: Protection 1985, Speed 9, Protection % 1.29%, Defense 9 / 5★ B lvl15
-- **MAGAZYN → JEDIKNIGHTREVAN:** Circle / Health / Health % 5.88% / secondary: Speed 15, Defense 8, Offense % 0.45%, Protection % 2.16% / 5★ C lvl15
+- **MAGAZYN → QUIGGOLD:** Square / Defense / Offense % 5.88% / secondary: Defense % 1.4%, Speed 8, Health % 1.49%, Protection % 1.37% / 5★ C lvl15
+- **MAGAZYN → SCORCH:** Circle / Defense / Health % 5.88% / secondary: Protection 1579, Protection % 1.17%, Health 647, Speed 10 / 5★ B lvl15
+- **MAGAZYN → SANASTARROS:** Triangle / Health / Offense % 5.88% / secondary: Potency % 1.74%, Critical Chance % 2.89%, Speed 13, Health 803 / 5★ A lvl15
+- **MAGAZYN → SCORCH:** Cross / Health / Tenacity % 24% / secondary: Speed 15, Offense % 0.42%, Health % 1.02%, Health 300 / 5★ C lvl15
 
 ## Kolejność przekładania
 
 1. **Arrow — załóż na VEL** mod z MAGAZYN: Arrow / Defense / Offense % 5.88% / secondary: Defense % 1.37%, Speed 21, Protection 712, Tenacity % 2.79% / 5★ A lvl15
-2. **Square — załóż na VEL** mod z MERRIN: Square / Health / Offense % 5.88% / secondary: Critical Chance % 3.35%, Protection 459, Speed 20, Potency % 1.71% / 5★ A lvl15
-3. **Triangle — załóż na VEL** mod z MAGAZYN: Triangle / Defense / Defense % 11.75% / secondary: Protection % 1.18%, Health % 1.8%, Speed 9, Tenacity % 4.27% / 5★ B lvl15
-4. **Circle — załóż na VEL** mod z JEDIKNIGHTREVAN: Circle / Health / Health % 16% / secondary: Tenacity % 7.16%, Defense 11, Speed 24, Defense % 9.53% / 6★ A lvl15
-5. **Cross — załóż na VEL** mod z MAGAZYN: Cross / Defense / Tenacity % 24% / secondary: Health % 0.96%, Speed 18, Offense 32, Defense 9 / 5★ B lvl15
+2. **Square — załóż na VEL** mod z QUIGGOLD: Square / Defense / Offense % 5.88% / secondary: Protection % 3.36%, Speed 15, Defense % 2.69%, Health 326 / 5★ A lvl15
+3. **Triangle — załóż na VEL** mod z SANASTARROS: Triangle / Health / Critical Damage % 42% / secondary: Protection 764, Speed 23, Protection % 4.06%, Defense % 13.03% / 6★ A lvl15
+4. **Circle — załóż na VEL** mod z SCORCH: Circle / Defense / Protection % 24% / secondary: Defense 13, Speed 16, Tenacity % 7.97%, Defense % 12.54% / 6★ A lvl15
+5. **Cross — załóż na VEL** mod z SCORCH: Cross / Health / Protection % 24% / secondary: Defense 24, Speed 22, Critical Chance % 3.97%, Health % 4.38% / 6★ A lvl15
 
 ### Uzupełnienie dawców — poziom 1
 
-6. **PATCH — załóż na MERRIN** mod z MAGAZYN (dostępny po wcześniejszym kroku): Square / Health / Offense % 5.88% / secondary: Protection 1985, Speed 9, Protection % 1.29%, Defense 9 / 5★ B lvl15
-7. **PATCH — załóż na JEDIKNIGHTREVAN** mod z MAGAZYN (dostępny po wcześniejszym kroku): Circle / Health / Health % 5.88% / secondary: Speed 15, Defense 8, Offense % 0.45%, Protection % 2.16% / 5★ C lvl15
+6. **PATCH — załóż na QUIGGOLD** mod z MAGAZYN (dostępny po wcześniejszym kroku): Square / Defense / Offense % 5.88% / secondary: Defense % 1.4%, Speed 8, Health % 1.49%, Protection % 1.37% / 5★ C lvl15
+7. **PATCH — załóż na SANASTARROS** mod z MAGAZYN (dostępny po wcześniejszym kroku): Triangle / Health / Offense % 5.88% / secondary: Potency % 1.74%, Critical Chance % 2.89%, Speed 13, Health 803 / 5★ A lvl15
+8. **PATCH — załóż na SCORCH** mod z MAGAZYN (dostępny po wcześniejszym kroku): Circle / Defense / Health % 5.88% / secondary: Protection 1579, Protection % 1.17%, Health 647, Speed 10 / 5★ B lvl15
+9. **PATCH — załóż na SCORCH** mod z MAGAZYN (dostępny po wcześniejszym kroku): Cross / Health / Tenacity % 24% / secondary: Speed 15, Offense % 0.42%, Health % 1.02%, Health 300 / 5★ C lvl15
 
 Zakładanie moda automatycznie przenosi poprzedni mod ze slotu do magazynu. Wszystkie powyższe kroki zostały sprawdzone na pełnym stanie slotów i magazynu.
 
 ## Wpływ na postacie-dawców
 
-- **MERRIN:** modValue 369.9 → 367.4 (-2.5).
-  - Kombinacja setów: Health + Potency + Tenacity (11.9%) → Health + Potency + Tenacity (11.9%).
-  - Fit pojedynczych modów wg profilu dawcy: Square -3.1 pkt.
+- **QUIGGOLD:** modValue 361.3 → 365.8 (+4.5).
+  - Kombinacja setów: Double Health + Defense (44.7%) → Double Health + Defense (44.7%).
+  - Fit pojedynczych modów wg profilu dawcy: Square -1.2 pkt.
+- **SANASTARROS:** modValue 372.9 → 361.6 (-11.3).
+  - Kombinacja setów: Speed + Health (30.7%) → Speed + Health (30.7%).
+  - Fit pojedynczych modów wg profilu dawcy: Triangle -3.1 pkt.
   - ISTOTNY SPADEK wartości modów u dawcy.
-- **JEDIKNIGHTREVAN:** modValue 382.9 → 403.1 (+20.2).
-  - Kombinacja setów: Speed + Health (69.2%) → Speed + Health (69.2%).
-  - Fit pojedynczych modów wg profilu dawcy: Circle -4.5 pkt.
+- **SCORCH:** modValue 355.6 → 385.6 (+30.0).
+  - Kombinacja setów: Double Health + Defense (48.9%) → Double Health + Defense (48.9%).
+  - Fit pojedynczych modów wg profilu dawcy: Circle -3.8 pkt; Cross -5.4 pkt.
 
 ## Kontrola profili użytych w łańcuchu
 
-- JEDIKNIGHTREVAN: profil dostępny, 2 źródła.
-- MERRIN: profil dostępny, 2 źródła.
+- QUIGGOLD: profil dostępny, 2 źródła.
+- SANASTARROS: profil dostępny, 2 źródła.
+- SCORCH: profil dostępny, 2 źródła.
 - VEL: profil dostępny, 2 źródła.
 
 ## Założenia projekcji
