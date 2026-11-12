@@ -103,6 +103,20 @@ def _normalize_set_name(name):
     return aliases.get(value, value)
 
 
+def profile_set_preference(profile, set_name):
+    """Read set preference using canonical game names and SWGOH.GG aliases."""
+    canonical = _normalize_set_name(set_name)
+    preferences = profile.get("set_preferences", {}) or {}
+    values = []
+    for raw_name, raw_value in preferences.items():
+        if _normalize_set_name(raw_name) != canonical:
+            continue
+        try:
+            values.append(max(0.0, float(raw_value or 0.0)))
+        except (TypeError, ValueError):
+            continue
+    return max(values, default=0.0)
+
 
 def _canonical_set_combo_from_counts(counts):
     if sum(int(value) for value in counts.values()) != 6:
@@ -578,7 +592,7 @@ def profile_mod_score_components(row, profile):
 def score_profile(row, profile):
     components = profile_mod_score_components(row, profile)
     set_name = row.get("set", "")
-    set_fit = float(profile.get("set_preferences", {}).get(set_name, 0.0)) * 100.0
+    set_fit = profile_set_preference(profile, set_name) * 100.0
     # Set bonuses are evaluated only once at complete-build level.
     return {
         "fitScore": round(components["fitScore"], 2),
@@ -613,7 +627,7 @@ def profiled_build_score(mods, profile):
         half_groups = (count - full_groups * required) // required
         if not full_groups and not half_groups:
             continue
-        set_pref = max(0.0, float(profile.get("set_preferences", {}).get(name, 0.0)))
+        set_pref = profile_set_preference(profile, name)
         profile_stat = {
             "Health %": "Health", "Defense %": "Defense",
             "Offense %": "Offense", "Potency %": "Potency",
@@ -1560,7 +1574,7 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
             if not full_groups and not half_groups:
                 continue
 
-            set_pref = max(0.0, float(profile.get("set_preferences", {}).get(name, 0.0)))
+            set_pref = profile_set_preference(profile, name)
             preference_tiebreak += (full_groups + half_groups) * set_pref
             profile_stat = {
                 "Health %": "Health",
