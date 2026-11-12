@@ -10,7 +10,6 @@ on:
   push:
     branches:
       - optimizer-v2
-      - integrate-canonical-data-v2
     paths:
       - "mod_analyzer.py"
       - "ship_analysis.py"
