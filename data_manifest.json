@@ -37,9 +37,9 @@
     },
     "mod_profiles.json": {
       "role": "shared SWGOH.GG mod profiles",
-      "bytes": 123523,
-      "sha256": "ad1649246430992f19a6666d558303effd1424f2957e594ea79e913351d028f1",
-      "git_blob_sha": "9008d3418642d317303f6e3a516c0b83cac3db04",
+      "bytes": 129184,
+      "sha256": "f576a694642955b3e3acc42232895d926668226c3e7831d23569792b1e0eae5c",
+      "git_blob_sha": "7873ad17182338abf6426394ab07f5460460c305",
       "source_branch": "main",
       "source_commit": "981d655a23e3d611c19c2f028f9bd3236b31a5e8"
     },
