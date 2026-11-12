@@ -7,6 +7,7 @@
 - **Wykonalność fizyczna:** POTWIERDZONA
 - **Walidacja fizyczna całego łańcucha:** POTWIERDZONA
 - **Ocena:** KOMPROMIS — łańcuch wykonalny, ale osłabia co najmniej jednego dawcę
+- **Interpretacja:** koszt u dawcy jest jawnie liczony i porównywany z korzyścią celu; sam fakt przeniesienia nie jest błędem optymalizacji.
 - **Liczba modów docelowych:** 6/6
 
 ## Docelowy zestaw — VEL
@@ -50,7 +51,7 @@
 - **Źródło:** SCORCH
   - Zmiana dopasowania do profilu: +8.3 pkt (7.5 → 15.9).
 
-- **Zmiana oczekiwanej oceny buildu po podniesieniu do 15:** +35.7 pkt (średnia dla przyszłych rolli; bez slice i calibration).
+- **Zmiana potencjału buildu:** +35.7 pkt (optymistyczna projekcja do 15; brakujące rolle przypisane do najwyżej preferowanej secondary; dla 5A projekcja secondary do 6E; primary pozostaje bez zmian; bez slice i calibration).
 
 ## MOD — mody przenoszone na cel
 
@@ -86,16 +87,21 @@ Zakładanie moda automatycznie przenosi poprzedni mod ze slotu do magazynu. Wszy
 
 ## Wpływ na postacie-dawców
 
-- **QUIGGOLD:** modValue 361.3 → 365.8 (+4.5).
+- **QUIGGOLD — wynik pełnego buildu wg profilu:** 40.66 → 39.46 (-1.20 pkt).
+  - Σ modValue modów: 361.3 → 365.8 (+4.5) — surowy wskaźnik jakości modów, nie wynik profilu.
   - Kombinacja setów: Double Health + Defense (44.7%) → Double Health + Defense (44.7%).
-  - Fit pojedynczych modów wg profilu dawcy: Square -1.2 pkt.
-- **SANASTARROS:** modValue 372.9 → 361.6 (-11.3).
-  - Kombinacja setów: Speed + Health (30.7%) → Speed + Health (30.7%).
-  - Fit pojedynczych modów wg profilu dawcy: Triangle -3.1 pkt.
+  - Zmiana wyniku pełnego buildu po kolejnych PATCH-ach: Square -1.2 pkt.
   - ISTOTNY SPADEK wartości modów u dawcy.
-- **SCORCH:** modValue 355.6 → 385.6 (+30.0).
+- **SANASTARROS — wynik pełnego buildu wg profilu:** 41.41 → 38.27 (-3.13 pkt).
+  - Σ modValue modów: 372.9 → 361.6 (-11.3) — surowy wskaźnik jakości modów, nie wynik profilu.
+  - Kombinacja setów: Speed + Health (30.7%) → Speed + Health (30.7%).
+  - Zmiana wyniku pełnego buildu po kolejnych PATCH-ach: Triangle -3.1 pkt.
+  - ISTOTNY SPADEK wartości modów u dawcy.
+- **SCORCH — wynik pełnego buildu wg profilu:** 79.05 → 69.83 (-9.22 pkt).
+  - Σ modValue modów: 355.6 → 385.6 (+30.0) — surowy wskaźnik jakości modów, nie wynik profilu.
   - Kombinacja setów: Double Health + Defense (48.9%) → Double Health + Defense (48.9%).
-  - Fit pojedynczych modów wg profilu dawcy: Circle -3.8 pkt; Cross -5.4 pkt.
+  - Zmiana wyniku pełnego buildu po kolejnych PATCH-ach: Circle -3.8 pkt; Cross -5.4 pkt.
+  - ISTOTNY SPADEK wartości modów u dawcy.
 
 ## Kontrola profili użytych w łańcuchu
 
