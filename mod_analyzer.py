@@ -663,10 +663,14 @@ def compare_profiled_builds(before_mods, after_mods, profile):
         return None
     before_score = profiled_build_score(before_mods, profile)
     after_score = profiled_build_score(after_mods, profile)
+    before_display = round(before_score, 2)
+    after_display = round(after_score, 2)
     return {
-        "before": round(before_score, 2),
-        "after": round(after_score, 2),
-        "delta": round(after_score - before_score, 2),
+        "before": before_display,
+        "after": after_display,
+        # Keep the displayed delta arithmetically consistent with the
+        # displayed before/after values and the account-level sum.
+        "delta": round(after_display - before_display, 2),
     }
 
 
