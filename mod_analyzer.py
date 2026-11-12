@@ -15,7 +15,7 @@ INPUT_FILE = "mods.csv"
 OUTPUT_CSV = "mod_analysis.csv"
 OUTPUT_MD = "mod_analysis.md"
 PROFILE_FILE = "mod_profiles.json"
-ANALYZER_VERSION = "2026-11-11-donor-exact-combo-target-override-v1"
+ANALYZER_VERSION = "2026-11-12-profile-combo-weighted-v1"
 
 R5 = {
     "Critical Chance %": (1.125, 2.25), "Defense": (4.9, 9.8),
@@ -193,6 +193,15 @@ def profile_set_combo_match(profile, mods):
     frequency = frequencies[target_key]
     return {"key": target_key, "frequency": round(frequency, 4),
             "preference": round(frequency / maximum, 6)}
+
+
+def profile_set_combo_alignment_score(profile, mods):
+    """Bounded score for how closely a complete build matches observed set combos."""
+    match = profile_set_combo_match(profile, mods)
+    if not match:
+        return 0.0, None
+    score = float(match.get("preference", 0.0)) * PROFILE_COMBO_ALIGNMENT_POINTS
+    return score, match
 
 
 
@@ -546,7 +555,11 @@ PROFILE_PRIMARY_MAX_6DOT = {
     "Critical Damage": 42.0, "Potency": 30.0, "Tenacity": 35.0,
 }
 PROFILE_PRIMARY_POINTS = 40.0
-PROFILE_SECONDARY_POINTS = 60.0
+PROFILE_SECONDARY_POINTS = 60
+# Exact six-mod set-combination alignment is worth up to 15 points on the
+# same 100-point scale: strong enough to distinguish a dominant observed
+# profile combo without making it an unconditional hard constraint.
+PROFILE_COMBO_ALIGNMENT_POINTS = 15.0
 PROFILE_MAX_ROLLS = 24.0
 
 
@@ -636,6 +649,9 @@ def profiled_build_score(mods, profile):
         stat_pref = max(0.0, float(secondary_prefs.get(stat, 0.0)),
                         float(secondary_prefs.get(profile_stat, 0.0)))
         max_roll = R5.get(stat, (0.0, 0.0))[1] or set_max_roll.get(stat)
+        # A set explicitly favored by the profile remains valuable even when
+        # its bonus stat is not among SWGOH.GG's top secondary-focus stats.
+        stat_pref = max(stat_pref, set_pref)
         if not max_roll or not stat_pref:
             continue
         if stat == "Speed":
@@ -647,7 +663,8 @@ def profiled_build_score(mods, profile):
         equivalents = (full_groups * full_units + half_groups * half_units) / max_roll
         set_weight = 0.10 + 0.90 * min(1.0, set_pref)
         set_score += equivalents * stat_pref * set_weight * PROFILE_SECONDARY_POINTS / PROFILE_MAX_ROLLS
-    return base_score + set_score
+    combo_score, _combo_match = profile_set_combo_alignment_score(profile, mods)
+    return base_score + set_score + combo_score
 
 
 def compare_profiled_builds(before_mods, after_mods, profile):
@@ -1589,6 +1606,10 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
                 float(secondary_prefs.get(profile_stat, 0.0)),
             )
             max_roll = R5.get(stat, (0.0, 0.0))[1] or set_max_roll.get(stat)
+            # The profile's set preference is independent evidence that the
+            # set bonus is useful, even when its stat is absent from the top
+            # secondary-focus list.
+            stat_pref = max(stat_pref, set_pref)
             if not max_roll or not stat_pref:
                 continue
 
@@ -1620,9 +1641,14 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
         ]
         base_score = sum(mod_score(m, profile) for m in scored_mods)
         set_score, set_pref, breakdown = set_bonus_score(scored_mods, profile)
+        combo_score, combo_match = profile_set_combo_alignment_score(profile, scored_mods)
         return {
-            "total": base_score + set_score, "base": base_score,
+            "total": base_score + set_score + combo_score, "base": base_score,
             "setBonus": set_score, "setPreference": set_pref,
+            "setComboAlignment": combo_score, "setComboMatch": combo_match,
+            "setComboKey": combo_match.get("key") if combo_match else None,
+            "setComboFrequency": combo_match.get("frequency") if combo_match else None,
+            "setComboMode": "weighted" if combo_match else "none",
             "setBreakdown": breakdown,
         }
 
@@ -1699,7 +1725,8 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
         for _counts, (base_score, unchanged_count, chosen) in states.items():
             projected_chosen = [project_mod_for_build(m, profile) for m in chosen]
             set_score, set_pref, breakdown = set_bonus_score(projected_chosen, profile)
-            total = base_score + set_score
+            combo_score, combo_match = profile_set_combo_alignment_score(profile, projected_chosen)
+            total = base_score + set_score + combo_score
             # Profile set preference outranks preserving the current assignment.
             # Keeping an existing mod is only the final tie-break.
             key = (total, set_pref, unchanged_count)
@@ -1707,7 +1734,13 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
                 best = {
                     "key": key, "totalScore": total, "baseScore": base_score,
                     "setBonusScore": set_score, "setPreferenceScore": set_pref,
-                    "setBreakdown": breakdown, "unchangedCount": unchanged_count,
+                    "setBreakdown": breakdown,
+                    "setComboAlignmentScore": combo_score,
+                    "setComboMatch": combo_match,
+                    "setComboKey": combo_match.get("key") if combo_match else None,
+                    "setComboFrequency": combo_match.get("frequency") if combo_match else None,
+                    "setComboMode": "weighted" if combo_match else "none",
+                    "unchangedCount": unchanged_count,
                     "mods": chosen,
                 }
         if not best:
@@ -1724,6 +1757,7 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
             mod["optimizerBaseScore"] = round(best["baseScore"], 2)
             mod["optimizerSetBonusScore"] = round(best["setBonusScore"], 2)
             mod["optimizerSetPreferenceScore"] = round(best["setPreferenceScore"], 3)
+            mod["optimizerSetComboAlignmentScore"] = round(best["setComboAlignmentScore"], 3)
             mod["optimizerCurrentScore"] = round(current_score["total"], 2)
             mod["optimizerCurrentProjectedScore"] = round(current_projected_score["total"], 2)
             mod["optimizerGain"] = round(best["totalScore"] - current_projected_score["total"], 2)
@@ -1733,6 +1767,11 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
             "mods": best["mods"], "totalScore": best["totalScore"],
             "baseScore": best["baseScore"], "setBonusScore": best["setBonusScore"],
             "setPreferenceScore": best["setPreferenceScore"],
+            "setComboAlignmentScore": best["setComboAlignmentScore"],
+            "setComboMatch": best["setComboMatch"],
+            "setComboKey": best["setComboKey"],
+            "setComboFrequency": best["setComboFrequency"],
+            "setComboMode": best["setComboMode"],
             "setBreakdown": best["setBreakdown"], "unchangedCount": best["unchangedCount"],
             "currentScore": current_score["total"],
             "currentProjectedScore": current_projected_score["total"],
@@ -1963,9 +2002,9 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
             lines.append("- Najczęstsze kombinacje: {}".format(
                 "; ".join("{} ({:.1f}%)".format(k, float(v)) for k, v in top_combos)
             ))
-        if opt.get("setComboMode") in {"exact", "tie_break"}:
+        if opt.get("setComboMode") in {"exact", "tie_break", "weighted"}:
             if opt.get("setComboKey"):
-                qualifier = "kryterium rozstrzygające remis" if opt.get("setComboMode") == "tie_break" else "element punktacji"
+                qualifier = "element punktacji ważonej" if opt.get("setComboMode") == "weighted" else ("kryterium rozstrzygające remis" if opt.get("setComboMode") == "tie_break" else "element punktacji")
                 lines.append("- **Dopasowanie dokładnej kombinacji ({}):** {} — {:.2f}% profilu.".format(
                     qualifier, opt["setComboKey"], float(opt.get("setComboFrequency") or 0.0)
                 ))

@@ -269,5 +269,58 @@ class ProfileSetAliasTests(unittest.TestCase):
         )
 
 
+class TargetSetCombinationSelectionTests(unittest.TestCase):
+    def test_optimizer_selects_dominant_observed_combo_even_without_secondary_stat_focus(self):
+        from mod_analyzer import optimize_target_build, canonical_set_combo_from_mods
+
+        slots = ("Square", "Diamond", "Circle", "Arrow", "Triangle", "Cross")
+        sets = ("Critical Damage", "Critical Chance", "Offense", "Health", "Speed", "Potency")
+        rows = []
+        for slot in slots:
+            for set_name in sets:
+                rows.append(make_mod(
+                    "{}-{}".format(slot, set_name), slot=slot,
+                    value=10, mod_set=set_name,
+                ))
+        profile = {
+            "set_preferences": {
+                "Crit Damage": 1.0, "Crit Chance": 0.7427,
+                "Offense": 0.1427, "Health": 0.3939,
+                "Speed": 0.1, "Potency": 0.1061,
+            },
+            # Deliberately omit Critical Damage %: the set itself is still
+            # strongly preferred in the observed complete-build distribution.
+            "secondary_preferences": {},
+            "set_combinations": {
+                "Crit Damage + Crit Chance": 30.45,
+                "Offense + Health": 5.85,
+                "Crit Damage + Health": 6.2,
+                "Speed + Health": 4.1,
+                "Crit Damage + Potency": 4.35,
+            },
+        }
+        result = optimize_target_build(rows, {"CADBANE"}, {"CADBANE": profile})
+        self.assertIn("CADBANE", result)
+        selected = result["CADBANE"]["mods"]
+        self.assertEqual(
+            canonical_set_combo_from_mods(selected),
+            "Critical Damage + Critical Chance",
+        )
+        self.assertEqual(result["CADBANE"]["setComboMatch"]["key"],
+                         "Critical Damage + Critical Chance")
+        self.assertEqual(result["CADBANE"]["setComboAlignmentScore"], 15.0)
+
+    def test_combo_alignment_is_zero_when_profile_has_no_exact_combo_data(self):
+        from mod_analyzer import profile_set_combo_alignment_score
+        slots = ("Square", "Diamond", "Circle", "Arrow", "Triangle", "Cross")
+        mods = [make_mod("m{}".format(i), slot=slot, mod_set="Health")
+                for i, slot in enumerate(slots)]
+        score, match = profile_set_combo_alignment_score(
+            {"set_combinations": {}}, mods
+        )
+        self.assertEqual(score, 0.0)
+        self.assertIsNone(match)
+
+
 if __name__ == "__main__":
     unittest.main()
