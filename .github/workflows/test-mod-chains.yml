@@ -56,7 +56,7 @@ jobs:
         if: github.event_name == 'pull_request'
         run: |
           python mod_analyzer.py --target VEL
-          python validate_mod_target_report.py
+          python validate_mod_target_report.py --targets VEL
       - name: Upload generated account-balance report
         if: github.event_name == 'pull_request'
         uses: actions/upload-artifact@v4
