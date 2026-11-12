@@ -1792,6 +1792,30 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
         }:
             donor_costs.append(item)
 
+    # Compare every affected character, including the target, with the same
+    # unprojected profile-aware full-build scorer. Never mix the target's
+    # optimistic projected gain with donors' actual before/after deltas.
+    target_owners = {
+        next((str(r.get("assignedTo", "") or "") for r in rows
+              if is_true(r.get("equipped")) and owner_base(r) == target_id), target_id)
+        for target_id in optimizer
+    }
+    account_items = [
+        item for item in chain_result.get("validation", [])
+        if item.get("owner") in affected_owners
+    ]
+    account_profiles_complete = bool(account_items) and all(
+        item.get("profileScoreAvailable")
+        and profiles.get(aliases.get(str(item.get("owner", "") or ""),
+                                     str(item.get("owner", "") or "")))
+        for item in account_items
+    )
+    account_delta = (
+        round(sum(float(item.get("profileScoreDelta", 0.0) or 0.0)
+                  for item in account_items), 2)
+        if account_profiles_complete else None
+    )
+
     # A broken set is material only when it is a meaningful part of that
     # donor's observed SWGOH.GG build profile. 20% is the explicit threshold
     # for a common build pattern; below it the change remains informational.
@@ -1839,10 +1863,14 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
     donor_compromise = donor_compromise or unavailable_profile_losses
     if not chain_result.get("safe"):
         assessment = "BLOKADA — nie wykonuj przekładek"
+    elif account_delta is None:
+        assessment = "BILANS NIEPEŁNY — brakuje porównywalnego profilu dla co najmniej jednej postaci"
+    elif account_delta <= 0.05:
+        assessment = "BILANS NIEDODATNI — nie rekomenduję wykonania łańcucha"
     elif donor_compromise:
-        assessment = "KOMPROMIS — łańcuch wykonalny, ale osłabia co najmniej jednego dawcę"
+        assessment = "KOMPROMIS — bilans rosteru dodatni, ale co najmniej jeden dawca traci"
     else:
-        assessment = "REKOMENDACJA — łańcuch wykonalny bez wykrytego kosztu u dawców"
+        assessment = "REKOMENDACJA — dodatni bilans całego rosteru, bez wykrytej straty u dawców"
 
     lines += [
         "## Status",
@@ -1850,12 +1878,40 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
         "- **Wykonalność fizyczna:** {}".format("POTWIERDZONA" if chain_result.get("safe") else "ZABLOKOWANA"),
         "- **Walidacja fizyczna całego łańcucha:** {}".format("POTWIERDZONA" if chain_result.get("safe") else "ZABLOKOWANA"),
         "- **Ocena:** {}".format(assessment),
-        "- **Interpretacja:** koszt u dawcy jest jawnie liczony i porównywany z korzyścią celu; sam fakt przeniesienia nie jest błędem optymalizacji.",
+        "- **Interpretacja:** bilans obejmuje cel i wszystkich dotkniętych dawców, liczony tą samą nieprojekcyjną punktacją pełnego buildu.",
+        "- **Łączny bilans profilu rosteru:** {}".format(
+            "NIEOBLICZALNY — brak profilu/oceny dla jednej z postaci"
+            if account_delta is None else "{:+.2f} pkt".format(account_delta)
+        ),
         "- **Liczba modów docelowych:** {}/6".format(
             min(6, max((len(opt.get("mods", [])) for opt in optimizer.values()), default=0))
         ),
         "",
     ]
+
+    if account_items:
+        lines += ["## Bilans całej operacji — ta sama punktacja przed/po", "",
+                  "Wynik każdego buildu jest liczony bez projekcji przyszłych rolli i bez założeń o slice. Suma obejmuje cel oraz każdego dawcę bezpośredniego i pośredniego.", "",
+                  "| Postać | Rola w łańcuchu | Wynik przed | Wynik po | Zmiana |",
+                  "|---|---|---:|---:|---:|"]
+        for item in account_items:
+            owner_id = str(item.get("owner", "") or "")
+            role = "CEL" if owner_id in target_owners else "DAWCA"
+            if item.get("profileScoreAvailable"):
+                lines.append("| {} | {} | {:.2f} | {:.2f} | {:+.2f} |".format(
+                    item.get("name", display_name(owner_id)), role,
+                    float(item.get("beforeProfileScore", 0.0) or 0.0),
+                    float(item.get("afterProfileScore", 0.0) or 0.0),
+                    float(item.get("profileScoreDelta", 0.0) or 0.0)))
+            else:
+                lines.append("| {} | {} | — | — | BRAK PROFILU |".format(
+                    item.get("name", display_name(owner_id)), role))
+        lines.append("")
+        if account_delta is not None:
+            lines.append("**ŁĄCZNA ZMIANA: {:+.2f} pkt.**".format(account_delta))
+        else:
+            lines.append("**ŁĄCZNA ZMIANA: NIEOBLICZALNA** — nie sumuję punktacji z fallbackiem modValue.")
+        lines.append("")
 
     for target_id, opt in optimizer.items():
         target_owner = next(
