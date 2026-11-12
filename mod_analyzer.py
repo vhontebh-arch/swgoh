@@ -1828,6 +1828,15 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
             "minor_set_changes": minor_set_changes,
         }
         donor_compromise = donor_compromise or material
+    # For donors without a profile, move.gain is the explicitly labeled
+    # single-mod fallback. Preserve that warning in the overall status.
+    unavailable_profile_losses = any(
+        not profiles.get(aliases.get(str(move.get("owner", "") or ""), str(move.get("owner", "") or "")))
+        and float(move.get("gain", 0.0) or 0.0) < -0.05
+        for plan in chain_result.get("plans", [])
+        for move in plan.get("moves", [])
+    )
+    donor_compromise = donor_compromise or unavailable_profile_losses
     if not chain_result.get("safe"):
         assessment = "BLOKADA — nie wykonuj przekładek"
     elif donor_compromise:
