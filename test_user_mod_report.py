@@ -48,7 +48,7 @@ class AccountBalanceTests(unittest.TestCase):
         ]
         items, total = account_balance_summary(
             validation, {"VEL", "SCORCH", "SANA"},
-            {"VEL": {}, "SCORCH": {}, "SANA": {}}, {}
+            {"VEL": {"ok": True}, "SCORCH": {"ok": True}, "SANA": {"ok": True}}, {}
         )
         self.assertEqual(len(items), 3)
         self.assertEqual(total, 3.3)
@@ -59,7 +59,7 @@ class AccountBalanceTests(unittest.TestCase):
             {"owner": "SCORCH", "profileScoreAvailable": False, "profileScoreDelta": None},
         ]
         items, total = account_balance_summary(
-            validation, {"VEL", "SCORCH"}, {"VEL": {}}, {}
+            validation, {"VEL", "SCORCH"}, {"VEL": {"ok": True}}, {}
         )
         self.assertEqual(len(items), 2)
         self.assertIsNone(total)
