@@ -17,6 +17,8 @@ on:
       - ".github/scripts/sync-c3po.sh"
       - "sync_optimizer_data.py"
       - "publish_optimizer_data.py"
+      - "test_optimizer_data_sync.py"
+      - ".github/workflows/update-swgoh.yml"
   schedule:
     - cron: "0 6 * * *"
 
@@ -1213,6 +1215,15 @@ jobs:
         run: |
           set -e
           python publish_optimizer_data.py
+
+      - name: Trigger optimizer-v2 consumer
+        if: github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -e
+          gh api --method POST "repos/${{ github.repository }}/actions/workflows/update-swgoh.yml/dispatches" -f ref=optimizer-v2
+          echo "Uruchomiono optimizer-v2 na właśnie opublikowanym snapshotcie."
 
       # ============================================================
       # CLEANUP
