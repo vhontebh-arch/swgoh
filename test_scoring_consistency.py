@@ -74,6 +74,48 @@ class UnifiedScoringTests(unittest.TestCase):
                 places=2,
             )
 
+    def test_dominant_profile_set_combo_outranks_higher_scoring_unobserved_mix(self):
+        slots = ("Square", "Diamond", "Circle", "Arrow", "Triangle", "Cross")
+        primary = {
+            "Square": ("Offense", 8.5), "Diamond": ("Defense", 20),
+            "Circle": ("Health", 16), "Arrow": ("Speed", 30),
+            "Triangle": ("Critical Damage", 42), "Cross": ("Potency", 30),
+        }
+        rows = []
+        for slot in slots:
+            pstat, pvalue = primary[slot]
+            # Strong individual mods from an unobserved set mix.
+            rows.append(make_mod(
+                "health-" + slot, slot, pstat, pvalue, "Health", "Speed", 30, 5
+            ))
+            # Weaker individual mods, but the complete 4+2 set combination
+            # is the dominant combination in the target's profile.
+            preferred_set = "Critical Damage" if slot in slots[:4] else "Critical Chance"
+            rows.append(make_mod(
+                "profile-" + slot, slot, pstat, pvalue,
+                preferred_set, "Speed", 6, 1
+            ))
+
+        profile = {
+            "primary_preferences": {
+                slot: {primary[slot][0]: 1.0} for slot in slots
+            },
+            "secondary_preferences": {"Speed": 1.0},
+            "set_preferences": {"Health": 1.0},
+            "set_combinations": {
+                "Crit Damage + Crit Chance": 30.0,
+                "Health + Offense": 8.0,
+            },
+        }
+        result = optimize_target_build(rows, {"TARGET"}, {"TARGET": profile})
+        chosen = result["TARGET"]["mods"]
+        counts = {}
+        for mod in chosen:
+            counts[mod["set"]] = counts.get(mod["set"], 0) + 1
+        self.assertEqual(counts.get("Critical Damage"), 4)
+        self.assertEqual(counts.get("Critical Chance"), 2)
+        self.assertEqual(result["TARGET"]["setComboMode"], "profile_priority")
+
     def test_donor_build_comparison_reports_full_profile_score_delta(self):
         before = [
             make_mod("a", "Arrow", "Speed", 32, "Speed", "Speed", 24, 4),
