@@ -15,7 +15,7 @@ INPUT_FILE = "mods.csv"
 OUTPUT_CSV = "mod_analysis.csv"
 OUTPUT_MD = "mod_analysis.md"
 PROFILE_FILE = "mod_profiles.json"
-ANALYZER_VERSION = "2026-11-11-donor-exact-combo-target-override-v1"
+ANALYZER_VERSION = "2026-11-12-profile-combo-weighted-v1"
 
 R5 = {
     "Critical Chance %": (1.125, 2.25), "Defense": (4.9, 9.8),
@@ -1646,6 +1646,9 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
             "total": base_score + set_score + combo_score, "base": base_score,
             "setBonus": set_score, "setPreference": set_pref,
             "setComboAlignment": combo_score, "setComboMatch": combo_match,
+            "setComboKey": combo_match.get("key") if combo_match else None,
+            "setComboFrequency": combo_match.get("frequency") if combo_match else None,
+            "setComboMode": "weighted" if combo_match else "none",
             "setBreakdown": breakdown,
         }
 
@@ -1734,6 +1737,9 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
                     "setBreakdown": breakdown,
                     "setComboAlignmentScore": combo_score,
                     "setComboMatch": combo_match,
+                    "setComboKey": combo_match.get("key") if combo_match else None,
+                    "setComboFrequency": combo_match.get("frequency") if combo_match else None,
+                    "setComboMode": "weighted" if combo_match else "none",
                     "unchangedCount": unchanged_count,
                     "mods": chosen,
                 }
@@ -1763,6 +1769,9 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
             "setPreferenceScore": best["setPreferenceScore"],
             "setComboAlignmentScore": best["setComboAlignmentScore"],
             "setComboMatch": best["setComboMatch"],
+            "setComboKey": best["setComboKey"],
+            "setComboFrequency": best["setComboFrequency"],
+            "setComboMode": best["setComboMode"],
             "setBreakdown": best["setBreakdown"], "unchangedCount": best["unchangedCount"],
             "currentScore": current_score["total"],
             "currentProjectedScore": current_projected_score["total"],
@@ -1993,9 +2002,9 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
             lines.append("- Najczęstsze kombinacje: {}".format(
                 "; ".join("{} ({:.1f}%)".format(k, float(v)) for k, v in top_combos)
             ))
-        if opt.get("setComboMode") in {"exact", "tie_break"}:
+        if opt.get("setComboMode") in {"exact", "tie_break", "weighted"}:
             if opt.get("setComboKey"):
-                qualifier = "kryterium rozstrzygające remis" if opt.get("setComboMode") == "tie_break" else "element punktacji"
+                qualifier = "element punktacji ważonej" if opt.get("setComboMode") == "weighted" else ("kryterium rozstrzygające remis" if opt.get("setComboMode") == "tie_break" else "element punktacji")
                 lines.append("- **Dopasowanie dokładnej kombinacji ({}):** {} — {:.2f}% profilu.".format(
                     qualifier, opt["setComboKey"], float(opt.get("setComboFrequency") or 0.0)
                 ))
