@@ -15,6 +15,7 @@ on:
       - "targets.json"
       - ".github/workflows/update-trigger.txt"
       - ".github/scripts/sync-c3po.sh"
+      - "c3po.json"
       - "sync_optimizer_data.py"
       - "publish_optimizer_data.py"
       - "test_optimizer_data_sync.py"
