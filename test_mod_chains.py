@@ -302,6 +302,28 @@ class ProfileSetAliasTests(unittest.TestCase):
         self.assertEqual(match["frequency"], 30.45)
         self.assertEqual(match["preference"], 1.0)
 
+    def test_optimizer_uses_observed_exact_combo_as_equal_score_tiebreak(self):
+        from mod_analyzer import optimize_target_build
+
+        slots = ("Square", "Diamond", "Circle", "Arrow", "Triangle", "Cross")
+        rows = []
+        for slot in slots:
+            for set_name in ("Health", "Defense", "Potency"):
+                rows.append(make_mod("{}-{}".format(slot, set_name), slot=slot, mod_set=set_name))
+        profile = {
+            "set_combinations": {
+                "Double Health + Defense": 50.0,
+                "Health + Potency + Defense": 20.0,
+            },
+        }
+        result = optimize_target_build(
+            rows, {"TARGET"}, profiles={"TARGET": profile}, aliases={}, names={},
+        )
+        self.assertIn("TARGET", result)
+        self.assertEqual(result["TARGET"]["setComboKey"], "Double Health + Defense")
+        self.assertEqual(result["TARGET"]["setComboFrequency"], 50.0)
+        self.assertEqual(result["TARGET"]["setComboMode"], "tie_break")
+
 
 if __name__ == "__main__":
     unittest.main()
