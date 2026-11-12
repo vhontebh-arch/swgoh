@@ -24,32 +24,32 @@
 - **Obecny mod:** Arrow / Health / Speed 30 / secondary: Health 742, Tenacity % 1.64%, Critical Chance % 2.15%, Defense % 2.53% / 5★ C lvl15
 - **Proponowany mod:** Arrow / Speed / Protection % 24% / secondary: Health 770, Defense % 9.48%, Protection 1035, Speed 24 / 6★ A lvl15
 - **Źródło:** JEDIKNIGHTREVAN
-  - Zmiana dopasowania do profilu: +10.7 pkt (27.6 → 38.3).
+  - Zmiana dopasowania do profilu: +6.9 pkt (7.4 → 14.3).
 #### Square
 - **Obecny mod:** Square / Speed / Offense % 5.88% / secondary: Critical Chance % 3.21%, Health 364, Potency % 1.55%, Speed 5 / 5★ D lvl15
 - **Proponowany mod:** Square / Health / Offense % 5.88% / secondary: Critical Chance % 3.35%, Protection 459, Speed 20, Potency % 1.71% / 5★ A lvl15
 - **Źródło:** MERRIN
-  - Zmiana dopasowania do profilu: +18.1 pkt (21.9 → 40.0).
+  - Zmiana dopasowania do profilu: +6.6 pkt (3.4 → 10.0).
 #### Diamond
 - **Obecny mod:** Diamond / Speed / Defense % 11.75% / secondary: Critical Chance % 1.49%, Potency % 2.11%, Offense 70, Speed 5 / 5★ D lvl15
 - **Proponowany mod:** Diamond / Speed / Defense % 20% / secondary: Tenacity % 5.13%, Potency % 3.46%, Speed 24, Protection 1994 / 6★ A lvl15
 - **Źródło:** MAGAZYN
-  - Zmiana dopasowania do profilu: +4.7 pkt (28.6 → 33.3).
+  - Zmiana dopasowania do profilu: +8.0 pkt (4.5 → 12.5).
 #### Triangle
 - **Obecny mod:** Triangle / Speed / Offense % 5.88% / secondary: Protection 1973, Tenacity % 2.02%, Speed 5, Offense 72 / 5★ B lvl15
 - **Proponowany mod:** Triangle / Health / Offense % 5.88% / secondary: Potency % 1.74%, Critical Chance % 2.89%, Speed 13, Health 803 / 5★ A lvl15
 - **Źródło:** MAGAZYN
-  - Zmiana dopasowania do profilu: +17.0 pkt (20.4 → 37.4).
+  - Zmiana dopasowania do profilu: +4.9 pkt (4.5 → 9.3).
 #### Circle
 - **Obecny mod:** Circle / Speed / Health % 5.88% / secondary: Speed 5, Critical Chance % 1.51%, Health 682, Protection 823 / 5★ D lvl15
 - **Proponowany mod:** Circle / Health / Health % 16% / secondary: Tenacity % 7.16%, Defense 11, Speed 24, Defense % 9.53% / 6★ A lvl15
 - **Źródło:** JEDIKNIGHTREVAN
-  - Zmiana dopasowania do profilu: +5.4 pkt (27.9 → 33.3).
+  - Zmiana dopasowania do profilu: +8.2 pkt (4.3 → 12.5).
 #### Cross
 - **Obecny mod:** Cross / Speed / Health % 5.88% / secondary: Offense 42, Protection 1099, Speed 4, Defense % 0.95% / 5★ D lvl15
 - **Proponowany mod:** Cross / Health / Health % 16% / secondary: Health 694, Protection 1743, Speed 20, Offense 116 / 6★ A lvl15
 - **Źródło:** JEDIKNIGHTREVAN
-  - Zmiana dopasowania do profilu: +23.8 pkt (22.3 → 46.1).
+  - Zmiana dopasowania do profilu: +13.8 pkt (3.5 → 17.3).
 
 - **Zmiana oczekiwanej oceny buildu po podniesieniu do 15:** +60.0 pkt (średnia dla przyszłych rolli; bez slice i calibration).
 
@@ -64,10 +64,10 @@
 
 ## PATCH — uzupełnienie dawców
 
-- **MAGAZYN → MERRIN:** Square / Health / Offense % 0.63% / secondary: Speed 4 / 5★ D lvl1
+- **MAGAZYN → MERRIN:** Square / Health / Offense % 5.88% / secondary: Protection 1985, Speed 9, Protection % 1.29%, Defense 9 / 5★ B lvl15
 - **MAGAZYN → JEDIKNIGHTREVAN:** Circle / Health / Health % 5.88% / secondary: Speed 15, Defense 8, Offense % 0.45%, Protection % 2.16% / 5★ C lvl15
 - **MAGAZYN → JEDIKNIGHTREVAN:** Arrow / Speed / Health % 5.88% / secondary: Speed 16, Protection 1247, Critical Chance % 1.25%, Defense 6 / 5★ B lvl15
-- **MAGAZYN → JEDIKNIGHTREVAN:** Cross / Health / Tenacity % 24% / secondary: Speed 15, Offense % 0.42%, Health % 1.02%, Health 300 / 5★ C lvl15
+- **MAGAZYN → JEDIKNIGHTREVAN:** Cross / Health / Potency % 30% / secondary: Speed 10, Protection % 10.78%, Health 1262, Tenacity % 3.76% / 6★ A lvl15
 
 ## Kolejność przekładania
 
@@ -81,20 +81,21 @@
 ### Uzupełnienie dawców — poziom 1
 
 7. **PATCH — załóż na JEDIKNIGHTREVAN** mod z MAGAZYN (dostępny po wcześniejszym kroku): Arrow / Speed / Health % 5.88% / secondary: Speed 16, Protection 1247, Critical Chance % 1.25%, Defense 6 / 5★ B lvl15
-8. **PATCH — załóż na MERRIN** mod z MAGAZYN (dostępny po wcześniejszym kroku): Square / Health / Offense % 0.63% / secondary: Speed 4 / 5★ D lvl1
+8. **PATCH — załóż na MERRIN** mod z MAGAZYN (dostępny po wcześniejszym kroku): Square / Health / Offense % 5.88% / secondary: Protection 1985, Speed 9, Protection % 1.29%, Defense 9 / 5★ B lvl15
 9. **PATCH — załóż na JEDIKNIGHTREVAN** mod z MAGAZYN (dostępny po wcześniejszym kroku): Circle / Health / Health % 5.88% / secondary: Speed 15, Defense 8, Offense % 0.45%, Protection % 2.16% / 5★ C lvl15
-10. **PATCH — załóż na JEDIKNIGHTREVAN** mod z MAGAZYN (dostępny po wcześniejszym kroku): Cross / Health / Tenacity % 24% / secondary: Speed 15, Offense % 0.42%, Health % 1.02%, Health 300 / 5★ C lvl15
+10. **PATCH — załóż na JEDIKNIGHTREVAN** mod z MAGAZYN (dostępny po wcześniejszym kroku): Cross / Health / Potency % 30% / secondary: Speed 10, Protection % 10.78%, Health 1262, Tenacity % 3.76% / 6★ A lvl15
 
 Zakładanie moda automatycznie przenosi poprzedni mod ze slotu do magazynu. Wszystkie powyższe kroki zostały sprawdzone na pełnym stanie slotów i magazynu.
 
 ## Wpływ na postacie-dawców
 
-- **MERRIN:** modValue 369.9 → 403.4 (+33.5).
+- **MERRIN:** modValue 369.9 → 367.4 (-2.5).
   - Kombinacja setów: Health + Potency + Tenacity (11.9%) → Health + Potency + Tenacity (11.9%).
-  - Fit pojedynczych modów wg profilu dawcy: Square +36.3 pkt.
-- **JEDIKNIGHTREVAN:** modValue 382.9 → 407.0 (+24.1).
+  - Fit pojedynczych modów wg profilu dawcy: Square -3.1 pkt.
+  - ISTOTNY SPADEK wartości modów u dawcy.
+- **JEDIKNIGHTREVAN:** modValue 382.9 → 384.5 (+1.6).
   - Kombinacja setów: Speed + Health (69.2%) → Speed + Health (69.2%).
-  - Fit pojedynczych modów wg profilu dawcy: Circle +9.1 pkt; Arrow -0.7 pkt; Cross -2.1 pkt.
+  - Fit pojedynczych modów wg profilu dawcy: Circle -4.5 pkt; Arrow -6.9 pkt; Cross -7.5 pkt.
 
 ## Kontrola profili użytych w łańcuchu
 
