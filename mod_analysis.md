@@ -6,9 +6,23 @@
 
 - **Wykonalność fizyczna:** POTWIERDZONA
 - **Walidacja fizyczna całego łańcucha:** POTWIERDZONA
-- **Ocena:** KOMPROMIS — łańcuch wykonalny, ale osłabia co najmniej jednego dawcę
-- **Interpretacja:** koszt u dawcy jest jawnie liczony i porównywany z korzyścią celu; sam fakt przeniesienia nie jest błędem optymalizacji.
+- **Ocena:** KOMPROMIS — bilans rosteru dodatni, ale co najmniej jeden dawca traci
+- **Interpretacja:** bilans obejmuje cel i wszystkich dotkniętych dawców, liczony tą samą nieprojekcyjną punktacją pełnego buildu.
+- **Łączny bilans profilu rosteru:** +22.20 pkt
 - **Liczba modów docelowych:** 6/6
+
+## Bilans całej operacji — ta sama punktacja przed/po
+
+Wynik każdego buildu jest liczony bez projekcji przyszłych rolli i bez założeń o slice. Suma obejmuje cel oraz każdego dawcę bezpośredniego i pośredniego.
+
+| Postać | Rola w łańcuchu | Wynik przed | Wynik po | Zmiana |
+|---|---|---:|---:|---:|
+| QUIGGOLD | DAWCA | 40.66 | 39.46 | -1.20 |
+| SANASTARROS | DAWCA | 41.41 | 38.27 | -3.13 |
+| VEL | CEL | 67.49 | 103.23 | +35.75 |
+| SCORCH | DAWCA | 79.05 | 69.83 | -9.22 |
+
+**ŁĄCZNA ZMIANA: +22.20 pkt.**
 
 ## Docelowy zestaw — VEL
 
