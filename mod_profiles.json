@@ -550,6 +550,187 @@
         "Accuracy": 0
       }
     },
+    "VELSARTHA": {
+      "name": "Vel Sartha",
+      "role": "support",
+      "source_model": {
+        "method": "direct SWGOH.GG Best Mods page read by ChatGPT",
+        "sources": [
+          {
+            "name": "Top 1000 Kyber GAC",
+            "url": "https://swgoh.gg/units/vel-sartha/best-mods/",
+            "units_fully_modded": 936,
+            "set_combinations_pct": {
+              "Double Health + Defense": 30.3,
+              "Double Defense + Health": 16.8,
+              "Triple Health": 14.3,
+              "Triple Defense": 14.3,
+              "Offense + Crit Chance": 4.9
+            },
+            "primary_pct": {
+              "Arrow": {
+                "Protection": 43.3,
+                "Speed": 42.6,
+                "Health": 9.15,
+                "Critical Avoidance": 2.46
+              },
+              "Triangle": {
+                "Protection": 69.71,
+                "Health": 18.3,
+                "Defense": 8.09,
+                "Offense": 2.46
+              },
+              "Circle": {
+                "Protection": 75,
+                "Health": 25
+              },
+              "Cross": {
+                "Protection": 71.47,
+                "Health": 18.3,
+                "Defense": 5.98,
+                "Potency": 2.46
+              }
+            },
+            "secondary_focus": {
+              "Speed": {
+                "average": 17.1,
+                "focus_pct": 23.01
+              },
+              "Defense %": {
+                "average": 6.6,
+                "focus_pct": 8.28
+              },
+              "Health %": {
+                "average": 3.28,
+                "focus_pct": 7.95
+              },
+              "Tenacity": {
+                "average": 4.29,
+                "focus_pct": 7.73
+              }
+            }
+          },
+          {
+            "name": "Top 100 Guilds",
+            "url": "https://swgoh.gg/units/vel-sartha/best-mods/?s=GUILDTOP100",
+            "units_fully_modded": 4865,
+            "set_combinations_pct": {
+              "Double Health + Defense": 28.2,
+              "Triple Health": 13.6,
+              "Offense + Crit Chance": 12.7,
+              "Double Defense + Health": 8.5,
+              "Triple Defense": 7.4
+            },
+            "primary_pct": {
+              "Arrow": {
+                "Protection": 50.1,
+                "Speed": 40.07,
+                "Health": 5.23,
+                "Defense": 3.05
+              },
+              "Triangle": {
+                "Protection": 76.43,
+                "Health": 10.54,
+                "Defense": 8.65,
+                "Critical Chance": 1.96
+              },
+              "Circle": {
+                "Protection": 82.69,
+                "Health": 17.3
+              },
+              "Cross": {
+                "Protection": 76.07,
+                "Health": 9.74,
+                "Defense": 8.65,
+                "Tenacity": 2.1
+              }
+            },
+            "secondary_focus": {
+              "Speed": {
+                "average": 16.1,
+                "focus_pct": 23.19
+              },
+              "Health %": {
+                "average": 3.12,
+                "focus_pct": 7.78
+              },
+              "Defense %": {
+                "average": 6.11,
+                "focus_pct": 7.65
+              },
+              "Defense": {
+                "average": 22.2,
+                "focus_pct": 7.63
+              }
+            }
+          }
+        ],
+        "refreshed_at_utc": "2026-11-10T17:46:00Z",
+        "note": "Raw source data integrated into the main profile database. Derived optimizer preferences are intentionally not generated yet."
+      },
+      "set_combinations": {
+        "Double Health + Defense": 29.25,
+        "Double Defense + Health": 12.65,
+        "Triple Health": 13.95,
+        "Triple Defense": 10.85,
+        "Offense + Crit Chance": 8.8
+      },
+      "set_preferences": {
+        "Double Health": 1,
+        "Defense": 1,
+        "Double Defense": 0.4325,
+        "Health": 0.4325,
+        "Triple Health": 0.4769,
+        "Triple Defense": 0.3709,
+        "Offense": 0.3009,
+        "Crit Chance": 0.3009
+      },
+      "primary_preferences": {
+        "Arrow": {
+          "Protection": 0.4766,
+          "Speed": 0.4219,
+          "Health": 0.0734,
+          "Critical Avoidance": 0.0126,
+          "Defense": 0.0156
+        },
+        "Triangle": {
+          "Protection": 0.7451,
+          "Health": 0.147,
+          "Defense": 0.0853,
+          "Offense": 0.0125,
+          "Critical Chance": 0.01
+        },
+        "Circle": {
+          "Protection": 0.7885,
+          "Health": 0.2115
+        },
+        "Cross": {
+          "Protection": 0.7575,
+          "Health": 0.144,
+          "Defense": 0.0751,
+          "Potency": 0.0126,
+          "Tenacity": 0.0108
+        }
+      },
+      "secondary_preferences": {
+        "Speed": 1,
+        "Defense %": 0.3448,
+        "Health %": 0.3405,
+        "Tenacity": 0.1673,
+        "Defense": 0.1652,
+        "Potency": 0,
+        "Protection": 0,
+        "Protection %": 0,
+        "Health": 0,
+        "Offense": 0,
+        "Offense %": 0,
+        "Tenacity %": 0,
+        "Critical Chance %": 0,
+        "Critical Damage %": 0,
+        "Critical Avoidance %": 0,
+        "Accuracy": 0
+      }
+    },
     "MERRIN": {
       "name": "Merrin",
       "role": "support",
@@ -1993,6 +2174,24 @@
           "name": "Top 100 Guilds",
           "url": "https://swgoh.gg/units/4-lom/best-mods/?s=GUILDTOP100",
           "units_fully_modded": 4862
+        }
+      ]
+    },
+    "VELSARTHA": {
+      "status": "refreshed",
+      "checked_at_utc": "2026-11-10T17:46:00Z",
+      "fetched_at_utc": "2026-11-10T17:46:00Z",
+      "source": "SWGOH.GG direct page read by ChatGPT; raw source slices retained; derived optimizer preferences pending",
+      "sources": [
+        {
+          "name": "Top 1000 Kyber GAC",
+          "url": "https://swgoh.gg/units/vel-sartha/best-mods/",
+          "units_fully_modded": 936
+        },
+        {
+          "name": "Top 100 Guilds",
+          "url": "https://swgoh.gg/units/vel-sartha/best-mods/?s=GUILDTOP100",
+          "units_fully_modded": 4865
         }
       ]
     },
