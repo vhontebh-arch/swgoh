@@ -3442,6 +3442,180 @@
         "Protection": 0.3792,
         "Potency": 0.3467
       }
+    },
+    "CADBANE": {
+      "name": "Cad Bane",
+      "role": "support",
+      "source_model": {
+        "method": "direct SWGOH.GG Best Mods page read by ChatGPT",
+        "refreshed_at_utc": "2026-11-12T21:17:07Z",
+        "sources": [
+          {
+            "name": "Top 1000 Kyber GAC",
+            "url": "https://swgoh.gg/units/cad-bane/best-mods/",
+            "units_fully_modded": 982,
+            "set_combinations_pct": {
+              "Crit Damage + Crit Chance": 30.1,
+              "Offense + Health": 7.3,
+              "Crit Damage + Health": 6.3,
+              "Speed + Health": 4.3,
+              "Crit Damage + Potency": 4.1
+            },
+            "primary_pct": {
+              "Arrow": {
+                "Speed": 86.14,
+                "Offense": 8.78,
+                "Critical Avoidance": 2.36,
+                "Protection": 1.35
+              },
+              "Triangle": {
+                "Critical Damage": 65.2,
+                "Offense": 13.51,
+                "Critical Chance": 9.79,
+                "Protection": 5.4
+              },
+              "Circle": {
+                "Protection": 66.21,
+                "Health": 33.78
+              },
+              "Cross": {
+                "Potency": 38.85,
+                "Offense": 31.75,
+                "Protection": 15.54,
+                "Health": 7.43
+              }
+            },
+            "secondary_focus": {
+              "Speed": {
+                "average": 14.5,
+                "focus_pct": 20.45
+              },
+              "Offense": {
+                "average": 85.7,
+                "focus_pct": 9.15
+              },
+              "Critical Chance %": {
+                "average": 3.79,
+                "focus_pct": 8.5
+              },
+              "Potency": {
+                "average": 4.41,
+                "focus_pct": 8.06
+              }
+            }
+          },
+          {
+            "name": "Top 100 Guilds",
+            "url": "https://swgoh.gg/units/cad-bane/best-mods/?s=GUILDTOP100",
+            "units_fully_modded": 4960,
+            "set_combinations_pct": {
+              "Crit Damage + Crit Chance": 30.8,
+              "Crit Damage + Health": 6.1,
+              "Crit Damage + Potency": 4.6,
+              "Offense + Health": 4.4,
+              "Speed + Health": 3.9
+            },
+            "primary_pct": {
+              "Arrow": {
+                "Speed": 89.08,
+                "Offense": 5.81,
+                "Critical Avoidance": 1.76,
+                "Protection": 1.69
+              },
+              "Triangle": {
+                "Critical Damage": 55.29,
+                "Critical Chance": 13.72,
+                "Offense": 13.66,
+                "Protection": 7.97
+              },
+              "Circle": {
+                "Protection": 66.66,
+                "Health": 33.33
+              },
+              "Cross": {
+                "Potency": 35.22,
+                "Offense": 25.75,
+                "Protection": 19.41,
+                "Health": 9.15
+              }
+            },
+            "secondary_focus": {
+              "Speed": {
+                "average": 13.3,
+                "focus_pct": 20.18
+              },
+              "Critical Chance %": {
+                "average": 3.81,
+                "focus_pct": 8.62
+              },
+              "Offense": {
+                "average": 81.5,
+                "focus_pct": 8.51
+              },
+              "Potency": {
+                "average": 4.52,
+                "focus_pct": 7.93
+              }
+            }
+          }
+        ]
+      },
+      "set_combinations": {
+        "Crit Damage + Crit Chance": 30.45,
+        "Offense + Health": 5.85,
+        "Crit Damage + Health": 6.2,
+        "Speed + Health": 4.1,
+        "Crit Damage + Potency": 4.35
+      },
+      "set_preferences": {
+        "Crit Damage": 1,
+        "Crit Chance": 0.7427,
+        "Offense": 0.1427,
+        "Health": 0.3939,
+        "Speed": 0.1,
+        "Potency": 0.1061
+      },
+      "primary_preferences": {
+        "Arrow": {
+          "Speed": 0.8896,
+          "Offense": 0.0741,
+          "Critical Avoidance": 0.0209,
+          "Protection": 0.0154
+        },
+        "Triangle": {
+          "Critical Damage": 0.6529,
+          "Offense": 0.1472,
+          "Critical Chance": 0.1274,
+          "Protection": 0.0725
+        },
+        "Circle": {
+          "Protection": 0.6644,
+          "Health": 0.3356
+        },
+        "Cross": {
+          "Potency": 0.4045,
+          "Offense": 0.314,
+          "Protection": 0.1909,
+          "Health": 0.0906
+        }
+      },
+      "secondary_preferences": {
+        "Health": 0,
+        "Defense": 0,
+        "Offense": 0.4347,
+        "Potency": 0.3936,
+        "Protection": 0,
+        "Protection %": 0,
+        "Speed": 1,
+        "Health %": 0,
+        "Offense %": 0,
+        "Defense %": 0,
+        "Tenacity %": 0,
+        "Critical Chance %": 0.4214,
+        "Critical Damage %": 0,
+        "Critical Avoidance %": 0,
+        "Accuracy": 0
+      }
     }
   },
   "profile_status": {
@@ -4129,6 +4303,24 @@
           "url": "https://swgoh.gg/units/finn/best-mods/?s=GUILDTOP100",
           "units_fully_modded": 4907,
           "updated_label": "8h ago"
+        }
+      ]
+    },
+    "CADBANE": {
+      "status": "refreshed",
+      "checked_at_utc": "2026-11-12T21:17:07Z",
+      "fetched_at_utc": "2026-11-12T21:17:07Z",
+      "source": "SWGOH.GG direct Best Mods page read by ChatGPT; Top 1000 Kyber GAC + Top 100 Guilds; TOP 4 secondary-stat focus per source",
+      "sources": [
+        {
+          "name": "Top 1000 Kyber GAC",
+          "url": "https://swgoh.gg/units/cad-bane/best-mods/",
+          "units_fully_modded": 982
+        },
+        {
+          "name": "Top 100 Guilds",
+          "url": "https://swgoh.gg/units/cad-bane/best-mods/?s=GUILDTOP100",
+          "units_fully_modded": 4960
         }
       ]
     }
