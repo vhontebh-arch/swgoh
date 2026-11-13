@@ -63,26 +63,17 @@ Nie jest wymagany żaden PATCH.
 
 ### Co blokuje zatwierdzenie
 
-- **KLEYA:** dawca JEDIKNIGHTREVAN zablokowany: brak pełnego buildu zachowującego kombinację Speed + Health
-- **KLEYA:** dawca JEDIKNIGHTREVAN zablokowany: brak pełnego buildu zachowującego kombinację Speed + Health
-- **KLEYA:** dawca JEDIKNIGHTREVAN zablokowany: brak pełnego buildu zachowującego kombinację Speed + Health
-- **KLEYA:** dawca JEDIKNIGHTREVAN zablokowany: brak pełnego buildu zachowującego kombinację Speed + Health
-- **KLEYA:** dawca JEDIKNIGHTREVAN zablokowany: brak pełnego buildu zachowującego kombinację Speed + Health
-- **walidacja profilu dawcy:** KLEYA: końcowa kombinacja brak pełnej kombinacji narusza wymaganą Speed + Health
-- **KLEYA:** optimizer mod nie trafił na miejsce: Square
-- **KLEYA:** optimizer mod nie trafił na miejsce: Circle
-- **KLEYA:** optimizer mod nie trafił na miejsce: Arrow
-- **KLEYA:** optimizer mod nie trafił na miejsce: Triangle
-- **KLEYA:** optimizer mod nie trafił na miejsce: Cross
-## Wpływ na postacie-dawców
-
-- **KLEYA — wynik pełnego buildu wg profilu:** 0.00 → 12.50 (+12.50 pkt).
-  - Σ modValue modów: 0.0 → 64.3 (+64.3) — surowy wskaźnik jakości modów, nie wynik profilu.
-  - Speed: BUDOWANY pełnych setów (0 → 0).
-
+- **walidacja profilu dawcy:** KUIIL: końcowa kombinacja brak pełnej kombinacji narusza wymaganą Speed + Health
 ## Kontrola profili użytych w łańcuchu
 
+- 4LOM: profil dostępny, 2 źródła.
+- 50RT: profil dostępny, 2 źródła.
+- JEDIKNIGHTREVAN: profil dostępny, 2 źródła.
 - KLEYA: profil dostępny, 2 źródła.
+- MERRIN: profil dostępny, 2 źródła.
+- SANASTARROS: profil dostępny, 2 źródła.
+- SCORCH: profil dostępny, 2 źródła.
+- VEL: profil dostępny, 2 źródła.
 
 ## Założenia projekcji
 
