@@ -9,13 +9,13 @@ import csv
 import json
 import os
 
-from update_mod_profiles import ensure_profiles
+from update_mod_profiles import ensure_profiles, load_fresh_profiles
 
 INPUT_FILE = "mods.csv"
 OUTPUT_CSV = "mod_analysis.csv"
 OUTPUT_MD = "mod_analysis.md"
 PROFILE_FILE = "mod_profiles.json"
-ANALYZER_VERSION = "2026-11-13-profiled-donor-backtracking-v4"
+ANALYZER_VERSION = "2026-11-13-profiled-donor-backtracking-fresh-cache-v5"
 
 R5 = {
     "Critical Chance %": (1.125, 2.25), "Defense": (4.9, 9.8),
@@ -484,10 +484,10 @@ def merge_profiles(existing, additional):
 
 
 def unavailable_profile_ids(status):
-    """Owners without a cached profile cannot be treated as safe mod donors."""
+    """Owners without a fresh, complete profile cannot be treated as safe donors."""
     return {
         str(base_id) for base_id, result in (status or {}).items()
-        if str(result).strip().lower() == "unavailable"
+        if str(result).strip().lower() in {"unavailable", "stale_or_incomplete"}
     }
 
 
@@ -2167,13 +2167,12 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
         affected_owners.update(move.get("owner") for move in plan.get("moves", []) if move.get("owner"))
 
     donor_costs = []
-    for item in chain_result.get("validation", []):
-        if item.get("owner") in affected_owners and item.get("owner") not in {
-            next((str(r.get("assignedTo", "") or "") for r in rows
-                  if is_true(r.get("equipped")) and owner_base(r) == target_id), target_id)
-            for target_id in optimizer
-        }:
-            donor_costs.append(item)
+    if chain_result.get("safe"):
+        for item in chain_result.get("validation", []):
+            item_owner = str(item.get("owner", "") or "")
+            item_base = aliases.get(item_owner, item_owner)
+            if item_owner in affected_owners and item_base not in target_ids:
+                donor_costs.append(item)
 
     # Compare every affected character, including the target, with the same
     # unprojected profile-aware full-build scorer. Never mix the target's
@@ -2467,7 +2466,7 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
             else:
                 lines.append("- Łańcuch nie przeszedł walidacji fizycznej.")
 
-    if chain_result.get("validation"):
+    if chain_result.get("safe") and donor_costs:
         lines += ["## Wpływ na postacie-dawców", ""]
         if donor_costs:
             for item in donor_costs:
@@ -2603,7 +2602,7 @@ def main(argv=None):
         raise RuntimeError("mods.csv jest pusty.")
 
     targets = load_targets(args.target)
-    profiles = load_profiles()
+    profiles = load_fresh_profiles()
     aliases = load_player_aliases()
     names = load_player_names()
     protected_owners = load_protected_owners()
@@ -2622,8 +2621,22 @@ def main(argv=None):
 
     # Fetch target profiles first: without them the first full-build ranking
     # would be based on a fallback and could select the wrong mod slots.
-    profiles, target_profile_status = ensure_profiles(target_ids, names)
+    requested_target_profiles, target_profile_status = ensure_profiles(target_ids, names)
+    for target_id in target_ids:
+        if target_id in profiles:
+            target_profile_status[target_id] = "cached"
+        elif target_id in requested_target_profiles:
+            target_profile_status[target_id] = "stale_or_incomplete"
+        else:
+            target_profile_status[target_id] = "unavailable"
     profile_fetch_status.update(target_profile_status)
+    missing_target_profiles = target_ids - set(profiles)
+    if missing_target_profiles:
+        raise RuntimeError(
+            "Brak świeżego, kompletnego profilu celu (limit 5 dni): {}".format(
+                ", ".join(sorted(missing_target_profiles))
+            )
+        )
     rows = [analyze(row) for row in source]
 
     for row in rows:
@@ -2682,12 +2695,21 @@ def main(argv=None):
             break
 
         additional_profiles, donor_profile_status = ensure_profiles(missing_attempts, names)
-        profiles = merge_profiles(profiles, additional_profiles)
+        fresh_cache = load_fresh_profiles()
+        profiles = merge_profiles(
+            profiles,
+            {base_id: fresh_cache[base_id] for base_id in missing_attempts if base_id in fresh_cache},
+        )
+        for base_id in missing_attempts:
+            if base_id in profiles:
+                donor_profile_status[base_id] = "cached"
+            elif base_id in additional_profiles:
+                donor_profile_status[base_id] = "stale_or_incomplete"
         profile_fetch_status.update(donor_profile_status)
         attempted_profile_units.update(missing_attempts)
 
-        # Without a profile, donor impact cannot be evaluated. Protect that
-        # owner for this run and rebuild the target from the remaining pool.
+        # Without a fresh, complete profile, donor impact cannot be evaluated.
+        # Protect that owner for this run and rebuild the target from the remaining pool.
         newly_unavailable = unavailable_profile_ids(donor_profile_status) - protected_owners
         if newly_unavailable:
             protected_owners.update(newly_unavailable)
