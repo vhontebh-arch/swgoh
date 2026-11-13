@@ -37,10 +37,10 @@
     },
     "mod_profiles.json": {
       "role": "shared SWGOH.GG mod profiles",
-      "bytes": 129184,
-      "sha256": "f576a694642955b3e3acc42232895d926668226c3e7831d23569792b1e0eae5c",
-      "git_blob_sha": "7873ad17182338abf6426394ab07f5460460c305",
-      "source_branch": "main",
+      "bytes": 134968,
+      "sha256": "60397b48d2f1913be4c369d561938eacc3fa39b9707cf6c885fbad1b4b3f8ff4",
+      "git_blob_sha": "940d8a8fc2a1ef244025216e2ccfd28f67045849",
+      "source_branch": "optimizer-data",
       "source_commit": "59f5be8b44d29605eef977ee3a4f0182df9235d7"
     },
     "swgoh_972824625.json": {
@@ -81,10 +81,11 @@
     "roster.csv was taken from optimizer-v2, the newer Comlink-derived snapshot. The known Major Partagaz star discrepancy reflects the recent in-game change reported on 2026-11-12 and is not treated as a conflict.",
     "c3po.json was taken from main because optimizer-v2 already designates main as its canonical C3PO source; the prior sync step downloaded but did not persist it.",
     "mod_profiles.json was taken from optimizer-v2 because it contains the larger current profile cache; main's copy is stale/incomplete.",
-    "The committed raw swgoh_972824625.json is excluded because it is not a reliable current snapshot and is not required by the optimizer inputs."
+    "The committed raw swgoh_972824625.json is excluded because it is not a reliable current snapshot and is not required by the optimizer inputs.",
+    "Kleya Marki profile was read directly from SWGOH.GG Best Mods pages for Top 1000 Kyber GAC and Top 100 Guilds, then added to the shared profile cache."
   ],
   "snapshot": {
-    "published_at": "2026-11-13T13:47:31.500657+00:00",
+    "published_at": "2026-11-13T19:33:00Z",
     "player_export_acquired_at": "2026-11-13T13:47:11Z",
     "producer_repository": "vhontebh-arch/swgoh",
     "producer_branch": "main",
