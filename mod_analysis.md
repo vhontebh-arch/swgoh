@@ -8,18 +8,8 @@
 - **Walidacja fizyczna całego łańcucha:** ZABLOKOWANA
 - **Ocena:** BLOKADA — nie wykonuj przekładek
 - **Interpretacja:** bilans obejmuje cel i wszystkich dotkniętych dawców, liczony tą samą nieprojekcyjną punktacją pełnego buildu.
-- **Łączny bilans profilu rosteru:** +12.50 pkt
+- **Łączny bilans profilu rosteru:** NIEZATWIERDZONY — łańcuch przekładek jest zablokowany
 - **Liczba modów docelowych:** 6/6
-
-## Bilans całej operacji — ta sama punktacja przed/po
-
-Wynik każdego buildu jest liczony bez projekcji przyszłych rolli i bez założeń o slice. Suma obejmuje cel oraz każdego dawcę bezpośredniego i pośredniego.
-
-| Postać | Rola w łańcuchu | Wynik przed | Wynik po | Zmiana |
-|---|---|---:|---:|---:|
-| KLEYA | DAWCA | 0.00 | 12.50 | +12.50 |
-
-**ŁĄCZNA ZMIANA: +12.50 pkt.**
 
 ## Docelowy zestaw — KLEYA
 
@@ -73,11 +63,11 @@ Nie jest wymagany żaden PATCH.
 
 ### Co blokuje zatwierdzenie
 
-- **KLEYA:** dawca JEDIKNIGHTREVAN zablokowany: dawca SANASTARROS: brak pełnego buildu zachowującego kombinację Speed + Health
-- **KLEYA:** dawca JEDIKNIGHTREVAN zablokowany: dawca SANASTARROS: brak pełnego buildu zachowującego kombinację Speed + Health
-- **KLEYA:** dawca JEDIKNIGHTREVAN zablokowany: dawca SANASTARROS: brak pełnego buildu zachowującego kombinację Speed + Health
-- **KLEYA:** dawca JEDIKNIGHTREVAN zablokowany: dawca SANASTARROS: brak pełnego buildu zachowującego kombinację Speed + Health
-- **KLEYA:** dawca JEDIKNIGHTREVAN zablokowany: dawca SANASTARROS: brak pełnego buildu zachowującego kombinację Speed + Health
+- **KLEYA:** dawca JEDIKNIGHTREVAN zablokowany: brak pełnego buildu zachowującego kombinację Speed + Health
+- **KLEYA:** dawca JEDIKNIGHTREVAN zablokowany: brak pełnego buildu zachowującego kombinację Speed + Health
+- **KLEYA:** dawca JEDIKNIGHTREVAN zablokowany: brak pełnego buildu zachowującego kombinację Speed + Health
+- **KLEYA:** dawca JEDIKNIGHTREVAN zablokowany: brak pełnego buildu zachowującego kombinację Speed + Health
+- **KLEYA:** dawca JEDIKNIGHTREVAN zablokowany: brak pełnego buildu zachowującego kombinację Speed + Health
 - **walidacja profilu dawcy:** KLEYA: końcowa kombinacja brak pełnej kombinacji narusza wymaganą Speed + Health
 - **KLEYA:** optimizer mod nie trafił na miejsce: Square
 - **KLEYA:** optimizer mod nie trafił na miejsce: Circle
