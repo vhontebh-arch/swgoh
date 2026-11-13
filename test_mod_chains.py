@@ -128,7 +128,7 @@ class TransferChainTests(unittest.TestCase):
         self.assertTrue(result["safe"], result["failed"])
         move = result["plans"][0]["moves"][0]
         self.assertEqual(move["replacement"]["id"], "speed-arrow-patch")
-        self.assertEqual(move["strategy"], "PROFILE_RECURSIVE_FULL_BUILD")
+        self.assertEqual(move["strategy"], "PROFILE_RECURSIVE_FULL_BUILD_BACKTRACK")
         donor = next(item for item in result["validation"] if item["owner"] == DONOR)
         self.assertEqual(donor["beforeComboKey"], "Speed + Health")
         self.assertEqual(donor["afterComboKey"], "Speed + Health")
@@ -184,6 +184,36 @@ class TransferChainTests(unittest.TestCase):
             donor = next(item for item in result["validation"] if item["owner"] == donor_id)
             self.assertEqual(donor["beforeComboKey"], "Speed + Health")
             self.assertEqual(donor["afterComboKey"], "Speed + Health")
+
+    def test_full_build_optimizer_can_exclude_a_failed_branch_candidate(self):
+        from mod_analyzer import optimize_target_build
+
+        rows = [
+            make_mod("best-arrow", slot="Arrow", value=90, mod_set="Speed"),
+            make_mod("alternate-arrow", slot="Arrow", value=10, mod_set="Speed"),
+            make_mod("square-speed", slot="Square", value=10, mod_set="Speed"),
+            make_mod("diamond-speed", slot="Diamond", value=10, mod_set="Speed"),
+            make_mod("circle-speed", slot="Circle", value=10, mod_set="Speed"),
+            make_mod("triangle-health", slot="Triangle", value=10, mod_set="Health"),
+            make_mod("cross-health", slot="Cross", value=10, mod_set="Health"),
+        ]
+        profile = {
+            "set_combinations": {"Speed + Health": 73.84},
+            "set_preferences": {"Speed": 1.0, "Health": 0.8},
+        }
+        best = optimize_target_build(
+            rows, {"TARGET"}, {"TARGET": profile},
+            required_set_combo="Speed + Health",
+        )["TARGET"]["mods"]
+        self.assertIn("best-arrow", {row["id"] for row in best})
+
+        alternate = optimize_target_build(
+            rows, {"TARGET"}, {"TARGET": profile},
+            required_set_combo="Speed + Health",
+            excluded_mod_ids={"best-arrow"},
+        )["TARGET"]["mods"]
+        self.assertIn("alternate-arrow", {row["id"] for row in alternate})
+        self.assertNotIn("best-arrow", {row["id"] for row in alternate})
 
     def test_inventory_to_empty_target(self):
         selected = make_mod("inventory-mod")
