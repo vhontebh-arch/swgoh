@@ -1179,44 +1179,69 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                 recycled["assignedTo"] = ""
                 displaced_target_mods.append(recycled)
 
-    for donor_id, donor_selected in sorted(
-        selected_by_donor.items(), key=lambda item: (-len(item[1]), item[0])
-    ):
+    profiled_donor_moves = {}
+    donor_rebuild_reserved = set()
+
+    def rebuild_profiled_donor(donor_id, donor_selected, visited):
+        """Rebuild all holes of one donor, recursively repairing every donor it borrows from."""
+        if donor_id in visited:
+            return None, "wykryto cykl w łańcuchu dawców"
         donor_profile = profiles.get(donor_id)
         if not donor_profile:
-            continue
-        hole_slots = {str(mod.get("slot", "") or "") for mod in donor_selected}
-        candidate_rows = []
-        seen_candidate_ids = set()
-        for row in rows:
-            mod_id = rid(row)
-            slot = str(row.get("slot", "") or "")
-            if not mod_id or mod_id in selected_ids or mod_id in donor_rebuild_reserved:
-                continue
-            if is_true(row.get("equipped")):
-                eligible = base(row) == donor_id and slot not in hole_slots
-            else:
-                eligible = slot in hole_slots
-            if eligible and mod_id not in seen_candidate_ids:
-                candidate_rows.append(dict(row))
-                seen_candidate_ids.add(mod_id)
-        for row in displaced_target_mods:
-            mod_id = rid(row)
-            if (mod_id and mod_id not in selected_ids and
-                    mod_id not in donor_rebuild_reserved and
-                    str(row.get("slot", "") or "") in hole_slots and
-                    mod_id not in seen_candidate_ids):
-                candidate_rows.append(row)
-                seen_candidate_ids.add(mod_id)
-
-        donor_before = [r for (o, _slot), r in eq.items() if o == next(
-            (owner(mod) for mod in donor_selected), ""
-        )]
+            return None, "brak profilu dawcy {}".format(donor_id)
+        source_owner = owner(donor_selected[0])
+        if not source_owner:
+            return None, "brak identyfikatora właściciela dawcy"
+        selected_slots = {str(mod.get("slot", "") or "") for mod in donor_selected}
+        donor_before = [r for (o, _slot), r in eq.items() if o == source_owner]
         current_match = profile_set_combo_match(donor_profile, donor_before)
         required_combo = (
             current_match.get("key") if current_match
             else dominant_profile_set_combo(donor_profile)
         )
+        # Include already-empty slots as holes too: the full-build optimizer must
+        # evaluate the donor's complete six-slot combination, not a partial build.
+        all_slots = {"Square", "Diamond", "Circle", "Arrow", "Triangle", "Cross"}
+        occupied_slots = {str(r.get("slot", "") or "") for r in donor_before}
+        hole_slots = selected_slots | (all_slots - occupied_slots)
+        fixed_rows = [
+            dict(r) for r in donor_before
+            if str(r.get("slot", "") or "") not in hole_slots
+        ]
+        candidate_rows = list(fixed_rows)
+        local_ids = {rid(r) for r in fixed_rows}
+        selected_here = {rid(r) for r in donor_selected}
+        for row in rows:
+            mod_id = rid(row)
+            slot = str(row.get("slot", "") or "")
+            if (not mod_id or mod_id in selected_ids or mod_id in selected_here
+                    or mod_id in donor_rebuild_reserved or mod_id in local_ids
+                    or slot not in hole_slots):
+                continue
+            if is_true(row.get("equipped")):
+                other_owner = owner(row)
+                other_donor_id = base(row)
+                # Only borrow from another profiled, non-target character. That
+                # makes every subsequent hole repair subject to the same rule.
+                eligible = (
+                    other_owner and other_donor_id != donor_id
+                    and other_donor_id not in targets
+                    and bool(profiles.get(other_donor_id))
+                    and other_donor_id not in visited
+                )
+            else:
+                eligible = True
+            if eligible:
+                candidate_rows.append(dict(row))
+                local_ids.add(mod_id)
+        for row in displaced_target_mods:
+            mod_id = rid(row)
+            if (mod_id and mod_id not in selected_ids and mod_id not in local_ids
+                    and mod_id not in donor_rebuild_reserved
+                    and str(row.get("slot", "") or "") in hole_slots):
+                candidate_rows.append(dict(row))
+                local_ids.add(mod_id)
+
         donor_optimizer = optimize_target_build(
             candidate_rows, {donor_id}, profiles, aliases, names, set(),
             required_set_combo=required_combo,
@@ -1224,29 +1249,64 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
         donor_build = donor_optimizer.get(donor_id, {}).get("mods", [])
         by_slot = {str(mod.get("slot", "") or ""): mod for mod in donor_build}
         built_combo = canonical_set_combo_from_mods(donor_build)
-        if required_combo and built_combo != required_combo:
-            profiled_donor_rebuild_failures[donor_id] = (
-                "nie można uzupełnić dawcy bez naruszenia kombinacji setów "
-                "{} (profil: {})".format(required_combo, donor_id)
+        if len(by_slot) != 6 or (required_combo and built_combo != required_combo):
+            return None, (
+                "brak pełnego buildu zachowującego kombinację {}"
+                .format(required_combo or "zgodną z profilem")
             )
-            continue
         if not all(slot in by_slot for slot in hole_slots):
-            profiled_donor_rebuild_failures[donor_id] = (
-                "brak pełnego zestawu uzupełnień dla slotów {}".format(
-                    ", ".join(sorted(hole_slots))
-                )
-            )
-            continue
-        if any(rid(by_slot[slot]) in selected_ids for slot in hole_slots):
-            profiled_donor_rebuild_failures[donor_id] = "uzupełnienie koliduje z modami celu"
-            continue
-        replacement_ids = [rid(by_slot[slot]) for slot in hole_slots]
+            return None, "nie udało się uzupełnić wszystkich slotów dawcy"
+
+        replacements = {slot: by_slot[slot] for slot in hole_slots}
+        replacement_ids = [rid(mod) for mod in replacements.values()]
         if len(replacement_ids) != len(set(replacement_ids)):
-            profiled_donor_rebuild_failures[donor_id] = "ten sam mod został wybrany do kilku slotów"
+            return None, "optimizer wskazał ten sam mod dla kilku slotów"
+        if any(mod_id in donor_rebuild_reserved for mod_id in replacement_ids):
+            return None, "mod został już zarezerwowany przez inny łańcuch"
+        donor_rebuild_reserved.update(replacement_ids)
+
+        donor_after = [r for r in donor_before if rid(r) not in selected_here]
+        donor_after.extend(replacements.values())
+        moves = []
+        for slot in sorted(hole_slots):
+            mod = replacements[slot]
+            moves.append({
+                "owner": source_owner, "name": pname(source_owner),
+                "slot": slot, "removed": None, "replacement": mod,
+                "gain": 0.0, "set_delta": 0,
+                "combo_delta": (
+                    exact_combo_frequency(donor_profile, donor_after)
+                    - exact_combo_frequency(donor_profile, donor_before)
+                ),
+                "strategy": "PROFILE_RECURSIVE_FULL_BUILD",
+            })
+
+        child_groups = {}
+        for mod in replacements.values():
+            if is_true(mod.get("equipped")):
+                child_id = base(mod)
+                child_groups.setdefault(child_id, []).append(mod)
+        for child_id, child_selected in sorted(child_groups.items()):
+            child_moves, error = rebuild_profiled_donor(
+                child_id, child_selected, visited | {donor_id}
+            )
+            if child_moves is None:
+                return None, "dawca {}: {}".format(child_id, error)
+            moves.extend(child_moves)
+        return moves, None
+
+    for donor_id, donor_selected in sorted(
+        selected_by_donor.items(), key=lambda item: (-len(item[1]), item[0])
+    ):
+        if not profiles.get(donor_id):
             continue
-        for slot in hole_slots:
-            replacement = by_slot[slot]
-            profiled_donor_replacements[(donor_id, slot)] = replacement
+        moves, error = rebuild_profiled_donor(donor_id, donor_selected, set())
+        if moves is None:
+            profiled_donor_rebuild_failures[donor_id] = error
+            continue
+        profiled_donor_moves[donor_id] = moves
+        for move in moves:
+            replacement = move["replacement"]
             if not is_true(replacement.get("equipped")):
                 donor_rebuild_reserved.add(rid(replacement))
 
@@ -1351,6 +1411,8 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
         return None
 
     plans, failed, used_ids = [], [], set()
+    attached_profiled_moves = set()
+    deferred_moves = []
     for target_id, opt in optimizer.items():
         target_owner = resolve_target_owner(target_id)
         if not target_owner:
@@ -1363,34 +1425,33 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
             donor_replacement = profiled_donor_replacements.get((donor_id, slot))
             if donor_id in profiled_donor_rebuild_failures:
                 plan = None
-            elif donor_replacement and rid(donor_replacement) not in used_ids:
-                donor_before = [r for (o, _s), r in working_eq.items() if o == owner(mod)]
-                donor_after = [r for r in donor_before if rid(r) != rid(mod)] + [donor_replacement]
+            elif donor_replacement:
+                moves = []
+                if donor_id not in attached_profiled_moves:
+                    moves = profiled_donor_moves.get(donor_id, [])
+                    attached_profiled_moves.add(donor_id)
                 donor_profile = profiles.get(donor_id, {}) or {}
+                donor_before = [r for (o, _s), r in eq.items() if o == owner(mod)]
+                donor_after = [r for r in donor_before if rid(r) not in {
+                    rid(x) for x in selected_by_donor.get(donor_id, [])
+                }]
+                donor_after.extend(
+                    item["replacement"] for item in moves
+                    if item["owner"] == owner(mod)
+                )
                 local_gain = (
                     profiled_build_score(donor_after, donor_profile)
                     - profiled_build_score(donor_before, donor_profile)
                 )
-                move = {
-                    "owner": owner(mod), "name": pname(owner(mod)),
-                    "removed": None, "replacement": donor_replacement,
-                    "gain": local_gain,
-                    "set_delta": completed_set_delta(owner(mod), mod, donor_replacement),
-                    "combo_delta": (
-                        exact_combo_frequency(donor_profile, donor_after)
-                        - exact_combo_frequency(donor_profile, donor_before)
-                    ),
-                    "strategy": "PROFILE_FULL_BUILD",
-                }
                 plan = {
-                    "moves": [move], "gain": local_gain,
-                    "combo_delta": move["combo_delta"],
-                    "set_delta": move["set_delta"],
-                    "mod_value_delta": (
-                        float(donor_replacement.get("modValue", 0) or 0)
-                        - float(mod.get("modValue", 0) or 0)
+                    "moves": moves, "gain": sum(float(x.get("gain", 0.0)) for x in moves),
+                    "set_delta": sum(int(x.get("set_delta", 0)) for x in moves),
+                    "mod_value_delta": sum(
+                        float(x["replacement"].get("modValue", 0) or 0)
+                        - float(x["removed"].get("modValue", 0) or 0)
+                        for x in moves if x.get("removed")
                     ),
-                    "strategy": "PROFILE_FULL_BUILD",
+                    "strategy": "PROFILE_RECURSIVE_FULL_BUILD",
                 }
             else:
                 plan = find_chain(mod, target_id, target_owner, current, used_ids)
@@ -1403,9 +1464,7 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                 continue
             physical = {rid(mod)}
             for move in plan["moves"]:
-                physical.update((rid(move["removed"]), rid(move["replacement"])))
-            # The first PATCH fills the physical hole left by MOD and has no
-            # removed mod. Empty IDs are sentinels, not shared resources.
+                physical.update((rid(move.get("removed")), rid(move["replacement"])))
             physical.discard("")
             if physical & used_ids:
                 failed.append((target_id, "konflikt modów dla {} / {}".format(slot,mod.get("set","")))); continue
@@ -1414,17 +1473,31 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                           "target_current":current,"moves":plan["moves"],"chain_gain":plan["gain"],
                           "chain_set_delta":plan.get("set_delta",0),
                           "chain_mod_value_delta":plan.get("mod_value_delta",0.0),
-                           "chain_strategy":plan.get("strategy", "GREEDY_CHAIN")})
+                          "chain_strategy":plan.get("strategy", "GREEDY_CHAIN")})
 
             old_owner = owner(mod)
             if old_owner and (old_owner,slot) in working_eq and rid(working_eq[(old_owner,slot)]) == rid(mod):
                 working_eq.pop((old_owner,slot),None)
-            for move in plan["moves"]:
-                key=(move["owner"],slot)
-                if key in working_eq and rid(working_eq[key]) == rid(move["removed"]):
-                    working_eq.pop(key,None)
-                working_eq[key]=move["replacement"]
             working_eq[(target_owner,slot)]=mod
+            deferred_moves.extend(plan["moves"])
+
+    # All target MOD transfers happen before any PATCH. This is essential when
+    # one donor gives several mods: its complete replacement build is a single
+    # transaction, not a sequence of temporarily incomplete builds.
+    for move in deferred_moves:
+        move_slot = str(move.get("slot") or move["replacement"].get("slot") or "")
+        key = (move["owner"], move_slot)
+        current = working_eq.get(key)
+        removed = move.get("removed")
+        if removed:
+            if current is None or rid(current) != rid(removed):
+                failed.append(("łańcuch PATCH", "niezgodny stan slotu {} u {}".format(move_slot, move["name"])))
+                continue
+            working_eq.pop(key, None)
+        elif current is not None:
+            failed.append(("łańcuch PATCH", "slot {} u {} nie jest pusty".format(move_slot, move["name"])))
+            continue
+        working_eq[key] = move["replacement"]
 
     final_eq = dict(working_eq)
 
