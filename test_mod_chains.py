@@ -75,6 +75,33 @@ class TransferChainTests(unittest.TestCase):
         self.assertIn("Double Health + Defense", report)
         self.assertIn("48.9%", report)
 
+    def test_profiled_donor_rejects_fallback_that_breaks_current_combo(self):
+        selected = make_mod("revan-selected-arrow", DONOR, True, "Arrow", 30, "Speed", 4)
+        donor_mods = [
+            make_mod("revan-square", DONOR, True, "Square", 10, "Speed"),
+            make_mod("revan-diamond", DONOR, True, "Diamond", 10, "Speed"),
+            make_mod("revan-triangle", DONOR, True, "Triangle", 10, "Speed"),
+            make_mod("revan-circle", DONOR, True, "Circle", 10, "Health"),
+            make_mod("revan-cross", DONOR, True, "Cross", 10, "Health"),
+        ]
+        # A physically usable replacement exists, but it cannot restore the
+        # donor's observed Speed + Health combination.
+        wrong_patch = make_mod("offense-arrow-patch", value=80, mod_set="Offense", speed_roll=6)
+        profile = {
+            "set_preferences": {"Speed": 1.0, "Health": 0.8, "Offense": 0.2},
+            "set_combinations": {"Speed + Health": 73.84, "Offense + Health": 3.0},
+        }
+        result = run_plan(
+            [selected, *donor_mods, wrong_patch], selected,
+            {TARGET: "TARGET", DONOR: "DONOR"}, { "DONOR": profile },
+        )
+        self.assertFalse(result["safe"])
+        self.assertTrue(any("dawca DONOR zablokowany" in reason for _, reason in result["failed"]))
+        self.assertFalse(any(
+            move.get("replacement", {}).get("id") == "offense-arrow-patch"
+            for plan in result["plans"] for move in plan["moves"]
+        ))
+
     def test_profiled_full_build_repair_preserves_donor_combo_over_better_single_patch(self):
         selected = make_mod("revan-selected-arrow", DONOR, True, "Arrow", 30, "Speed", 4)
         donor_mods = [

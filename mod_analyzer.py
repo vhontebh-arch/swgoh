@@ -15,7 +15,7 @@ INPUT_FILE = "mods.csv"
 OUTPUT_CSV = "mod_analysis.csv"
 OUTPUT_MD = "mod_analysis.md"
 PROFILE_FILE = "mod_profiles.json"
-ANALYZER_VERSION = "2026-11-13-profiled-donor-full-build-experiment-v1"
+ANALYZER_VERSION = "2026-11-13-profiled-donor-combo-hard-constraint-v2"
 
 R5 = {
     "Critical Chance %": (1.125, 2.25), "Defense": (4.9, 9.8),
@@ -202,6 +202,23 @@ def profile_set_combo_alignment_score(profile, mods):
         return 0.0, None
     score = float(match.get("preference", 0.0)) * PROFILE_COMBO_ALIGNMENT_POINTS
     return score, match
+
+
+def dominant_profile_set_combo(profile):
+    """Return the most frequently observed complete set combination."""
+    frequencies = {}
+    for label, raw_frequency in (profile.get("set_combinations", {}) or {}).items():
+        key = _canonical_set_combo_from_profile_label(label)
+        if not key:
+            continue
+        try:
+            frequency = max(0.0, float(raw_frequency or 0.0))
+        except (TypeError, ValueError):
+            continue
+        frequencies[key] = frequencies.get(key, 0.0) + frequency
+    if not frequencies:
+        return None
+    return max(frequencies.items(), key=lambda item: (item[1], item[0]))[0]
 
 
 
@@ -1146,6 +1163,7 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                 selected_by_donor.setdefault(donor_id, []).append(selected)
 
     profiled_donor_replacements = {}
+    profiled_donor_rebuild_failures = {}
     donor_rebuild_reserved = set()
     displaced_target_mods = []
     for target_id, opt in optimizer.items():
@@ -1191,17 +1209,40 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                 candidate_rows.append(row)
                 seen_candidate_ids.add(mod_id)
 
+        donor_before = [r for (o, _slot), r in eq.items() if o == next(
+            (owner(mod) for mod in donor_selected), ""
+        )]
+        current_match = profile_set_combo_match(donor_profile, donor_before)
+        required_combo = (
+            current_match.get("key") if current_match
+            else dominant_profile_set_combo(donor_profile)
+        )
         donor_optimizer = optimize_target_build(
-            candidate_rows, {donor_id}, profiles, aliases, names, set()
+            candidate_rows, {donor_id}, profiles, aliases, names, set(),
+            required_set_combo=required_combo,
         )
         donor_build = donor_optimizer.get(donor_id, {}).get("mods", [])
         by_slot = {str(mod.get("slot", "") or ""): mod for mod in donor_build}
+        built_combo = canonical_set_combo_from_mods(donor_build)
+        if required_combo and built_combo != required_combo:
+            profiled_donor_rebuild_failures[donor_id] = (
+                "nie można uzupełnić dawcy bez naruszenia kombinacji setów "
+                "{} (profil: {})".format(required_combo, donor_id)
+            )
+            continue
         if not all(slot in by_slot for slot in hole_slots):
+            profiled_donor_rebuild_failures[donor_id] = (
+                "brak pełnego zestawu uzupełnień dla slotów {}".format(
+                    ", ".join(sorted(hole_slots))
+                )
+            )
             continue
         if any(rid(by_slot[slot]) in selected_ids for slot in hole_slots):
+            profiled_donor_rebuild_failures[donor_id] = "uzupełnienie koliduje z modami celu"
             continue
         replacement_ids = [rid(by_slot[slot]) for slot in hole_slots]
         if len(replacement_ids) != len(set(replacement_ids)):
+            profiled_donor_rebuild_failures[donor_id] = "ten sam mod został wybrany do kilku slotów"
             continue
         for slot in hole_slots:
             replacement = by_slot[slot]
@@ -1320,7 +1361,9 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
             if current is not None and rid(current) == rid(mod): continue
             donor_id = base(mod)
             donor_replacement = profiled_donor_replacements.get((donor_id, slot))
-            if donor_replacement and rid(donor_replacement) not in used_ids:
+            if donor_id in profiled_donor_rebuild_failures:
+                plan = None
+            elif donor_replacement and rid(donor_replacement) not in used_ids:
                 donor_before = [r for (o, _s), r in working_eq.items() if o == owner(mod)]
                 donor_after = [r for r in donor_before if rid(r) != rid(mod)] + [donor_replacement]
                 donor_profile = profiles.get(donor_id, {}) or {}
@@ -1352,7 +1395,12 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
             else:
                 plan = find_chain(mod, target_id, target_owner, current, used_ids)
             if plan is None:
-                failed.append((target_id, "brak wykonalnego łańcucha dla {} / {}".format(slot,mod.get("set","")))); continue
+                donor_reason = profiled_donor_rebuild_failures.get(donor_id)
+                if donor_reason:
+                    failed.append((target_id, "dawca {} zablokowany: {}".format(donor_id, donor_reason)))
+                else:
+                    failed.append((target_id, "brak wykonalnego łańcucha dla {} / {}".format(slot,mod.get("set",""))))
+                continue
             physical = {rid(mod)}
             for move in plan["moves"]:
                 physical.update((rid(move["removed"]), rid(move["replacement"])))
@@ -1661,7 +1709,7 @@ def project_mod_for_build(row, profile):
     return projected
 
 
-def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, names=None, protected_owners=None):
+def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, names=None, protected_owners=None, required_set_combo=None):
     """Independently implemented full-build optimizer inspired by Grandivory."""
     profiles = profiles or {}
     aliases = aliases or {}
@@ -1837,6 +1885,9 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
         best = None
         for _counts, (base_score, unchanged_count, chosen) in states.items():
             projected_chosen = [project_mod_for_build(m, profile) for m in chosen]
+            combo_key = canonical_set_combo_from_mods(projected_chosen)
+            if required_set_combo and combo_key != required_set_combo:
+                continue
             set_score, set_pref, breakdown = set_bonus_score(projected_chosen, profile)
             combo_score, combo_match = profile_set_combo_alignment_score(profile, projected_chosen)
             total = base_score + set_score + combo_score
