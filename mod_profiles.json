@@ -3442,6 +3442,196 @@
         "Protection": 0.3792,
         "Potency": 0.3467
       }
+    },
+    "KLEYA": {
+      "name": "Kleya Marki",
+      "role": "attacker",
+      "source_model": {
+        "method": "direct SWGOH.GG Best Mods page read by ChatGPT; equal-weight average of configured slices",
+        "refreshed_at_utc": "2026-11-13T19:29:00Z",
+        "sources": [
+          {
+            "name": "Top 1000 Kyber GAC",
+            "url": "https://swgoh.gg/units/kleya-marki/best-mods/",
+            "units_fully_modded": 940,
+            "set_combinations_pct": {
+              "Speed + Health": 40.74,
+              "Speed + Crit Chance": 13.19,
+              "Speed + Potency": 8.29,
+              "Offense + Potency": 7.44,
+              "Offense + Health": 7.23,
+              "Offense + Crit Chance": 4.04,
+              "Crit Damage + Crit Chance": 2.97,
+              "Crit Damage + Health": 2.44,
+              "Speed + Defense": 2.12
+            },
+            "primary_pct": {
+              "Arrow": {
+                "Speed": 95.82,
+                "Offense": 3.13,
+                "Health": 0.52,
+                "Protection": 0.26
+              },
+              "Triangle": {
+                "Critical Damage": 79.11,
+                "Offense": 9.66,
+                "Health": 6.26,
+                "Protection": 2.34
+              },
+              "Circle": {
+                "Health": 79.63,
+                "Protection": 20.36
+              },
+              "Cross": {
+                "Offense": 81.46,
+                "Health": 5.74,
+                "Potency": 5.48,
+                "Protection": 5.22
+              }
+            },
+            "secondary_focus": {
+              "Speed": {
+                "average": 20.9,
+                "focus_pct": 21
+              },
+              "Offense %": {
+                "average": 3.46,
+                "focus_pct": 9
+              },
+              "Offense": {
+                "average": 84.9,
+                "focus_pct": 8.94
+              },
+              "Critical Chance %": {
+                "average": 3.67,
+                "focus_pct": 7.71
+              }
+            }
+          },
+          {
+            "name": "Top 100 Guilds",
+            "url": "https://swgoh.gg/units/kleya-marki/best-mods/?s=GUILDTOP100",
+            "units_fully_modded": 4879,
+            "set_combinations_pct": {
+              "Speed + Health": 35.25,
+              "Offense + Potency": 17.42,
+              "Speed + Crit Chance": 10.86,
+              "Speed + Potency": 5.73,
+              "Offense + Health": 5.69,
+              "Crit Damage + Crit Chance": 2.8,
+              "Triple Health": 2.78,
+              "Offense + Crit Chance": 2.5,
+              "Crit Damage + Health": 2.41
+            },
+            "primary_pct": {
+              "Arrow": {
+                "Speed": 96.16,
+                "Offense": 2.38,
+                "Health": 0.93,
+                "Critical Avoidance": 0.29
+              },
+              "Triangle": {
+                "Critical Damage": 76.22,
+                "Offense": 10.98,
+                "Health": 4.59,
+                "Protection": 3.25
+              },
+              "Circle": {
+                "Health": 77.9,
+                "Protection": 22.09
+              },
+              "Cross": {
+                "Offense": 79.01,
+                "Health": 6.45,
+                "Potency": 4.53,
+                "Protection": 4.36
+              }
+            },
+            "secondary_focus": {
+              "Speed": {
+                "average": 17.9,
+                "focus_pct": 20.94
+              },
+              "Offense": {
+                "average": 84.3,
+                "focus_pct": 9.05
+              },
+              "Offense %": {
+                "average": 3,
+                "focus_pct": 8.34
+              },
+              "Critical Chance %": {
+                "average": 3.69,
+                "focus_pct": 7.45
+              }
+            }
+          }
+        ]
+      },
+      "set_combinations": {
+        "Speed + Health": 37.995000000000005,
+        "Speed + Crit Chance": 12.024999999999999,
+        "Speed + Potency": 7.01,
+        "Offense + Potency": 12.430000000000001,
+        "Offense + Health": 6.460000000000001,
+        "Offense + Crit Chance": 3.27,
+        "Crit Damage + Crit Chance": 2.885,
+        "Crit Damage + Health": 2.425,
+        "Speed + Defense": 1.06,
+        "Triple Health": 1.39
+      },
+      "set_preferences": {
+        "Speed": 1,
+        "Health": 0.807,
+        "Crit Chance": 0.313,
+        "Potency": 0.3347,
+        "Offense": 0.3815,
+        "Crit Damage": 0.0914,
+        "Defense": 0.0182,
+        "Triple Health": 0.0239
+      },
+      "primary_preferences": {
+        "Arrow": {
+          "Speed": 0.9624,
+          "Offense": 0.0276,
+          "Health": 0.0073,
+          "Protection": 0.0013,
+          "Critical Avoidance": 0.0015
+        },
+        "Triangle": {
+          "Critical Damage": 0.8073,
+          "Offense": 0.1073,
+          "Health": 0.0564,
+          "Protection": 0.0291
+        },
+        "Circle": {
+          "Health": 0.7877,
+          "Protection": 0.2123
+        },
+        "Cross": {
+          "Offense": 0.8347,
+          "Health": 0.0634,
+          "Potency": 0.0521,
+          "Protection": 0.0498
+        }
+      },
+      "secondary_preferences": {
+        "Speed": 1,
+        "Offense %": 0.4134,
+        "Offense": 0.4289,
+        "Critical Chance %": 0.3615,
+        "Health": 0,
+        "Defense": 0,
+        "Potency": 0,
+        "Protection": 0,
+        "Protection %": 0,
+        "Health %": 0,
+        "Defense %": 0,
+        "Tenacity %": 0,
+        "Critical Damage %": 0,
+        "Critical Avoidance %": 0,
+        "Accuracy": 0
+      }
     }
   },
   "profile_status": {
@@ -4131,6 +4321,11 @@
           "updated_label": "8h ago"
         }
       ]
+    },
+    "KLEYA": {
+      "status": "refreshed",
+      "fetched_at_utc": "2026-11-13T19:29:00Z",
+      "checked_at_utc": "2026-11-13T19:29:00Z"
     }
   }
 }
