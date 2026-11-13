@@ -134,6 +134,57 @@ class TransferChainTests(unittest.TestCase):
         self.assertEqual(donor["afterComboKey"], "Speed + Health")
         self.assertEqual(donor["afterComboFrequency"], 73.84)
 
+    def test_profiled_donor_rebuild_can_borrow_from_second_profiled_donor(self):
+        selected = make_mod("donor-a-selected-arrow", "donor-a-instance", True,
+                            "Arrow", 30, "Speed", 4)
+        donor_a_fixed = [
+            make_mod("a-square", "donor-a-instance", True, "Square", 10, "Speed"),
+            make_mod("a-diamond", "donor-a-instance", True, "Diamond", 10, "Speed"),
+            make_mod("a-circle", "donor-a-instance", True, "Circle", 10, "Speed"),
+            make_mod("a-triangle", "donor-a-instance", True, "Triangle", 10, "Health"),
+            make_mod("a-cross", "donor-a-instance", True, "Cross", 10, "Health"),
+        ]
+        donor_b_arrow = make_mod("donor-b-arrow", "donor-b-instance", True,
+                                 "Arrow", 90, "Speed", 6)
+        donor_b_fixed = [
+            make_mod("b-square", "donor-b-instance", True, "Square", 10, "Speed"),
+            make_mod("b-diamond", "donor-b-instance", True, "Diamond", 10, "Speed"),
+            make_mod("b-circle", "donor-b-instance", True, "Circle", 10, "Speed"),
+            make_mod("b-triangle", "donor-b-instance", True, "Triangle", 10, "Health"),
+            make_mod("b-cross", "donor-b-instance", True, "Cross", 10, "Health"),
+        ]
+        inventory_arrow = make_mod("inventory-speed-arrow", value=15,
+                                   mod_set="Speed", speed_roll=3)
+        profile = {
+            "set_preferences": {"Speed": 1.0, "Health": 0.8},
+            "primary_preferences": {"Arrow": {"Speed": 1.0}},
+            "secondary_preferences": {"Speed": 1.0},
+            "set_combinations": {"Speed + Health": 73.84},
+        }
+        result = run_plan(
+            [selected, *donor_a_fixed, donor_b_arrow, *donor_b_fixed, inventory_arrow],
+            selected,
+            {
+                TARGET: "TARGET",
+                "donor-a-instance": "DONOR_A",
+                "donor-b-instance": "DONOR_B",
+            },
+            {"DONOR_A": profile, "DONOR_B": profile},
+        )
+        self.assertTrue(result["safe"], result["failed"])
+        moves = result["plans"][0]["moves"]
+        self.assertEqual(
+            [(move["owner"], move["replacement"]["id"]) for move in moves],
+            [
+                ("donor-a-instance", "donor-b-arrow"),
+                ("donor-b-instance", "inventory-speed-arrow"),
+            ],
+        )
+        for donor_id in ("donor-a-instance", "donor-b-instance"):
+            donor = next(item for item in result["validation"] if item["owner"] == donor_id)
+            self.assertEqual(donor["beforeComboKey"], "Speed + Health")
+            self.assertEqual(donor["afterComboKey"], "Speed + Health")
+
     def test_inventory_to_empty_target(self):
         selected = make_mod("inventory-mod")
         result = run_plan([selected], selected)
