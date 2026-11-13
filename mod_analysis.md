@@ -73,11 +73,12 @@ Nie jest wymagany żaden PATCH.
 
 ### Co blokuje zatwierdzenie
 
-- **KLEYA:** dawca JEDIKNIGHTREVAN zablokowany: nie można uzupełnić dawcy bez naruszenia kombinacji setów Speed + Health (profil: JEDIKNIGHTREVAN)
-- **KLEYA:** dawca JEDIKNIGHTREVAN zablokowany: nie można uzupełnić dawcy bez naruszenia kombinacji setów Speed + Health (profil: JEDIKNIGHTREVAN)
-- **KLEYA:** dawca JEDIKNIGHTREVAN zablokowany: nie można uzupełnić dawcy bez naruszenia kombinacji setów Speed + Health (profil: JEDIKNIGHTREVAN)
-- **KLEYA:** dawca JEDIKNIGHTREVAN zablokowany: nie można uzupełnić dawcy bez naruszenia kombinacji setów Speed + Health (profil: JEDIKNIGHTREVAN)
-- **KLEYA:** dawca JEDIKNIGHTREVAN zablokowany: nie można uzupełnić dawcy bez naruszenia kombinacji setów Speed + Health (profil: JEDIKNIGHTREVAN)
+- **KLEYA:** dawca JEDIKNIGHTREVAN zablokowany: dawca SANASTARROS: brak pełnego buildu zachowującego kombinację Speed + Health
+- **KLEYA:** dawca JEDIKNIGHTREVAN zablokowany: dawca SANASTARROS: brak pełnego buildu zachowującego kombinację Speed + Health
+- **KLEYA:** dawca JEDIKNIGHTREVAN zablokowany: dawca SANASTARROS: brak pełnego buildu zachowującego kombinację Speed + Health
+- **KLEYA:** dawca JEDIKNIGHTREVAN zablokowany: dawca SANASTARROS: brak pełnego buildu zachowującego kombinację Speed + Health
+- **KLEYA:** dawca JEDIKNIGHTREVAN zablokowany: dawca SANASTARROS: brak pełnego buildu zachowującego kombinację Speed + Health
+- **walidacja profilu dawcy:** KLEYA: końcowa kombinacja brak pełnej kombinacji narusza wymaganą Speed + Health
 - **KLEYA:** optimizer mod nie trafił na miejsce: Square
 - **KLEYA:** optimizer mod nie trafił na miejsce: Circle
 - **KLEYA:** optimizer mod nie trafił na miejsce: Arrow
