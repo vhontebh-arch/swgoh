@@ -1305,7 +1305,10 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
             profiled_donor_rebuild_failures[donor_id] = error
             continue
         profiled_donor_moves[donor_id] = moves
+        root_owner = owner(donor_selected[0])
         for move in moves:
+            if move["owner"] == root_owner:
+                profiled_donor_replacements[(donor_id, move["slot"])] = move["replacement"]
             replacement = move["replacement"]
             if not is_true(replacement.get("equipped")):
                 donor_rebuild_reserved.add(rid(replacement))
@@ -1530,6 +1533,8 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
         physical_errors.append("mod {} nie istnieje w aktualnym stanie symulacji".format(mod_id))
         return False
 
+    # Replay every MOD first, then the dependent PATCH operations. This keeps
+    # grouped donor withdrawals physically consistent.
     for plan in plans:
         selected = plan["mod"]
         selected_id = rid(selected)
@@ -1541,21 +1546,22 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                 continue
         elif not take_mod(selected_id):
             continue
-
         target_key = (target_owner, slot)
         displaced_id = simulated_slots.pop(target_key, None)
         if displaced_id:
             simulated_inventory.add(displaced_id)
         simulated_slots[target_key] = selected_id
 
+    for plan in plans:
         for move in plan.get("moves", []):
             replacement = move["replacement"]
             replacement_id = rid(replacement)
+            move_slot = str(move.get("slot") or replacement.get("slot") or "")
             replacement_slot = str(replacement.get("slot", "") or "")
-            destination = (move["owner"], slot)
-            if replacement_slot != slot:
+            destination = (move["owner"], move_slot)
+            if replacement_slot != move_slot:
                 physical_errors.append("PATCH {} używa slotu {}, wymagany {}".format(
-                    replacement_id, replacement_slot, slot))
+                    replacement_id, replacement_slot, move_slot))
                 continue
             if not take_mod(replacement_id):
                 continue
@@ -1563,7 +1569,7 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
             expected_removed_id = rid(move.get("removed"))
             if removed_id != (expected_removed_id or None):
                 physical_errors.append("PATCH {}: w slocie {} postaci {} oczekiwano {}, znaleziono {}".format(
-                    replacement_id, slot, move["owner"], expected_removed_id or "PUSTO", removed_id or "PUSTO"))
+                    replacement_id, move_slot, move["owner"], expected_removed_id or "PUSTO", removed_id or "PUSTO"))
             if removed_id:
                 simulated_inventory.add(removed_id)
             simulated_slots[destination] = replacement_id
@@ -1673,15 +1679,18 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
             for idx,move in enumerate(plan["moves"],1):
                 patch=move["replacement"]
                 patch_row=next((r for r in rows if rid(r)==rid(patch)),patch)
+                patch_slot=str(move.get("slot") or patch.get("slot") or slot)
                 patch_row["recommendedAction"]="PATCH"; patch_row["chainStatus"]="VALIDATED"
-                patch_row["patchOwner"]=move["owner"]; patch_row["patchOwnerName"]=move["name"]; patch_row["patchSlot"]=slot
+                patch_row["patchOwner"]=move["owner"]; patch_row["patchOwnerName"]=move["name"]; patch_row["patchSlot"]=patch_slot
                 patch_row["chainId"]=mod["chainId"]; patch_row["chainStep"]=idx; patch_row["chainLength"]=mod["chainLength"]
                 patch_row["chainPath"]=mod["chainPath"]; patch_row["replacesModId"]=rid(move["removed"])
                 patch_row["replacementGain"]=round(move["gain"],1); patch_row["accountGain"]=round(move["gain"],1)
                 patch_row["chainSetDelta"]=mod.get("chainSetDelta",0)
                 patch_row["chainModValueDelta"]=mod.get("chainModValueDelta",0.0)
                 patch_row["chainStrategy"]=mod.get("chainStrategy", "GREEDY_CHAIN")
-                if move.get("strategy") == "PROFILE_FULL_BUILD":
+                if move.get("strategy") == "PROFILE_RECURSIVE_FULL_BUILD":
+                    patch_row["reason"]="PATCH {}; rekurencyjna odbudowa pełnego buildu dawcy wg profilu (slot {})".format(move["name"], patch_slot)
+                elif move.get("strategy") == "PROFILE_FULL_BUILD":
                     patch_row["reason"]="PATCH {}; wybór wspólny dla pełnego buildu dawcy wg profilu".format(move["name"])
                 else:
                     patch_row["reason"]="PATCH {}; zmiana pełnych setów {:+d}".format(move["name"],move["set_delta"])
