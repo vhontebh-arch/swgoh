@@ -1493,6 +1493,17 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
     # transaction, not a sequence of temporarily incomplete builds.
     for move in deferred_moves:
         move_slot = str(move.get("slot") or move["replacement"].get("slot") or "")
+        replacement = move["replacement"]
+        replacement_owner = owner(replacement)
+        if is_true(replacement.get("equipped")) and replacement_owner:
+            source_key = (replacement_owner, move_slot)
+            source_current = working_eq.get(source_key)
+            if source_current is None or rid(source_current) != rid(replacement):
+                failed.append(("łańcuch PATCH", "mod {} nie znajduje się u źródłowego dawcy {}".format(
+                    rid(replacement), pname(replacement_owner)
+                )))
+                continue
+            working_eq.pop(source_key, None)
         key = (move["owner"], move_slot)
         current = working_eq.get(key)
         removed = move.get("removed")
