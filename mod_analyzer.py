@@ -1180,7 +1180,7 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
             else:
                 eligible = slot in hole_slots
             if eligible and mod_id not in seen_candidate_ids:
-                candidate_rows.append(row)
+                candidate_rows.append(dict(row))
                 seen_candidate_ids.add(mod_id)
         for row in displaced_target_mods:
             mod_id = rid(row)
@@ -1559,7 +1559,11 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                 patch_row["replacementGain"]=round(move["gain"],1); patch_row["accountGain"]=round(move["gain"],1)
                 patch_row["chainSetDelta"]=mod.get("chainSetDelta",0)
                 patch_row["chainModValueDelta"]=mod.get("chainModValueDelta",0.0)
-                patch_row["reason"]="PATCH {}; zmiana pełnych setów {:+d}".format(move["name"],move["set_delta"])
+                patch_row["chainStrategy"]=mod.get("chainStrategy", "GREEDY_CHAIN")
+                if move.get("strategy") == "PROFILE_FULL_BUILD":
+                    patch_row["reason"]="PATCH {}; wybór wspólny dla pełnego buildu dawcy wg profilu".format(move["name"])
+                else:
+                    patch_row["reason"]="PATCH {}; zmiana pełnych setów {:+d}".format(move["name"],move["set_delta"])
     else:
         for r in rows:
             if r.get("optimizerTarget"): r["chainStatus"]="BLOCKED"
