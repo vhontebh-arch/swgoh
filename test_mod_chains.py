@@ -128,7 +128,7 @@ class TransferChainTests(unittest.TestCase):
         self.assertTrue(result["safe"], result["failed"])
         move = result["plans"][0]["moves"][0]
         self.assertEqual(move["replacement"]["id"], "speed-arrow-patch")
-        self.assertEqual(move["strategy"], "PROFILE_FULL_BUILD")
+        self.assertEqual(move["strategy"], "PROFILE_RECURSIVE_FULL_BUILD")
         donor = next(item for item in result["validation"] if item["owner"] == DONOR)
         self.assertEqual(donor["beforeComboKey"], "Speed + Health")
         self.assertEqual(donor["afterComboKey"], "Speed + Health")
