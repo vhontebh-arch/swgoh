@@ -4,11 +4,11 @@
 
 ## Status
 
-- **Wykonalność fizyczna:** POTWIERDZONA
-- **Walidacja fizyczna całego łańcucha:** POTWIERDZONA
-- **Ocena:** KOMPROMIS — bilans rosteru dodatni, ale co najmniej jeden dawca traci
+- **Wykonalność fizyczna:** ZABLOKOWANA
+- **Walidacja fizyczna całego łańcucha:** ZABLOKOWANA
+- **Ocena:** BLOKADA — nie wykonuj przekładek
 - **Interpretacja:** bilans obejmuje cel i wszystkich dotkniętych dawców, liczony tą samą nieprojekcyjną punktacją pełnego buildu.
-- **Łączny bilans profilu rosteru:** +84.25 pkt
+- **Łączny bilans profilu rosteru:** +12.50 pkt
 - **Liczba modów docelowych:** 6/6
 
 ## Bilans całej operacji — ta sama punktacja przed/po
@@ -17,10 +17,9 @@ Wynik każdego buildu jest liczony bez projekcji przyszłych rolli i bez założ
 
 | Postać | Rola w łańcuchu | Wynik przed | Wynik po | Zmiana |
 |---|---|---:|---:|---:|
-| JEDIKNIGHTREVAN | DAWCA | 112.08 | 79.92 | -32.16 |
-| KLEYA | DAWCA | 0.00 | 116.41 | +116.41 |
+| KLEYA | DAWCA | 0.00 | 12.50 | +12.50 |
 
-**ŁĄCZNA ZMIANA: +84.25 pkt.**
+**ŁĄCZNA ZMIANA: +12.50 pkt.**
 
 ## Docelowy zestaw — KLEYA
 
@@ -62,60 +61,36 @@ Wynik każdego buildu jest liczony bez projekcji przyszłych rolli i bez założ
 
 ## MOD — mody przenoszone na cel
 
-- **JEDIKNIGHTREVAN → KLEYA:** Square / Speed / Offense % 8.5% / secondary: Speed 9, Critical Chance % 8.02%, Protection % 4.67%, Offense 129 / 6★ A lvl15
-- **MAGAZYN → KLEYA:** Diamond / Speed / Defense % 20% / secondary: Tenacity % 5.13%, Potency % 3.46%, Speed 24, Protection 1994 / 6★ A lvl15
-- **JEDIKNIGHTREVAN → KLEYA:** Circle / Health / Health % 16% / secondary: Tenacity % 7.16%, Defense 11, Speed 24, Defense % 9.53% / 6★ A lvl15
-- **JEDIKNIGHTREVAN → KLEYA:** Arrow / Speed / Protection % 24% / secondary: Health 770, Defense % 9.48%, Protection 1035, Speed 24 / 6★ A lvl15
-- **JEDIKNIGHTREVAN → KLEYA:** Triangle / Speed / Health % 16% / secondary: Speed 19, Defense 33, Critical Chance % 3.91%, Health 1007 / 6★ A lvl15
-- **JEDIKNIGHTREVAN → KLEYA:** Cross / Health / Health % 16% / secondary: Health 694, Protection 1743, Speed 20, Offense 116 / 6★ A lvl15
+Brak zatwierdzonych transferów MOD.
 
 ## PATCH — uzupełnienie dawców
 
-- **MAGAZYN → JEDIKNIGHTREVAN:** Square / Health / Offense % 5.88% / secondary: Protection 1985, Speed 9, Protection % 1.29%, Defense 9 / 5★ B lvl15
-- **MAGAZYN → JEDIKNIGHTREVAN:** Circle / Health / Protection % 17.5% / secondary: Speed 14, Critical Chance % 2.23%, Potency % 3.78%, Tenacity % 1.66% / 5★ A lvl11
-- **MAGAZYN → JEDIKNIGHTREVAN:** Arrow / Health / Critical Avoidance % 24% / secondary: Protection 422, Offense 34, Speed 14, Defense % 1.35% / 5★ C lvl15
-- **MAGAZYN → JEDIKNIGHTREVAN:** Triangle / Potency / Health % 16% / secondary: Protection % 6.75%, Protection 1368, Speed 20, Critical Chance % 5.58% / 6★ A lvl15
-- **MAGAZYN → JEDIKNIGHTREVAN:** Cross / Health / Potency % 30% / secondary: Speed 10, Protection % 10.78%, Health 1262, Tenacity % 3.76% / 6★ A lvl15
+Nie jest wymagany żaden PATCH.
 
 ## Kolejność przekładania
 
-1. **Arrow — załóż na KLEYA** mod z JEDIKNIGHTREVAN: Arrow / Speed / Protection % 24% / secondary: Health 770, Defense % 9.48%, Protection 1035, Speed 24 / 6★ A lvl15
-2. **Square — załóż na KLEYA** mod z JEDIKNIGHTREVAN: Square / Speed / Offense % 8.5% / secondary: Speed 9, Critical Chance % 8.02%, Protection % 4.67%, Offense 129 / 6★ A lvl15
-3. **Diamond — załóż na KLEYA** mod z MAGAZYN: Diamond / Speed / Defense % 20% / secondary: Tenacity % 5.13%, Potency % 3.46%, Speed 24, Protection 1994 / 6★ A lvl15
-4. **Triangle — załóż na KLEYA** mod z JEDIKNIGHTREVAN: Triangle / Speed / Health % 16% / secondary: Speed 19, Defense 33, Critical Chance % 3.91%, Health 1007 / 6★ A lvl15
-5. **Circle — załóż na KLEYA** mod z JEDIKNIGHTREVAN: Circle / Health / Health % 16% / secondary: Tenacity % 7.16%, Defense 11, Speed 24, Defense % 9.53% / 6★ A lvl15
-6. **Cross — załóż na KLEYA** mod z JEDIKNIGHTREVAN: Cross / Health / Health % 16% / secondary: Health 694, Protection 1743, Speed 20, Offense 116 / 6★ A lvl15
+**Nie wykonuj jeszcze żadnej przekładki.** Poniższy build jest wariantem roboczym; walidacja nie zatwierdziła pełnego łańcucha.
 
-### Uzupełnienie dawców — poziom 1
+### Co blokuje zatwierdzenie
 
-7. **PATCH — załóż na JEDIKNIGHTREVAN** mod z MAGAZYN (dostępny po wcześniejszym kroku): Arrow / Health / Critical Avoidance % 24% / secondary: Protection 422, Offense 34, Speed 14, Defense % 1.35% / 5★ C lvl15
-8. **PATCH — załóż na JEDIKNIGHTREVAN** mod z MAGAZYN (dostępny po wcześniejszym kroku): Square / Health / Offense % 5.88% / secondary: Protection 1985, Speed 9, Protection % 1.29%, Defense 9 / 5★ B lvl15
-9. **PATCH — załóż na JEDIKNIGHTREVAN** mod z MAGAZYN (dostępny po wcześniejszym kroku): Triangle / Potency / Health % 16% / secondary: Protection % 6.75%, Protection 1368, Speed 20, Critical Chance % 5.58% / 6★ A lvl15
-10. **PATCH — załóż na JEDIKNIGHTREVAN** mod z MAGAZYN (dostępny po wcześniejszym kroku): Circle / Health / Protection % 17.5% / secondary: Speed 14, Critical Chance % 2.23%, Potency % 3.78%, Tenacity % 1.66% / 5★ A lvl11
-11. **PATCH — załóż na JEDIKNIGHTREVAN** mod z MAGAZYN (dostępny po wcześniejszym kroku): Cross / Health / Potency % 30% / secondary: Speed 10, Protection % 10.78%, Health 1262, Tenacity % 3.76% / 6★ A lvl15
-
-Zakładanie moda automatycznie przenosi poprzedni mod ze slotu do magazynu. Wszystkie powyższe kroki zostały sprawdzone na pełnym stanie slotów i magazynu.
-
+- **KLEYA:** dawca JEDIKNIGHTREVAN zablokowany: nie można uzupełnić dawcy bez naruszenia kombinacji setów Speed + Health (profil: JEDIKNIGHTREVAN)
+- **KLEYA:** dawca JEDIKNIGHTREVAN zablokowany: nie można uzupełnić dawcy bez naruszenia kombinacji setów Speed + Health (profil: JEDIKNIGHTREVAN)
+- **KLEYA:** dawca JEDIKNIGHTREVAN zablokowany: nie można uzupełnić dawcy bez naruszenia kombinacji setów Speed + Health (profil: JEDIKNIGHTREVAN)
+- **KLEYA:** dawca JEDIKNIGHTREVAN zablokowany: nie można uzupełnić dawcy bez naruszenia kombinacji setów Speed + Health (profil: JEDIKNIGHTREVAN)
+- **KLEYA:** dawca JEDIKNIGHTREVAN zablokowany: nie można uzupełnić dawcy bez naruszenia kombinacji setów Speed + Health (profil: JEDIKNIGHTREVAN)
+- **KLEYA:** optimizer mod nie trafił na miejsce: Square
+- **KLEYA:** optimizer mod nie trafił na miejsce: Circle
+- **KLEYA:** optimizer mod nie trafił na miejsce: Arrow
+- **KLEYA:** optimizer mod nie trafił na miejsce: Triangle
+- **KLEYA:** optimizer mod nie trafił na miejsce: Cross
 ## Wpływ na postacie-dawców
 
-- **JEDIKNIGHTREVAN — wynik pełnego buildu wg profilu:** 112.08 → 79.92 (-32.16 pkt).
-  - Σ modValue modów: 382.9 → 387.8 (+4.9) — surowy wskaźnik jakości modów, nie wynik profilu.
-  - Kombinacja setów: Speed + Health (69.2%) → kombinacja nieujęta w profilu (—).
-  - Zmiana wyniku pełnego buildu po kolejnych PATCH-ach: Square -20.3 pkt; Circle -5.0 pkt; Arrow +0.4 pkt; Triangle +0.3 pkt; Cross -7.5 pkt.
-  - Health: UKOŃCZONO pełnych setów (1 → 2).
-  - Potency: BUDOWANY pełnych setów (0 → 0).
-  - Speed: ROZBITO pełnych setów (1 → 0).
-    - ISTOTNA STRATA: set występuje w 86.9% kombinacji profilu SWGOH.GG.
-  - ISTOTNY SPADEK wartości modów u dawcy.
-- **KLEYA — wynik pełnego buildu wg profilu:** 0.00 → 116.41 (+116.41 pkt).
-  - Σ modValue modów: 0.0 → 390.4 (+390.4) — surowy wskaźnik jakości modów, nie wynik profilu.
-  - Kombinacja setów: kombinacja nieujęta w profilu (—) → Speed + Health (38.0%).
-  - Health: UKOŃCZONO pełnych setów (0 → 1).
-  - Speed: UKOŃCZONO pełnych setów (0 → 1).
+- **KLEYA — wynik pełnego buildu wg profilu:** 0.00 → 12.50 (+12.50 pkt).
+  - Σ modValue modów: 0.0 → 64.3 (+64.3) — surowy wskaźnik jakości modów, nie wynik profilu.
+  - Speed: BUDOWANY pełnych setów (0 → 0).
 
 ## Kontrola profili użytych w łańcuchu
 
-- JEDIKNIGHTREVAN: profil dostępny, 2 źródła.
 - KLEYA: profil dostępny, 2 źródła.
 
 ## Założenia projekcji
