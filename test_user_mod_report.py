@@ -65,6 +65,34 @@ class AccountBalanceTests(unittest.TestCase):
         self.assertIsNone(total)
 
 
+    def test_blocked_chain_does_not_report_target_as_a_donor(self):
+        from mod_analyzer import render_user_report
+
+        report = render_user_report(
+            rows=[],
+            optimizer={"KLEYA": {"mods": [], "gain": 12.5}},
+            chain_result={
+                "safe": False,
+                "plans": [{"target_owner": "KLEYA", "mod": {"assignedTo": ""}, "moves": []}],
+                "validation": [{
+                    "owner": "KLEYA", "name": "Kleya",
+                    "beforeProfileScore": 0.0, "afterProfileScore": 12.5,
+                    "profileScoreDelta": 12.5, "beforeModValue": 0.0,
+                    "afterModValue": 64.3, "modValueDelta": 64.3,
+                    "setChanges": [],
+                }],
+                "failed": [("KLEYA", "blocked")],
+            },
+            profiles={"KLEYA": {}},
+            aliases={},
+            names={},
+            target_ids={"KLEYA"},
+            profile_fetch_status={},
+            display_name=lambda value: value,
+        )
+        self.assertNotIn("## Wpływ na postacie-dawców", report)
+        self.assertIn("NIEZATWIERDZONY — łańcuch przekładek jest zablokowany", report)
+
 class UserReportValidationTests(unittest.TestCase):
     def test_accepts_complete_vel_style_user_report(self):
         self.assertEqual(validate_report(valid_report(), ["VEL"]), [])
