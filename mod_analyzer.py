@@ -15,7 +15,7 @@ INPUT_FILE = "mods.csv"
 OUTPUT_CSV = "mod_analysis.csv"
 OUTPUT_MD = "mod_analysis.md"
 PROFILE_FILE = "mod_profiles.json"
-ANALYZER_VERSION = "2026-11-12-profile-combo-weighted-v1"
+ANALYZER_VERSION = "2026-11-13-profiled-donor-full-build-experiment-v1"
 
 R5 = {
     "Critical Chance %": (1.125, 2.25), "Defense": (4.9, 9.8),
@@ -1134,6 +1134,81 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
         bg=set_groups(before); ag=set_groups(after)
         return sum(ag[s]-bg[s] for s in SET_RULES)
 
+    # Experimental profile-aware donor repair: choose all replacement mods for a
+    # donor together, so the donor's completed six-mod set combination is scored
+    # as a whole instead of greedily scoring each temporarily incomplete build.
+    selected_by_donor = {}
+    for opt in optimizer.values():
+        for selected in opt.get("mods", []):
+            source_owner = owner(selected)
+            donor_id = base(selected)
+            if source_owner and donor_id and donor_id not in targets:
+                selected_by_donor.setdefault(donor_id, []).append(selected)
+
+    profiled_donor_replacements = {}
+    donor_rebuild_reserved = set()
+    displaced_target_mods = []
+    for target_id, opt in optimizer.items():
+        target_owner = resolve_target_owner(target_id)
+        if not target_owner:
+            continue
+        for selected in opt.get("mods", []):
+            slot = str(selected.get("slot", "") or "")
+            current = eq.get((target_owner, slot))
+            if current and rid(current) != rid(selected):
+                recycled = dict(current)
+                recycled["equipped"] = "False"
+                recycled["assignedTo"] = ""
+                displaced_target_mods.append(recycled)
+
+    for donor_id, donor_selected in sorted(
+        selected_by_donor.items(), key=lambda item: (-len(item[1]), item[0])
+    ):
+        donor_profile = profiles.get(donor_id)
+        if not donor_profile:
+            continue
+        hole_slots = {str(mod.get("slot", "") or "") for mod in donor_selected}
+        candidate_rows = []
+        seen_candidate_ids = set()
+        for row in rows:
+            mod_id = rid(row)
+            slot = str(row.get("slot", "") or "")
+            if not mod_id or mod_id in selected_ids or mod_id in donor_rebuild_reserved:
+                continue
+            if is_true(row.get("equipped")):
+                eligible = base(row) == donor_id and slot not in hole_slots
+            else:
+                eligible = slot in hole_slots
+            if eligible and mod_id not in seen_candidate_ids:
+                candidate_rows.append(row)
+                seen_candidate_ids.add(mod_id)
+        for row in displaced_target_mods:
+            mod_id = rid(row)
+            if (mod_id and mod_id not in selected_ids and
+                    mod_id not in donor_rebuild_reserved and
+                    str(row.get("slot", "") or "") in hole_slots and
+                    mod_id not in seen_candidate_ids):
+                candidate_rows.append(row)
+                seen_candidate_ids.add(mod_id)
+
+        donor_optimizer = optimize_target_build(
+            candidate_rows, {donor_id}, profiles, aliases, names, set()
+        )
+        donor_build = donor_optimizer.get(donor_id, {}).get("mods", [])
+        by_slot = {str(mod.get("slot", "") or ""): mod for mod in donor_build}
+        if not all(slot in by_slot for slot in hole_slots):
+            continue
+        if any(rid(by_slot[slot]) in selected_ids for slot in hole_slots):
+            continue
+        replacement_ids = [rid(by_slot[slot]) for slot in hole_slots]
+        if len(replacement_ids) != len(set(replacement_ids)):
+            continue
+        for slot in hole_slots:
+            replacement = by_slot[slot]
+            profiled_donor_replacements[(donor_id, slot)] = replacement
+            if not is_true(replacement.get("equipped")):
+                donor_rebuild_reserved.add(rid(replacement))
+
     def find_chain(selected_mod, target_id, target_owner, target_current, used_ids):
         slot = str(selected_mod.get("slot", "") or "")
         src = owner(selected_mod)
@@ -1243,7 +1318,39 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
             slot = str(mod.get("slot",""))
             current = working_eq.get((target_owner, slot))
             if current is not None and rid(current) == rid(mod): continue
-            plan = find_chain(mod, target_id, target_owner, current, used_ids)
+            donor_id = base(mod)
+            donor_replacement = profiled_donor_replacements.get((donor_id, slot))
+            if donor_replacement and rid(donor_replacement) not in used_ids:
+                donor_before = [r for (o, _s), r in working_eq.items() if o == owner(mod)]
+                donor_after = [r for r in donor_before if rid(r) != rid(mod)] + [donor_replacement]
+                donor_profile = profiles.get(donor_id, {}) or {}
+                local_gain = (
+                    profiled_build_score(donor_after, donor_profile)
+                    - profiled_build_score(donor_before, donor_profile)
+                )
+                move = {
+                    "owner": owner(mod), "name": pname(owner(mod)),
+                    "removed": None, "replacement": donor_replacement,
+                    "gain": local_gain,
+                    "set_delta": completed_set_delta(owner(mod), mod, donor_replacement),
+                    "combo_delta": (
+                        exact_combo_frequency(donor_profile, donor_after)
+                        - exact_combo_frequency(donor_profile, donor_before)
+                    ),
+                    "strategy": "PROFILE_FULL_BUILD",
+                }
+                plan = {
+                    "moves": [move], "gain": local_gain,
+                    "combo_delta": move["combo_delta"],
+                    "set_delta": move["set_delta"],
+                    "mod_value_delta": (
+                        float(donor_replacement.get("modValue", 0) or 0)
+                        - float(mod.get("modValue", 0) or 0)
+                    ),
+                    "strategy": "PROFILE_FULL_BUILD",
+                }
+            else:
+                plan = find_chain(mod, target_id, target_owner, current, used_ids)
             if plan is None:
                 failed.append((target_id, "brak wykonalnego łańcucha dla {} / {}".format(slot,mod.get("set","")))); continue
             physical = {rid(mod)}
@@ -1258,7 +1365,8 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
             plans.append({"target":target_id,"target_owner":target_owner,"mod":mod,
                           "target_current":current,"moves":plan["moves"],"chain_gain":plan["gain"],
                           "chain_set_delta":plan.get("set_delta",0),
-                          "chain_mod_value_delta":plan.get("mod_value_delta",0.0)})
+                          "chain_mod_value_delta":plan.get("mod_value_delta",0.0),
+                           "chain_strategy":plan.get("strategy", "GREEDY_CHAIN")})
 
             old_owner = owner(mod)
             if old_owner and (old_owner,slot) in working_eq and rid(working_eq[(old_owner,slot)]) == rid(mod):
@@ -1428,6 +1536,7 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
             mod["chainLength"]=1+len(plan["moves"]); mod["chainGain"]=round(plan["chain_gain"],1)
             mod["chainSetDelta"]=plan.get("chain_set_delta",0)
             mod["chainModValueDelta"]=round(plan.get("chain_mod_value_delta",0.0),1)
+            mod["chainStrategy"]=plan.get("chain_strategy", "GREEDY_CHAIN")
             # Physical execution starts with the selected mod, then repairs the vacated slot.
             # Every PATCH is a separate mod transfer; the selected mod never travels through
             # another character.
