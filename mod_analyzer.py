@@ -1267,13 +1267,17 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
 
         donor_after = [r for r in donor_before if rid(r) not in selected_here]
         donor_after.extend(replacements.values())
+        donor_gain = (
+            profiled_build_score(donor_after, donor_profile)
+            - profiled_build_score(donor_before, donor_profile)
+        )
         moves = []
-        for slot in sorted(hole_slots):
+        for index, slot in enumerate(sorted(hole_slots)):
             mod = replacements[slot]
             moves.append({
                 "owner": source_owner, "name": pname(source_owner),
                 "slot": slot, "removed": None, "replacement": mod,
-                "gain": 0.0, "set_delta": 0,
+                "gain": donor_gain if index == 0 else 0.0, "set_delta": 0,
                 "combo_delta": (
                     exact_combo_frequency(donor_profile, donor_after)
                     - exact_combo_frequency(donor_profile, donor_before)
@@ -1627,6 +1631,20 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
         profile_score = compare_profiled_builds(before, after, donor_profile)
         before_combo = profile_set_combo_match(donor_profile, before)
         after_combo = profile_set_combo_match(donor_profile, after)
+        required_combo = (
+            before_combo.get("key") if before_combo
+            else dominant_profile_set_combo(donor_profile)
+        )
+        actual_after_combo = canonical_set_combo_from_mods(after)
+        if required_combo and actual_after_combo != required_combo:
+            failed.append((
+                "walidacja profilu dawcy",
+                "{}: końcowa kombinacja {} narusza wymaganą {}".format(
+                    pname(o), actual_after_combo or "brak pełnej kombinacji",
+                    required_combo,
+                ),
+            ))
+            safe = False
         validation.append({
             "owner":o,"name":pname(o),"before":bc,"after":ac,
             "beforeComboKey":before_combo.get("key", "") if before_combo else "",
