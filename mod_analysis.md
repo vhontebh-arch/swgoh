@@ -8,7 +8,7 @@
 - **Walidacja fizyczna całego łańcucha:** POTWIERDZONA
 - **Ocena:** KOMPROMIS — bilans rosteru dodatni, ale co najmniej jeden dawca traci
 - **Interpretacja:** bilans obejmuje cel i wszystkich dotkniętych dawców, liczony tą samą nieprojekcyjną punktacją pełnego buildu.
-- **Łączny bilans profilu rosteru:** +72.83 pkt
+- **Łączny bilans profilu rosteru:** +84.25 pkt
 - **Liczba modów docelowych:** 6/6
 
 ## Bilans całej operacji — ta sama punktacja przed/po
@@ -17,10 +17,10 @@ Wynik każdego buildu jest liczony bez projekcji przyszłych rolli i bez założ
 
 | Postać | Rola w łańcuchu | Wynik przed | Wynik po | Zmiana |
 |---|---|---:|---:|---:|
-| JEDIKNIGHTREVAN | DAWCA | 112.08 | 68.51 | -43.58 |
+| JEDIKNIGHTREVAN | DAWCA | 112.08 | 79.92 | -32.16 |
 | KLEYA | DAWCA | 0.00 | 116.41 | +116.41 |
 
-**ŁĄCZNA ZMIANA: +72.83 pkt.**
+**ŁĄCZNA ZMIANA: +84.25 pkt.**
 
 ## Docelowy zestaw — KLEYA
 
@@ -72,8 +72,8 @@ Wynik każdego buildu jest liczony bez projekcji przyszłych rolli i bez założ
 ## PATCH — uzupełnienie dawców
 
 - **MAGAZYN → JEDIKNIGHTREVAN:** Square / Health / Offense % 5.88% / secondary: Protection 1985, Speed 9, Protection % 1.29%, Defense 9 / 5★ B lvl15
-- **MAGAZYN → JEDIKNIGHTREVAN:** Circle / Speed / Health % 0.63% / secondary: Protection 679, Offense % 0.35%, Speed 5 / 5★ B lvl1
-- **MAGAZYN → JEDIKNIGHTREVAN:** Arrow / Speed / Health % 5.88% / secondary: Speed 16, Protection 1247, Critical Chance % 1.25%, Defense 6 / 5★ B lvl15
+- **MAGAZYN → JEDIKNIGHTREVAN:** Circle / Health / Protection % 17.5% / secondary: Speed 14, Critical Chance % 2.23%, Potency % 3.78%, Tenacity % 1.66% / 5★ A lvl11
+- **MAGAZYN → JEDIKNIGHTREVAN:** Arrow / Health / Critical Avoidance % 24% / secondary: Protection 422, Offense 34, Speed 14, Defense % 1.35% / 5★ C lvl15
 - **MAGAZYN → JEDIKNIGHTREVAN:** Triangle / Potency / Health % 16% / secondary: Protection % 6.75%, Protection 1368, Speed 20, Critical Chance % 5.58% / 6★ A lvl15
 - **MAGAZYN → JEDIKNIGHTREVAN:** Cross / Health / Potency % 30% / secondary: Speed 10, Protection % 10.78%, Health 1262, Tenacity % 3.76% / 6★ A lvl15
 
@@ -88,20 +88,21 @@ Wynik każdego buildu jest liczony bez projekcji przyszłych rolli i bez założ
 
 ### Uzupełnienie dawców — poziom 1
 
-7. **PATCH — załóż na JEDIKNIGHTREVAN** mod z MAGAZYN (dostępny po wcześniejszym kroku): Arrow / Speed / Health % 5.88% / secondary: Speed 16, Protection 1247, Critical Chance % 1.25%, Defense 6 / 5★ B lvl15
+7. **PATCH — załóż na JEDIKNIGHTREVAN** mod z MAGAZYN (dostępny po wcześniejszym kroku): Arrow / Health / Critical Avoidance % 24% / secondary: Protection 422, Offense 34, Speed 14, Defense % 1.35% / 5★ C lvl15
 8. **PATCH — załóż na JEDIKNIGHTREVAN** mod z MAGAZYN (dostępny po wcześniejszym kroku): Square / Health / Offense % 5.88% / secondary: Protection 1985, Speed 9, Protection % 1.29%, Defense 9 / 5★ B lvl15
 9. **PATCH — załóż na JEDIKNIGHTREVAN** mod z MAGAZYN (dostępny po wcześniejszym kroku): Triangle / Potency / Health % 16% / secondary: Protection % 6.75%, Protection 1368, Speed 20, Critical Chance % 5.58% / 6★ A lvl15
-10. **PATCH — załóż na JEDIKNIGHTREVAN** mod z MAGAZYN (dostępny po wcześniejszym kroku): Circle / Speed / Health % 0.63% / secondary: Protection 679, Offense % 0.35%, Speed 5 / 5★ B lvl1
+10. **PATCH — załóż na JEDIKNIGHTREVAN** mod z MAGAZYN (dostępny po wcześniejszym kroku): Circle / Health / Protection % 17.5% / secondary: Speed 14, Critical Chance % 2.23%, Potency % 3.78%, Tenacity % 1.66% / 5★ A lvl11
 11. **PATCH — załóż na JEDIKNIGHTREVAN** mod z MAGAZYN (dostępny po wcześniejszym kroku): Cross / Health / Potency % 30% / secondary: Speed 10, Protection % 10.78%, Health 1262, Tenacity % 3.76% / 6★ A lvl15
 
 Zakładanie moda automatycznie przenosi poprzedni mod ze slotu do magazynu. Wszystkie powyższe kroki zostały sprawdzone na pełnym stanie slotów i magazynu.
 
 ## Wpływ na postacie-dawców
 
-- **JEDIKNIGHTREVAN — wynik pełnego buildu wg profilu:** 112.08 → 68.51 (-43.58 pkt).
-  - Σ modValue modów: 382.9 → 393.7 (+10.8) — surowy wskaźnik jakości modów, nie wynik profilu.
+- **JEDIKNIGHTREVAN — wynik pełnego buildu wg profilu:** 112.08 → 79.92 (-32.16 pkt).
+  - Σ modValue modów: 382.9 → 387.8 (+4.9) — surowy wskaźnik jakości modów, nie wynik profilu.
   - Kombinacja setów: Speed + Health (69.2%) → kombinacja nieujęta w profilu (—).
-  - Zmiana wyniku pełnego buildu po kolejnych PATCH-ach: Square -20.3 pkt; Circle +9.1 pkt; Arrow -6.9 pkt; Triangle -17.8 pkt; Cross -7.5 pkt.
+  - Zmiana wyniku pełnego buildu po kolejnych PATCH-ach: Square -20.3 pkt; Circle -5.0 pkt; Arrow +0.4 pkt; Triangle +0.3 pkt; Cross -7.5 pkt.
+  - Health: UKOŃCZONO pełnych setów (1 → 2).
   - Potency: BUDOWANY pełnych setów (0 → 0).
   - Speed: ROZBITO pełnych setów (1 → 0).
     - ISTOTNA STRATA: set występuje w 86.9% kombinacji profilu SWGOH.GG.
