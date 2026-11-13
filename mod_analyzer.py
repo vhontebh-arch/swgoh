@@ -1195,10 +1195,12 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
         selected_slots = {str(mod.get("slot", "") or "") for mod in donor_selected}
         donor_before = [r for (o, _slot), r in eq.items() if o == source_owner]
         current_match = profile_set_combo_match(donor_profile, donor_before)
-        required_combo = (
-            current_match.get("key") if current_match
-            else dominant_profile_set_combo(donor_profile)
-        )
+        # Preserve the donor's existing observed combo when it already
+        # matches the profile. If the pre-operation build is already outside
+        # the observed profile, do not "repair" untouched slots toward the
+        # dominant combo: only fill the slots vacated by this transfer (and
+        # slots that were already empty). The report will flag the mismatch.
+        required_combo = current_match.get("key") if current_match else None
         # Include already-empty slots as holes too: the full-build optimizer must
         # evaluate the donor's complete six-slot combination, not a partial build.
         all_slots = {"Square", "Diamond", "Circle", "Arrow", "Triangle", "Cross"}
@@ -1670,10 +1672,10 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
         profile_score = compare_profiled_builds(before, after, donor_profile)
         before_combo = profile_set_combo_match(donor_profile, before)
         after_combo = profile_set_combo_match(donor_profile, after)
-        required_combo = (
-            before_combo.get("key") if before_combo
-            else dominant_profile_set_combo(donor_profile)
-        )
+        # A donor already outside its observed profile is not silently
+        # rebuilt. Its untouched mods remain exactly as they were before the
+        # operation; only the slots actually replenished by this chain change.
+        required_combo = before_combo.get("key") if before_combo else None
         actual_after_combo = canonical_set_combo_from_mods(after)
         if required_combo and actual_after_combo != required_combo:
             failed.append((
@@ -1690,6 +1692,10 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
             "beforeComboFrequency":before_combo.get("frequency") if before_combo else None,
             "afterComboKey":after_combo.get("key", "") if after_combo else "",
             "afterComboFrequency":after_combo.get("frequency") if after_combo else None,
+            "profileMismatchBefore": bool(
+                donor_profile.get("set_combinations") and not before_combo
+            ),
+            "untouchedSlotsPreserved": True,
             "beforeCounts":before_counts,"afterCounts":after_counts,
             "setChanges":set_changes,
             "beforeGroups":bg,"afterGroups":ag,
@@ -2265,6 +2271,22 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
         ),
         "",
     ]
+
+    preexisting_profile_mismatches = [
+        item for item in donor_costs if item.get("profileMismatchBefore")
+    ]
+    if preexisting_profile_mismatches:
+        lines += [
+            "## Uwagi o stanie dawców przed operacją",
+            "",
+            "Poniższe postacie już przed przekładką miały kombinację setów nieobecną w zebranym profilu SWGOH.GG. **Optimizer nie próbuje naprawiać ich pozostałych modów** — zachowuje wszystkie sloty, których łańcuch nie uzupełnia, i ocenia wyłącznie mody wkładane w zwolnione lub wcześniej puste sloty.",
+            "",
+        ]
+        for item in preexisting_profile_mismatches:
+            lines.append("- **{}** — przed operacją: kombinacja niezgodna z zebranym profilem; pozostałe sloty pozostawione bez zmian.".format(
+                item.get("name", "Nieznana postać")
+            ))
+        lines.append("")
 
     if account_items:
         lines += ["## Bilans całej operacji — ta sama punktacja przed/po", "",
