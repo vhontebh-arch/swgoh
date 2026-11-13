@@ -15,7 +15,7 @@ INPUT_FILE = "mods.csv"
 OUTPUT_CSV = "mod_analysis.csv"
 OUTPUT_MD = "mod_analysis.md"
 PROFILE_FILE = "mod_profiles.json"
-ANALYZER_VERSION = "2026-11-13-profiled-donor-combo-hard-constraint-v2"
+ANALYZER_VERSION = "2026-11-13-profiled-donor-backtracking-v4"
 
 R5 = {
     "Critical Chance %": (1.125, 2.25), "Defense": (4.9, 9.8),
@@ -1242,62 +1242,90 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                 candidate_rows.append(dict(row))
                 local_ids.add(mod_id)
 
-        donor_optimizer = optimize_target_build(
-            candidate_rows, {donor_id}, profiles, aliases, names, set(),
-            required_set_combo=required_combo,
-        )
-        donor_build = donor_optimizer.get(donor_id, {}).get("mods", [])
-        by_slot = {str(mod.get("slot", "") or ""): mod for mod in donor_build}
-        built_combo = canonical_set_combo_from_mods(donor_build)
-        if len(by_slot) != 6 or (required_combo and built_combo != required_combo):
-            return None, (
-                "brak pełnego buildu zachowującego kombinację {}"
-                .format(required_combo or "zgodną z profilem")
+        # Backtracking: a locally optimal replacement may lead to a dead end
+        # several donors deeper. Exclude only the mod(s) that opened the failed
+        # child branch, then ask the full-build optimizer for the next candidate.
+        excluded_mod_ids = set()
+        while True:
+            donor_optimizer = optimize_target_build(
+                candidate_rows, {donor_id}, profiles, aliases, names, set(),
+                required_set_combo=required_combo,
+                excluded_mod_ids=excluded_mod_ids,
             )
-        if not all(slot in by_slot for slot in hole_slots):
-            return None, "nie udało się uzupełnić wszystkich slotów dawcy"
+            donor_build = donor_optimizer.get(donor_id, {}).get("mods", [])
+            by_slot = {str(mod.get("slot", "") or ""): mod for mod in donor_build}
+            built_combo = canonical_set_combo_from_mods(donor_build)
+            if len(by_slot) != 6 or (required_combo and built_combo != required_combo):
+                return None, (
+                    "brak pełnego buildu zachowującego kombinację {}"
+                    .format(required_combo or "zgodną z profilem")
+                )
+            if not all(slot in by_slot for slot in hole_slots):
+                return None, "nie udało się uzupełnić wszystkich slotów dawcy"
 
-        replacements = {slot: by_slot[slot] for slot in hole_slots}
-        replacement_ids = [rid(mod) for mod in replacements.values()]
-        if len(replacement_ids) != len(set(replacement_ids)):
-            return None, "optimizer wskazał ten sam mod dla kilku slotów"
-        if any(mod_id in donor_rebuild_reserved for mod_id in replacement_ids):
-            return None, "mod został już zarezerwowany przez inny łańcuch"
-        donor_rebuild_reserved.update(replacement_ids)
+            replacements = {slot: by_slot[slot] for slot in hole_slots}
+            replacement_ids = [rid(mod) for mod in replacements.values()]
+            if len(replacement_ids) != len(set(replacement_ids)):
+                return None, "optimizer wskazał ten sam mod dla kilku slotów"
+            if any(mod_id in donor_rebuild_reserved for mod_id in replacement_ids):
+                return None, "mod został już zarezerwowany przez inny łańcuch"
 
-        donor_after = [r for r in donor_before if rid(r) not in selected_here]
-        donor_after.extend(replacements.values())
-        donor_gain = (
-            profiled_build_score(donor_after, donor_profile)
-            - profiled_build_score(donor_before, donor_profile)
-        )
-        moves = []
-        for index, slot in enumerate(sorted(hole_slots)):
-            mod = replacements[slot]
-            moves.append({
-                "owner": source_owner, "name": pname(source_owner),
-                "slot": slot, "removed": None, "replacement": mod,
-                "gain": donor_gain if index == 0 else 0.0, "set_delta": 0,
-                "combo_delta": (
-                    exact_combo_frequency(donor_profile, donor_after)
-                    - exact_combo_frequency(donor_profile, donor_before)
-                ),
-                "strategy": "PROFILE_RECURSIVE_FULL_BUILD",
-            })
-
-        child_groups = {}
-        for mod in replacements.values():
-            if is_true(mod.get("equipped")):
-                child_id = base(mod)
-                child_groups.setdefault(child_id, []).append(mod)
-        for child_id, child_selected in sorted(child_groups.items()):
-            child_moves, error = rebuild_profiled_donor(
-                child_id, child_selected, visited | {donor_id}
+            reservation_snapshot = set(donor_rebuild_reserved)
+            donor_rebuild_reserved.update(replacement_ids)
+            donor_after = [r for r in donor_before if rid(r) not in selected_here]
+            donor_after.extend(replacements.values())
+            donor_gain = (
+                profiled_build_score(donor_after, donor_profile)
+                - profiled_build_score(donor_before, donor_profile)
             )
-            if child_moves is None:
-                return None, "dawca {}: {}".format(child_id, error)
-            moves.extend(child_moves)
-        return moves, None
+            moves = []
+            for index, slot in enumerate(sorted(hole_slots)):
+                mod = replacements[slot]
+                moves.append({
+                    "owner": source_owner, "name": pname(source_owner),
+                    "slot": slot, "removed": None, "replacement": mod,
+                    "gain": donor_gain if index == 0 else 0.0, "set_delta": 0,
+                    "combo_delta": (
+                        exact_combo_frequency(donor_profile, donor_after)
+                        - exact_combo_frequency(donor_profile, donor_before)
+                    ),
+                    "strategy": "PROFILE_RECURSIVE_FULL_BUILD_BACKTRACK",
+                })
+
+            child_groups = {}
+            for mod in replacements.values():
+                if is_true(mod.get("equipped")):
+                    child_id = base(mod)
+                    child_groups.setdefault(child_id, []).append(mod)
+
+            failed_child = None
+            failed_error = None
+            child_moves_all = []
+            for child_id, child_selected in sorted(child_groups.items()):
+                child_moves, error = rebuild_profiled_donor(
+                    child_id, child_selected, visited | {donor_id}
+                )
+                if child_moves is None:
+                    failed_child, failed_error = child_id, error
+                    break
+                child_moves_all.extend(child_moves)
+
+            if failed_child is None:
+                moves.extend(child_moves_all)
+                return moves, None
+
+            # Undo every reservation made by this attempt before exploring the
+            # next candidate. Otherwise a failed branch could poison alternatives.
+            donor_rebuild_reserved.clear()
+            donor_rebuild_reserved.update(reservation_snapshot)
+            failed_branch_ids = {
+                rid(mod) for mod in replacements.values()
+                if base(mod) == failed_child and rid(mod)
+            }
+            new_ids = failed_branch_ids - excluded_mod_ids
+            if not new_ids:
+                return None, "dawca {}: {}".format(failed_child, failed_error)
+            excluded_mod_ids.update(new_ids)
 
     for donor_id, donor_selected in sorted(
         selected_by_donor.items(), key=lambda item: (-len(item[1]), item[0])
@@ -1820,12 +1848,13 @@ def project_mod_for_build(row, profile):
     return projected
 
 
-def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, names=None, protected_owners=None, required_set_combo=None):
+def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, names=None, protected_owners=None, required_set_combo=None, excluded_mod_ids=None):
     """Independently implemented full-build optimizer inspired by Grandivory."""
     profiles = profiles or {}
     aliases = aliases or {}
     names = names or {}
     protected_owners = set(protected_owners or set())
+    excluded_mod_ids = {str(value) for value in (excluded_mod_ids or set())}
     slots = ("Square", "Diamond", "Circle", "Arrow", "Triangle", "Cross")
     primary_points, secondary_points, max_rolls = PROFILE_PRIMARY_POINTS, PROFILE_SECONDARY_POINTS, PROFILE_MAX_ROLLS
     speed_reference = 150.0
@@ -1943,6 +1972,8 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
             best_by_set = {}
             for row in rows:
                 if str(row.get("slot", "")) != slot:
+                    continue
+                if rid(row) in excluded_mod_ids:
                     continue
                 if integer(row.get("dots")) < 5:
                     continue
@@ -2155,6 +2186,10 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
     account_items, account_delta = account_balance_summary(
         chain_result.get("validation", []), affected_owners, profiles, aliases
     )
+    # A blocked chain is only a hypothetical proposal. Never present its
+    # partial validation rows as an achieved or comparable roster balance.
+    if not chain_result.get("safe"):
+        account_items, account_delta = [], None
 
     # A broken set is material only when it is a meaningful part of that
     # donor's observed SWGOH.GG build profile. 20% is the explicit threshold
@@ -2220,8 +2255,11 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
         "- **Ocena:** {}".format(assessment),
         "- **Interpretacja:** bilans obejmuje cel i wszystkich dotkniętych dawców, liczony tą samą nieprojekcyjną punktacją pełnego buildu.",
         "- **Łączny bilans profilu rosteru:** {}".format(
-            "NIEOBLICZALNY — brak profilu/oceny dla jednej z postaci"
-            if account_delta is None else "{:+.2f} pkt".format(account_delta)
+            "NIEZATWIERDZONY — łańcuch przekładek jest zablokowany"
+            if not chain_result.get("safe") else (
+                "NIEOBLICZALNY — brak profilu/oceny dla jednej z postaci"
+                if account_delta is None else "{:+.2f} pkt".format(account_delta)
+            )
         ),
         "- **Liczba modów docelowych:** {}/6".format(
             min(6, max((len(opt.get("mods", [])) for opt in optimizer.values()), default=0))
