@@ -1692,8 +1692,17 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
             "beforeComboFrequency":before_combo.get("frequency") if before_combo else None,
             "afterComboKey":after_combo.get("key", "") if after_combo else "",
             "afterComboFrequency":after_combo.get("frequency") if after_combo else None,
+            "beforeCompleteBuild": len({
+                str(mod.get("slot", "") or "") for mod in before
+                if str(mod.get("slot", "") or "")
+            }) == 6,
             "profileMismatchBefore": bool(
-                donor_profile.get("set_combinations") and not before_combo
+                len({
+                    str(mod.get("slot", "") or "") for mod in before
+                    if str(mod.get("slot", "") or "")
+                }) == 6
+                and donor_profile.get("set_combinations")
+                and not before_combo
             ),
             "untouchedSlotsPreserved": True,
             "beforeCounts":before_counts,"afterCounts":after_counts,
