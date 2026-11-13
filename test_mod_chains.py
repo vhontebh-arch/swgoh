@@ -75,6 +75,38 @@ class TransferChainTests(unittest.TestCase):
         self.assertIn("Double Health + Defense", report)
         self.assertIn("48.9%", report)
 
+    def test_profiled_full_build_repair_preserves_donor_combo_over_better_single_patch(self):
+        selected = make_mod("revan-selected-arrow", DONOR, True, "Arrow", 30, "Speed", 4)
+        donor_mods = [
+            make_mod("revan-square", DONOR, True, "Square", 10, "Speed"),
+            make_mod("revan-diamond", DONOR, True, "Diamond", 10, "Speed"),
+            make_mod("revan-triangle", DONOR, True, "Triangle", 10, "Speed"),
+            make_mod("revan-circle", DONOR, True, "Circle", 10, "Health"),
+            make_mod("revan-cross", DONOR, True, "Cross", 10, "Health"),
+        ]
+        high_fit_wrong_combo = make_mod("offense-arrow-patch", value=80, mod_set="Offense", speed_roll=6)
+        lower_fit_profile_combo = make_mod("speed-arrow-patch", value=20, mod_set="Speed", speed_roll=3)
+        profile = {
+            "set_preferences": {"Speed": 1.0, "Health": 0.8, "Offense": 0.2},
+            "primary_preferences": {"Arrow": {"Speed": 1.0}},
+            "secondary_preferences": {"Speed": 1.0},
+            "set_combinations": {"Speed + Health": 73.84, "Offense + Health": 3.0},
+        }
+        result = run_plan(
+            [selected, *donor_mods, high_fit_wrong_combo, lower_fit_profile_combo],
+            selected,
+            {TARGET: "TARGET", DONOR: "DONOR"},
+            {"DONOR": profile},
+        )
+        self.assertTrue(result["safe"], result["failed"])
+        move = result["plans"][0]["moves"][0]
+        self.assertEqual(move["replacement"]["id"], "speed-arrow-patch")
+        self.assertEqual(move["strategy"], "PROFILE_FULL_BUILD")
+        donor = next(item for item in result["validation"] if item["owner"] == DONOR)
+        self.assertEqual(donor["beforeComboKey"], "Speed + Health")
+        self.assertEqual(donor["afterComboKey"], "Speed + Health")
+        self.assertEqual(donor["afterComboFrequency"], 73.84)
+
     def test_inventory_to_empty_target(self):
         selected = make_mod("inventory-mod")
         result = run_plan([selected], selected)
