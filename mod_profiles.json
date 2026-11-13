@@ -3582,13 +3582,12 @@
       },
       "set_preferences": {
         "Speed": 1,
-        "Health": 0.807,
-        "Crit Chance": 0.313,
+        "Health": 0.8788,
+        "Critical Chance": 0.313,
         "Potency": 0.3347,
         "Offense": 0.3815,
-        "Crit Damage": 0.0914,
-        "Defense": 0.0182,
-        "Triple Health": 0.0239
+        "Critical Damage": 0.0914,
+        "Defense": 0.0182
       },
       "primary_preferences": {
         "Arrow": {
