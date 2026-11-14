@@ -374,6 +374,42 @@ class TransferChainTests(unittest.TestCase):
         self.assertTrue(any("konflikt modów" in reason for _, reason in result["failed"]))
 
 
+    def test_preexisting_profile_mismatch_warns_without_rebuilding_untouched_slots(self):
+        selected = make_mod("donor-offense-arrow", DONOR, True, "Arrow", 20, "Offense", 3)
+        donor_mods = [
+            make_mod("donor-offense-square", DONOR, True, "Square", 10, "Offense"),
+            make_mod("donor-offense-diamond", DONOR, True, "Diamond", 10, "Offense"),
+            make_mod("donor-offense-triangle", DONOR, True, "Triangle", 10, "Offense"),
+            make_mod("donor-health-circle", DONOR, True, "Circle", 10, "Health"),
+            make_mod("donor-health-cross", DONOR, True, "Cross", 10, "Health"),
+        ]
+        # The donor's existing Offense + Health build is not represented in
+        # this profile, whose observed combination is Speed + Health.
+        # Replacing the vacated Arrow with another Offense mod is valid; the
+        # optimizer must not attempt to convert the donor's untouched slots.
+        patch = make_mod("inventory-offense-arrow", slot="Arrow",
+                         value=15, mod_set="Offense", speed_roll=3)
+        profile = {
+            "set_preferences": {"Speed": 1.0, "Health": 0.8, "Offense": 0.4},
+            "secondary_preferences": {"Speed": 1.0},
+            "set_combinations": {"Speed + Health": 73.84},
+        }
+        result = run_plan(
+            [selected, *donor_mods, patch], selected,
+            {TARGET: "TARGET", DONOR: "DONOR"}, {"DONOR": profile},
+        )
+        self.assertTrue(result["safe"], result["failed"])
+        moves = result["plans"][0]["moves"]
+        self.assertEqual(len(moves), 1)
+        self.assertEqual(moves[0]["slot"], "Arrow")
+        self.assertEqual(moves[0]["replacement"]["id"], "inventory-offense-arrow")
+        donor = next(item for item in result["validation"] if item["owner"] == DONOR)
+        self.assertTrue(donor["profileMismatchBefore"])
+        self.assertTrue(donor["untouchedSlotsPreserved"])
+        self.assertEqual(donor["beforeComboKey"], "")
+        self.assertEqual(donor["afterComboKey"], "")
+
+
 class ProfileSetAliasTests(unittest.TestCase):
     def test_swgoh_gg_set_aliases_match_internal_game_names(self):
         from mod_analyzer import profile_set_preference, score_profile
