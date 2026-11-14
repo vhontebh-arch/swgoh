@@ -15,7 +15,7 @@ INPUT_FILE = "mods.csv"
 OUTPUT_CSV = "mod_analysis.csv"
 OUTPUT_MD = "mod_analysis.md"
 PROFILE_FILE = "mod_profiles.json"
-ANALYZER_VERSION = "2026-11-13-profiled-donor-backtracking-fresh-cache-v5"
+ANALYZER_VERSION = "2026-11-14-actual-donor-rebuild-score-experiment-v1"
 
 R5 = {
     "Critical Chance %": (1.125, 2.25), "Defense": (4.9, 9.8),
