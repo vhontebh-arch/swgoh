@@ -2150,6 +2150,12 @@ def account_balance_summary(validation, affected_owners, profiles, aliases):
     ), 2)
 
 
+def report_chain_role(owner_id, target_ids, aliases):
+    """Classify report rows by canonical base ID, not roster unit instance ID."""
+    owner_id = str(owner_id or "")
+    return "CEL" if aliases.get(owner_id, owner_id) in target_ids else "DAWCA"
+
+
 def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
                        target_ids, profile_fetch_status, display_name):
     """Create a short, executable report for the player; CSV remains technical."""
@@ -2192,11 +2198,6 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
     # Compare every affected character, including the target, with the same
     # unprojected profile-aware full-build scorer. Never mix the target's
     # optimistic projected gain with donors' actual before/after deltas.
-    target_owners = {
-        next((str(r.get("assignedTo", "") or "") for r in rows
-              if is_true(r.get("equipped")) and owner_base(r) == target_id), target_id)
-        for target_id in optimizer
-    }
     account_items, account_delta = account_balance_summary(
         chain_result.get("validation", []), affected_owners, profiles, aliases
     )
@@ -2304,7 +2305,7 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
                   "|---|---|---:|---:|---:|"]
         for item in account_items:
             owner_id = str(item.get("owner", "") or "")
-            role = "CEL" if owner_id in target_owners else "DAWCA"
+            role = report_chain_role(owner_id, target_ids, aliases)
             if item.get("profileScoreAvailable"):
                 lines.append("| {} | {} | {:.2f} | {:.2f} | {:+.2f} |".format(
                     item.get("name", display_name(owner_id)), role,

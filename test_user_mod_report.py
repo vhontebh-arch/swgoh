@@ -40,6 +40,18 @@ def valid_report():
 
 
 class AccountBalanceTests(unittest.TestCase):
+    def test_report_chain_role_resolves_target_unit_id_to_base_id(self):
+        from mod_analyzer import report_chain_role
+
+        self.assertEqual(
+            report_chain_role("kleya-unit-123", {"KLEYA"}, {"kleya-unit-123": "KLEYA"}),
+            "CEL",
+        )
+        self.assertEqual(
+            report_chain_role("JEDIKNIGHTREVAN", {"KLEYA"}, {}),
+            "DAWCA",
+        )
+
     def test_sums_target_and_all_donors_with_same_profile_score(self):
         validation = [
             {"owner": "VEL", "profileScoreAvailable": True, "profileScoreDelta": 12.5},
