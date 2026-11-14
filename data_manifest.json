@@ -38,9 +38,9 @@
     "mod_profiles.json": {
       "role": "shared SWGOH.GG mod profiles",
       "bytes": 140308,
-      "git_blob_sha": "0ac26747ba62157debdd4290e89e5034c050c6f0",
+      "git_blob_sha": "8739357c18f418d869fbad2ae6d5db8e9730d862",
       "source_branch": "optimizer-data",
-      "source_commit": "68493a917f5028e597b3278de574ea9e5fe83b20"
+      "source_commit": "4b0b5e09041a883cc651d12a18cac6cfbacacbfd"
     },
     "swgoh_972824625.json": {
       "role": "raw Comlink player export",

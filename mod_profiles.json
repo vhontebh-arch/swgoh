@@ -3811,7 +3811,7 @@
       "role": "support",
       "source_model": {
         "method": "direct SWGOH.GG Best Mods page read; equal-weight average of Top 1000 Kyber GAC and Top 100 Guilds",
-        "refreshed_at_utc": "2026-11-14T13:40:00Z",
+        "refreshed_at_utc": "2026-11-14T12:40:00Z",
         "sources": [
           {
             "name": "Top 1000 Kyber GAC",
