@@ -1,6 +1,6 @@
-# Odświeżanie profili modów SWGOH.GG
+# Odświeżanie profili modów SaGOH.GG
 
-**Obowiązujący sposób:** ręczny odczyt źródła przez ChatGPT na żądanie użytkownika. GitHub Actions i skrypty repozytorium nie pobierają profili ze SWGOH.GG.
+**Obowiązujący sposób:** ręczny odczyt źródła przez ChatGPT na żądanie użytkownika. GitHub Actions i skrypty repozytorium nie pobierają profili ze SaGOH.GG.
 
 ## Świeżość danych i kontrola przy łańcuchach optymalizatora
 
