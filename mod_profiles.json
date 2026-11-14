@@ -3805,6 +3805,190 @@
         "Critical Avoidance %": 0,
         "Accuracy": 0
       }
+    },
+    "LUKESTARKILLER": {
+      "name": "Starkiller (Luke Concept)",
+      "role": "support",
+      "source_model": {
+        "method": "direct SWGOH.GG Best Mods page read; equal-weight average of Top 1000 Kyber GAC and Top 100 Guilds",
+        "refreshed_at_utc": "2026-11-14T13:40:00Z",
+        "sources": [
+          {
+            "name": "Top 1000 Kyber GAC",
+            "url": "https://swgoh.gg/units/starkiller-luke-concept/best-mods/",
+            "units_fully_modded": 898,
+            "set_combinations_pct": {
+              "Speed + Potency": 58.24,
+              "Speed + Health": 14.81,
+              "Speed + Tenacity": 4.56,
+              "Triple Health": 2.22,
+              "Speed + Crit Chance": 2.11,
+              "Speed + Defense": 1.89,
+              "Speed": 1.89
+            },
+            "primary_pct": {
+              "Arrow": {
+                "Speed": 92.87,
+                "Health": 0.95,
+                "Offense": 0.76,
+                "Protection": 0.57
+              },
+              "Triangle": {
+                "Critical Damage": 62.14,
+                "Critical Chance": 14.53,
+                "Offense": 7.64,
+                "Protection": 7.07,
+                "Health": 8.24,
+                "Defense": 3.78
+              },
+              "Circle": {
+                "Protection": 68.83,
+                "Health": 31.16
+              },
+              "Cross": {
+                "Potency": 80.11,
+                "Protection": 6.3,
+                "Offense": 5.16,
+                "Health": 3.82,
+                "Tenacity": 7.46,
+                "Defense": 4.23
+              }
+            },
+            "secondary_focus": {
+              "Speed": {
+                "average": 16.8,
+                "focus_pct": 20.93
+              },
+              "Potency": {
+                "average": 4.78,
+                "focus_pct": 10.46
+              },
+              "Offense %": {
+                "average": 2.44,
+                "focus_pct": 7.41
+              },
+              "Offense": {
+                "average": 76.4,
+                "focus_pct": 7.24
+              }
+            }
+          },
+          {
+            "name": "Top 100 Guilds",
+            "url": "https://swgoh.gg/units/starkiller-luke-concept/best-mods/?s=GUILDTOP100",
+            "units_fully_modded": 4338,
+            "set_combinations_pct": {
+              "Speed + Potency": 62.05,
+              "Speed + Health": 14.15,
+              "Speed": 3.08,
+              "Triple Health": 2.95,
+              "Speed + Tenacity": 1.77,
+              "Speed + Defense": 1.63,
+              "Speed + Crit Chance": 1.52,
+              "Offense + Health": 1.45,
+              "Health": 1.19
+            },
+            "primary_pct": {
+              "Arrow": {
+                "Speed": 93.96,
+                "Offense": 1.91,
+                "Health": 1.24,
+                "Protection": 1.08
+              },
+              "Triangle": {
+                "Critical Damage": 50.33,
+                "Critical Chance": 30.05,
+                "Offense": 7.54,
+                "Health": 4.9,
+                "Protection": 8.06,
+                "Defense": 5
+              },
+              "Circle": {
+                "Protection": 70.69,
+                "Health": 29.3
+              },
+              "Cross": {
+                "Potency": 77.67,
+                "Protection": 7.54,
+                "Offense": 5.57,
+                "Health": 3.67,
+                "Defense": 6.2,
+                "Tenacity": 5.83
+              }
+            },
+            "secondary_focus": {
+              "Speed": {
+                "average": 14.7,
+                "focus_pct": 20.7
+              },
+              "Potency": {
+                "average": 4.31,
+                "focus_pct": 9.86
+              },
+              "Offense": {
+                "average": 73,
+                "focus_pct": 7.42
+              },
+              "Tenacity": {
+                "average": 3.88,
+                "focus_pct": 7.14
+              }
+            }
+          }
+        ]
+      },
+      "set_combinations": {
+        "Speed + Potency": 60.145,
+        "Speed + Health": 14.48,
+        "Speed + Tenacity": 3.165,
+        "Triple Health": 2.585,
+        "Speed + Crit Chance": 1.815,
+        "Speed + Defense": 1.76,
+        "Speed": 2.485,
+        "Offense + Health": 0.725,
+        "Health": 0.595
+      },
+      "set_preferences": {
+        "Speed": 1,
+        "Potency": 0.7485,
+        "Health": 0.1802,
+        "Tenacity": 0.0394
+      },
+      "primary_preferences": {
+        "Arrow": {
+          "Speed": 0.9663,
+          "Health": 0.0113,
+          "Offense": 0.0138,
+          "Protection": 0.0085
+        },
+        "Triangle": {
+          "Critical Damage": 0.5374,
+          "Critical Chance": 0.213,
+          "Offense": 0.0725,
+          "Protection": 0.0723,
+          "Health": 0.0628,
+          "Defense": 0.042
+        },
+        "Circle": {
+          "Protection": 0.6977,
+          "Health": 0.3023
+        },
+        "Cross": {
+          "Potency": 0.7388,
+          "Protection": 0.0648,
+          "Offense": 0.0502,
+          "Health": 0.0351,
+          "Tenacity": 0.0622,
+          "Defense": 0.0488
+        }
+      },
+      "secondary_preferences": {
+        "Speed": 1,
+        "Potency": 0.4881,
+        "Offense %": 0.178,
+        "Offense": 0.3521,
+        "Tenacity": 0.1715
+      }
     }
   },
   "profile_status": {
