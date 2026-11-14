@@ -8,7 +8,7 @@
 - **Walidacja fizyczna całego łańcucha:** POTWIERDZONA
 - **Ocena:** KOMPROMIS — bilans rosteru dodatni, ale co najmniej jeden dawca traci
 - **Interpretacja:** bilans obejmuje cel i wszystkich dotkniętych dawców, liczony tą samą nieprojekcyjną punktacją pełnego buildu.
-- **Łączny bilans profilu rosteru:** +120.07 pkt
+- **Łączny bilans profilu rosteru:** +120.68 pkt
 - **Liczba modów docelowych:** 6/6
 
 ## Uwagi o stanie dawców przed operacją
@@ -34,21 +34,21 @@ Wynik każdego buildu jest liczony bez projekcji przyszłych rolli i bez założ
 | CROSSHAIRS3 | DAWCA | 36.87 | 45.65 | +8.79 |
 | KUIIL | DAWCA | 44.61 | 44.84 | +0.23 |
 | SCORCH | DAWCA | 120.81 | 111.25 | -9.56 |
-| LUKESTARKILLER | CEL | 0.00 | 129.27 | +129.27 |
+| LUKESTARKILLER | CEL | 0.00 | 129.88 | +129.88 |
 | 4LOM | DAWCA | 55.24 | 55.58 | +0.33 |
 | MARAJADE | DAWCA | 113.70 | 109.80 | -3.90 |
 | EMPERORPALPATINE | DAWCA | 108.44 | 93.58 | -14.87 |
 | JEDIKNIGHTREVAN | DAWCA | 112.08 | 94.41 | -17.67 |
 
-**ŁĄCZNA ZMIANA: +120.07 pkt.**
+**ŁĄCZNA ZMIANA: +120.68 pkt.**
 
 ## Docelowy zestaw — LUKESTARKILLER
 
 ### Profil SWGOH.GG
 
 - Top 1000 Kyber GAC — 898 postaci z kompletnymi 6 modami
-- Top 100 Guilds — 4338 postaci z kompletnymi 6 modami
-- Najczęstsze kombinacje: Speed + Potency (60.1%); Speed + Health (14.5%); Speed + Tenacity (3.2%)
+- Top 100 Guilds — 4462 postaci z kompletnymi 6 modami
+- Najczęstsze kombinacje: Speed + Potency (60.5%); Speed + Health (14.2%); Speed + Tenacity (3.2%)
 - Priorytet secondary: Speed, Potency %, Offense %, Offense
 
 ### Sześć modów docelowych
@@ -78,7 +78,7 @@ Wynik każdego buildu jest liczony bez projekcji przyszłych rolli i bez założ
 - **Proponowany mod:** Cross / Speed / Potency % 30% / secondary: Defense 15, Health 2082, Health % 3.6%, Speed 19 / 6★ A lvl15
 - **Źródło:** MARAJADE
 
-- **Zmiana potencjału buildu:** +129.3 pkt (optymistyczna projekcja do 15; brakujące rolle przypisane do najwyżej preferowanej secondary; dla 5A projekcja secondary do 6E; primary pozostaje bez zmian; bez slice i calibration).
+- **Zmiana potencjału buildu:** +129.9 pkt (optymistyczna projekcja do 15; brakujące rolle przypisane do najwyżej preferowanej secondary; dla 5A projekcja secondary do 6E; primary pozostaje bez zmian; bez slice i calibration).
 
 ## MOD — mody przenoszone na cel
 
