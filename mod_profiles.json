@@ -3985,7 +3985,8 @@
       "secondary_preferences": {
         "Speed": 1,
         "Potency %": 0.4881,
-        "Offense %": 0.3534,
+        "Offense %": 0.356,
+        "Offense": 0.3521,
         "Tenacity %": 0.343
       }
     }
