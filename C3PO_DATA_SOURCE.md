@@ -24,7 +24,7 @@ Workflow `.github/workflows/update-swgoh.yml` uruchamia `sync_optimizer_data.py`
 
 Wymagany zestaw obejmuje: `swgoh_972824625.json`, `c3po.json`, `data.json`, `localization.json`, `roster.csv`, `ships.csv`, `mods.csv` i `mod_profiles.json`.
 
-Domyślnym repozytorium i branchem synchronizatora są `vhontebh-arch/swgoh` oraz `optimizer-data`. Można je jawnie nadpisać parametrami `--repository` i `--branch`. Nie istnieje obecnie parametr `C3PO_SOURCE_COMMIT) ani pole `c3po_source_commit` w `workflow_dispatch`; identyfikatorem snapshotu jest commit gałęzi danych odczytany na początku uruchomienia.
+Domyślnym repozytorium i branchem synchronizatora są `vhontebh-arch/swgoh` oraz `optimizer-data`. Można je jawnie nadpisać parametrami `--repository` i `--branch`. Nie istnieje obecnie parametr `C3PO_SOURCE_COMMIT` ani pole `c3po_source_commit` w `workflow_dispatch`; identyfikatorem snapshotu jest commit gałęzi danych odczytany na początku uruchomienia.
 
 ## Porównywanie uruchomień
 
