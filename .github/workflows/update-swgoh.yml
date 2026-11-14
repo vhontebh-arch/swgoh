@@ -10,6 +10,7 @@ on:
   push:
     branches:
       - optimizer-v2
+      - experiment/actual-donor-rebuild-score
     paths:
       - "mod_analyzer.py"
       - "ship_analysis.py"
