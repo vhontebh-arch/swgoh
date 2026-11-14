@@ -3,7 +3,7 @@
 **Repozytorium źródłowe:** https://github.com/grandivory/mods-optimizer  
 **Przeanalizowany plik:** `public/workers/optimizer.js` (gałąź `develop`)  
 **Licencja repozytorium:** MIT (potwierdzona w metadanych GitHub).  
-**Status:** niezależna implementacja wybranych metod w `mod_analyzer.py`; bez kopiowania kodu źródłowego. Aktualny analizator: `2026-11-10-profile-first-set-audit-v8`.
+**Status:** niezależna implementacja wybranych metod w `mod_analyzer.py`; bez kopiowania kodu źródłowego. Aktualny identyfikator analizatora w kodzie `optimizer-v2`: `2026-11-14-actual-donor-rebuild-score-experiment-v1`. Ten dokument rozdziela historyczne etapy rozwoju od zachowania aktualnego kodu; w razie rozbieżności rozstrzygający jest kod i testy na `optimizer-v2`.
 
 ## Co robi Grandivory
 
@@ -65,7 +65,7 @@ To zachowuje prosty model profili oparty na preferencjach statystyk i setów. Ni
 - Raport podaje dla każdej dotkniętej postaci sumę `modValue` założonych modów przed i po transferze oraz zmianę liczby pełnych setów. `modValue` jest ogólną miarą jakości samych modów, nie oceną całego buildu konkretnego dawcy.
 - Nie ma automatycznej ochrony dawcy przed spadkiem jakości ani utratą setu. Użytkownik widzi bilans i podejmuje decyzję; algorytm nie ukrywa kosztu transferu.
 - Testy regresyjne obejmują: equip z magazynu do pustego celu, zastąpienie moda w celu i jego zwrot do magazynu, naprawę pustego slotu dawcy, wykorzystanie moda wypieranego z celu jako PATCH, konflikt dwóch celów o ten sam mod oraz odrzucenie niewykonalnego transferu.
-- Ograniczenie bieżącej wersji: wyszukiwanie wybiera bezpośredni PATCH z dostępnej puli magazynowej przed rozważaniem kolejnych dawców. Nie jest to jeszcze optymalizacja alternatywnych łańcuchów wielodawcowych; ten etap pozostaje otwarty i nie należy zakładać, że raport znajduje globalnie najlepszy łańcuch.
+- **Ten opis jest historyczny i nie opisuje aktualnej wersji.** W aktualnym kodzie istnieje rekurencyjna przebudowa pełnego buildu profilowanego dawcy (z backtrackingiem), a dla pozostałych przypadków osobne wyszukiwanie fizycznego łańcucha MOD/PATCH. Aktualne zachowanie opisano w sekcji „Stan implementacji — 2026-11-14” poniżej.
 
 ### Ograniczenie interpretacji bilansu
 
@@ -100,7 +100,7 @@ Te ograniczenia są celowe i widoczne: nie udajemy, że samo przeniesienie metod
 - Nowa implementacja znajduje się wyłącznie na `optimizer-v2`; gałęzie bazowej i `main` nie zmieniano.
 
 
-## Priorytet profilu i audyt przebudowy setów — v8
+## Historyczny etap: priorytet profilu i audyt przebudowy setów — v8 (zastąpiony)
 
 - Kompletny build celu jest oceniany przede wszystkim według profilu postaci: primary, secondary oraz bonusów setów ważonych preferencjami setów z profilu SWGOH.GG.
 - Waga bonusu setu wynosi od 10% do 100% jego wartości statystycznej: set nieobecny w profilu nie jest zakazany, ale set z preferencją 100% ma pełną wagę. Zachowanie aktualnie założonych modów jest dopiero tie-breakiem po wyniku buildu i preferencji setów.
@@ -136,3 +136,40 @@ Wersja integracyjna uwzględnia dokładną sześciomodową kombinację setów da
 - `score_profile()` nie dodaje preferencji setu do pojedynczego moda. Bonus setu pozostaje oceniany wyłącznie na poziomie kompletnego buildu.
 - `profiled_build_score()` ocenia ustalony zestaw modów dawcy przed i po zmianie, z uwzględnieniem tych samych punktacji modów i bonusów setów co wyszukiwanie buildu. Jeśli profil dawcy jest dostępny, łańcuch transferów używa tej różnicy zamiast porównywania tylko pojedynczego moda. Bez profilu pozostaje jawny fallback `modValue`.
 - Testy regresyjne sprawdzają zgodność punktacji pojedynczego moda z wynikiem optymalizatora, proporcję 40/60 i wpływ pełnego zestawu dawcy.
+
+
+
+## Stan implementacji — 2026-11-14
+
+Poniższy opis odpowiada kodowi `mod_analyzer.py` z identyfikatorem `2026-11-14-actual-donor-rebuild-score-experiment-v1`. Jest nadrzędny wobec starszych opisów etapów v3–v8 w tym dokumencie.
+
+### Wspólna punktacja
+
+- Pojedynczy mod jest oceniany wspólną funkcją `profile_mod_score_components()`.
+- Skala wynosi 40 punktów za primary i 60 punktów za secondary; secondary są normalizowane względem maksymalnie 24 rolli.
+- `profiled_build_score()` ocenia kompletny lub rzeczywiście dostępny build z uwzględnieniem preferencji profilu i bonusów setów. Nie dodaje preferencji setu do punktacji pojedynczego moda.
+- Ocena dawców profilowanych porównuje wynik buildu przed i po transferze. Dla dawcy bez profilu pozostaje jawny fallback oparty na `modValue`/lokalnym dopasowaniu; raport nie może przedstawiać go jako pełnej oceny profilowej.
+
+### Przebudowa profilowanego dawcy
+
+- Jeżeli dawca ma profil, algorytm próbuje zbudować jego pełny sześciomodowy układ, zamiast oceniać wyłącznie pojedynczy zamiennik.
+- Sloty nieobjęte transferem pozostają stałe, jeżeli istniejący układ nie pasuje do żadnej rozpoznanej kombinacji z profilu. W takim przypadku optymalizator nie naprawia samowolnie nietkniętych slotów.
+- Uzupełniane są sloty opróżnione przez transfer oraz sloty, które były puste już wcześniej.
+- Wybór zastępstw wykorzystuje optymalizator pełnego buildu z `projected=False`, rezerwację modów i rekurencyjne naprawianie kolejnych dawców.
+- Backtracking wycofuje rezerwacje po nieudanej gałęzi i próbuje alternatywnego moda. Wykrywane są cykle i konflikty użycia tych samych modów.
+- Profilowana przebudowa wymaga dostępnego profilu dawcy i sprawdza, czy można uzyskać kompletny build zgodny z rozpoznaną kombinacją setów, jeżeli bieżący build taką kombinację już realizował.
+
+### Łańcuch fizycznych transferów MOD/PATCH
+
+- Dla łańcuchów, które nie są obsłużone przez profilowaną przebudowę dawcy, kod wykonuje przeszukiwanie BFS według długości łańcucha.
+- Na pierwszym poziomie z fizycznie wykonalnymi rozwiązaniami porównuje wszystkie znalezione zakończenia, a nie przyjmuje pierwszego napotkanego.
+- Kryteria porównania w obrębie tej samej długości to kolejno: zmiana częstości dokładnej kombinacji setów dawcy, zysk dopasowania dawcy, zmiana liczby pełnych setów oraz zmiana `modValue`.
+- Każdy właściciel może wystąpić w łańcuchu najwyżej raz; mod nie może być użyty ponownie. Mod wyparty z celu może zostać wykorzystany jako element uzupełniający.
+- Preferowana jest najkrótsza wykonalna ścieżka. Nie jest to dowód globalnego optimum po wszystkich możliwych konfiguracjach i długościach łańcuchów.
+
+### Ograniczenia wyszukiwania i interpretacji
+
+- Nie należy opisywać aktualnego algorytmu jako nieograniczonego globalnego optymalizatora. W pomocniczym wyszukiwaniu naprawy obowiązują limity głębokości i liczby kandydatów; wyszukiwanie kandydatów jest celowo ograniczone dla czasu wykonania.
+- Wynik zależy od dostępnych danych, profili, kandydatów i ograniczeń wyszukiwania. „Wykonalny” oznacza, że plan można odtworzyć bez konfliktu modów; nie oznacza matematycznego optimum całego rosteru.
+- Nie ma automatycznej blokady strat dawcy. Bilans jest ujawniany w raporcie, a decyzja o zaakceptowaniu kompromisu należy do użytkownika.
+- Profile SWGOH.GG są pobierane ręcznie na żądanie, dla celu i rzeczywistych uczestników łańcucha, zgodnie z TTL 5 dni opisanym w `MOD_PROFILE_REFRESH.md`.
