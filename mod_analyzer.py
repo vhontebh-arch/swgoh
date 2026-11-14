@@ -15,7 +15,7 @@ INPUT_FILE = "mods.csv"
 OUTPUT_CSV = "mod_analysis.csv"
 OUTPUT_MD = "mod_analysis.md"
 PROFILE_FILE = "mod_profiles.json"
-ANALYZER_VERSION = "2026-11-13-profiled-donor-backtracking-fresh-cache-v5"
+ANALYZER_VERSION = "2026-11-14-actual-donor-rebuild-score-experiment-v1"
 
 R5 = {
     "Critical Chance %": (1.125, 2.25), "Defense": (4.9, 9.8),
@@ -1253,6 +1253,7 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                 candidate_rows, {donor_id}, profiles, aliases, names, set(),
                 required_set_combo=required_combo,
                 excluded_mod_ids=excluded_mod_ids,
+                projected=False,
             )
             donor_build = donor_optimizer.get(donor_id, {}).get("mods", [])
             by_slot = {str(mod.get("slot", "") or ""): mod for mod in donor_build}
@@ -1863,7 +1864,7 @@ def project_mod_for_build(row, profile):
     return projected
 
 
-def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, names=None, protected_owners=None, required_set_combo=None, excluded_mod_ids=None):
+def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, names=None, protected_owners=None, required_set_combo=None, excluded_mod_ids=None, projected=True):
     """Independently implemented full-build optimizer inspired by Grandivory."""
     profiles = profiles or {}
     aliases = aliases or {}
@@ -1977,7 +1978,7 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
         current = [r for r in rows if is_true(r.get("equipped")) and base(r) == target_id]
         current_by_slot = {str(r.get("slot", "")): r for r in current}
         current_score = build_score(current, profile)
-        current_projected_score = build_score(current, profile, projected=True)
+        current_projected_score = build_score(current, profile, projected=projected)
 
         # For a fixed slot and set, only the highest-scoring candidate can win:
         # every such candidate has the same set-bonus effect. This is an exact
@@ -1997,7 +1998,7 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
                 name = str(row.get("set", "") or "")
                 unchanged = slot in current_by_slot and rid(current_by_slot[slot]) == rid(row)
                 key = (
-                    mod_score(project_mod_for_build(row, profile), profile), 1 if unchanged else 0,
+                    mod_score(project_mod_for_build(row, profile) if projected else row, profile), 1 if unchanged else 0,
                     float(row.get("potentialCeiling", 0) or 0),
                     float(row.get("modValue", 0) or 0),
                 )
@@ -2026,7 +2027,7 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
                         index = set_names.index(name)
                         new_counts[index] = min(caps[name], new_counts[index] + 1)
                     new_counts = tuple(new_counts)
-                    projected_row = project_mod_for_build(row, profile)
+                    projected_row = project_mod_for_build(row, profile) if projected else row
                     candidate = (
                         score_so_far + mod_score(projected_row, profile),
                         unchanged_so_far + (1 if unchanged else 0),
@@ -2041,7 +2042,7 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
 
         best = None
         for _counts, (base_score, unchanged_count, chosen) in states.items():
-            projected_chosen = [project_mod_for_build(m, profile) for m in chosen]
+            projected_chosen = [project_mod_for_build(m, profile) if projected else m for m in chosen]
             combo_key = canonical_set_combo_from_mods(projected_chosen)
             if required_set_combo and combo_key != required_set_combo:
                 continue
@@ -2072,7 +2073,7 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
             continue
 
         for mod in best["mods"]:
-            projected_mod = project_mod_for_build(mod, profile)
+            projected_mod = project_mod_for_build(mod, profile) if projected else mod
             mod["optimizerTarget"] = target_id
             mod["optimizerScore"] = round(mod_score(mod, profile), 2)
             mod["optimizerProjectedScore"] = round(mod_score(projected_mod, profile), 2)
