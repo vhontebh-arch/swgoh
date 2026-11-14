@@ -30,7 +30,7 @@ Wynik każdego buildu jest liczony bez projekcji przyszłych rolli i bez założ
 | SCORCH | DAWCA | 120.81 | 104.29 | -16.52 |
 | 4LOM | DAWCA | 55.24 | 55.24 | +0.00 |
 | JEDIKNIGHTREVAN | DAWCA | 112.08 | 88.76 | -23.33 |
-| KLEYA | DAWCA | 0.00 | 116.41 | +116.41 |
+| KLEYA | CEL | 0.00 | 116.41 | +116.41 |
 
 **ŁĄCZNA ZMIANA: +111.35 pkt.**
 
