@@ -8,7 +8,7 @@
 - **Walidacja fizyczna całego łańcucha:** POTWIERDZONA
 - **Ocena:** KOMPROMIS — bilans rosteru dodatni, ale co najmniej jeden dawca traci
 - **Interpretacja:** bilans obejmuje cel i wszystkich dotkniętych dawców, liczony tą samą nieprojekcyjną punktacją pełnego buildu.
-- **Łączny bilans profilu rosteru:** +105.55 pkt
+- **Łączny bilans profilu rosteru:** +141.89 pkt
 - **Liczba modów docelowych:** 6/6
 
 ## Uwagi o stanie dawców przed operacją
@@ -25,18 +25,18 @@ Wynik każdego buildu jest liczony bez projekcji przyszłych rolli i bez założ
 | Postać | Rola w łańcuchu | Wynik przed | Wynik po | Zmiana |
 |---|---|---:|---:|---:|
 | MERRIN | DAWCA | 64.42 | 63.49 | -0.93 |
-| 50RT | DAWCA | 32.49 | 70.20 | +37.71 |
+| 50RT | DAWCA | 32.49 | 100.46 | +67.97 |
 | QUIGGOLD | DAWCA | 85.70 | 84.50 | -1.20 |
-| SANASTARROS | DAWCA | 66.72 | 66.09 | -0.63 |
+| SANASTARROS | DAWCA | 66.72 | 65.24 | -1.48 |
 | VEL | DAWCA | 108.58 | 108.04 | -0.53 |
 | MASTERQUIGON | DAWCA | 51.74 | 51.78 | +0.03 |
 | KUIIL | DAWCA | 44.61 | 44.84 | +0.23 |
-| SCORCH | DAWCA | 120.81 | 114.73 | -6.08 |
-| LUKESTARKILLER | CEL | 0.00 | 90.45 | +90.45 |
+| SCORCH | DAWCA | 120.81 | 111.25 | -9.56 |
+| LUKESTARKILLER | CEL | 0.00 | 100.58 | +100.58 |
 | 4LOM | DAWCA | 55.24 | 54.30 | -0.94 |
-| JEDIKNIGHTREVAN | DAWCA | 112.08 | 99.53 | -12.56 |
+| JEDIKNIGHTREVAN | DAWCA | 112.08 | 99.80 | -12.28 |
 
-**ŁĄCZNA ZMIANA: +105.55 pkt.**
+**ŁĄCZNA ZMIANA: +141.89 pkt.**
 
 ## Docelowy zestaw — LUKESTARKILLER
 
@@ -45,14 +45,14 @@ Wynik każdego buildu jest liczony bez projekcji przyszłych rolli i bez założ
 - Top 1000 Kyber GAC — 898 postaci z kompletnymi 6 modami
 - Top 100 Guilds — 4338 postaci z kompletnymi 6 modami
 - Najczęstsze kombinacje: Speed + Potency (60.1%); Speed + Health (14.5%); Speed + Tenacity (3.2%)
-- Priorytet secondary: Speed, Potency, Offense, Offense %
+- Priorytet secondary: Speed, Potency %, Offense %, Offense
 
 ### Sześć modów docelowych
 
 #### Arrow
 - **Obecny mod:** Pusty slot
-- **Proponowany mod:** Arrow / Speed / Protection % 24% / secondary: Health 770, Defense % 9.48%, Protection 1035, Speed 24 / 6★ A lvl15
-- **Źródło:** JEDIKNIGHTREVAN
+- **Proponowany mod:** Arrow / Potency / Health % 5.88% / secondary: Offense % 0.28%, Speed 20, Offense 70, Potency % 2% / 5★ A lvl15
+- **Źródło:** MAGAZYN
 #### Square
 - **Obecny mod:** Pusty slot
 - **Proponowany mod:** Square / Speed / Offense % 8.5% / secondary: Speed 9, Critical Chance % 8.02%, Protection % 4.67%, Offense 129 / 6★ A lvl15
@@ -63,8 +63,8 @@ Wynik każdego buildu jest liczony bez projekcji przyszłych rolli i bez założ
 - **Źródło:** MAGAZYN
 #### Triangle
 - **Obecny mod:** Pusty slot
-- **Proponowany mod:** Triangle / Potency / Health % 16% / secondary: Protection % 6.75%, Protection 1368, Speed 20, Critical Chance % 5.58% / 6★ A lvl15
-- **Źródło:** MAGAZYN
+- **Proponowany mod:** Triangle / Speed / Health % 16% / secondary: Speed 19, Defense 33, Critical Chance % 3.91%, Health 1007 / 6★ A lvl15
+- **Źródło:** JEDIKNIGHTREVAN
 #### Circle
 - **Obecny mod:** Pusty slot
 - **Proponowany mod:** Circle / Potency / Health % 5.88% / secondary: Offense % 0.83%, Speed 18, Protection % 2.05%, Defense % 1.19% / 5★ A lvl15
@@ -74,21 +74,21 @@ Wynik każdego buildu jest liczony bez projekcji przyszłych rolli i bez założ
 - **Proponowany mod:** Cross / Speed / Health % 5.88% / secondary: Speed 5, Defense 6, Potency % 4.33%, Offense 129 / 5★ A lvl15
 - **Źródło:** MASTERQUIGON
 
-- **Zmiana potencjału buildu:** +90.5 pkt (optymistyczna projekcja do 15; brakujące rolle przypisane do najwyżej preferowanej secondary; dla 5A projekcja secondary do 6E; primary pozostaje bez zmian; bez slice i calibration).
+- **Zmiana potencjału buildu:** +100.6 pkt (optymistyczna projekcja do 15; brakujące rolle przypisane do najwyżej preferowanej secondary; dla 5A projekcja secondary do 6E; primary pozostaje bez zmian; bez slice i calibration).
 
 ## MOD — mody przenoszone na cel
 
 - **JEDIKNIGHTREVAN → LUKESTARKILLER:** Square / Speed / Offense % 8.5% / secondary: Speed 9, Critical Chance % 8.02%, Protection % 4.67%, Offense 129 / 6★ A lvl15
 - **MAGAZYN → LUKESTARKILLER:** Diamond / Speed / Defense % 20% / secondary: Tenacity % 5.13%, Potency % 3.46%, Speed 24, Protection 1994 / 6★ A lvl15
 - **MAGAZYN → LUKESTARKILLER:** Circle / Potency / Health % 5.88% / secondary: Offense % 0.83%, Speed 18, Protection % 2.05%, Defense % 1.19% / 5★ A lvl15
-- **JEDIKNIGHTREVAN → LUKESTARKILLER:** Arrow / Speed / Protection % 24% / secondary: Health 770, Defense % 9.48%, Protection 1035, Speed 24 / 6★ A lvl15
-- **MAGAZYN → LUKESTARKILLER:** Triangle / Potency / Health % 16% / secondary: Protection % 6.75%, Protection 1368, Speed 20, Critical Chance % 5.58% / 6★ A lvl15
+- **MAGAZYN → LUKESTARKILLER:** Arrow / Potency / Health % 5.88% / secondary: Offense % 0.28%, Speed 20, Offense 70, Potency % 2% / 5★ A lvl15
+- **JEDIKNIGHTREVAN → LUKESTARKILLER:** Triangle / Speed / Health % 16% / secondary: Speed 19, Defense 33, Critical Chance % 3.91%, Health 1007 / 6★ A lvl15
 - **MASTERQUIGON → LUKESTARKILLER:** Cross / Speed / Health % 5.88% / secondary: Speed 5, Defense 6, Potency % 4.33%, Offense 129 / 5★ A lvl15
 
 ## PATCH — uzupełnienie dawców
 
-- **MAGAZYN → JEDIKNIGHTREVAN:** Arrow / Speed / Health % 5.88% / secondary: Speed 16, Protection 1247, Critical Chance % 1.25%, Defense 6 / 5★ B lvl15
 - **4LOM → JEDIKNIGHTREVAN:** Square / Speed / Offense % 5.88% / secondary: Health 613, Speed 8, Potency % 1.73%, Defense 12 / 5★ B lvl15
+- **50RT → JEDIKNIGHTREVAN:** Triangle / Speed / Offense % 5.88% / secondary: Protection 1973, Tenacity % 2.02%, Speed 5, Offense 72 / 5★ B lvl15
 - **SANASTARROS → 4LOM:** Square / Speed / Offense % 5.88% / secondary: Protection % 3.95%, Health % 0.57%, Tenacity % 5.59%, Speed 8 / 5★ A lvl15
 - **50RT → SANASTARROS:** Square / Speed / Offense % 5.88% / secondary: Critical Chance % 3.21%, Health 364, Potency % 1.55%, Speed 5 / 5★ D lvl15
 - **MERRIN → 50RT:** Square / Health / Offense % 5.88% / secondary: Critical Chance % 3.35%, Protection 459, Speed 20, Potency % 1.71% / 5★ A lvl15
@@ -97,6 +97,9 @@ Wynik każdego buildu jest liczony bez projekcji przyszłych rolli i bez założ
 - **KUIIL → VEL:** Square / Health / Offense % 5.88% / secondary: Defense 8, Speed 15, Tenacity % 3.23%, Potency % 1.89% / 5★ B lvl15
 - **QUIGGOLD → KUIIL:** Square / Defense / Offense % 5.88% / secondary: Protection % 3.36%, Speed 15, Defense % 2.69%, Health 326 / 5★ A lvl15
 - **MAGAZYN → QUIGGOLD:** Square / Defense / Offense % 5.88% / secondary: Defense % 1.4%, Speed 8, Health % 1.49%, Protection % 1.37% / 5★ C lvl15
+- **SANASTARROS → 50RT:** Triangle / Health / Critical Damage % 42% / secondary: Protection 764, Speed 23, Protection % 4.06%, Defense % 13.03% / 6★ A lvl15
+- **SCORCH → SANASTARROS:** Triangle / Health / Protection % 24% / secondary: Defense % 13.63%, Offense 172, Health 481, Speed 11 / 6★ A lvl15
+- **MAGAZYN → SCORCH:** Triangle / Health / Offense % 5.88% / secondary: Potency % 1.74%, Critical Chance % 2.89%, Speed 13, Health 803 / 5★ A lvl15
 - **4LOM → MASTERQUIGON:** Cross / Speed / Health % 5.88% / secondary: Tenacity % 3.03%, Offense 63, Speed 5, Health 224 / 5★ C lvl15
 - **50RT → 4LOM:** Cross / Speed / Health % 5.88% / secondary: Offense 42, Protection 1099, Speed 4, Defense % 0.95% / 5★ D lvl15
 - **JEDIKNIGHTREVAN → 50RT:** Cross / Health / Health % 16% / secondary: Health 694, Protection 1743, Speed 20, Offense 116 / 6★ A lvl15
@@ -105,21 +108,21 @@ Wynik każdego buildu jest liczony bez projekcji przyszłych rolli i bez założ
 
 ## Kolejność przekładania
 
-1. **Arrow — załóż na LUKESTARKILLER** mod z JEDIKNIGHTREVAN: Arrow / Speed / Protection % 24% / secondary: Health 770, Defense % 9.48%, Protection 1035, Speed 24 / 6★ A lvl15
+1. **Arrow — załóż na LUKESTARKILLER** mod z MAGAZYN: Arrow / Potency / Health % 5.88% / secondary: Offense % 0.28%, Speed 20, Offense 70, Potency % 2% / 5★ A lvl15
 2. **Square — załóż na LUKESTARKILLER** mod z JEDIKNIGHTREVAN: Square / Speed / Offense % 8.5% / secondary: Speed 9, Critical Chance % 8.02%, Protection % 4.67%, Offense 129 / 6★ A lvl15
 3. **Diamond — załóż na LUKESTARKILLER** mod z MAGAZYN: Diamond / Speed / Defense % 20% / secondary: Tenacity % 5.13%, Potency % 3.46%, Speed 24, Protection 1994 / 6★ A lvl15
-4. **Triangle — załóż na LUKESTARKILLER** mod z MAGAZYN: Triangle / Potency / Health % 16% / secondary: Protection % 6.75%, Protection 1368, Speed 20, Critical Chance % 5.58% / 6★ A lvl15
+4. **Triangle — załóż na LUKESTARKILLER** mod z JEDIKNIGHTREVAN: Triangle / Speed / Health % 16% / secondary: Speed 19, Defense 33, Critical Chance % 3.91%, Health 1007 / 6★ A lvl15
 5. **Circle — załóż na LUKESTARKILLER** mod z MAGAZYN: Circle / Potency / Health % 5.88% / secondary: Offense % 0.83%, Speed 18, Protection % 2.05%, Defense % 1.19% / 5★ A lvl15
 6. **Cross — załóż na LUKESTARKILLER** mod z MASTERQUIGON: Cross / Speed / Health % 5.88% / secondary: Speed 5, Defense 6, Potency % 4.33%, Offense 129 / 5★ A lvl15
 
 ### Uzupełnienie dawców — poziom 1
 
-7. **PATCH — załóż na JEDIKNIGHTREVAN** mod z MAGAZYN (dostępny po wcześniejszym kroku): Arrow / Speed / Health % 5.88% / secondary: Speed 16, Protection 1247, Critical Chance % 1.25%, Defense 6 / 5★ B lvl15
+7. **PATCH — załóż na JEDIKNIGHTREVAN** mod z 4LOM: Square / Speed / Offense % 5.88% / secondary: Health 613, Speed 8, Potency % 1.73%, Defense 12 / 5★ B lvl15
 8. **PATCH — załóż na MASTERQUIGON** mod z 4LOM: Cross / Speed / Health % 5.88% / secondary: Tenacity % 3.03%, Offense 63, Speed 5, Health 224 / 5★ C lvl15
 
 ### Uzupełnienie dawców — poziom 2
 
-9. **PATCH — załóż na JEDIKNIGHTREVAN** mod z 4LOM: Square / Speed / Offense % 5.88% / secondary: Health 613, Speed 8, Potency % 1.73%, Defense 12 / 5★ B lvl15
+9. **PATCH — załóż na JEDIKNIGHTREVAN** mod z 50RT: Triangle / Speed / Offense % 5.88% / secondary: Protection 1973, Tenacity % 2.02%, Speed 5, Offense 72 / 5★ B lvl15
 10. **PATCH — załóż na 4LOM** mod z 50RT: Cross / Speed / Health % 5.88% / secondary: Offense 42, Protection 1099, Speed 4, Defense % 0.95% / 5★ D lvl15
 
 ### Uzupełnienie dawców — poziom 3
@@ -157,6 +160,18 @@ Wynik każdego buildu jest liczony bez projekcji przyszłych rolli i bez założ
 
 21. **PATCH — załóż na QUIGGOLD** mod z MAGAZYN (dostępny po wcześniejszym kroku): Square / Defense / Offense % 5.88% / secondary: Defense % 1.4%, Speed 8, Health % 1.49%, Protection % 1.37% / 5★ C lvl15
 
+### Uzupełnienie dawców — poziom 11
+
+22. **PATCH — załóż na 50RT** mod z SANASTARROS: Triangle / Health / Critical Damage % 42% / secondary: Protection 764, Speed 23, Protection % 4.06%, Defense % 13.03% / 6★ A lvl15
+
+### Uzupełnienie dawców — poziom 12
+
+23. **PATCH — załóż na SANASTARROS** mod z SCORCH: Triangle / Health / Protection % 24% / secondary: Defense % 13.63%, Offense 172, Health 481, Speed 11 / 6★ A lvl15
+
+### Uzupełnienie dawców — poziom 13
+
+24. **PATCH — załóż na SCORCH** mod z MAGAZYN (dostępny po wcześniejszym kroku): Triangle / Health / Offense % 5.88% / secondary: Potency % 1.74%, Critical Chance % 2.89%, Speed 13, Health 803 / 5★ A lvl15
+
 Zakładanie moda automatycznie przenosi poprzedni mod ze slotu do magazynu. Wszystkie powyższe kroki zostały sprawdzone na pełnym stanie slotów i magazynu.
 
 ## Wpływ na postacie-dawców
@@ -166,10 +181,10 @@ Zakładanie moda automatycznie przenosi poprzedni mod ze slotu do magazynu. Wszy
   - Kombinacja setów: Health + Potency + Tenacity (11.9%) → Health + Potency + Tenacity (11.9%).
   - Zmiana wyniku pełnego buildu po kolejnych PATCH-ach: Square -0.9 pkt.
   - ISTOTNY SPADEK wartości modów u dawcy.
-- **50RT — wynik pełnego buildu wg profilu:** 32.49 → 70.20 (+37.71 pkt).
-  - Σ modValue modów: 330.6 → 364.9 (+34.3) — surowy wskaźnik jakości modów, nie wynik profilu.
-  - Zmiana wyniku pełnego buildu po kolejnych PATCH-ach: Square +43.8 pkt; Cross +51.0 pkt.
-  - Health: UKOŃCZONO pełnych setów (0 → 1).
+- **50RT — wynik pełnego buildu wg profilu:** 32.49 → 100.46 (+67.97 pkt).
+  - Σ modValue modów: 330.6 → 373.6 (+43.0) — surowy wskaźnik jakości modów, nie wynik profilu.
+  - Zmiana wyniku pełnego buildu po kolejnych PATCH-ach: Square +43.8 pkt; Square +45.3 pkt; Cross +51.0 pkt.
+  - Health: UKOŃCZONO pełnych setów (0 → 2).
   - Speed: ROZBITO pełnych setów (1 → 0).
     - ISTOTNA STRATA: set występuje w 27.4% kombinacji profilu SWGOH.GG.
 - **QUIGGOLD — wynik pełnego buildu wg profilu:** 85.70 → 84.50 (-1.20 pkt).
@@ -177,10 +192,10 @@ Zakładanie moda automatycznie przenosi poprzedni mod ze slotu do magazynu. Wszy
   - Kombinacja setów: Double Health + Defense (44.7%) → Double Health + Defense (44.7%).
   - Zmiana wyniku pełnego buildu po kolejnych PATCH-ach: Square -1.2 pkt.
   - ISTOTNY SPADEK wartości modów u dawcy.
-- **SANASTARROS — wynik pełnego buildu wg profilu:** 66.72 → 66.09 (-0.63 pkt).
-  - Σ modValue modów: 372.9 → 356.6 (-16.3) — surowy wskaźnik jakości modów, nie wynik profilu.
+- **SANASTARROS — wynik pełnego buildu wg profilu:** 66.72 → 65.24 (-1.48 pkt).
+  - Σ modValue modów: 372.9 → 355.6 (-17.3) — surowy wskaźnik jakości modów, nie wynik profilu.
   - Kombinacja setów: Speed + Health (30.7%) → Speed + Health (30.7%).
-  - Zmiana wyniku pełnego buildu po kolejnych PATCH-ach: Square -0.6 pkt.
+  - Zmiana wyniku pełnego buildu po kolejnych PATCH-ach: Square -0.6 pkt; Square -0.9 pkt.
   - ISTOTNY SPADEK wartości modów u dawcy.
 - **VEL — wynik pełnego buildu wg profilu:** 108.58 → 108.04 (-0.53 pkt).
   - Σ modValue modów: 402.2 → 410.1 (+7.9) — surowy wskaźnik jakości modów, nie wynik profilu.
@@ -197,20 +212,20 @@ Zakładanie moda automatycznie przenosi poprzedni mod ze slotu do magazynu. Wszy
   - Defense: UKOŃCZONO pełnych setów (0 → 1).
   - Health: OSŁABIONY pełnych setów (1 → 1).
     - ISTOTNA STRATA: set występuje w 49.3% kombinacji profilu SWGOH.GG.
-- **SCORCH — wynik pełnego buildu wg profilu:** 120.81 → 114.73 (-6.08 pkt).
-  - Σ modValue modów: 355.6 → 359.1 (+3.5) — surowy wskaźnik jakości modów, nie wynik profilu.
+- **SCORCH — wynik pełnego buildu wg profilu:** 120.81 → 111.25 (-9.56 pkt).
+  - Σ modValue modów: 355.6 → 348.8 (-6.8) — surowy wskaźnik jakości modów, nie wynik profilu.
   - Kombinacja setów: Double Health + Defense (48.9%) → Double Health + Defense (48.9%).
-  - Zmiana wyniku pełnego buildu po kolejnych PATCH-ach: Square -0.6 pkt; Cross -5.4 pkt.
+  - Zmiana wyniku pełnego buildu po kolejnych PATCH-ach: Square -0.6 pkt; Square -3.5 pkt; Cross -5.4 pkt.
   - ISTOTNY SPADEK wartości modów u dawcy.
 - **4LOM — wynik pełnego buildu wg profilu:** 55.24 → 54.30 (-0.94 pkt).
   - Σ modValue modów: 396.2 → 404.0 (+7.8) — surowy wskaźnik jakości modów, nie wynik profilu.
   - Kombinacja setów: Speed + Tenacity (43.7%) → Speed + Tenacity (43.7%).
   - Zmiana wyniku pełnego buildu po kolejnych PATCH-ach: Square +0.0 pkt; Cross -0.9 pkt.
   - ISTOTNY SPADEK wartości modów u dawcy.
-- **JEDIKNIGHTREVAN — wynik pełnego buildu wg profilu:** 112.08 → 99.53 (-12.56 pkt).
-  - Σ modValue modów: 382.9 → 368.7 (-14.2) — surowy wskaźnik jakości modów, nie wynik profilu.
+- **JEDIKNIGHTREVAN — wynik pełnego buildu wg profilu:** 112.08 → 99.80 (-12.28 pkt).
+  - Σ modValue modów: 382.9 → 376.5 (-6.4) — surowy wskaźnik jakości modów, nie wynik profilu.
   - Kombinacja setów: Speed + Health (69.2%) → Speed + Health (69.2%).
-  - Zmiana wyniku pełnego buildu po kolejnych PATCH-ach: Square -7.3 pkt; Square +0.0 pkt; Cross -5.2 pkt.
+  - Zmiana wyniku pełnego buildu po kolejnych PATCH-ach: Square -7.1 pkt; Square +0.0 pkt; Cross -5.2 pkt.
   - ISTOTNY SPADEK wartości modów u dawcy.
 
 ## Kontrola profili użytych w łańcuchu
