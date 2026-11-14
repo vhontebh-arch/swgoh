@@ -52,7 +52,7 @@ To zachowuje prosty model profili oparty na preferencjach statystyk i setów. Ni
 - Wartość primary pozostaje taka jak w eksporcie; nie jest sztucznie podbijana w projekcji poziomu.
 
 
-## Łańcuchy transferów i bilans dawców — v4
+## Historyczny etap: łańcuchy transferów i bilans dawców — v4 (zastąpiony)
 
 - Cel jest rozpoznawany również wtedy, gdy nie ma obecnie żadnego założonego moda: identyfikator instancji postaci jest odtwarzany z mapowania rosteru.
 - Pula naprawcza obejmuje wszystkie mody z magazynu, również poniżej poziomu 15. Koszt ich ulepszenia jest osobną decyzją inwestycyjną, a nie powodem do ukrycia ich z wyszukiwania.
