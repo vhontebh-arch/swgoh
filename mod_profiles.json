@@ -3957,37 +3957,36 @@
       "primary_preferences": {
         "Arrow": {
           "Speed": 0.9663,
-          "Health": 0.0113,
-          "Offense": 0.0138,
-          "Protection": 0.0085
+          "Health %": 0.0113,
+          "Offense %": 0.0138,
+          "Protection %": 0.0085
         },
         "Triangle": {
-          "Critical Damage": 0.5374,
-          "Critical Chance": 0.213,
-          "Offense": 0.0725,
-          "Protection": 0.0723,
-          "Health": 0.0628,
-          "Defense": 0.042
+          "Critical Damage %": 0.5374,
+          "Critical Chance %": 0.213,
+          "Offense %": 0.0725,
+          "Protection %": 0.0723,
+          "Health %": 0.0628,
+          "Defense %": 0.042
         },
         "Circle": {
-          "Protection": 0.6977,
-          "Health": 0.3023
+          "Protection %": 0.6977,
+          "Health %": 0.3023
         },
         "Cross": {
-          "Potency": 0.7388,
-          "Protection": 0.0648,
-          "Offense": 0.0502,
-          "Health": 0.0351,
-          "Tenacity": 0.0622,
-          "Defense": 0.0488
+          "Potency %": 0.7388,
+          "Protection %": 0.0648,
+          "Offense %": 0.0502,
+          "Health %": 0.0351,
+          "Tenacity %": 0.0622,
+          "Defense %": 0.0488
         }
       },
       "secondary_preferences": {
         "Speed": 1,
-        "Potency": 0.4881,
-        "Offense %": 0.178,
-        "Offense": 0.3521,
-        "Tenacity": 0.1715
+        "Potency %": 0.4881,
+        "Offense %": 0.3534,
+        "Tenacity %": 0.343
       }
     }
   },

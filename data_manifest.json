@@ -37,10 +37,10 @@
     },
     "mod_profiles.json": {
       "role": "shared SWGOH.GG mod profiles",
-      "bytes": 140308,
-      "git_blob_sha": "8739357c18f418d869fbad2ae6d5db8e9730d862",
+      "bytes": 140319,
+      "git_blob_sha": "1f76c2ee6776e277fa28379e58c6ac5e7b198391",
       "source_branch": "optimizer-data",
-      "source_commit": "4b0b5e09041a883cc651d12a18cac6cfbacacbfd"
+      "source_commit": "7fbec0375297fccbb335909f2007f3deac174879"
     },
     "swgoh_972824625.json": {
       "role": "raw Comlink player export",
@@ -82,7 +82,8 @@
     "mod_profiles.json was taken from optimizer-v2 because it contains the larger current profile cache; main's copy is stale/incomplete.",
     "The committed raw swgoh_972824625.json is excluded because it is not a reliable current snapshot and is not required by the optimizer inputs.",
     "Kleya Marki profile was read directly from SWGOH.GG Best Mods pages for Top 1000 Kyber GAC and Top 100 Guilds, then added to the shared profile cache.",
-    "Starkiller (Luke Concept) profile was read directly from SWGOH.GG Best Mods pages for Top 1000 Kyber GAC and Top 100 Guilds, then added to the shared profile cache; manifest validates the updated Git blob hash."
+    "Starkiller (Luke Concept) profile was read directly from SWGOH.GG Best Mods pages for Top 1000 Kyber GAC and Top 100 Guilds, then added to the shared profile cache; manifest validates the updated Git blob hash.",
+    "Luke Concept profile preference keys were normalized to the game's exported stat names (including percentage suffixes) after validation identified a name-mapping mismatch."
   ],
   "snapshot": {
     "published_at": "2026-11-14T12:25:51.569103+00:00",
