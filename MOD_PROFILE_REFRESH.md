@@ -35,7 +35,7 @@ Obowiązuje algorytm odtworzony z wcześniejszej implementacji `build_profile()`
 5. **`secondary_preferences`:** bierzemy uśrednione `focus_pct` z TOP 4 każdego źródła, dzielimy je przez najwyższe uśrednione `focus_pct`. Maksimum = 1. Pozostałe statystyki z ustalonego słownika statystyk otrzymują 0; nie oznacza to odczytanego zera na stronie, tylko brak wartości w wymaganym zakresie TOP 4.
 6. **Precyzja:** wartości pochodne zaokrąglamy do 4 miejsc po przecinku. Kolejność surowych pozycji TOP 4 pozostaje bez zmian; sortowanie map pochodnych nie jest kryterium preferencji.
 
-Weryfikacja algorytmu na `JARJARBINKS` odtworzyła wszystkie zapisane wartości pochodne (różnice dotyczyły wyłącznie kolejności kluczy JSON). Wagi scoringowe analizatora (obecnie 20% primary / 80% secondary) są osobną warstwą i nie zmieniają powyższego algorytmu agregacji źródeł.
+Weryfikacja algorytmu na `JARJARBINKS` odtworzyła wszystkie zapisane wartości pochodne (różnice dotyczyły wyłącznie kolejności kluczy JSON). Wagi scoringowe analizatora (obecnie 40% primary / 60% secondary) są osobną warstwą i nie zmieniają powyższego algorytmu agregacji źródeł.
 
 ## Statusy
 
