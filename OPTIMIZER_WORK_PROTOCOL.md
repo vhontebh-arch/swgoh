@@ -98,14 +98,14 @@ python optimizer_preflight.py --target "Nazwa celu" --donor "Dawca 1" --donor "D
 - Narzędzie jest wyłącznie odczytowe: nie pobiera stron SWGOH.GG, nie aktualizuje profili, nie modyfikuje CSV ani kodu analizatora.
 - Sukces preflightu potwierdza wyłącznie warunki wejściowe; nie zastępuje walidacji łańcucha transferów ani kontroli końcowego raportu.
 
-## 10. Wspólny snapshot C-3PO dla wszystkich wersji
+## 10. Wspólny snapshot danych konta
 
-- Kanonicznym źródłem jest wyłącznie `main/c3po.json`; eksporty należy wgrywać na `main`.
-- Każdy workflow generujący dane optymalizatora uruchamia `.github/scripts/sync-c3po.sh` przed generowaniem `mods.csv`.
-- Analiza musi korzystać z pliku pobranego z konkretnego commita `main`, a log musi zawierać commit źródłowy, Git blob SHA i SHA-256.
-- Porównując wersje algorytmu, należy uruchomić je z tym samym `c3po_source_commit` w `workflow_dispatch`; porównanie jest ważne tylko przy zgodnych identyfikatorach snapshotu.
-- Lokalna kopia `c3po.json` na innej gałęzi nie jest źródłem danych i nie może zastępować synchronizacji.
-- Szczegóły: `C3PO_DATA_SOURCE.md`.
+- Surowe eksporty konta, w tym `c3po.json`, są aktualizowane w źródłowym obiegu repozytorium; opublikowany snapshot wejściowy optymalizatora znajduje się na gałęzi `optimizer-data`.
+- Każde produkcyjne uruchomienie `update-swgoh.yml` wykonuje `sync_optimizer_data.py` przed analizą.
+- Synchronizator pobiera wszystkie wymagane pliki z jednego konkretnego commita `optimizer-data` i weryfikuje Git blob SHA względem `data_manifest.json`.
+- Identyfikatorem snapshotu jest commit gałęzi `optimizer-data` zapisany w logu i podsumowaniu Actions. Nie ma obecnie parametru `c3po_source_commit` w `workflow_dispatch`.
+- Nie używaj lokalnej kopii pliku wejściowego jako zamiennika synchronizacji i nie kontynuuj analizy, jeśli snapshot lub hash nie przejdzie weryfikacji.
+- Szczegóły i lista plików: `C3PO_DATA_SOURCE.md`.
 
 
 ## Kontrola kombinacji setów dawców
