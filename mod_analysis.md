@@ -8,7 +8,7 @@
 - **Walidacja fizyczna całego łańcucha:** POTWIERDZONA
 - **Ocena:** KOMPROMIS — bilans rosteru dodatni, ale co najmniej jeden dawca traci
 - **Interpretacja:** bilans obejmuje cel i wszystkich dotkniętych dawców, liczony tą samą nieprojekcyjną punktacją pełnego buildu.
-- **Łączny bilans profilu rosteru:** +120.68 pkt
+- **Łączny bilans profilu rosteru:** +126.24 pkt
 - **Liczba modów docelowych:** 6/6
 
 ## Uwagi o stanie dawców przed operacją
@@ -31,16 +31,16 @@ Wynik każdego buildu jest liczony bez projekcji przyszłych rolli i bez założ
 | SANASTARROS | DAWCA | 66.72 | 65.24 | -1.48 |
 | VEL | DAWCA | 108.58 | 108.04 | -0.53 |
 | ADMIRALPIETT | DAWCA | 86.02 | 85.68 | -0.34 |
-| CROSSHAIRS3 | DAWCA | 36.87 | 45.65 | +8.79 |
+| CROSSHAIRS3 | DAWCA | 36.87 | 40.54 | +3.67 |
 | KUIIL | DAWCA | 44.61 | 44.84 | +0.23 |
-| SCORCH | DAWCA | 120.81 | 111.25 | -9.56 |
+| SCORCH | DAWCA | 120.81 | 116.69 | -4.11 |
 | LUKESTARKILLER | CEL | 0.00 | 129.88 | +129.88 |
 | 4LOM | DAWCA | 55.24 | 55.58 | +0.33 |
 | MARAJADE | DAWCA | 113.70 | 109.80 | -3.90 |
 | EMPERORPALPATINE | DAWCA | 108.44 | 93.58 | -14.87 |
-| JEDIKNIGHTREVAN | DAWCA | 112.08 | 94.41 | -17.67 |
+| JEDIKNIGHTREVAN | DAWCA | 112.08 | 99.64 | -12.44 |
 
-**ŁĄCZNA ZMIANA: +120.68 pkt.**
+**ŁĄCZNA ZMIANA: +126.24 pkt.**
 
 ## Docelowy zestaw — LUKESTARKILLER
 
@@ -102,9 +102,7 @@ Wynik każdego buildu jest liczony bez projekcji przyszłych rolli i bez założ
 - **MAGAZYN → SCORCH:** Triangle / Health / Offense % 5.88% / secondary: Potency % 1.74%, Critical Chance % 2.89%, Speed 13, Health 803 / 5★ A lvl15
 - **CROSSHAIRS3 → EMPERORPALPATINE:** Cross / Potency / Potency % 24% / secondary: Protection 622, Offense % 0.42%, Health % 2.53%, Speed 15 / 5★ A lvl15
 - **JEDIKNIGHTREVAN → EMPERORPALPATINE:** Square / Speed / Offense % 8.5% / secondary: Speed 9, Critical Chance % 8.02%, Protection % 4.67%, Offense 129 / 6★ A lvl15
-- **JEDIKNIGHTREVAN → CROSSHAIRS3:** Cross / Health / Health % 16% / secondary: Health 694, Protection 1743, Speed 20, Offense 116 / 6★ A lvl15
-- **SCORCH → JEDIKNIGHTREVAN:** Cross / Health / Protection % 24% / secondary: Defense 24, Speed 22, Critical Chance % 3.97%, Health % 4.38% / 6★ A lvl15
-- **MAGAZYN → SCORCH:** Cross / Health / Tenacity % 24% / secondary: Speed 15, Offense % 0.42%, Health % 1.02%, Health 300 / 5★ C lvl15
+- **MAGAZYN → CROSSHAIRS3:** Cross / Critical Damage / Offense % 5.88% / secondary: Health % 1.87%, Health 350, Defense % 2.3%, Speed 12 / 5★ A lvl15
 - **4LOM → JEDIKNIGHTREVAN:** Square / Speed / Offense % 5.88% / secondary: Health 613, Speed 8, Potency % 1.73%, Defense 12 / 5★ B lvl15
 - **ADMIRALPIETT → 4LOM:** Square / Speed / Offense % 5.88% / secondary: Offense 110, Speed 5, Health 696, Health % 1.01% / 5★ B lvl15
 - **SANASTARROS → ADMIRALPIETT:** Square / Speed / Offense % 5.88% / secondary: Protection % 3.95%, Health % 0.57%, Tenacity % 5.59%, Speed 8 / 5★ A lvl15
@@ -177,55 +175,47 @@ Wynik każdego buildu jest liczony bez projekcji przyszłych rolli i bez założ
 
 ### Uzupełnienie dawców — poziom 12
 
-21. **PATCH — załóż na CROSSHAIRS3** mod z JEDIKNIGHTREVAN: Cross / Health / Health % 16% / secondary: Health 694, Protection 1743, Speed 20, Offense 116 / 6★ A lvl15
+21. **PATCH — załóż na CROSSHAIRS3** mod z MAGAZYN (dostępny po wcześniejszym kroku): Cross / Critical Damage / Offense % 5.88% / secondary: Health % 1.87%, Health 350, Defense % 2.3%, Speed 12 / 5★ A lvl15
 
 ### Uzupełnienie dawców — poziom 13
 
-22. **PATCH — załóż na JEDIKNIGHTREVAN** mod z SCORCH: Cross / Health / Protection % 24% / secondary: Defense 24, Speed 22, Critical Chance % 3.97%, Health % 4.38% / 6★ A lvl15
+22. **PATCH — załóż na JEDIKNIGHTREVAN** mod z 4LOM: Square / Speed / Offense % 5.88% / secondary: Health 613, Speed 8, Potency % 1.73%, Defense 12 / 5★ B lvl15
 
 ### Uzupełnienie dawców — poziom 14
 
-23. **PATCH — załóż na SCORCH** mod z MAGAZYN (dostępny po wcześniejszym kroku): Cross / Health / Tenacity % 24% / secondary: Speed 15, Offense % 0.42%, Health % 1.02%, Health 300 / 5★ C lvl15
+23. **PATCH — załóż na 4LOM** mod z ADMIRALPIETT: Square / Speed / Offense % 5.88% / secondary: Offense 110, Speed 5, Health 696, Health % 1.01% / 5★ B lvl15
 
 ### Uzupełnienie dawców — poziom 15
 
-24. **PATCH — załóż na JEDIKNIGHTREVAN** mod z 4LOM: Square / Speed / Offense % 5.88% / secondary: Health 613, Speed 8, Potency % 1.73%, Defense 12 / 5★ B lvl15
+24. **PATCH — załóż na ADMIRALPIETT** mod z SANASTARROS: Square / Speed / Offense % 5.88% / secondary: Protection % 3.95%, Health % 0.57%, Tenacity % 5.59%, Speed 8 / 5★ A lvl15
 
 ### Uzupełnienie dawców — poziom 16
 
-25. **PATCH — załóż na 4LOM** mod z ADMIRALPIETT: Square / Speed / Offense % 5.88% / secondary: Offense 110, Speed 5, Health 696, Health % 1.01% / 5★ B lvl15
+25. **PATCH — załóż na SANASTARROS** mod z 50RT: Square / Speed / Offense % 5.88% / secondary: Critical Chance % 3.21%, Health 364, Potency % 1.55%, Speed 5 / 5★ D lvl15
 
 ### Uzupełnienie dawców — poziom 17
 
-26. **PATCH — załóż na ADMIRALPIETT** mod z SANASTARROS: Square / Speed / Offense % 5.88% / secondary: Protection % 3.95%, Health % 0.57%, Tenacity % 5.59%, Speed 8 / 5★ A lvl15
+26. **PATCH — załóż na 50RT** mod z MERRIN: Square / Health / Offense % 5.88% / secondary: Critical Chance % 3.35%, Protection 459, Speed 20, Potency % 1.71% / 5★ A lvl15
 
 ### Uzupełnienie dawców — poziom 18
 
-27. **PATCH — załóż na SANASTARROS** mod z 50RT: Square / Speed / Offense % 5.88% / secondary: Critical Chance % 3.21%, Health 364, Potency % 1.55%, Speed 5 / 5★ D lvl15
+27. **PATCH — załóż na MERRIN** mod z SCORCH: Square / Health / Offense % 8.5% / secondary: Defense 36, Potency % 4.16%, Health % 4.18%, Speed 22 / 6★ A lvl15
 
 ### Uzupełnienie dawców — poziom 19
 
-28. **PATCH — załóż na 50RT** mod z MERRIN: Square / Health / Offense % 5.88% / secondary: Critical Chance % 3.35%, Protection 459, Speed 20, Potency % 1.71% / 5★ A lvl15
+28. **PATCH — załóż na SCORCH** mod z VEL: Square / Health / Offense % 8.5% / secondary: Defense % 11.39%, Potency % 5.43%, Protection 1219, Speed 11 / 6★ C lvl15
 
 ### Uzupełnienie dawców — poziom 20
 
-29. **PATCH — załóż na MERRIN** mod z SCORCH: Square / Health / Offense % 8.5% / secondary: Defense 36, Potency % 4.16%, Health % 4.18%, Speed 22 / 6★ A lvl15
+29. **PATCH — załóż na VEL** mod z KUIIL: Square / Health / Offense % 5.88% / secondary: Defense 8, Speed 15, Tenacity % 3.23%, Potency % 1.89% / 5★ B lvl15
 
 ### Uzupełnienie dawców — poziom 21
 
-30. **PATCH — załóż na SCORCH** mod z VEL: Square / Health / Offense % 8.5% / secondary: Defense % 11.39%, Potency % 5.43%, Protection 1219, Speed 11 / 6★ C lvl15
+30. **PATCH — załóż na KUIIL** mod z QUIGGOLD: Square / Defense / Offense % 5.88% / secondary: Protection % 3.36%, Speed 15, Defense % 2.69%, Health 326 / 5★ A lvl15
 
 ### Uzupełnienie dawców — poziom 22
 
-31. **PATCH — załóż na VEL** mod z KUIIL: Square / Health / Offense % 5.88% / secondary: Defense 8, Speed 15, Tenacity % 3.23%, Potency % 1.89% / 5★ B lvl15
-
-### Uzupełnienie dawców — poziom 23
-
-32. **PATCH — załóż na KUIIL** mod z QUIGGOLD: Square / Defense / Offense % 5.88% / secondary: Protection % 3.36%, Speed 15, Defense % 2.69%, Health 326 / 5★ A lvl15
-
-### Uzupełnienie dawców — poziom 24
-
-33. **PATCH — załóż na QUIGGOLD** mod z MAGAZYN (dostępny po wcześniejszym kroku): Square / Defense / Offense % 5.88% / secondary: Defense % 1.4%, Speed 8, Health % 1.49%, Protection % 1.37% / 5★ C lvl15
+31. **PATCH — załóż na QUIGGOLD** mod z MAGAZYN (dostępny po wcześniejszym kroku): Square / Defense / Offense % 5.88% / secondary: Defense % 1.4%, Speed 8, Health % 1.49%, Protection % 1.37% / 5★ C lvl15
 
 Zakładanie moda automatycznie przenosi poprzedni mod ze slotu do magazynu. Wszystkie powyższe kroki zostały sprawdzone na pełnym stanie slotów i magazynu.
 
@@ -262,10 +252,10 @@ Zakładanie moda automatycznie przenosi poprzedni mod ze slotu do magazynu. Wszy
   - Kombinacja setów: Speed + Health (54.2%) → Speed + Health (54.2%).
   - Zmiana wyniku pełnego buildu po kolejnych PATCH-ach: Square +2.0 pkt; Square -2.3 pkt.
   - ISTOTNY SPADEK wartości modów u dawcy.
-- **CROSSHAIRS3 — wynik pełnego buildu wg profilu:** 36.87 → 45.65 (+8.79 pkt).
-  - Σ modValue modów: 416.2 → 412.4 (-3.8) — surowy wskaźnik jakości modów, nie wynik profilu.
-  - Zmiana wyniku pełnego buildu po kolejnych PATCH-ach: Square +8.8 pkt.
-  - Health: BUDOWANY pełnych setów (0 → 0).
+- **CROSSHAIRS3 — wynik pełnego buildu wg profilu:** 36.87 → 40.54 (+3.67 pkt).
+  - Σ modValue modów: 416.2 → 406.2 (-10.0) — surowy wskaźnik jakości modów, nie wynik profilu.
+  - Zmiana wyniku pełnego buildu po kolejnych PATCH-ach: Square +3.7 pkt.
+  - Critical Damage: BUDOWANY pełnych setów (0 → 0).
   - Potency: OSŁABIONY pełnych setów (0 → 0).
     - ZMIANA NIEISTOTNA WG PROFILU: set występuje w 0.0% kombinacji SWGOH.GG.
 - **KUIIL — wynik pełnego buildu wg profilu:** 44.61 → 44.84 (+0.23 pkt).
@@ -274,10 +264,10 @@ Zakładanie moda automatycznie przenosi poprzedni mod ze slotu do magazynu. Wszy
   - Defense: UKOŃCZONO pełnych setów (0 → 1).
   - Health: OSŁABIONY pełnych setów (1 → 1).
     - ISTOTNA STRATA: set występuje w 49.3% kombinacji profilu SWGOH.GG.
-- **SCORCH — wynik pełnego buildu wg profilu:** 120.81 → 111.25 (-9.56 pkt).
-  - Σ modValue modów: 355.6 → 348.8 (-6.8) — surowy wskaźnik jakości modów, nie wynik profilu.
+- **SCORCH — wynik pełnego buildu wg profilu:** 120.81 → 116.69 (-4.11 pkt).
+  - Σ modValue modów: 355.6 → 333.0 (-22.6) — surowy wskaźnik jakości modów, nie wynik profilu.
   - Kombinacja setów: Double Health + Defense (48.9%) → Double Health + Defense (48.9%).
-  - Zmiana wyniku pełnego buildu po kolejnych PATCH-ach: Square -3.5 pkt; Square -5.4 pkt; Square -0.6 pkt.
+  - Zmiana wyniku pełnego buildu po kolejnych PATCH-ach: Square -3.5 pkt; Square -0.6 pkt.
   - ISTOTNY SPADEK wartości modów u dawcy.
 - **4LOM — wynik pełnego buildu wg profilu:** 55.24 → 55.58 (+0.33 pkt).
   - Σ modValue modów: 396.2 → 412.7 (+16.5) — surowy wskaźnik jakości modów, nie wynik profilu.
@@ -293,10 +283,10 @@ Zakładanie moda automatycznie przenosi poprzedni mod ze slotu do magazynu. Wszy
   - Kombinacja setów: Speed + Potency (47.0%) → Speed + Potency (47.0%).
   - Zmiana wyniku pełnego buildu po kolejnych PATCH-ach: Square -4.4 pkt; Square -8.5 pkt; Square +0.0 pkt; Circle -4.3 pkt; Arrow +2.4 pkt.
   - ISTOTNY SPADEK wartości modów u dawcy.
-- **JEDIKNIGHTREVAN — wynik pełnego buildu wg profilu:** 112.08 → 94.41 (-17.67 pkt).
-  - Σ modValue modów: 382.9 → 333.3 (-49.6) — surowy wskaźnik jakości modów, nie wynik profilu.
+- **JEDIKNIGHTREVAN — wynik pełnego buildu wg profilu:** 112.08 → 99.64 (-12.44 pkt).
+  - Σ modValue modów: 382.9 → 342.0 (-40.9) — surowy wskaźnik jakości modów, nie wynik profilu.
   - Kombinacja setów: Speed + Health (69.2%) → Speed + Health (69.2%).
-  - Zmiana wyniku pełnego buildu po kolejnych PATCH-ach: Square -5.1 pkt; Square -5.2 pkt; Square -0.4 pkt; Arrow -6.9 pkt.
+  - Zmiana wyniku pełnego buildu po kolejnych PATCH-ach: Square -5.1 pkt; Square -0.4 pkt; Arrow -6.9 pkt.
   - ISTOTNY SPADEK wartości modów u dawcy.
 
 ## Kontrola profili użytych w łańcuchu
