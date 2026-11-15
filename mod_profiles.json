@@ -3815,6 +3815,217 @@
         "Offense": 0.3521,
         "Tenacity": 0.1715
       }
+    },
+    "STORMTROOPERLUKE": {
+      "name": "Stormtrooper Luke",
+      "role": "support",
+      "source_model": {
+        "method": "direct SWGOH.GG Best Mods page read; equal-weight average of Top 1000 Kyber GAC and Top 100 Guilds",
+        "refreshed_at_utc": "2026-11-15T16:00:00Z",
+        "fetched_at_utc": "2026-11-15T16:00:00Z",
+        "sources": [
+          {
+            "name": "Top 1000 Kyber GAC",
+            "url": "https://swgoh.gg/units/stormtrooper-luke/best-mods/",
+            "units_fully_modded": 945,
+            "set_combinations_pct": {
+              "Speed + Health": 57.67,
+              "Speed + Tenacity": 15.55,
+              "Speed + Potency": 7.83,
+              "Speed + Defense": 4.44,
+              "Triple Health": 3.06,
+              "Speed": 2.43,
+              "Health": 1.16,
+              "Speed + Crit Chance": 1.05,
+              "Double Health + Defense": 0.84
+            },
+            "primary_pct": {
+              "Arrow": {
+                "Speed": 92.48,
+                "Protection": 3.49,
+                "Health": 2.01,
+                "Defense": 0.74,
+                "Offense": 0.63,
+                "Critical Avoidance": 0.52,
+                "Accuracy": 0.1
+              },
+              "Triangle": {
+                "Protection": 53.33,
+                "Health": 16.82,
+                "Offense": 8.88,
+                "Critical Damage": 8.88,
+                "Defense": 7.4,
+                "Critical Chance": 4.65
+              },
+              "Circle": {
+                "Protection": 70.47,
+                "Health": 29.52
+              },
+              "Cross": {
+                "Protection": 45.07,
+                "Tenacity": 18.2,
+                "Health": 15.02,
+                "Potency": 8.67,
+                "Offense": 6.87,
+                "Defense": 6.13
+              }
+            },
+            "secondary_focus": {
+              "Speed": {
+                "average": 16.8,
+                "focus_pct": 20.88
+              },
+              "Health": {
+                "average": 794.3,
+                "focus_pct": 8.44
+              },
+              "Protection": {
+                "average": 1413.4,
+                "focus_pct": 7.84
+              },
+              "Offense": {
+                "average": 79.8,
+                "focus_pct": 7.5
+              }
+            }
+          },
+          {
+            "name": "Top 100 Guilds",
+            "url": "https://swgoh.gg/units/stormtrooper-luke/best-mods/?s=GUILDTOP100",
+            "units_fully_modded": 4858,
+            "set_combinations_pct": {
+              "Speed + Health": 62.59,
+              "Speed + Tenacity": 9.9,
+              "Triple Health": 5.72,
+              "Speed + Potency": 4.3,
+              "Speed + Defense": 3.37,
+              "Speed": 2.96,
+              "Health": 1.09,
+              "Speed + Crit Chance": 1.04,
+              "Double Health + Tenacity": 0.88
+            },
+            "primary_pct": {
+              "Arrow": {
+                "Speed": 93.35,
+                "Protection": 2.36,
+                "Health": 1.5,
+                "Offense": 0.98,
+                "Critical Avoidance": 0.76,
+                "Defense": 0.74,
+                "Accuracy": 0.28
+              },
+              "Triangle": {
+                "Protection": 51.91,
+                "Health": 16.28,
+                "Offense": 9.53,
+                "Critical Damage": 8.93,
+                "Defense": 7.38,
+                "Critical Chance": 5.94
+              },
+              "Circle": {
+                "Protection": 72.58,
+                "Health": 27.41
+              },
+              "Cross": {
+                "Protection": 45.34,
+                "Health": 15.45,
+                "Tenacity": 14.73,
+                "Defense": 8.27,
+                "Potency": 8.23,
+                "Offense": 7.94
+              }
+            },
+            "secondary_focus": {
+              "Speed": {
+                "average": 15,
+                "focus_pct": 20.69
+              },
+              "Health": {
+                "average": 792.8,
+                "focus_pct": 8.73
+              },
+              "Protection": {
+                "average": 1388.3,
+                "focus_pct": 8.11
+              },
+              "Offense": {
+                "average": 77.4,
+                "focus_pct": 7.61
+              }
+            }
+          }
+        ]
+      },
+      "set_combinations": {
+        "Speed + Health": 60.13,
+        "Speed + Tenacity": 12.725,
+        "Speed + Potency": 6.065,
+        "Speed + Defense": 3.905,
+        "Triple Health": 4.39,
+        "Speed": 2.695,
+        "Health": 1.125,
+        "Speed + Crit Chance": 1.045,
+        "Double Health + Defense": 0.42,
+        "Double Health + Tenacity": 0.44
+      },
+      "set_preferences": {
+        "Speed": 1,
+        "Health": 0.7683,
+        "Tenacity": 0.1521,
+        "Potency": 0.0701,
+        "Defense": 0.05,
+        "Crit Chance": 0.0121
+      },
+      "primary_preferences": {
+        "Arrow": {
+          "Speed": 0.9294,
+          "Protection": 0.0293,
+          "Health": 0.0176,
+          "Defense": 0.0074,
+          "Offense": 0.0081,
+          "Critical Avoidance": 0.0064,
+          "Accuracy": 0.0019
+        },
+        "Triangle": {
+          "Protection": 0.5264,
+          "Health": 0.1656,
+          "Offense": 0.0921,
+          "Critical Damage": 0.0891,
+          "Defense": 0.0739,
+          "Critical Chance": 0.053
+        },
+        "Circle": {
+          "Protection": 0.7153,
+          "Health": 0.2847
+        },
+        "Cross": {
+          "Protection": 0.4522,
+          "Tenacity": 0.1647,
+          "Health": 0.1524,
+          "Potency": 0.0845,
+          "Offense": 0.0741,
+          "Defense": 0.072
+        }
+      },
+      "secondary_preferences": {
+        "Speed": null,
+        "Health": null,
+        "Protection": null,
+        "Offense": null,
+        "Defense": null,
+        "Potency": null,
+        "Tenacity": null,
+        "Health %": null,
+        "Protection %": null,
+        "Offense %": null,
+        "Defense %": null,
+        "Potency %": null,
+        "Tenacity %": null,
+        "Critical Chance %": null,
+        "Critical Damage %": null,
+        "Critical Avoidance %": null,
+        "Accuracy": null
+      }
     }
   },
   "profile_status": {
