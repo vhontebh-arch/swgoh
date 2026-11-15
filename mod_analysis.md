@@ -1,4 +1,4 @@
-# Raport modów — LUKESTARKILLER, STORMTROOPERLUKE
+# Raport modów — STORMTROOPERLUKE
 
 **Raport użytkowy.** Pokazuje wyłącznie docelowe mody, kolejność przekładek i wpływ na dawców.
 
@@ -11,68 +11,6 @@
 - **Łączny bilans profilu rosteru:** NIEZATWIERDZONY — łańcuch przekładek jest zablokowany
 - **Liczba modów docelowych:** 6/6
 
-## Docelowy zestaw — LUKESTARKILLER
-
-### Profil SWGOH.GG
-
-**Najczęstszy układ w profilu:** Speed + Potency
-**Układ po tej operacji:** niepełny / nieustalony build
-**Częstość układu po operacji w profilu:** 60.5%.
-
-- Top 1000 Kyber GAC — 898 postaci z kompletnymi 6 modami
-- Top 100 Guilds — 4462 postaci z kompletnymi 6 modami
-- Najczęstsze kombinacje: Speed + Potency (60.5%); Speed + Health (14.2%); Speed + Tenacity (3.2%)
-- Priorytet secondary: Speed, Potency %, Offense %, Offense
-
-### Sześć modów docelowych
-
-#### Arrow
-- **Obecny mod:** Arrow / Speed / Protection % 24% / secondary: Health 770, Defense % 9.48%, Protection 1035, Speed 24 / 6★ A lvl15
-- **Proponowany mod:** pozostaje bez zmian — Arrow / Speed / Protection % 24% / secondary: Health 770, Defense % 9.48%, Protection 1035, Speed 24 / 6★ A lvl15
-- **Korzyść:** zachowanie obecnej konfiguracji slotu.
-#### Square
-- **Obecny mod:** Square / Speed / Offense % 8.5% / secondary: Potency % 8.71%, Health 698, Tenacity % 4.38%, Speed 17 / 6★ A lvl15
-- **Proponowany mod:** pozostaje bez zmian — Square / Speed / Offense % 8.5% / secondary: Potency % 8.71%, Health 698, Tenacity % 4.38%, Speed 17 / 6★ A lvl15
-- **Korzyść:** zachowanie obecnej konfiguracji slotu.
-#### Diamond
-- **Obecny mod:** Diamond / Speed / Defense % 20% / secondary: Tenacity % 5.13%, Potency % 3.46%, Speed 24, Protection 1994 / 6★ A lvl15
-- **Proponowany mod:** pozostaje bez zmian — Diamond / Speed / Defense % 20% / secondary: Tenacity % 5.13%, Potency % 3.46%, Speed 24, Protection 1994 / 6★ A lvl15
-- **Korzyść:** zachowanie obecnej konfiguracji slotu.
-#### Triangle
-- **Obecny mod:** Triangle / Potency / Critical Damage % 42% / secondary: Health % 5.16%, Tenacity % 4.33%, Offense 67, Speed 21 / 6★ A lvl15
-- **Proponowany mod:** pozostaje bez zmian — Triangle / Potency / Critical Damage % 42% / secondary: Health % 5.16%, Tenacity % 4.33%, Offense 67, Speed 21 / 6★ A lvl15
-- **Korzyść:** zachowanie obecnej konfiguracji slotu.
-#### Circle
-- **Obecny mod:** Circle / Potency / Protection % 24% / secondary: Health 298, Speed 17, Tenacity % 8.64%, Health % 5.09% / 6★ A lvl15
-- **Proponowany mod:** pozostaje bez zmian — Circle / Potency / Protection % 24% / secondary: Health 298, Speed 17, Tenacity % 8.64%, Health % 5.09% / 6★ A lvl15
-- **Korzyść:** zachowanie obecnej konfiguracji slotu.
-#### Cross
-- **Obecny mod:** Cross / Speed / Potency % 30% / secondary: Defense 15, Health 2082, Health % 3.6%, Speed 19 / 6★ A lvl15
-- **Proponowany mod:** pozostaje bez zmian — Cross / Speed / Potency % 30% / secondary: Defense 15, Health 2082, Health % 3.6%, Speed 19 / 6★ A lvl15
-- **Korzyść:** zachowanie obecnej konfiguracji slotu.
-
-- **Zmiana potencjału buildu:** +0.0 pkt (optymistyczna projekcja do 15; brakujące rolle przypisane do najwyżej preferowanej secondary; dla 5A projekcja secondary do 6E; primary pozostaje bez zmian; bez slice i calibration).
-
-## MOD — mody przenoszone na cel
-
-Brak zatwierdzonych transferów MOD.
-
-## PATCH — uzupełnienie dawców
-
-Nie jest wymagany żaden PATCH.
-
-## Kolejność przekładania
-
-**Nie wykonuj jeszcze żadnej przekładki.** Poniższy build jest wariantem roboczym; walidacja nie zatwierdziła pełnego łańcucha.
-
-### Co blokuje zatwierdzenie
-
-- **STORMTROOPERLUKE:** dawca ADMIRALPIETT zablokowany: brak pełnego buildu zachowującego kombinację Speed + Health
-- **walidacja profilu dawcy:** LUKESTARKILLER: końcowa kombinacja brak pełnej kombinacji narusza wymaganą Speed + Potency
-- **LUKESTARKILLER:** optimizer mod nie trafił na miejsce: Square
-- **LUKESTARKILLER:** optimizer mod nie trafił na miejsce: Diamond
-- **LUKESTARKILLER:** optimizer mod nie trafił na miejsce: Arrow
-- **STORMTROOPERLUKE:** optimizer mod nie trafił na miejsce: Triangle
 ## Docelowy zestaw — STORMTROOPERLUKE
 
 ### Profil SWGOH.GG
@@ -131,16 +69,16 @@ Nie jest wymagany żaden PATCH.
 ### Co blokuje zatwierdzenie
 
 - **STORMTROOPERLUKE:** dawca ADMIRALPIETT zablokowany: brak pełnego buildu zachowującego kombinację Speed + Health
-- **walidacja profilu dawcy:** LUKESTARKILLER: końcowa kombinacja brak pełnej kombinacji narusza wymaganą Speed + Potency
-- **LUKESTARKILLER:** optimizer mod nie trafił na miejsce: Square
-- **LUKESTARKILLER:** optimizer mod nie trafił na miejsce: Diamond
-- **LUKESTARKILLER:** optimizer mod nie trafił na miejsce: Arrow
 - **STORMTROOPERLUKE:** optimizer mod nie trafił na miejsce: Triangle
 ## Kontrola profili użytych w łańcuchu
 
+- 50RT: profil dostępny, 2 źródła.
+- ADMIRALPIETT: profil dostępny, 2 źródła.
+- EMPERORPALPATINE: profil dostępny, 2 źródła.
 - FINN: profil dostępny, 2 źródła.
 - JEDIKNIGHTREVAN: profil dostępny, 2 źródła.
 - LUKESTARKILLER: profil dostępny, 2 źródła.
+- MARAJADE: profil dostępny, 2 źródła.
 - STORMTROOPERLUKE: profil dostępny, 2 źródła.
 - VEL: profil dostępny, 2 źródła.
 - ZAALBAR: profil dostępny, 2 źródła.
