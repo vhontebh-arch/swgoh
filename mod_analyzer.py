@@ -532,6 +532,23 @@ def load_player_aliases():
 
     return aliases
 
+def load_player_gear_tiers():
+    """Return baseId -> current gearTier from the player roster."""
+    gear_tiers = {}
+    roster_path = "roster.csv"
+    if os.path.exists(roster_path):
+        try:
+            with open(roster_path, newline="", encoding="utf-8-sig") as f:
+                for item in csv.DictReader(f):
+                    base_id = str(item.get("baseId", "") or "").strip()
+                    gear_tier = integer(item.get("gearTier"), -1)
+                    if base_id:
+                        gear_tiers[base_id] = gear_tier
+        except Exception:
+            pass
+    return gear_tiers
+
+
 def load_player_names():
     names = {}
     roster_path = "roster.csv"
@@ -1085,13 +1102,24 @@ def apply_replacements(rows, target_base_ids, profiles=None, aliases=None, names
 
 
 
-def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None, aliases=None, names=None, protected_owners=None):
+def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None, aliases=None, names=None, protected_owners=None, gear_tiers=None):
     """Plan physical same-slot mod transfers and report every affected owner's balance."""
     profiles = profiles or {}
     aliases = aliases or {}
     names = names or {}
     targets = set(target_base_ids)
     protected_owners = set(protected_owners or set())
+    gear_tiers = gear_tiers or {}
+
+    def recipient_gear(base_id):
+        return integer(gear_tiers.get(aliases.get(base_id, base_id), -1), -1)
+
+    def gear_eligible_for_mod(recipient_id, mod):
+        # Six-dot mods may only be equipped by G12+ characters. Unknown gear
+        # is treated as ineligible: the guard must fail closed.
+        if integer(mod.get("dots"), 0) < 6:
+            return True
+        return recipient_gear(recipient_id) >= 12
 
     def rid(r): return str(r.get("id", "") or "") if r else ""
     def owner(r): return str(r.get("assignedTo", "") or "")
@@ -1193,6 +1221,8 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
         if not source_owner:
             return None, "brak identyfikatora właściciela dawcy"
         selected_slots = {str(mod.get("slot", "") or "") for mod in donor_selected}
+        if any(not gear_eligible_for_mod(donor_id, candidate) for candidate in donor_selected):
+            return None, "PATCH zablokowany: dawca {} nie ma G12+ dla moda 6★".format(donor_id)
         donor_before = [r for (o, _slot), r in eq.items() if o == source_owner]
         current_match = profile_set_combo_match(donor_profile, donor_before)
         # Preserve the donor's existing observed combo when it already
@@ -1379,12 +1409,14 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                 for r in candidate_inventory:
                     if rid(r) in forbidden or rid(r) in selected_ids:
                         continue
-                    if str(r.get("slot","")) == slot:
+                    if str(r.get("slot","")) == slot and gear_eligible_for_mod(hole_owner, r):
                         candidates.append((0,r))
                 for (other_owner,other_slot),r in working_eq.items():
                     if other_slot != slot or other_owner == hole_owner or other_owner == target_owner or other_owner in seen:
                         continue
                     if base(r) in protected_owners:
+                        continue
+                    if not gear_eligible_for_mod(hole_owner, r):
                         continue
                     if rid(r) in forbidden or rid(r) in selected_ids:
                         continue
@@ -1456,6 +1488,11 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
         if not target_owner:
             failed.append((target_id, "brak identyfikatora postaci w roster.csv")); continue
         for mod in opt.get("mods", []):
+            if not gear_eligible_for_mod(target_owner, mod):
+                failed.append((target_id, "mod 6★ zablokowany: odbiorca {} ma Gear {}, wymagane G12+".format(
+                    pname(target_owner), recipient_gear(target_owner)
+                )))
+                continue
             slot = str(mod.get("slot",""))
             current = working_eq.get((target_owner, slot))
             if current is not None and rid(current) == rid(mod): continue
@@ -2638,6 +2675,7 @@ def main(argv=None):
     profiles = load_fresh_profiles()
     aliases = load_player_aliases()
     names = load_player_names()
+    gear_tiers = load_player_gear_tiers()
     protected_owners = load_protected_owners()
     protected_owners = {aliases.get(owner_id, owner_id) for owner_id in protected_owners}
     target_ids = {t.get("baseId") for t in targets if t.get("baseId")}
@@ -2701,7 +2739,7 @@ def main(argv=None):
     attempted_profile_units = set(target_ids)
     while True:
         chain_result = apply_optimizer_replacements(
-            rows, optimizer, target_ids, profiles, aliases, names, protected_owners
+            rows, optimizer, target_ids, profiles, aliases, names, protected_owners, gear_tiers
         )
         chain_donor_ids = set()
 
