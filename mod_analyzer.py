@@ -2202,6 +2202,16 @@ def report_chain_role(owner_id, target_ids, aliases):
     return "CEL" if aliases.get(owner_id, owner_id) in target_ids else "DAWCA"
 
 
+def set_counts(mods):
+    """Count equipped mod pieces by set for complete-build reporting."""
+    counts = {}
+    for mod in mods or []:
+        name = str(mod.get("set", "") or "")
+        if name in SET_RULES:
+            counts[name] = counts.get(name, 0) + 1
+    return counts
+
+
 def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
                        target_ids, profile_fetch_status, display_name):
     """Create a short, executable report for the player; CSV remains technical."""
