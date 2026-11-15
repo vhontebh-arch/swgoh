@@ -158,7 +158,7 @@ Wynik pełnego buildu celu i każdego dawcy, liczony tym samym modelem:
 
 ## Wpływ na postacie-dawców
 
-Poniżej zmiana wyniku pełnego buildu oraz pomocnicza suma modValue. ModValue nie zastępuje wyniku profilu — pokazuje jedynie surową zmianę wartości modów.
+Poniżej zmiana **wyniku pełnego buildu wg profilu** przed i po operacji oraz pomocnicza suma modValue. ModValue nie zastępuje wyniku profilu — pokazuje jedynie surową zmianę wartości modów.
 
 - **50RT:** wynik 64,42 → 69,81 (+5,39); Σ modValue 359,4 → 378,5 (+19,1). Sety: przed 3× Health + 3× Speed, po 3× Health + 2× Speed + 1× Potency. Dokładna kombinacja nie występuje w zebranym profilu.
 - **SANASTARROS:** wynik 65,24 → 66,62 (+1,38); Σ modValue 355,6 → 356,1 (+0,5). Speed + Health zachowane (30,7% profilu).
