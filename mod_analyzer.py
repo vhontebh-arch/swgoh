@@ -1274,6 +1274,14 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                 candidate_rows.append(dict(row))
                 local_ids.add(mod_id)
 
+        # A donor receiving a replacement is also a recipient. Apply the
+        # same G12+ rule to every six-dot candidate before the donor build
+        # optimizer can select it; this covers PATCH and recursive PATCH chains.
+        candidate_rows = [
+            row for row in candidate_rows
+            if gear_eligible_for_mod(donor_id, row)
+        ]
+
         # Backtracking: a locally optimal replacement may lead to a dead end
         # several donors deeper. Exclude only the mod(s) that opened the failed
         # child branch, then ask the full-build optimizer for the next candidate.
