@@ -109,32 +109,31 @@ Każdy PATCH jest konkretnym modem dla konkretnego slotu. Przekładki z magazynu
 
 Wykonuj dokładnie w tej kolejności. Założenie moda na zajęty slot automatycznie przenosi poprzedni mod do magazynu. Żaden mod nie jest użyty dwukrotnie.
 
-1. **MOD:** LUKESTARKILLER → STORMTROOPERLUKE, Arrow — MOD 1.
-2. **MOD:** LUKESTARKILLER → STORMTROOPERLUKE, Square — MOD 2.
-3. **MOD:** LUKESTARKILLER → STORMTROOPERLUKE, Diamond — MOD 3.
-4. **MOD:** 50RT → STORMTROOPERLUKE, Triangle — MOD 4.
-5. **MOD:** MARAJADE → STORMTROOPERLUKE, Circle — MOD 5.
-6. **MOD:** MAGAZYN → STORMTROOPERLUKE, Cross — MOD 6.
-7. **PATCH:** ADMIRALPIETT → LUKESTARKILLER, Arrow — PATCH 1.
-8. **PATCH:** LUKESTARKILLER → 50RT, Triangle — PATCH 2.
-9. **PATCH:** SANASTARROS → MARAJADE, Circle — PATCH 3.
-10. **PATCH:** JEDIKNIGHTREVAN → LUKESTARKILLER, Diamond — PATCH 4.
-11. **PATCH:** MAGAZYN → LUKESTARKILLER, Triangle — PATCH 5.
-12. **PATCH:** KUIIL → SANASTARROS, Circle — PATCH 6.
-13. **PATCH:** EMPERORPALPATINE → LUKESTARKILLER, Square — PATCH 7.
-14. **PATCH:** JEDIKNIGHTREVAN → KUIIL, Circle — PATCH 8.
-15. **PATCH:** JEDIKNIGHTREVAN → ADMIRALPIETT, Arrow — PATCH 9.
-16. **PATCH:** ZAALBAR → JEDIKNIGHTREVAN, Circle — PATCH 10.
-17. **PATCH:** MAGAZYN → JEDIKNIGHTREVAN, Arrow — PATCH 11.
-18. **PATCH:** VEL → ZAALBAR, Circle — PATCH 12.
-19. **PATCH:** MAGAZYN → EMPERORPALPATINE, Square — PATCH 13.
-20. **PATCH:** FINN → VEL, Circle — PATCH 14.
-21. **PATCH:** EMPERORPALPATINE → JEDIKNIGHTREVAN, Diamond — PATCH 15.
-22. **PATCH:** MAGAZYN → FINN, Circle — PATCH 16.
-23. **PATCH:** MARAJADE → EMPERORPALPATINE, Diamond — PATCH 17.
-24. **PATCH:** 50RT → MARAJADE, Diamond — PATCH 18.
-25. **PATCH:** MAGAZYN → 50RT, Diamond — PATCH 19.
-
+1. **MOD 1:** LUKESTARKILLER → STORMTROOPERLUKE, Arrow. **Identyfikacja moda:** Speed, 6★ A, poziom 15; primary Protection 24%; secondary: Health 770, Defense 9,48%, Protection 1035, Speed 24.
+2. **MOD 2:** LUKESTARKILLER → STORMTROOPERLUKE, Square. **Identyfikacja moda:** Speed, 6★ A, poziom 15; primary Offense 8,5%; secondary: Potency 8,71%, Health 698, Tenacity 4,38%, Speed 17.
+3. **MOD 3:** LUKESTARKILLER → STORMTROOPERLUKE, Diamond. **Identyfikacja moda:** Speed, 6★ A, poziom 15; primary Defense 20%; secondary: Tenacity 5,13%, Potency 3,46%, Speed 24, Protection 1994.
+4. **MOD 4:** 50RT → STORMTROOPERLUKE, Triangle. **Identyfikacja moda:** Health, 6★ A, poziom 15; primary Critical Damage 42%; secondary: Protection 764, Speed 23, Protection 4,06%, Defense 13,03%.
+5. **MOD 5:** MARAJADE → STORMTROOPERLUKE, Circle. **Identyfikacja moda:** Speed, 6★ A, poziom 15; primary Protection 24%; secondary: Defense 15,26%, Speed 16, Health 1181, Critical Chance 2,93%.
+6. **MOD 6:** MAGAZYN → STORMTROOPERLUKE, Cross. **Identyfikacja moda:** Health, 6★ A, poziom 15; primary Health 16%; secondary: Health 694, Protection 1743, Speed 20, Offense 116.
+7. **PATCH 1:** ADMIRALPIETT → LUKESTARKILLER, Arrow. **Identyfikacja moda:** Speed, 5★ A, poziom 15; primary Speed 30; secondary: Offense 1,02%, Tenacity 1,66%, Offense 107, Critical Chance 3,6%.
+8. **PATCH 2:** LUKESTARKILLER → 50RT, Triangle. **Identyfikacja moda:** Potency, 6★ A, poziom 15; primary Critical Damage 42%; secondary: Health 5,16%, Tenacity 4,33%, Offense 67, Speed 21.
+9. **PATCH 3:** SANASTARROS → MARAJADE, Circle. **Identyfikacja moda:** Speed, 5★ A, poziom 15; primary Health 5,88%; secondary: Potency 1,38%, Speed 5, Defense 4,06%, Health 1024.
+10. **PATCH 4:** JEDIKNIGHTREVAN → LUKESTARKILLER, Diamond. **Identyfikacja moda:** Speed, 6★ A, poziom 15; primary Defense 20%; secondary: Defense 21, Speed 13, Tenacity 13,01%, Offense 71.
+11. **PATCH 5:** MAGAZYN → LUKESTARKILLER, Triangle. **Identyfikacja moda:** Potency, 6★ A, poziom 15; primary Health 16%; secondary: Protection 6,75%, Protection 1368, Speed 20, Critical Chance 5,58%.
+12. **PATCH 6:** KUIIL → SANASTARROS, Circle. **Identyfikacja moda:** Speed, 5★ D, poziom 15; primary Health 5,88%; secondary: Health 819, Critical Chance 1,81%, Defense 8, Speed 5.
+13. **PATCH 7:** EMPERORPALPATINE → LUKESTARKILLER, Square. **Identyfikacja moda:** Speed, 6★ A, poziom 15; primary Offense 8,5%; secondary: Protection 6,07%, Speed 18, Critical Chance 3,86%, Protection 1109.
+14. **PATCH 8:** JEDIKNIGHTREVAN → KUIIL, Circle. **Identyfikacja moda:** Health, 6★ A, poziom 15; primary Health 16%; secondary: Tenacity 7,16%, Defense 11, Speed 24, Defense 9,53%.
+15. **PATCH 9:** JEDIKNIGHTREVAN → ADMIRALPIETT, Arrow. **Identyfikacja moda:** Speed, 6★ A, poziom 15; primary Speed 32; secondary: Critical Chance 9,28%, Potency 1,53%, Health 1122, Defense 8,45%.
+16. **PATCH 10:** ZAALBAR → JEDIKNIGHTREVAN, Circle. **Identyfikacja moda:** Health, 6★ E, poziom 15; primary Protection 24%; secondary: Speed 15, Protection 1730, Offense 2,8%, Defense 14.
+17. **PATCH 11:** MAGAZYN → JEDIKNIGHTREVAN, Arrow. **Identyfikacja moda:** Speed, 5★ B, poziom 15; primary Health 5,88%; secondary: Speed 16, Protection 1247, Critical Chance 1,25%, Defense 6.
+18. **PATCH 12:** VEL → ZAALBAR, Circle. **Identyfikacja moda:** Health, 5★ A, poziom 15; primary Protection 23,5%; secondary: Offense 0,35%, Health 636, Speed 11, Health 2,58%.
+19. **PATCH 13:** MAGAZYN → EMPERORPALPATINE, Square. **Identyfikacja moda:** Speed, 6★ A, poziom 15; primary Offense 8,5%; secondary: Speed 9, Critical Chance 8,02%, Protection 4,67%, Offense 129.
+20. **PATCH 14:** FINN → VEL, Circle. **Identyfikacja moda:** Health, 5★ B, poziom 15; primary Protection 23,5%; secondary: Potency 2,24%, Speed 13, Protection 614, Defense 15.
+21. **PATCH 15:** EMPERORPALPATINE → JEDIKNIGHTREVAN, Diamond. **Identyfikacja moda:** Speed, 6★ A, poziom 15; primary Defense 20%; secondary: Tenacity 8,31%, Offense 1,33%, Speed 19, Health 1560.
+22. **PATCH 16:** MAGAZYN → FINN, Circle. **Identyfikacja moda:** Health, 5★ C, poziom 15; primary Health 5,88%; secondary: Speed 15, Defense 8, Offense 0,45%, Protection 2,16%.
+23. **PATCH 17:** MARAJADE → EMPERORPALPATINE, Diamond. **Identyfikacja moda:** Speed, 6★ A, poziom 15; primary Defense 20%; secondary: Offense 116, Protection 5,98%, Health 5,46%, Speed 16.
+24. **PATCH 18:** 50RT → MARAJADE, Diamond. **Identyfikacja moda:** Speed, 5★ D, poziom 15; primary Defense 11,75%; secondary: Critical Chance 1,49%, Potency 2,11%, Offense 70, Speed 5.
+25. **PATCH 19:** MAGAZYN → 50RT, Diamond. **Identyfikacja moda:** Health, 5★ C, poziom 15; primary Defense 11,75%; secondary: Health 277, Speed 9, Offense 70, Protection 493.
 ## Bilans całej operacji — ta sama punktacja przed/po
 
 Wynik pełnego buildu celu i każdego dawcy, liczony tym samym modelem:
