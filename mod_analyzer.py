@@ -2383,6 +2383,36 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
             "### Profil SWGOH.GG",
             "",
         ]
+        # Make the distinction between the population's preferred build and
+        # the exact six-set combination produced by this operation explicit.
+        target_validation = next(
+            (item for item in chain_result.get("validation", [])
+             if str(item.get("owner", "") or "") == str(target_owner or "")),
+            None,
+        )
+        profile_combo = dominant_profile_set_combo(profile)
+        actual_counts = (
+            target_validation.get("afterCounts", {})
+            if target_validation else set_counts(opt.get("mods", []))
+        )
+        actual_combo = _canonical_set_combo_from_counts(actual_counts)
+        actual_match = profile_set_combo_match(profile, opt.get("mods", []))
+        lines += [
+            "**Najczęstszy układ w profilu:** {}".format(profile_combo or "brak danych o pełnych kombinacjach"),
+            "**Układ po tej operacji:** {}".format(actual_combo or "niepełny / nieustalony build"),
+        ]
+        if profile_combo and actual_combo:
+            if actual_combo == profile_combo:
+                lines.append("**Zgodność z głównym układem profilu:** TAK.")
+            else:
+                lines.append("**Różnica względem głównego układu profilu:** wynik operacji odbiega od najczęstszej kombinacji.")
+        if actual_match:
+            lines.append("**Częstość układu po operacji w profilu:** {:.1f}%.".format(
+                float(actual_match.get("frequency", 0.0) or 0.0)
+            ))
+        elif actual_combo:
+            lines.append("**Częstość układu po operacji w profilu:** 0% — tej kombinacji nie ma w zebranym profilu.")
+        lines.append("")
         if sources:
             for source in sources:
                 lines.append("- {} — {} postaci z kompletnymi 6 modami".format(
