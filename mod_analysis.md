@@ -4,11 +4,11 @@ Model rozdziela **jakość obecnych rolli**, **potencjał dalszego rozwoju**, **
 
 W raportach przeznaczonych do ręcznego wykonania mod identyfikowany jest wyłącznie przez slot, set, primary, secondary, gwiazdki, tier i poziom; wewnętrzne ID nie są pokazywane.
 
-- Modów: **2186**
-- UPGRADE: **22**
+- Modów: **2197**
+- UPGRADE: **31**
 - SLICE: **1154**
 - SLICE_6E: **237**
-- CALIBRATE: **102**
+- CALIBRATE: **104**
 - EQUIP: **0**
 - REPLACE: **3**
 - PATCH: **3**
@@ -49,6 +49,7 @@ W raportach przeznaczonych do ręcznego wykonania mod identyfikowany jest wyłą
 | CALIBRATE | Diamond Defense % 20% | POSTAĆ: EPIXFINN | Speed | 6A | 15 | 100.0% | 68.8% | 43.8% | 0.0% | 77.8% | 68.8% | calibration |
 | CALIBRATE | Circle Health % 16% | POSTAĆ: HONDO | Speed | 6A | 15 | 100.0% | 55.3% | 43.5% | 0.0% | 83.3% | 55.3% | calibration |
 | CALIBRATE | Triangle Health % 16% | POSTAĆ: ADMIRALPIETT | Speed | 6A | 15 | 100.0% | 58.0% | 42.9% | 0.0% | 79.2% | 58.0% | calibration |
+| CALIBRATE | Cross Health % 16% | MAGAZYN | Health | 6A | 15 | 100.0% | 78.2% | 42.6% | 0.0% | 66.7% | 78.2% | calibration |
 | CALIBRATE | Arrow Protection % 24% | POSTAĆ: LUKESTARKILLER | Speed | 6A | 15 | 100.0% | 68.2% | 42.2% | 0.0% | 80.0% | 68.2% | calibration |
 | CALIBRATE | Triangle Critical Damage % 42% | POSTAĆ: 50RT | Health | 6A | 15 | 100.0% | 71.3% | 42.1% | 0.0% | 76.7% | 71.3% | calibration |
 | CALIBRATE | Cross Tenacity % 35% | POSTAĆ: SEVENTHSISTER | Speed | 6A | 15 | 100.0% | 74.0% | 42.0% | 0.0% | 83.3% | 74.0% | calibration |
@@ -80,6 +81,7 @@ W raportach przeznaczonych do ręcznego wykonania mod identyfikowany jest wyłą
 | CALIBRATE | Cross Potency % 30% | POSTAĆ: VADER | Critical Damage | 6A | 15 | 100.0% | 67.3% | 36.1% | 0.0% | 75.0% | 67.3% | calibration |
 | CALIBRATE | Circle Protection % 24% | POSTAĆ: HOTHLEIA | Critical Chance | 6A | 15 | 100.0% | 69.2% | 36.0% | 0.0% | 79.2% | 69.2% | calibration |
 | CALIBRATE | Circle Protection % 24% | POSTAĆ: GRANDADMIRALTHRAWN | Speed | 6A | 15 | 100.0% | 83.5% | 35.5% | 0.0% | 75.0% | 83.5% | calibration |
+| CALIBRATE | Square Offense % 8.5% | MAGAZYN | Speed | 6A | 15 | 100.0% | 59.2% | 35.3% | 0.0% | 75.0% | 59.2% | calibration |
 | CALIBRATE | Triangle Protection % 24% | POSTAĆ: SANASTARROS | Health | 6A | 15 | 100.0% | 70.3% | 35.2% | 0.0% | 61.1% | 70.3% | calibration |
 | CALIBRATE | Square Offense % 8.5% | POSTAĆ: GLREY | Offense | 6A | 15 | 100.0% | 76.7% | 34.8% | 0.0% | 80.0% | 76.7% | calibration |
 | CALIBRATE | Diamond Defense % 20% | POSTAĆ: JEDIKNIGHTREVAN | Speed | 6A | 15 | 100.0% | 56.8% | 33.3% | 0.0% | 72.2% | 56.8% | calibration |
@@ -93,8 +95,6 @@ W raportach przeznaczonych do ręcznego wykonania mod identyfikowany jest wyłą
 | CALIBRATE | Arrow Speed 32 | POSTAĆ: SEVENTHSISTER | Health | 6A | 15 | 100.0% | 69.0% | 30.8% | 0.0% | 0.0% | 69.0% | calibration |
 | CALIBRATE | Square Offense % 8.5% | POSTAĆ: MERRIN | Health | 6A | 15 | 100.0% | 65.5% | 30.2% | 0.0% | 91.7% | 65.5% | calibration |
 | CALIBRATE | Circle Protection % 24% | POSTAĆ: GRANDMOFFTARKIN | Potency | 6A | 15 | 100.0% | 64.3% | 29.8% | 0.0% | 75.0% | 64.3% | calibration |
-| CALIBRATE | Triangle Critical Chance % 20% | POSTAĆ: BB8 | Health | 6A | 15 | 100.0% | 67.0% | 29.4% | 0.0% | 83.3% | 67.0% | calibration |
-| CALIBRATE | Triangle Offense % 8.5% | POSTAĆ: GLREY | Offense | 6A | 15 | 100.0% | 65.8% | 29.0% | 0.0% | 83.3% | 65.8% | calibration |
 
 ### JARJARBINKS — najlepszy wirtualny build 6/6
 
