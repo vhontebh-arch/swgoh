@@ -253,6 +253,8 @@ Zakładanie moda automatycznie przenosi poprzedni mod ze slotu do magazynu. Wszy
   - Zmiana wyniku pełnego buildu po kolejnych PATCH-ach: Square +2.0 pkt; Square -2.3 pkt.
   - ISTOTNY SPADEK wartości modów u dawcy.
 - **CROSSHAIRS3 — wynik pełnego buildu wg profilu:** 36.87 → 40.54 (+3.67 pkt).
+  - **Najczęstszy układ profilu:** Offense + Critical Chance (38.86%).
+  - **Układ po tej operacji:** 4× Critical Chance + 1× Offense + 1× Critical Damage — odbiega od najczęstszego układu profilu.
   - Σ modValue modów: 416.2 → 406.2 (-10.0) — surowy wskaźnik jakości modów, nie wynik profilu.
   - Zmiana wyniku pełnego buildu po kolejnych PATCH-ach: Square +3.7 pkt.
   - Critical Damage: BUDOWANY pełnych setów (0 → 0).
