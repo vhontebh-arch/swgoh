@@ -21,7 +21,7 @@ on:
       - "test_optimizer_data_sync.py"
       - ".github/workflows/update-swgoh.yml"
   schedule:
-    - cron: "0 6 * * *"
+    - cron: "0 */3 * * *"
 
 concurrency:
   group: swgoh-canonical-data-publisher
