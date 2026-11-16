@@ -1,0 +1,69 @@
+name: Probe GAC stats source access
+
+on:
+  push:
+    branches:
+      - feature/character-importance-ranking
+    paths:
+      - ".github/workflows/probe-gac-sources.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - name: Probe Unit Tier List and classic GAC reports
+        run: |
+          python - <<'PY'
+          from urllib.request import Request, urlopen
+          from urllib.parse import quote
+          from html.parser import HTMLParser
+
+          pages = {
+              "unit_tier_list": "https://swgoh.gg/tier-list/units/",
+              "top_leaders": "https://swgoh.gg/gac/leaders/?cutoff=1",
+              "top_squads": "https://swgoh.gg/gac/squads/?cutoff=1",
+          }
+          class Rows(HTMLParser):
+              def __init__(self):
+                  super().__init__()
+                  self.rows = 0
+              def handle_starttag(self, tag, attrs):
+                  if tag == "tr":
+                      self.rows += 1
+
+          failures = []
+          for label, url in pages.items():
+              candidates = [
+                  ("direct", url),
+                  ("allorigins", "https://api.allorigins.win/raw?url=" + quote(url, safe="")),
+                  ("r_jina", "https://r.jina.ai/http://" + url.split("://",1)[1]),
+              ]
+              success = False
+              for source, endpoint in candidates:
+                  try:
+                      req = Request(endpoint, headers={"User-Agent": "Mozilla/5.0"})
+                      with urlopen(req, timeout=22) as response:
+                          body = response.read().decode("utf-8", "replace")
+                      parser = Rows()
+                      parser.feed(body)
+                      marker = {
+                          "unit_tier_list": "Unit Tier List",
+                          "top_leaders": "GAC Leaders",
+                          "top_squads": "Squads",
+                      }[label]
+                      if len(body) < 3000 or marker.lower() not in body.lower():
+                          raise RuntimeError(f"unexpected response: {len(body)} bytes, {parser.rows} table rows")
+                      print(f"PASS {label}: source={source}, bytes={len(body)}, table_rows={parser.rows}")
+                      success = True
+                      break
+                  except Exception as exc:
+                      print(f"FAIL {label} via {source}: {type(exc).__name__}: {exc}")
+              if not success:
+                  failures.append(label)
+          if failures:
+              raise SystemExit("Unable to retrieve sources: " + ", ".join(failures))
+          PY
