@@ -1,0 +1,63 @@
+name: Probe SWGOH.GG public player-data access
+
+on:
+  push:
+    branches:
+      - feature/character-importance-ranking
+    paths:
+      - ".github/workflows/probe-player-data-access.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Test public data pages from GitHub Actions
+        run: |
+          python - <<'PY'
+          import urllib.request
+          from urllib.error import HTTPError, URLError
+
+          urls = {
+              "unit_data_top100": "https://swgoh.gg/units/omega/data/",
+              "unit_data_all": "https://swgoh.gg/units/omega/data/abilities/?filter_type=all",
+              "omicron_zeta_report": "https://swgoh.gg/stats/ability-report/",
+              "top100_guild_mod_report": "https://swgoh.gg/stats/mod-meta-report/guilds_100_gp/",
+              "relic_player_data": "https://swgoh.gg/characters/relic-player-data/",
+              "unit_release_dates": "https://swgoh.gg/units/releases/",
+          }
+          headers = {
+              "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/130.0 Safari/537.36",
+              "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+          }
+          failures = 0
+          for name, url in urls.items():
+              request = urllib.request.Request(url, headers=headers)
+              try:
+                  with urllib.request.urlopen(request, timeout=25) as response:
+                      body = response.read()
+                      text = body.decode("utf-8", errors="replace")
+                      markers = {
+                          "unit_data_top100": ("Player Data", "Considered from player data"),
+                          "unit_data_all": ("Player Data", "Ability Level"),
+                          "omicron_zeta_report": ("SWGOH Omicron Report", "Territory Battles"),
+                          "top100_guild_mod_report": ("Top 100 Guilds", "Character"),
+                          "relic_player_data": ("Relic Player Data", "R5"),
+                          "unit_release_dates": ("Unit Releases",),
+                      }[name]
+                      valid = len(body) > 5000 and any(marker in text for marker in markers)
+                      print(f"{name}: HTTP {response.status}; bytes={len(body)}; marker_valid={valid}; final_url={response.url}")
+                      if not valid:
+                          failures += 1
+              except HTTPError as exc:
+                  print(f"{name}: HTTP {exc.code}; reason={exc.reason}")
+                  failures += 1
+              except (URLError, TimeoutError, Exception) as exc:
+                  print(f"{name}: ERROR {type(exc).__name__}: {exc}")
+                  failures += 1
+          if failures:
+              raise SystemExit(f"{failures}/{len(urls)} page checks failed")
+          PY
