@@ -315,7 +315,7 @@
       "catalog_name": "Temple Guard"
     },
     {
-      "character": "RC-1262 Scorch",
+      "character": "RC-1262 \"Scorch\"",
       "base_id": "SCORCH",
       "catalog_name": "RC-1262 \"Scorch\""
     },
@@ -455,7 +455,7 @@
       "catalog_name": "Second Sister"
     },
     {
-      "character": "Garazeb Zeb Orrelios",
+      "character": "Garazeb \"Zeb\" Orrelios",
       "base_id": "ZEBS3",
       "catalog_name": "Garazeb \"Zeb\" Orrelios"
     },
@@ -550,7 +550,7 @@
       "catalog_name": "Bo-Katan Kryze"
     },
     {
-      "character": "CC-1119 Appo",
+      "character": "CC-1119 \"Appo\"",
       "base_id": "APPO",
       "catalog_name": "CC-1119 \"Appo\""
     },
@@ -600,7 +600,7 @@
       "catalog_name": "Kylo Ren (Unmasked)"
     },
     {
-      "character": "CT-7567 Rex",
+      "character": "CT-7567 \"Rex\"",
       "base_id": "CT7567",
       "catalog_name": "CT-7567 \"Rex\""
     },
@@ -1015,7 +1015,7 @@
       "catalog_name": "Dedra Meero"
     },
     {
-      "character": "CT-5555 Fives",
+      "character": "CT-5555 \"Fives\"",
       "base_id": "CT5555",
       "catalog_name": "CT-5555 \"Fives\""
     },
@@ -1050,7 +1050,7 @@
       "catalog_name": "Clone Wars Chewbacca"
     },
     {
-      "character": "CT-21-0408 Echo",
+      "character": "CT-21-0408 \"Echo\"",
       "base_id": "CT210408",
       "catalog_name": "CT-21-0408 \"Echo\""
     },
@@ -1270,7 +1270,7 @@
       "catalog_name": "Jawa"
     },
     {
-      "character": "CC-2224 Cody",
+      "character": "CC-2224 \"Cody\"",
       "base_id": "CC2224",
       "catalog_name": "CC-2224 \"Cody\""
     },

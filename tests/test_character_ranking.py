@@ -29,7 +29,7 @@ class StackRankImportTests(unittest.TestCase):
     def test_lookup_accepts_display_name_and_base_id(self):
         item={"character":"Grogu & Anzellans","base_id":"GOPHERANTS","rank":270}
         self.assertEqual(get_character_rank([item],"grogu & anzellans")["rank"],270)
-        self.assertEqual(get_character_rank([item],"groguanzellans")["rank"],270)
+        self.assertEqual(get_character_rank([item],"gopherants")["rank"],270)
 
     def test_rejects_duplicate_names_and_invalid_tiers(self):
         for rows in ([row(1,"A",2),row(2,"a",3)],[row(1,"A",20)]):
