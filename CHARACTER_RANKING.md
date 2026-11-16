@@ -8,14 +8,17 @@ HotUtils usage, GAC-only ranking, or popularity proxy is mixed into the result.
 ## Source snapshot
 
 - Raw input: `data/stack_rank.tsv` (313 character rows; original columns retained).
+- baseId map: `data/character_base_id_mapping.json` (313 unique mappings).
 - Generated output: `character_ranking.json`.
-- Source page: [Stack Rank](https://swgoh.spineless.net/stackrank?omicronGac=true&omicronTw=true&omicronTb=true&omicronRaids=true&omicronConquest=true&allyCode=972824625&showFullDetails=true)
-- Export settings: Omicron Boost enabled for GAC, Territory War, Territory Battle,
-  Raids and Conquest; full details enabled.
-- The snapshot in this repository was supplied on 2026-11-16.
+- Stack Rank page: [personalized export](https://swgoh.spineless.net/stackrank?omicronGac=true&omicronTw=true&omicronTb=true&omicronRaids=true&omicronConquest=true&allyCode=972824625&showFullDetails=true)
+- Mapping catalog: [DrPivot/SWGOH-Guild-Progress unit_list.csv](https://github.com/DrPivot/SWGOH-Guild-Progress/blob/f6f2e182cab19602a9d45399235eb26caf0f0cce/data/unit_list.csv), pinned to commit `f6f2e182cab19602a9d45399235eb26caf0f0cce`.
+- Matching: normalized display-name match (case, diacritics and punctuation normalized). All 313 names matched exactly one catalog entry and all 313 baseIds are unique.
 
-Stack Rank is roster-personalized. Do not replace its `Final Tier` values with
-base tiers from a public character list or another dataset.
+The player roster CSV contained 308 of the 313 Stack Rank characters. The five
+not present in that roster export were resolved against the pinned full unit
+catalog: The Ronin (`THERONIN`), Third Sister (`THIRDSISTER`), Taron Malicos
+(`TARONMALICOS`), Dark Trooper Moff Gideon (`MOFFGIDEONS3`) and Jaxxon
+(`JAXXON`). This is a catalog mapping, not a claim that those five are owned.
 
 ## Interpretation
 
@@ -25,46 +28,33 @@ base tiers from a public character list or another dataset.
    a secondary ordering value. It is not the same as `Final Tier`.
 3. `importance_score = 20 - final_tier` is a simple inverse representation;
    it does not add another signal.
-4. `Base Tier`, `Synergy Enhancement`, `Omicron Boost`,
-   `Omicron Synergy Boost`, `Relic Gear Level` and `Ability Score` are
-   retained for audit. They are not scored a second time because their effects
-   are already represented in `Final Tier`.
-5. `Sort Score` and `SubSort Score` are retained as source sort metadata,
-   not independent importance signals.
+4. Base Tier, synergy/Omicron fields, Relic Gear Level and Ability Score remain
+   audit fields; their effects are not scored a second time.
+5. Sort Score and SubSort Score remain source sort metadata.
 
-The ranking module is standalone. It does not yet map every display name to a
-game `baseId`, and it is not connected to `mod_analyzer.py` or
-`protected_owners.json`. No mod protection behavior changes in this branch.
+The ranking is standalone and is not connected to `mod_analyzer.py` or
+`protected_owners.json`; no mod protection behavior changes in this branch.
 
-## Refreshing the snapshot
+## Refreshing
 
-The Stack Rank page is dynamic and no supported public export endpoint has
-been established. Therefore refresh is intentionally manual:
-
-1. Open the source URL above with the same ally code and all five Omicron
-   Boost options enabled.
-2. Export/copy the complete table including all columns.
-3. Replace `data/stack_rank.tsv` with the tab-delimited export.
-4. Regenerate `character_ranking.json` and run the tests:
+Stack Rank refresh remains manual because no supported public export endpoint
+has been established. Replace the TSV snapshot and, if new characters appear,
+refresh the pinned baseId map from a canonical game-unit catalog. Then run:
 
 ```bash
-python character_ranking.py --input data/stack_rank.tsv --output character_ranking.json
+python character_ranking.py --input data/stack_rank.tsv --output character_ranking.json --expected-count 313
 python -m unittest discover -s tests -p "test_character_ranking.py" -v
 ```
 
-5. Commit both the raw snapshot and generated JSON to
-   `feature/character-importance-ranking`.
-
-The workflow validates the committed snapshot and generated output; it does not
-pretend to fetch fresh data from the website. No automated website scraping is
-configured.
+The workflow validates the snapshot and generated JSON; it does not scrape the
+Stack Rank website.
 
 ## Python interface
 
 ```python
 from character_ranking import load_stack_rank, rank_characters, get_character_rank
 
-rows = load_stack_rank("data/stack_rank.tsv")
+rows = load_stack_rank("data/stack_rank.tsv", "data/character_base_id_mapping.json")
 importance_order = rank_characters(rows)
-grogu = get_character_rank(rows, "Grogu & Anzellans")
+grogu = get_character_rank(rows, "GROGUANZELLANS")
 ```
