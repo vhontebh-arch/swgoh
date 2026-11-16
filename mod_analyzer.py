@@ -1212,8 +1212,8 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
     profiled_donor_moves = {}
     donor_rebuild_reserved = set()
 
-    def rebuild_profiled_donor(donor_id, donor_selected, visited):
-        """Rebuild all holes of one donor, recursively repairing every donor it borrows from."""
+    def rebuild_profiled_donor(donor_id, donor_selected, visited, explore_alternatives=True):
+        """Rebuild donor holes and choose among bounded complete recursive alternatives by Rank-weighted roster impact."""
         if donor_id in visited:
             return None, "wykryto cykl w łańcuchu dawców"
         donor_profile = profiles.get(donor_id)
@@ -1288,6 +1288,10 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
         # several donors deeper. Exclude only the mod(s) that opened the failed
         # child branch, then ask the full-build optimizer for the next candidate.
         excluded_mod_ids = set()
+        best_moves = None
+        best_rank_score = float("-inf")
+        best_reservations = set()
+        successful_variants = 0
         while True:
             donor_optimizer = optimize_target_build(
                 candidate_rows, {donor_id}, profiles, aliases, names, set(),
@@ -1299,18 +1303,30 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
             by_slot = {str(mod.get("slot", "") or ""): mod for mod in donor_build}
             built_combo = canonical_set_combo_from_mods(donor_build)
             if len(by_slot) != 6 or (required_combo and built_combo != required_combo):
+                if best_moves is not None:
+                    donor_rebuild_reserved.update(best_reservations)
+                    return best_moves, None
                 return None, (
                     "brak pełnego buildu zachowującego kombinację {}"
                     .format(required_combo or "zgodną z profilem")
                 )
             if not all(slot in by_slot for slot in hole_slots):
+                if best_moves is not None:
+                    donor_rebuild_reserved.update(best_reservations)
+                    return best_moves, None
                 return None, "nie udało się uzupełnić wszystkich slotów dawcy"
 
             replacements = {slot: by_slot[slot] for slot in hole_slots}
             replacement_ids = [rid(mod) for mod in replacements.values()]
             if len(replacement_ids) != len(set(replacement_ids)):
+                if best_moves is not None:
+                    donor_rebuild_reserved.update(best_reservations)
+                    return best_moves, None
                 return None, "optimizer wskazał ten sam mod dla kilku slotów"
             if any(mod_id in donor_rebuild_reserved for mod_id in replacement_ids):
+                if best_moves is not None:
+                    donor_rebuild_reserved.update(best_reservations)
+                    return best_moves, None
                 return None, "mod został już zarezerwowany przez inny łańcuch"
 
             reservation_snapshot = set(donor_rebuild_reserved)
@@ -1332,7 +1348,7 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                         exact_combo_frequency(donor_profile, donor_after)
                         - exact_combo_frequency(donor_profile, donor_before)
                     ),
-                    "strategy": "PROFILE_RECURSIVE_FULL_BUILD_BACKTRACK",
+                    "strategy": "PROFILE_RECURSIVE_FULL_BUILD_RANK",
                 })
 
             child_groups = {}
@@ -1346,7 +1362,8 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
             child_moves_all = []
             for child_id, child_selected in sorted(child_groups.items()):
                 child_moves, error = rebuild_profiled_donor(
-                    child_id, child_selected, visited | {donor_id}
+                    child_id, child_selected, visited | {donor_id},
+                    explore_alternatives=False,
                 )
                 if child_moves is None:
                     failed_child, failed_error = child_id, error
@@ -1354,8 +1371,29 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                 child_moves_all.extend(child_moves)
 
             if failed_child is None:
-                moves.extend(child_moves_all)
-                return moves, None
+                complete_moves = moves + child_moves_all
+                rank_score = rank_weighted_donor_delta(complete_moves, ranking, aliases)
+                if rank_score > best_rank_score:
+                    best_moves = complete_moves
+                    best_rank_score = rank_score
+                    best_reservations = set(donor_rebuild_reserved)
+                donor_rebuild_reserved.clear()
+                donor_rebuild_reserved.update(reservation_snapshot)
+                successful_variants += 1
+                if not explore_alternatives or successful_variants >= 3:
+                    donor_rebuild_reserved.update(best_reservations)
+                    return best_moves, None
+                # Exclude one selected replacement at a time to obtain another
+                # complete build; cap exploration to keep recursive search bounded.
+                alternative_ids = [
+                    rid(replacements[slot]) for slot in sorted(replacements)
+                    if rid(replacements[slot]) and rid(replacements[slot]) not in excluded_mod_ids
+                ]
+                if not alternative_ids:
+                    donor_rebuild_reserved.update(best_reservations)
+                    return best_moves, None
+                excluded_mod_ids.add(alternative_ids[0])
+                continue
 
             # Undo every reservation made by this attempt before exploring the
             # next candidate. Otherwise a failed branch could poison alternatives.
@@ -1367,6 +1405,9 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
             }
             new_ids = failed_branch_ids - excluded_mod_ids
             if not new_ids:
+                if best_moves is not None:
+                    donor_rebuild_reserved.update(best_reservations)
+                    return best_moves, None
                 return None, "dawca {}: {}".format(failed_child, failed_error)
             excluded_mod_ids.update(new_ids)
 
