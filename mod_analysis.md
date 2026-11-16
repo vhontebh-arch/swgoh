@@ -8,11 +8,11 @@ W raportach przeznaczonych do ręcznego wykonania mod identyfikowany jest wyłą
 - UPGRADE: **31**
 - SLICE: **1154**
 - SLICE_6E: **237**
-- CALIBRATE: **104**
+- CALIBRATE: **105**
 - EQUIP: **0**
 - REPLACE: **3**
 - PATCH: **3**
-- KEEP: **665**
+- KEEP: **664**
 
 ## Globalny optimizer 6-slotowy
 
@@ -83,6 +83,7 @@ W raportach przeznaczonych do ręcznego wykonania mod identyfikowany jest wyłą
 | CALIBRATE | Square Offense % 8.5% | POSTAĆ: EMPERORPALPATINE | Speed | 6A | 15 | 100.0% | 59.2% | 35.5% | 0.0% | 75.0% | 59.2% | calibration |
 | CALIBRATE | Triangle Protection % 24% | POSTAĆ: SANASTARROS | Health | 6A | 15 | 100.0% | 70.3% | 35.2% | 0.0% | 61.1% | 70.3% | calibration |
 | CALIBRATE | Square Offense % 8.5% | POSTAĆ: GLREY | Offense | 6A | 15 | 100.0% | 76.7% | 34.8% | 0.0% | 80.0% | 76.7% | calibration |
+| CALIBRATE | Triangle Critical Damage % 42% | POSTAĆ: 50RT | Potency | 6A | 15 | 100.0% | 78.3% | 33.8% | 0.0% | 70.0% | 78.3% | calibration |
 | CALIBRATE | Triangle Health % 16% | POSTAĆ: LUKESTARKILLER | Potency | 6A | 15 | 100.0% | 65.1% | 33.8% | 0.0% | 83.3% | 65.1% | calibration |
 | CALIBRATE | Cross Tenacity % 35% | POSTAĆ: REY | Critical Damage | 6A | 15 | 100.0% | 63.0% | 33.2% | 0.0% | 83.3% | 63.0% | calibration |
 | CALIBRATE | Triangle Health % 16% | POSTAĆ: OPERATIVE | Speed | 6A | 15 | 100.0% | 62.8% | 32.7% | 0.0% | 66.7% | 62.8% | calibration |
@@ -90,7 +91,6 @@ W raportach przeznaczonych do ręcznego wykonania mod identyfikowany jest wyłą
 | CALIBRATE | Circle Protection % 24% | POSTAĆ: COMMANDERLUKESKYWALKER | Offense | 6A | 15 | 100.0% | 76.0% | 32.4% | 0.0% | 80.0% | 76.0% | calibration |
 | CALIBRATE | Cross Offense % 8.5% | POSTAĆ: GLREY | Health | 6A | 15 | 100.0% | 69.3% | 31.6% | 0.0% | 79.2% | 69.3% | calibration |
 | CALIBRATE | Circle Health % 16% | POSTAĆ: HERMITYODA | Speed | 6A | 15 | 100.0% | 78.3% | 31.5% | 0.0% | 91.7% | 78.3% | calibration |
-| CALIBRATE | Triangle Critical Damage % 42% | POSTAĆ: 50RT | Potency | 6A | 15 | 100.0% | 78.3% | 31.3% | 0.0% | 70.0% | 78.3% | calibration |
 | CALIBRATE | Triangle Health % 16% | POSTAĆ: NINTHSISTER | Tenacity | 6A | 15 | 100.0% | 79.7% | 31.1% | 0.0% | 83.3% | 79.7% | calibration |
 | CALIBRATE | Arrow Speed 32 | POSTAĆ: SEVENTHSISTER | Health | 6A | 15 | 100.0% | 69.0% | 30.8% | 0.0% | 0.0% | 69.0% | calibration |
 | CALIBRATE | Square Offense % 8.5% | POSTAĆ: MERRIN | Health | 6A | 15 | 100.0% | 65.5% | 30.2% | 0.0% | 91.7% | 65.5% | calibration |
