@@ -17,7 +17,7 @@ OUTPUT_CSV = "mod_analysis.csv"
 OUTPUT_MD = "mod_analysis.md"
 PROFILE_FILE = "mod_profiles.json"
 ANALYZER_VERSION = "2026-11-16-rank-weighted-chain-selection-v2"
-CHAIN_ALTERNATIVE_CAP = 3
+CHAIN_ALTERNATIVE_CAP = 5
 CHAIN_SEARCH_DIAGNOSTICS = {}
 
 R5 = {
@@ -2840,8 +2840,8 @@ def main(argv=None):
         help="BASE_ID postaci do optymalizacji modów; można powtórzyć lub podać listę rozdzieloną przecinkami.",
     )
     parser.add_argument(
-        "--chain-alternative-cap", type=int, default=3,
-        help="Maksymalna liczba kompletnych wariantów odbudowy każdego głównego dawcy (domyślnie 3).",
+        "--chain-alternative-cap", type=int, default=5,
+        help="Maksymalna liczba kompletnych wariantów odbudowy każdego głównego dawcy (domyślnie 5).",
     )
     args = parser.parse_args(argv)
     if args.chain_alternative_cap < 1:
