@@ -22,6 +22,10 @@ permissions:
 
 jobs:
   analyze:
+    strategy:
+      fail-fast: false
+      matrix:
+        alternative_cap: [1, 2, 3, 5, 8]
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -36,13 +40,13 @@ jobs:
       - name: Run target analysis with Rank-weighted chain selection
         run: |
           set -e
-          python mod_analyzer.py --target "${{ inputs.target || 'GOPHERANTS' }}"
+          python mod_analyzer.py --target "${{ inputs.target || 'GOPHERANTS' }}" --chain-alternative-cap "${{ matrix.alternative_cap }}"
           test -s mod_analysis.csv
           test -s mod_analysis.md
       - name: Upload analysis output
         uses: actions/upload-artifact@v4
         with:
-          name: rank-weighted-mod-analysis
+          name: rank-weighted-mod-analysis-cap-${{ matrix.alternative_cap }}
           path: |
             mod_analysis.csv
             mod_analysis.md
