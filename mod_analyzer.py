@@ -16,7 +16,9 @@ INPUT_FILE = "mods.csv"
 OUTPUT_CSV = "mod_analysis.csv"
 OUTPUT_MD = "mod_analysis.md"
 PROFILE_FILE = "mod_profiles.json"
-ANALYZER_VERSION = "2026-11-16-rank-weighted-chain-selection-v1"
+ANALYZER_VERSION = "2026-11-16-rank-weighted-chain-selection-v2"
+CHAIN_ALTERNATIVE_CAP = 3
+CHAIN_SEARCH_DIAGNOSTICS = {}
 
 R5 = {
     "Critical Chance %": (1.125, 2.25), "Defense": (4.9, 9.8),
@@ -1105,6 +1107,8 @@ def apply_replacements(rows, target_base_ids, profiles=None, aliases=None, names
 
 def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None, aliases=None, names=None, protected_owners=None, gear_tiers=None, ranking=None):
     """Plan physical same-slot mod transfers and report every affected owner's balance."""
+    global CHAIN_SEARCH_DIAGNOSTICS
+    CHAIN_SEARCH_DIAGNOSTICS = {}
     profiles = profiles or {}
     aliases = aliases or {}
     names = names or {}
@@ -1292,6 +1296,7 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
         best_rank_score = float("-inf")
         best_reservations = set()
         successful_variants = 0
+        variant_scores = []
         while True:
             donor_optimizer = optimize_target_build(
                 candidate_rows, {donor_id}, profiles, aliases, names, set(),
@@ -1380,7 +1385,10 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                 donor_rebuild_reserved.clear()
                 donor_rebuild_reserved.update(reservation_snapshot)
                 successful_variants += 1
-                if not explore_alternatives or successful_variants >= 3:
+                variant_scores.append(round(rank_score, 4))
+                if explore_alternatives:
+                    CHAIN_SEARCH_DIAGNOSTICS[donor_id] = list(variant_scores)
+                if not explore_alternatives or successful_variants >= CHAIN_ALTERNATIVE_CAP:
                     donor_rebuild_reserved.update(best_reservations)
                     return best_moves, None
                 # Exclude one selected replacement at a time to obtain another
@@ -2690,6 +2698,22 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
             else:
                 lines.append("- Łańcuch nie przeszedł walidacji fizycznej.")
 
+    if CHAIN_SEARCH_DIAGNOSTICS:
+        lines += [
+            "## Diagnostyka przeszukiwania wariantów łańcucha",
+            "",
+            "Limit kompletnych wariantów na głównego dawcę: **{}**.".format(CHAIN_ALTERNATIVE_CAP),
+            "Wyniki poniżej to ważony Rank bilans zmian danego dawcy i jego rekurencyjnych pod-dawców; wyższy wynik jest lepszy.",
+            "",
+        ]
+        for donor_id, scores in sorted(CHAIN_SEARCH_DIAGNOSTICS.items()):
+            lines.append("- **{}:** sprawdzono {} kompletnych wariantów; wyniki: {}; najlepszy: {:+.4f}.".format(
+                display_name(donor_id), len(scores),
+                ", ".join("{:+.4f}".format(score) for score in scores),
+                max(scores),
+            ))
+        lines.append("")
+
     if chain_result.get("safe") and donor_costs:
         lines += ["## Wpływ na postacie-dawców", ""]
         if donor_costs:
@@ -2815,7 +2839,15 @@ def main(argv=None):
         default=[],
         help="BASE_ID postaci do optymalizacji modów; można powtórzyć lub podać listę rozdzieloną przecinkami.",
     )
+    parser.add_argument(
+        "--chain-alternative-cap", type=int, default=3,
+        help="Maksymalna liczba kompletnych wariantów odbudowy każdego głównego dawcy (domyślnie 3).",
+    )
     args = parser.parse_args(argv)
+    if args.chain_alternative_cap < 1:
+        parser.error("--chain-alternative-cap musi być co najmniej 1")
+    global CHAIN_ALTERNATIVE_CAP
+    CHAIN_ALTERNATIVE_CAP = args.chain_alternative_cap
 
     if not os.path.exists(INPUT_FILE):
         raise FileNotFoundError(INPUT_FILE)
