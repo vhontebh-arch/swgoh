@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - experiment/rank-weighted-chain-selection
+      - analysis/gopherants-health-triangle
     paths:
       - ".github/workflows/run-rank-weighted-mod-analysis.yml"
       - "mod_analyzer.py"
@@ -25,7 +26,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        alternative_cap: [1, 2, 3, 5, 8]
+        alternative_cap: [5]
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
