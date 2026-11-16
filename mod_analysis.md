@@ -30,29 +30,29 @@
 #### Arrow
 - **Obecny mod:** Pusty slot
 - **Proponowany mod:** Arrow / Speed / Protection % 24% / secondary: Health 770, Defense % 9.48%, Protection 1035, Speed 24 / 6★ A lvl15
-- **Źródło:** LUKESTARKILLER
+- **Źródło:** STORMTROOPERLUKE
 #### Square
 - **Obecny mod:** Pusty slot
 - **Proponowany mod:** Square / Speed / Offense % 8.5% / secondary: Potency % 8.71%, Health 698, Tenacity % 4.38%, Speed 17 / 6★ A lvl15
-- **Źródło:** LUKESTARKILLER
+- **Źródło:** STORMTROOPERLUKE
 #### Diamond
 - **Obecny mod:** Pusty slot
-- **Proponowany mod:** Diamond / Speed / Defense % 20% / secondary: Tenacity % 8.31%, Offense % 1.33%, Speed 19, Health 1560 / 6★ A lvl15
-- **Źródło:** EMPERORPALPATINE
+- **Proponowany mod:** Diamond / Speed / Defense % 20% / secondary: Tenacity % 5.13%, Potency % 3.46%, Speed 24, Protection 1994 / 6★ A lvl15
+- **Źródło:** STORMTROOPERLUKE
 #### Triangle
 - **Obecny mod:** Pusty slot
-- **Proponowany mod:** Triangle / Speed / Health % 16% / secondary: Speed 19, Defense 33, Critical Chance % 3.91%, Health 1007 / 6★ A lvl15
-- **Źródło:** ADMIRALPIETT
+- **Proponowany mod:** Triangle / Health / Critical Damage % 42% / secondary: Protection 764, Speed 23, Protection % 4.06%, Defense % 13.03% / 6★ A lvl15
+- **Źródło:** STORMTROOPERLUKE
 #### Circle
 - **Obecny mod:** Pusty slot
 - **Proponowany mod:** Circle / Health / Protection % 17.5% / secondary: Speed 14, Critical Chance % 2.23%, Potency % 3.78%, Tenacity % 1.66% / 5★ A lvl11
 - **Źródło:** MAGAZYN
 #### Cross
 - **Obecny mod:** Pusty slot
-- **Proponowany mod:** Cross / Health / Health % 16% / secondary: Health 694, Protection 1743, Speed 20, Offense 116 / 6★ A lvl15
-- **Źródło:** MAGAZYN
+- **Proponowany mod:** Cross / Speed / Potency % 30% / secondary: Defense 15, Health 2082, Health % 3.6%, Speed 19 / 6★ A lvl15
+- **Źródło:** LUKESTARKILLER
 
-- **Zmiana potencjału buildu:** +115.3 pkt (optymistyczna projekcja do 15; brakujące rolle przypisane do najwyżej preferowanej secondary; dla 5A projekcja secondary do 6E; primary pozostaje bez zmian; bez slice i calibration).
+- **Zmiana potencjału buildu:** +115.8 pkt (optymistyczna projekcja do 15; brakujące rolle przypisane do najwyżej preferowanej secondary; dla 5A projekcja secondary do 6E; primary pozostaje bez zmian; bez slice i calibration).
 
 ## MOD — mody przenoszone na cel
 
@@ -68,15 +68,19 @@ Nie jest wymagany żaden PATCH.
 
 ### Co blokuje zatwierdzenie
 
-- **GOPHERANTS:** dawca ADMIRALPIETT zablokowany: brak pełnego buildu zachowującego kombinację Speed + Health
+- **GOPHERANTS:** dawca STORMTROOPERLUKE zablokowany: brak pełnego buildu zachowującego kombinację Speed + Health
+- **GOPHERANTS:** dawca STORMTROOPERLUKE zablokowany: brak pełnego buildu zachowującego kombinację Speed + Health
+- **GOPHERANTS:** dawca STORMTROOPERLUKE zablokowany: brak pełnego buildu zachowującego kombinację Speed + Health
+- **GOPHERANTS:** dawca STORMTROOPERLUKE zablokowany: brak pełnego buildu zachowującego kombinację Speed + Health
+- **GOPHERANTS:** dawca LUKESTARKILLER zablokowany: brak pełnego buildu zachowującego kombinację Speed + Potency
+- **GOPHERANTS:** optimizer mod nie trafił na miejsce: Square
+- **GOPHERANTS:** optimizer mod nie trafił na miejsce: Diamond
+- **GOPHERANTS:** optimizer mod nie trafił na miejsce: Arrow
 - **GOPHERANTS:** optimizer mod nie trafił na miejsce: Triangle
+- **GOPHERANTS:** optimizer mod nie trafił na miejsce: Cross
 ## Kontrola profili użytych w łańcuchu
 
-- ADMIRALPIETT: profil dostępny, 2 źródła.
-- EMPERORPALPATINE: profil dostępny, 2 źródła.
 - GOPHERANTS: profil dostępny, 2 źródła.
-- LUKESTARKILLER: profil dostępny, 2 źródła.
-- MARAJADE: profil dostępny, 2 źródła.
 
 ## Założenia projekcji
 
