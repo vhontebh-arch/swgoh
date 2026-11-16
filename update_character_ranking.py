@@ -237,16 +237,24 @@ def main():
     output = []
     unmatched = []
     for slug, item in relic.items():
-        if slug not in release_dates:
-            unmatched.append((slug, item["name"], "no release-date row"))
-            continue
-        release_name = release_names.get(slug, item["name"])
-        key = normalize(release_name)
+        key = normalize(item["name"])
+        release_date = release_dates.get(key)
+        if key not in release_dates:
+            # Some pages use slightly different display strings; try the
+            # release-page slug mapping when the row has a profile link.
+            release_key = next((candidate for candidate, name in release_names.items()
+                                if normalize(name) == key), None)
+            if release_key is None:
+                unmatched.append((slug, item["name"], "no release-date row"))
+                continue
+            key = release_key
+            release_date = release_dates[key]
         key = NAME_ALIASES.get(key, key)
         base_id = name_to_base.get(key)
         if not base_id:
             # Try the relic table's display name as a second exact key.
             base_id = name_to_base.get(normalize(item["name"]))
+        release_name = release_names.get(key, item["name"])
         if not base_id:
             unmatched.append((slug, release_name, "no game-data baseId match"))
             continue
@@ -258,7 +266,7 @@ def main():
         output.append({
             "baseId": base_id,
             "name": release_name,
-            "release_date": release_dates[slug] or "",
+            "release_date": release_date or "",
             "global_relic_r5_plus_players": r5,
             "global_relic_r7_plus_players": r7,
             "global_relic_r9_plus_players": r9,
