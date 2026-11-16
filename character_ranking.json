@@ -2,7 +2,6 @@
   "schema_version": 2,
   "source": "Stack Rank",
   "source_url": "https://swgoh.spineless.net/stackrank?omicronGac=true&omicronTw=true&omicronTb=true&omicronRaids=true&omicronConquest=true&allyCode=972824625&showFullDetails=true",
-  "imported_at": "2026-11-16T00:00:00+01:00",
   "record_count": 313,
   "method": {
     "primary_field": "final_tier",
@@ -4715,5 +4714,6 @@
       "importance_score": 6,
       "source": "Stack Rank"
     }
-  ]
+  ],
+  "snapshot_date": "2026-11-16"
 }

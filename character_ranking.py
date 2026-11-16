@@ -119,7 +119,7 @@ def build_payload(input_path: str | Path) -> dict[str, Any]:
         "schema_version": 2,
         "source": SOURCE_NAME,
         "source_url": SOURCE_URL,
-        "imported_at": datetime.now().astimezone().isoformat(timespec="seconds"),
+        "snapshot_date": datetime.now().date().isoformat(),
         "record_count": len(rows),
         "method": {
             "primary_field": "final_tier",
