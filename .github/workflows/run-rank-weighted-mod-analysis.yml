@@ -11,6 +11,8 @@ on:
       - "character_ranking.py"
       - "character_ranking.json"
       - "mod_profiles.json"
+      - "protected_owners.json"
+      - "tests/test_rank_weighted_chain_selection.py"
   workflow_dispatch:
     inputs:
       target:
@@ -37,30 +39,56 @@ jobs:
           python-version: "3.12"
       - name: Install runtime dependency
         run: python -m pip install requests
-      - name: Compile optimizer
-        run: python -m py_compile mod_analyzer.py character_ranking.py
-      - name: Run target analysis with Rank-weighted chain selection
+      - name: Compile optimizer and run unit tests
+        run: |
+          python -m py_compile mod_analyzer.py character_ranking.py
+          python -m unittest discover -s tests -p "test_*.py"
+      - name: Run constrained Grogu build and full Wat rebuild
         run: |
           set -e
-          python mod_analyzer.py --target "${{ inputs.target || 'GOPHERANTS' }}" --chain-alternative-cap "${{ matrix.alternative_cap }}"
-          test -s mod_analysis.csv
-          test -s mod_analysis.md
+          python mod_analyzer.py --target GOPHERANTS --chain-alternative-cap "${{ matrix.alternative_cap }}" --required-primary "Triangle=Health %" --forbid-set "Triangle=Speed" --required-set-combo "Speed + Health"
+          cp mod_analysis.csv gopherants_mod_analysis.csv
+          cp mod_analysis.md gopherants_mod_analysis.md
+          mapfile -t EXCLUDED_MOD_IDS < <(python - <<'PY'
+          import csv
+          ids = set()
+          with open("gopherants_mod_analysis.csv", newline="", encoding="utf-8-sig") as handle:
+              for row in csv.DictReader(handle):
+                  if row.get("optimizerCandidate") == "True" or row.get("recommendedAction") == "PATCH":
+                      if row.get("id"):
+                          ids.add(row["id"])
+          print("\\n".join(sorted(ids)))
+          PY
+          )
+          EXCLUDED_ARGS=()
+          for mod_id in "${EXCLUDED_MOD_IDS[@]}"; do
+            EXCLUDED_ARGS+=(--exclude-mod-id "$mod_id")
+          done
+          python mod_analyzer.py --target WATTAMBOR --chain-alternative-cap "${{ matrix.alternative_cap }}" --required-set-combo "Speed + Health" "${EXCLUDED_ARGS[@]}"
+          cp mod_analysis.csv wat_tambor_full_rebuild.csv
+          cp mod_analysis.md wat_tambor_full_rebuild.md
+          test -s gopherants_mod_analysis.csv
+          test -s gopherants_mod_analysis.md
+          test -s wat_tambor_full_rebuild.csv
+          test -s wat_tambor_full_rebuild.md
       - name: Upload analysis output
         uses: actions/upload-artifact@v4
         with:
           name: rank-weighted-mod-analysis-cap-${{ matrix.alternative_cap }}
           path: |
-            mod_analysis.csv
-            mod_analysis.md
+            gopherants_mod_analysis.csv
+            gopherants_mod_analysis.md
+            wat_tambor_full_rebuild.csv
+            wat_tambor_full_rebuild.md
 
       - name: Commit generated analysis report to this analysis branch
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add mod_analysis.csv mod_analysis.md
+          git add gopherants_mod_analysis.csv gopherants_mod_analysis.md wat_tambor_full_rebuild.csv wat_tambor_full_rebuild.md
           if git diff --cached --quiet; then
             echo "No report changes to commit."
             exit 0
           fi
-          git commit -m "Add Grogu Health Triangle analysis report"
+          git commit -m "Add constrained Grogu and Wat full-rebuild reports"
           git push
