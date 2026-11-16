@@ -9,6 +9,7 @@ import csv
 import json
 import os
 
+from character_ranking import load_ranking_json, rank_importance_score
 from update_mod_profiles import ensure_profiles, load_fresh_profiles
 
 INPUT_FILE = "mods.csv"
@@ -1102,7 +1103,7 @@ def apply_replacements(rows, target_base_ids, profiles=None, aliases=None, names
 
 
 
-def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None, aliases=None, names=None, protected_owners=None, gear_tiers=None):
+def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None, aliases=None, names=None, protected_owners=None, gear_tiers=None, ranking=None):
     """Plan physical same-slot mod transfers and report every affected owner's balance."""
     profiles = profiles or {}
     aliases = aliases or {}
@@ -1110,6 +1111,16 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
     targets = set(target_base_ids)
     protected_owners = set(protected_owners or set())
     gear_tiers = gear_tiers or {}
+    ranking = ranking or []
+    ranking_by_id = {str(item.get("base_id", "")).upper(): item for item in ranking if item.get("base_id")}
+    rank_count = len(ranking)
+
+    def donor_importance(owner_id):
+        base_id = aliases.get(owner_id, owner_id)
+        item = ranking_by_id.get(str(base_id).upper())
+        if not item or rank_count < 2:
+            return 1.0
+        return rank_importance_score(int(item["rank"]), rank_count)
 
     def recipient_gear(base_id):
         return integer(gear_tiers.get(aliases.get(base_id, base_id), -1), -1)
@@ -1473,11 +1484,19 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                                 new_moves,False
                             ))
             if terminal_solutions:
-                # Lexicographic objective: shortest executable chain (BFS layer),
-                # then preserve the donor exact set-combination frequency,
-                # followed by donor profile-fit gain, set transition, and modValue.
-                # Exact combo preservation is a preference, not a hard constraint.
+                # Rank-weight every donor's complete delta; target gain is deliberately
+                # excluded here and remains unweighted in the outer account objective.
+                # Exact combo preservation is a tie-break, not a second importance signal.
+                for solution in terminal_solutions:
+                    donor_deltas = {}
+                    for move in solution["moves"]:
+                        donor_deltas[move["owner"]] = donor_deltas.get(move["owner"], 0.0) + float(move.get("gain", 0.0) or 0.0)
+                    solution["rank_weighted_gain"] = sum(
+                        delta * donor_importance(owner_id)
+                        for owner_id, delta in donor_deltas.items()
+                    )
                 terminal_solutions.sort(key=lambda solution: (
+                    solution.get("rank_weighted_gain", solution["gain"]),
                     solution.get("combo_delta", 0.0),
                     solution["gain"],
                     solution["set_delta"],
@@ -2779,6 +2798,7 @@ def main(argv=None):
     def rid(row):
         return str(row.get("id", "") or "")
 
+    ranking = load_ranking_json("character_ranking.json")
     optimizer = optimize_target_build(rows, target_ids, profiles, aliases, names, protected_owners)
 
     # Resolve a provisional physical chain, fetch profiles only for owners
@@ -2787,7 +2807,7 @@ def main(argv=None):
     attempted_profile_units = set(target_ids)
     while True:
         chain_result = apply_optimizer_replacements(
-            rows, optimizer, target_ids, profiles, aliases, names, protected_owners, gear_tiers
+            rows, optimizer, target_ids, profiles, aliases, names, protected_owners, gear_tiers, ranking
         )
         chain_donor_ids = set()
 
