@@ -37,13 +37,15 @@ The score is a relative weighting input for chain evaluation, not a claim that a
 - Every affected character's complete-build before/after delta, including the target, is multiplied by that character's Rank-derived `importance_score`.
 - Positive and negative deltas use exactly the same rule. There is no special multiplier exemption for the target.
 - Deltas are grouped by character before weighting, so multiple PATCH operations for one character do not multiply its importance repeatedly.
-- The recursive donor-rebuild search compares up to three complete alternatives at each root donor. Child donor rebuilds use their best feasible result; the resulting whole recursive chain is ranked by the sum of Rank-weighted donor deltas.
+- The recursive donor-rebuild search compares up to five complete alternatives at each root donor (default cap: 5). Child donor rebuilds use their best feasible result; the resulting whole recursive chain is ranked by the sum of Rank-weighted donor deltas.
 - The simpler breadth-first chain fallback also ranks same-depth terminal alternatives by Rank-weighted donor deltas. Exact set-combination preservation is a secondary tie-break.
 - If an affected character is missing from Stack Rank, its neutral weight is 1.0.
 - The recursive donor-branch search compares alternatives by weighted donor impact. For a fixed target mod, the target contribution is constant across those donor alternatives, so weighting it symmetrically does not change their relative order. The account-level result and comparisons between target improvements do include the target's Rank weight.
 - The final user report displays both the ordinary unweighted roster balance and the fully Rank-weighted balance, including a separate weighted target contribution. The recommendation status uses the fully Rank-weighted balance.
 
-This is a bounded search, not an exhaustive search of every physically possible mod permutation. It deliberately limits recursive alternative exploration to keep runtime manageable.
+A sensitivity run for GOPHERANTS compared caps 1, 2, 3, 5 and 8 on the same checked-in account snapshot. Caps 1–3 selected the same chain and produced a Rank-weighted account balance of +97.26. Cap 5 found a fourth complete Emperor Palpatine donor alternative, changing the recursive PATCH chain and improving the balance to +116.01. Cap 8 produced the same chain and score as cap 5; only four complete alternatives were found for that donor. Thus cap 3 demonstrably stopped too early in this case, while cap 5 reached the observed plateau.
+
+This is a bounded search, not an exhaustive search of every physically possible mod permutation. It deliberately limits recursive alternative exploration to keep runtime manageable; the sensitivity test does not prove that no fifth or later alternative could exist in other cases.
 
 ## Refreshing
 
