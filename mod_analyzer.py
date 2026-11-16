@@ -16,7 +16,7 @@ INPUT_FILE = "mods.csv"
 OUTPUT_CSV = "mod_analysis.csv"
 OUTPUT_MD = "mod_analysis.md"
 PROFILE_FILE = "mod_profiles.json"
-ANALYZER_VERSION = "2026-11-14-actual-donor-rebuild-score-experiment-v1"
+ANALYZER_VERSION = "2026-11-16-rank-weighted-chain-selection-v1"
 
 R5 = {
     "Critical Chance %": (1.125, 2.25), "Defense": (4.9, 9.8),
@@ -1863,7 +1863,32 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
         for r in rows:
             if r.get("optimizerTarget"): r["chainStatus"]="BLOCKED"
 
-    return {"safe":safe,"plans":plans,"validation":validation,"failed":failed}
+    rank_donor_moves = [
+        {"owner": item.get("owner", ""), "gain": item.get("profileScoreDelta", 0.0)}
+        for item in validation
+        if aliases.get(str(item.get("owner", "") or ""), str(item.get("owner", "") or "")) not in targets
+        and item.get("profileScoreAvailable")
+    ]
+    target_profile_delta = sum(
+        float(item.get("profileScoreDelta", 0.0) or 0.0)
+        for item in validation
+        if aliases.get(str(item.get("owner", "") or ""), str(item.get("owner", "") or "")) in targets
+        and item.get("profileScoreAvailable")
+    )
+    all_profiled = bool(validation) and all(item.get("profileScoreAvailable") for item in validation)
+    weighted_donor_delta = (
+        rank_weighted_donor_delta(rank_donor_moves, ranking, aliases)
+        if all_profiled else None
+    )
+    rank_weighted_total = (
+        round(target_profile_delta + weighted_donor_delta, 2)
+        if all_profiled and weighted_donor_delta is not None else None
+    )
+    return {
+        "safe": safe, "plans": plans, "validation": validation, "failed": failed,
+        "rankWeightedDonorDelta": weighted_donor_delta,
+        "rankWeightedAccountDelta": rank_weighted_total,
+    }
 
 
 
@@ -2354,16 +2379,17 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
         for move in plan.get("moves", [])
     )
     donor_compromise = donor_compromise or unavailable_profile_losses
+    rank_weighted_total = chain_result.get("rankWeightedAccountDelta")
     if not chain_result.get("safe"):
         assessment = "BLOKADA — nie wykonuj przekładek"
-    elif account_delta is None:
-        assessment = "BILANS NIEPEŁNY — brakuje porównywalnego profilu dla co najmniej jednej postaci"
-    elif account_delta <= 0.05:
-        assessment = "BILANS NIEDODATNI — nie rekomenduję wykonania łańcucha"
+    elif rank_weighted_total is None:
+        assessment = "BILANS RANK NIEPEŁNY — brakuje porównywalnego profilu dla co najmniej jednej postaci"
+    elif rank_weighted_total <= 0.05:
+        assessment = "BILANS RANK NIEDODATNI — nie rekomenduję wykonania łańcucha"
     elif donor_compromise:
-        assessment = "KOMPROMIS — bilans rosteru dodatni, ale co najmniej jeden dawca traci"
+        assessment = "KOMPROMIS — bilans Rank dodatni, ale co najmniej jeden dawca traci"
     else:
-        assessment = "REKOMENDACJA — dodatni bilans całego rosteru, bez wykrytej straty u dawców"
+        assessment = "REKOMENDACJA — dodatni bilans Rank całego łańcucha, bez wykrytej straty u dawców"
 
     lines += [
         "## Status",
@@ -2378,6 +2404,11 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
                 "NIEOBLICZALNY — brak profilu/oceny dla jednej z postaci"
                 if account_delta is None else "{:+.2f} pkt".format(account_delta)
             )
+        ),
+        "- **Bilans ważony Rank (cel bez wagi, dawcy z wagą Rank):** {}".format(
+            "NIEOBLICZALNY — brak profilu/oceny dla jednej z postaci"
+            if chain_result.get("rankWeightedAccountDelta") is None
+            else "{:+.2f} pkt".format(chain_result["rankWeightedAccountDelta"])
         ),
         "- **Liczba modów docelowych:** {}/6".format(
             min(6, max((len(opt.get("mods", [])) for opt in optimizer.values()), default=0))
