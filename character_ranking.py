@@ -76,6 +76,24 @@ def load_stack_rank(path: str | Path, mapping_path: str | Path | None = None) ->
         raise ValueError(f"Stack Rank has {len(result)} rows but mapping has {len(mapping)} entries")
     return sorted(result, key=lambda item:item["rank"])
 
+def load_ranking_json(path: str | Path = "character_ranking.json") -> list[dict[str, Any]]:
+    """Load the generated Stack Rank snapshot for optimizer chain scoring."""
+    payload = json.loads(Path(path).read_text(encoding="utf-8"))
+    rows = payload.get("characters", [])
+    record_count = int(payload.get("record_count", 0))
+    if record_count < 2 or len(rows) != record_count:
+        raise ValueError("character_ranking.json has an invalid record_count")
+    seen = set()
+    for item in rows:
+        rank = int(item.get("rank", 0))
+        base_id = str(item.get("base_id", "")).strip()
+        if not base_id or base_id in seen:
+            raise ValueError("character_ranking.json has an empty or duplicate base_id")
+        rank_importance_score(rank, record_count)
+        seen.add(base_id)
+    return rows
+
+
 def rank_characters(rows):
     """Return characters in source Rank order (1 is most important)."""
     return sorted(rows, key=lambda item:item["rank"])
