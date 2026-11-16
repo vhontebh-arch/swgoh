@@ -27,7 +27,7 @@ class StackRankImportTests(unittest.TestCase):
         self.assertEqual([x["character"] for x in rank_characters(rows)],["A","B","C"])
 
     def test_lookup_accepts_display_name_and_base_id(self):
-        item={"character":"Grogu & Anzellans","base_id":"GROGUANZELLANS","rank":270}
+        item={"character":"Grogu & Anzellans","base_id":"GOPHERANTS","rank":270}
         self.assertEqual(get_character_rank([item],"grogu & anzellans")["rank"],270)
         self.assertEqual(get_character_rank([item],"groguanzellans")["rank"],270)
 
