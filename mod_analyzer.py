@@ -1105,7 +1105,7 @@ def apply_replacements(rows, target_base_ids, profiles=None, aliases=None, names
 
 
 
-def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None, aliases=None, names=None, protected_owners=None, gear_tiers=None, ranking=None):
+def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None, aliases=None, names=None, protected_owners=None, gear_tiers=None, ranking=None, excluded_mod_ids=None):
     """Plan physical same-slot mod transfers and report every affected owner's balance."""
     global CHAIN_SEARCH_DIAGNOSTICS
     CHAIN_SEARCH_DIAGNOSTICS = {}
@@ -1170,7 +1170,7 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
             key for key, value in aliases.items()
             if value == target_id and key != target_id and ":" not in key
         ), None)
-    selected_ids = {rid(m) for opt in optimizer.values() for m in opt.get("mods", [])}
+    selected_ids = {rid(m) for opt in optimizer.values() for m in opt.get("mods", [])} | {str(value) for value in (excluded_mod_ids or set())}
     def set_groups(mods):
         counts={}
         for m in mods:
@@ -2012,13 +2012,15 @@ def project_mod_for_build(row, profile):
     return projected
 
 
-def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, names=None, protected_owners=None, required_set_combo=None, excluded_mod_ids=None, projected=True):
+def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, names=None, protected_owners=None, required_set_combo=None, excluded_mod_ids=None, projected=True, required_primaries=None, forbidden_sets=None):
     """Independently implemented full-build optimizer inspired by Grandivory."""
     profiles = profiles or {}
     aliases = aliases or {}
     names = names or {}
     protected_owners = set(protected_owners or set())
     excluded_mod_ids = {str(value) for value in (excluded_mod_ids or set())}
+    required_primaries = {str(slot): set(values if isinstance(values, (list, tuple, set)) else [values]) for slot, values in (required_primaries or {}).items()}
+    forbidden_sets = {str(slot): set(values if isinstance(values, (list, tuple, set)) else [values]) for slot, values in (forbidden_sets or {}).items()}
     slots = ("Square", "Diamond", "Circle", "Arrow", "Triangle", "Cross")
     primary_points, secondary_points, max_rolls = PROFILE_PRIMARY_POINTS, PROFILE_SECONDARY_POINTS, PROFILE_MAX_ROLLS
     speed_reference = 150.0
@@ -2136,6 +2138,11 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
             best_by_set = {}
             for row in rows:
                 if str(row.get("slot", "")) != slot:
+                    continue
+                primary_required = required_primaries.get(slot, set())
+                if primary_required and str(row.get("primaryStat", "") or "").strip() not in primary_required:
+                    continue
+                if str(row.get("set", "") or "").strip() in forbidden_sets.get(slot, set()):
                     continue
                 if rid(row) in excluded_mod_ids:
                     continue
@@ -2843,11 +2850,28 @@ def main(argv=None):
         "--chain-alternative-cap", type=int, default=5,
         help="Maksymalna liczba kompletnych wariantów odbudowy każdego głównego dawcy (domyślnie 5).",
     )
+    parser.add_argument("--required-primary", action="append", default=[], help="Wymagany primary w slocie, format SLOT=STAT; można podać wielokrotnie.")
+    parser.add_argument("--forbid-set", action="append", default=[], help="Zakazany set w slocie, format SLOT=SET; można podać wielokrotnie.")
+    parser.add_argument("--required-set-combo", default=None, help="Wymagana pełna kombinacja setów, np. Speed + Health.")
+    parser.add_argument("--exclude-mod-id", action="append", default=[], help="ID moda wyłączonego z analizy i wszystkich łańcuchów; można podać wielokrotnie.")
     args = parser.parse_args(argv)
     if args.chain_alternative_cap < 1:
         parser.error("--chain-alternative-cap musi być co najmniej 1")
     global CHAIN_ALTERNATIVE_CAP
     CHAIN_ALTERNATIVE_CAP = args.chain_alternative_cap
+    required_primaries = {}
+    for spec in args.required_primary:
+        slot, sep, stat = str(spec).partition("=")
+        if not sep or not slot.strip() or not stat.strip():
+            parser.error("--required-primary wymaga formatu SLOT=STAT")
+        required_primaries.setdefault(slot.strip(), set()).add(stat.strip())
+    forbidden_sets = {}
+    for spec in args.forbid_set:
+        slot, sep, set_name = str(spec).partition("=")
+        if not sep or not slot.strip() or not set_name.strip():
+            parser.error("--forbid-set wymaga formatu SLOT=SET")
+        forbidden_sets.setdefault(slot.strip(), set()).add(set_name.strip())
+    excluded_mod_ids = {str(value).strip() for value in args.exclude_mod_id if str(value).strip()}
 
     if not os.path.exists(INPUT_FILE):
         raise FileNotFoundError(INPUT_FILE)
@@ -2918,7 +2942,13 @@ def main(argv=None):
         return str(row.get("id", "") or "")
 
     ranking = load_ranking_json("character_ranking.json")
-    optimizer = optimize_target_build(rows, target_ids, profiles, aliases, names, protected_owners)
+    optimizer = optimize_target_build(
+        rows, target_ids, profiles, aliases, names, protected_owners,
+        required_set_combo=args.required_set_combo,
+        excluded_mod_ids=excluded_mod_ids,
+        required_primaries=required_primaries,
+        forbidden_sets=forbidden_sets,
+    )
 
     # Resolve a provisional physical chain, fetch profiles only for owners
     # that actually appear in it, then re-run. Repeat if the improved ranking
@@ -2926,7 +2956,8 @@ def main(argv=None):
     attempted_profile_units = set(target_ids)
     while True:
         chain_result = apply_optimizer_replacements(
-            rows, optimizer, target_ids, profiles, aliases, names, protected_owners, gear_tiers, ranking
+            rows, optimizer, target_ids, profiles, aliases, names, protected_owners, gear_tiers, ranking,
+            excluded_mod_ids=excluded_mod_ids,
         )
         chain_donor_ids = set()
 
