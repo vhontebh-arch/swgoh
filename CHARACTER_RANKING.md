@@ -20,26 +20,23 @@ against the pinned full unit catalog: The Ronin (`THERONIN`), Third Sister (`THI
 (`TARONMALICOS`), Dark Trooper Moff Gideon (`MOFFGIDEONS3`) and Jaxxon
 (`JAXXON`). This is a catalog mapping, not a claim that those five are owned.
 
-## Interpretation
+## Importance model
 
-1. `Final Tier` is the primary importance measure. Lower tier means greater
-   importance (tier 1 is highest; tier 19 is lowest).
-2. `Rank` is the original overall position from the source and is retained as
-   a secondary ordering value. It is not the same as `Final Tier`.
-3. `importance_score = 20 - final_tier` is a simple inverse representation;
-   it does not add another signal.
-4. Base Tier, synergy/Omicron fields, Relic Gear Level and Ability Score remain
-   audit fields; their effects are not scored a second time.
-5. Sort Score and SubSort Score remain source sort metadata.
+1. **Rank is the sole primary importance signal.** Lower Rank means greater importance; Rank 1 is highest.
+2. `importance_score` is a bounded, monotonic transformation of Rank:
+   `1 + 2 * (1 - (rank - 1) / (record_count - 1))^2`.
+   It ranges from 3.0 for Rank 1 to 1.0 for the last-ranked character. The nonlinear curve gives more separation to the highest-ranked characters without creating an extreme multiplier.
+3. **Final Tier is audit metadata only.** It is not used to reorder characters or added again to the importance score.
+4. **Sort Score is audit metadata for now.** It is not combined with Rank as a second importance signal. It may later be used only as a small, separate donor-protection adjustment after testing on complete transfer chains.
+5. Base Tier, synergy/Omicron fields, Relic Gear Level and Ability Score remain available for auditing the source export; their effects are not scored again.
 
-The ranking is standalone and is not connected to `mod_analyzer.py` or
-`protected_owners.json`; no mod protection behavior changes in this branch.
+The score is a relative weighting input for later chain evaluation, not a claim
+that a character is exactly two or three times as useful in gameplay. No donor
+protection or optimizer behavior is changed by this importer update.
 
 ## Refreshing
 
-Stack Rank refresh remains manual because no supported public export endpoint
-has been established. Replace the TSV snapshot and, if new characters appear,
-refresh the pinned baseId map from a canonical game-unit catalog. Then run:
+Stack Rank refresh remains manual because no supported public export endpoint has been established. Replace the TSV snapshot and, if new characters appear, refresh the pinned baseId map from a canonical game-unit catalog. Then run:
 
 ```bash
 python character_ranking.py --input data/stack_rank.tsv --output character_ranking.json --expected-count 313
