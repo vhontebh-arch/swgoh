@@ -4052,10 +4052,13 @@
             },
             "primary_pct": {
               "Arrow": {
-                "Speed": 92.36,
-                "Health": 5.78,
-                "Protection": 1.05,
-                "Critical Avoidance": 0.52
+                "Speed": 86.17,
+                "Health": 8.21,
+                "Defense": 2.49,
+                "Protection": 1.87,
+                "Critical Avoidance": 0.72,
+                "Offense": 0.31,
+                "Accuracy": 0.2
               },
               "Triangle": {
                 "Health": 61.22,
@@ -4114,10 +4117,13 @@
             },
             "primary_pct": {
               "Arrow": {
-                "Speed": 94.01,
-                "Health": 3.76,
-                "Protection": 1.03,
-                "Defense": 0.51
+                "Speed": 79.27,
+                "Health": 13.37,
+                "Defense": 3.24,
+                "Protection": 2.19,
+                "Critical Avoidance": 1,
+                "Offense": 0.65,
+                "Accuracy": 0.24
               },
               "Triangle": {
                 "Health": 56.54,
@@ -4181,11 +4187,13 @@
       },
       "primary_preferences": {
         "Arrow": {
-          "Speed": 0.9364,
-          "Health": 0.0479,
-          "Protection": 0.0105,
-          "Critical Avoidance": 0.0026,
-          "Defense": 0.0026
+          "Speed": 0.8275,
+          "Health": 0.1079,
+          "Defense": 0.0287,
+          "Protection": 0.0203,
+          "Critical Avoidance": 0.0086,
+          "Offense": 0.0048,
+          "Accuracy": 0.0022
         },
         "Triangle": {
           "Health": 0.589,
