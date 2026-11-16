@@ -94,6 +94,33 @@ def load_ranking_json(path: str | Path = "character_ranking.json") -> list[dict[
     return rows
 
 
+def rank_weighted_donor_delta(moves, ranking, aliases=None) -> float:
+    """Sum donor build deltas weighted by Stack Rank; target gain is not included."""
+    aliases = aliases or {}
+    rows = list(ranking or [])
+    count = len(rows)
+    by_id = {
+        str(item.get("base_id", "")).upper(): item
+        for item in rows if item.get("base_id")
+    }
+    deltas: dict[str, float] = {}
+    for move in moves or []:
+        owner = str(move.get("owner", "") or "")
+        base_id = str(aliases.get(owner, owner) or "").upper()
+        if not base_id:
+            continue
+        deltas[base_id] = deltas.get(base_id, 0.0) + float(move.get("gain", 0.0) or 0.0)
+    total = 0.0
+    for base_id, delta in deltas.items():
+        item = by_id.get(base_id)
+        weight = (
+            rank_importance_score(int(item["rank"]), count)
+            if item and count >= 2 else 1.0
+        )
+        total += delta * weight
+    return round(total, 6)
+
+
 def rank_characters(rows):
     """Return characters in source Rank order (1 is most important)."""
     return sorted(rows, key=lambda item:item["rank"])
