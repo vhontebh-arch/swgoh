@@ -38,7 +38,7 @@
     "mod_profiles.json": {
       "role": "shared SWGOH.GG mod profiles",
       "bytes": 171981,
-      "sha256": "94b80e43ed99267f5de03b0bd5729fc82a78324f5863b49750af85491f67d6fd",
+      "sha256": "099c99f3e42551f0df085ec02b74a7d13d82d7a53b8548f820b62750f3cea722",
       "git_blob_sha": "b289134a8b37b1d689d4b28ea319588d20e156e2",
       "source_branch": "optimizer-data",
       "source_commit": "9a8fae6f9e59ae26306639335dc9e5e8fe315945"
