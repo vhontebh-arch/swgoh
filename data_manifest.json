@@ -37,11 +37,11 @@
     },
     "mod_profiles.json": {
       "role": "shared SWGOH.GG mod profiles",
-      "bytes": 171981,
-      "sha256": "099c99f3e42551f0df085ec02b74a7d13d82d7a53b8548f820b62750f3cea722",
-      "git_blob_sha": "b289134a8b37b1d689d4b28ea319588d20e156e2",
-      "source_branch": "main",
-      "source_commit": "2fab1046ae2f0a10de6a8774c9eb34dce3b96010"
+      "bytes": 172554,
+      "sha256": "86a3c8eff4949474caba1dbe4ba803b58355cc52a1945ba09e47fc9aaac942d5",
+      "git_blob_sha": "a32274c97778587a7464511832f312359359b846",
+      "source_branch": "optimizer-data",
+      "source_commit": "c5f1254198e75d7bb0fecd04d6c1b7976f7b9873"
     },
     "swgoh_972824625.json": {
       "role": "raw Comlink player export",
