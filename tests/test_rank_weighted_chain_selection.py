@@ -1,6 +1,6 @@
 import unittest
 
-from character_ranking import rank_importance_score, rank_weighted_donor_delta
+from character_ranking import rank_importance_score, rank_weighted_donor_delta, rank_weighted_account_delta
 
 
 _NAMED_RANKS = {
@@ -70,8 +70,28 @@ class RankWeightedChainSelectionTests(unittest.TestCase):
         moves = [{"owner": "jkr-unit", "gain": -10.0}]
         aliases = {"jkr-unit": "JEDIKNIGHTREVAN"}
         first = rank_weighted_donor_delta(moves, RANKING, aliases)
-        # The caller adds target gain separately and unweighted.
         self.assertAlmostEqual(first, -10.0 * rank_importance_score(10, len(RANKING)))
+
+    def test_account_objective_weights_target_and_donors_symmetrically(self):
+        aliases = {
+            "gopherants-unit": "GROGUANZELLANS",
+            "piett-unit": "ADMIRALPIETT",
+        }
+        ranking = RANKING + [
+            {"character": "Grogu & Anzellans", "base_id": "GROGUANZELLANS", "rank": 270},
+            {"character": "Admiral Piett", "base_id": "ADMIRALPIETT", "rank": 2},
+        ]
+        moves = [
+            {"owner": "gopherants-unit", "gain": 109.41},
+            {"owner": "piett-unit", "gain": -5.79},
+        ]
+        expected = (
+            109.41 * rank_importance_score(270, len(ranking))
+            - 5.79 * rank_importance_score(2, len(ranking))
+        )
+        self.assertAlmostEqual(
+            rank_weighted_account_delta(moves, ranking, aliases), expected, places=5
+        )
 
 
 if __name__ == "__main__":
