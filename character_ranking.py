@@ -121,6 +121,11 @@ def rank_weighted_donor_delta(moves, ranking, aliases=None) -> float:
     return round(total, 6)
 
 
+def rank_weighted_account_delta(character_moves, ranking, aliases=None) -> float:
+    """Sum every affected character's complete-build delta with its Rank weight."""
+    return rank_weighted_donor_delta(character_moves, ranking, aliases)
+
+
 def rank_characters(rows):
     """Return characters in source Rank order (1 is most important)."""
     return sorted(rows, key=lambda item:item["rank"])
