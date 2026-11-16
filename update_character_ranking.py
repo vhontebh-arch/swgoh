@@ -79,6 +79,8 @@ def fetch_page(url: str) -> str:
     candidates = [
         url,
         translated,
+        "https://corsproxy.io/?url=" + encoded,
+        "https://api.codetabs.com/v1/proxy?quest=" + encoded,
         "https://r.jina.ai/http://" + parsed.netloc + parsed.path,
         "https://api.allorigins.win/raw?url=" + encoded,
     ]
