@@ -1303,6 +1303,7 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                 required_set_combo=required_combo,
                 excluded_mod_ids=excluded_mod_ids,
                 projected=False,
+                gear_tiers=gear_tiers,
             )
             donor_build = donor_optimizer.get(donor_id, {}).get("mods", [])
             by_slot = {str(mod.get("slot", "") or ""): mod for mod in donor_build}
@@ -2012,7 +2013,7 @@ def project_mod_for_build(row, profile):
     return projected
 
 
-def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, names=None, protected_owners=None, required_set_combo=None, excluded_mod_ids=None, projected=True, required_primaries=None, forbidden_sets=None):
+def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, names=None, protected_owners=None, required_set_combo=None, excluded_mod_ids=None, projected=True, required_primaries=None, forbidden_sets=None, gear_tiers=None):
     """Independently implemented full-build optimizer inspired by Grandivory."""
     profiles = profiles or {}
     aliases = aliases or {}
@@ -2021,6 +2022,7 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
     excluded_mod_ids = {str(value) for value in (excluded_mod_ids or set())}
     required_primaries = {str(slot): set(values if isinstance(values, (list, tuple, set)) else [values]) for slot, values in (required_primaries or {}).items()}
     forbidden_sets = {str(slot): set(values if isinstance(values, (list, tuple, set)) else [values]) for slot, values in (forbidden_sets or {}).items()}
+    gear_tiers = gear_tiers or {}
     slots = ("Square", "Diamond", "Circle", "Arrow", "Triangle", "Cross")
     primary_points, secondary_points, max_rolls = PROFILE_PRIMARY_POINTS, PROFILE_SECONDARY_POINTS, PROFILE_MAX_ROLLS
     speed_reference = 150.0
@@ -2147,6 +2149,9 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
                 if rid(row) in excluded_mod_ids:
                     continue
                 if integer(row.get("dots")) < 5:
+                    continue
+                # A character below G12 cannot equip any 6-dot mod.
+                if integer(row.get("dots")) >= 6 and integer(gear_tiers.get(target_id, -1), -1) < 12:
                     continue
                 if is_true(row.get("equipped")) and base(row) in protected_owners:
                     continue
@@ -2948,6 +2953,7 @@ def main(argv=None):
         excluded_mod_ids=excluded_mod_ids,
         required_primaries=required_primaries,
         forbidden_sets=forbidden_sets,
+        gear_tiers=gear_tiers,
     )
 
     # Resolve a provisional physical chain, fetch profiles only for owners
@@ -3013,7 +3019,14 @@ def main(argv=None):
         for row in rows:
             fit = character_fit(row, targets, profiles, aliases)
             row.update(fit)
-        optimizer = optimize_target_build(rows, target_ids, profiles, aliases, names, protected_owners)
+        optimizer = optimize_target_build(
+            rows, target_ids, profiles, aliases, names, protected_owners,
+            required_set_combo=args.required_set_combo,
+            excluded_mod_ids=excluded_mod_ids,
+            required_primaries=required_primaries,
+            forbidden_sets=forbidden_sets,
+            gear_tiers=gear_tiers,
+        )
 
     # Mark the physical mods selected by the complete six-slot optimizer.
     # These values describe the full-build result, not a single-slot swap;
