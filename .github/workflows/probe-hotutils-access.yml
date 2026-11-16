@@ -12,63 +12,48 @@ jobs:
   probe:
     runs-on: ubuntu-latest
     steps:
-      - name: Fetch profile and inspect application bundle
+      - name: Fetch profile and application bundle
         run: |
           python - <<'PY'
           import json, re, urllib.request
           from html.parser import HTMLParser
-
           BASE = "https://players.hotutils.com"
           class Tags(HTMLParser):
-              def __init__(self):
-                  super().__init__()
-                  self.scripts = []
+              def __init__(self): super().__init__(); self.scripts=[]
               def handle_starttag(self, tag, attrs):
-                  if tag == "script":
-                      src = dict(attrs).get("src")
+                  if tag=="script":
+                      src=dict(attrs).get("src")
                       if src: self.scripts.append(src)
-
           def get(url):
-              req = urllib.request.Request(url, headers={
-                  "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/131.0.0.0 Safari/537.36",
-                  "Accept": "*/*",
-                  "Accept-Language": "en-US,en;q=0.9",
-              })
-              with urllib.request.urlopen(req, timeout=40) as r:
-                  b = r.read()
-                  return r.status, r.headers.get("Content-Type"), b
-
-          out = {"profile_url": BASE + "/units/ADMIRALACKBAR"}
+              req=urllib.request.Request(url,headers={"User-Agent":"Mozilla/5.0 Chrome/131.0.0.0 Safari/537.36","Accept":"*/*"})
+              with urllib.request.urlopen(req,timeout=40) as r: return r.status,r.headers.get("Content-Type"),r.read()
+          out={"profile_url":BASE+"/units/ADMIRALACKBAR"}
           try:
-              status, ctype, body = get(out["profile_url"])
-              html = body.decode("utf-8", "replace")
-              tags = Tags(); tags.feed(html)
-              out.update({"status":status,"content_type":ctype,"html_bytes":len(body),
-                          "html_has_players":bool(re.search("players",html,re.I)),
-                          "html_title":(re.search(r"<title[^>]*>(.*?)</title>",html,re.I|re.S).group(1).strip()
-                                        if re.search(r"<title[^>]*>(.*?)</title>",html,re.I|re.S) else None),
-                          "scripts":tags.scripts})
-              bundle_results=[]
+              status,ct,body=get(out["profile_url"]); html=body.decode("utf-8","replace")
+              tags=Tags(); tags.feed(html)
+              out.update({"status":status,"content_type":ct,"html_bytes":len(body),"scripts":tags.scripts,
+                          "html_title":re.search(r"<title[^>]*>(.*?)</title>",html,re.I|re.S).group(1).strip() if "<title" in html.lower() else None})
+              bundles=[]
               for src in tags.scripts:
-                  asset = src if src.startswith("http") else BASE + src
+                  asset=src if src.startswith("http") else BASE+src
                   try:
-                      s, ct, bb = get(asset)
-                      js=bb.decode("utf-8","replace")
-                      paths=sorted(set(re.findall(r'["\x27](/(?:api|v[0-9]|units|players|data)[^"\x27 ]*)["\x27]',js,re.I)))
-                      hosts=sorted(set(re.findall(r'https?://[a-zA-Z0-9._-]+',js)))
-                      keywords={k:len(re.findall(k,js,re.I)) for k in ["players","gear","relic","star","graphql","fetch(","axios","/api/"]}
-                      bundle_results.append({"url":asset,"status":s,"content_type":ct,"bytes":len(bb),
-                                             "paths":paths[:250],"hosts":hosts[:80],"keyword_counts":keywords,
-                                             "js_excerpt":js[:500]})
+                      s,c,b=get(asset); js=b.decode("utf-8","replace")
                       open("hotutils-app.js","w").write(js)
-                  except Exception as e:
-                      bundle_results.append({"url":asset,"error":repr(e)})
-              out["bundles"]=bundle_results
-          except Exception as e:
-              out["error"]=repr(e)
-          with open("hotutils-probe.json","w") as f: json.dump(out,f,indent=2)
+                      bundles.append({"url":asset,"status":s,"content_type":c,"bytes":len(b),
+                                      "contains_players": "players" in js.lower(),
+                                      "contains_graphql": "graphql" in js.lower(),
+                                      "contains_api": "/api/" in js.lower(),
+                                      "head":js[:1500]})
+                  except Exception as e: bundles.append({"url":asset,"error":repr(e)})
+              out["bundles"]=bundles
+          except Exception as e: out["error"]=repr(e)
+          open("hotutils-probe.json","w").write(json.dumps(out,indent=2))
           print(json.dumps(out,indent=2))
           PY
+          if [ -f hotutils-app.js ]; then
+            echo "=== API/PLAYER STRING MATCHES ==="
+            grep -Eo '.{0,100}(graphql|/api/|players|gear|relic|star).{0,160}' hotutils-app.js | head -80 || true
+          fi
       - uses: actions/upload-artifact@v4
         if: always()
         with:
