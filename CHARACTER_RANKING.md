@@ -74,3 +74,27 @@ fifty_rt = get_character_rank(ranking, "50RT")
 - The weights and 365-day cohort window are explicit defaults, not claims of
   objective truth. They should be evaluated against a sample of old and new
   characters before the ranking is used to protect donors automatically.
+
+
+## Automated live data refresh
+
+`update_character_ranking.py` downloads:
+
+- SWGOH.GG Relic Player Data (all-player population)
+- SWGOH.GG Unit Releases
+- canonical Comlink game data and ENG_US localization from the `optimizer-data` branch
+
+It joins SWGOH.GG rows to game `baseId` values using the localized unit names,
+then derives cumulative relic populations:
+
+- R5+ = R5 + R6 + R7 + R8 + R9 + R10
+- R7+ = R7 + R8 + R9 + R10
+- R9+ = R9 + R10
+
+The refresh workflow runs the tests, validates the source joins and monotonic
+counts, then publishes `character_counts.csv`, `character_release_dates.json`
+and `character_ranking.json` on this feature branch. It does not touch
+`optimizer-v2` or the optimizer code.
+
+Rows without a known release date (launch-era units) use the global score.
+Future releases are excluded until they appear in relic-player data.
