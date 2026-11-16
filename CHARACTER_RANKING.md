@@ -14,9 +14,9 @@ HotUtils usage, GAC-only ranking, or popularity proxy is mixed into the result.
 - Mapping catalog: [DrPivot/SWGOH-Guild-Progress unit_list.csv](https://github.com/DrPivot/SWGOH-Guild-Progress/blob/f6f2e182cab19602a9d45399235eb26caf0f0cce/data/unit_list.csv), pinned to commit `f6f2e182cab19602a9d45399235eb26caf0f0cce`.
 - Matching: normalized display-name match (case, diacritics and punctuation normalized). All 313 names matched exactly one catalog entry and all 313 baseIds are unique.
 
-The player roster CSV contained 308 of the 313 Stack Rank characters. The five
-not present in that roster export were resolved against the pinned full unit
-catalog: The Ronin (`THERONIN`), Third Sister (`THIRDSISTER`), Taron Malicos
+The mapping uses the player's roster export for 308 characters.
+The remaining 5 names, absent from that export, were resolved
+against the pinned full unit catalog: The Ronin (`THERONIN`), Third Sister (`THIRDSISTER`), Taron Malicos
 (`TARONMALICOS`), Dark Trooper Moff Gideon (`MOFFGIDEONS3`) and Jaxxon
 (`JAXXON`). This is a catalog mapping, not a claim that those five are owned.
 

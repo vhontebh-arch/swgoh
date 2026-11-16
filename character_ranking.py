@@ -73,7 +73,7 @@ def build_payload(input_path: str | Path, mapping_path: str | Path = DEFAULT_MAP
     mapping_payload = json.loads(Path(mapping_path).read_text(encoding="utf-8"))
     return {"schema_version":3,"source":SOURCE_NAME,"source_url":SOURCE_URL,
         "snapshot_date":datetime.now().date().isoformat(),"record_count":len(rows),
-        "base_id_mapping":mapping_payload["source"],
+        "base_id_mapping":mapping_payload["sources"],
         "method":{"primary_field":"final_tier","primary_direction":"ascending (1 is most important; 19 least important)",
         "secondary_field":"rank","secondary_direction":"ascending (original Stack Rank order)",
         "importance_score":"20 - final_tier",

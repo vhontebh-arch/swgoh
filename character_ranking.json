@@ -5029,11 +5029,21 @@
     }
   ],
   "snapshot_date": "2026-11-16",
-  "base_id_mapping": {
-    "repository": "DrPivot/SWGOH-Guild-Progress",
-    "file": "data/unit_list.csv",
-    "commit": "f6f2e182cab19602a9d45399235eb26caf0f0cce",
-    "url": "https://github.com/DrPivot/SWGOH-Guild-Progress/blob/f6f2e182cab19602a9d45399235eb26caf0f0cce/data/unit_list.csv",
-    "match_method": "Normalized display-name match; case, diacritics and punctuation ignored"
-  }
+  "base_id_mapping": [
+    {
+      "id": "player_roster_export",
+      "repository": "vhontebh-arch/swgoh",
+      "file": "Vhonte-972824625-characters.csv",
+      "ref": "feature/character-importance-ranking",
+      "description": "Base ID and Name fields from the user's current roster export"
+    },
+    {
+      "id": "unit_catalog_fallback",
+      "repository": "DrPivot/SWGOH-Guild-Progress",
+      "file": "data/unit_list.csv",
+      "commit": "f6f2e182cab19602a9d45399235eb26caf0f0cce",
+      "url": "https://github.com/DrPivot/SWGOH-Guild-Progress/blob/f6f2e182cab19602a9d45399235eb26caf0f0cce/data/unit_list.csv",
+      "description": "Fallback for Stack Rank characters absent from the user's roster export"
+    }
+  ]
 }
