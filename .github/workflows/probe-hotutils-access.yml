@@ -12,53 +12,48 @@ jobs:
   probe:
     runs-on: ubuntu-latest
     steps:
-      - name: Fetch profile and application bundle
+      - name: Test HotUtils Players API
         run: |
           python - <<'PY'
-          import json, re, urllib.request
-          from html.parser import HTMLParser
-          BASE = "https://players.hotutils.com"
-          class Tags(HTMLParser):
-              def __init__(self): super().__init__(); self.scripts=[]
-              def handle_starttag(self, tag, attrs):
-                  if tag=="script":
-                      src=dict(attrs).get("src")
-                      if src: self.scripts.append(src)
-          def get(url):
-              req=urllib.request.Request(url,headers={"User-Agent":"Mozilla/5.0 Chrome/131.0.0.0 Safari/537.36","Accept":"*/*"})
-              with urllib.request.urlopen(req,timeout=40) as r: return r.status,r.headers.get("Content-Type"),r.read()
-          out={"profile_url":BASE+"/units/ADMIRALACKBAR"}
-          try:
-              status,ct,body=get(out["profile_url"]); html=body.decode("utf-8","replace")
-              tags=Tags(); tags.feed(html)
-              out.update({"status":status,"content_type":ct,"html_bytes":len(body),"scripts":tags.scripts,
-                          "html_title":re.search(r"<title[^>]*>(.*?)</title>",html,re.I|re.S).group(1).strip() if "<title" in html.lower() else None})
-              bundles=[]
-              for src in tags.scripts:
-                  asset=src if src.startswith("http") else BASE+src
-                  try:
-                      s,c,b=get(asset); js=b.decode("utf-8","replace")
-                      open("hotutils-app.js","w").write(js)
-                      bundles.append({"url":asset,"status":s,"content_type":c,"bytes":len(b),
-                                      "contains_players": "players" in js.lower(),
-                                      "contains_graphql": "graphql" in js.lower(),
-                                      "contains_api": "/api/" in js.lower(),
-                                      "head":js[:1500]})
-                  except Exception as e: bundles.append({"url":asset,"error":repr(e)})
-              out["bundles"]=bundles
-          except Exception as e: out["error"]=repr(e)
-          open("hotutils-probe.json","w").write(json.dumps(out,indent=2))
+          import json, urllib.request, urllib.error
+          base="https://players.hotutils.com"
+          version="mwiyyicv"
+          endpoints=[
+            "/api/units/ADMIRALACKBAR/players?v="+version,
+            "/api/units/ADMIRALACKBAR/stats?v="+version,
+            "/api/units/ADMIRALACKBAR/top/players?v="+version,
+          ]
+          out=[]
+          for path in endpoints:
+            url=base+path
+            req=urllib.request.Request(url,headers={
+              "User-Agent":"Mozilla/5.0 Chrome/131.0.0.0 Safari/537.36",
+              "Accept":"application/json, text/plain, */*",
+              "Referer":base+"/units/ADMIRALACKBAR",
+              "Origin":base,
+            })
+            item={"url":url}
+            try:
+              with urllib.request.urlopen(req,timeout=40) as r:
+                body=r.read()
+                item.update({"status":r.status,"content_type":r.headers.get("Content-Type"),
+                             "bytes":len(body),"sample":body[:6000].decode("utf-8","replace")})
+                try:
+                  data=json.loads(body)
+                  item["json_type"]=type(data).__name__
+                  if isinstance(data,dict): item["json_keys"]=list(data.keys())
+                  if isinstance(data,list): item["list_length"]=len(data)
+                except Exception: pass
+            except urllib.error.HTTPError as e:
+              item.update({"status":e.code,"error_body":e.read(3000).decode("utf-8","replace")})
+            except Exception as e: item["error"]=repr(e)
+            out.append(item)
+          open("hotutils-api-probe.json","w").write(json.dumps(out,indent=2))
           print(json.dumps(out,indent=2))
           PY
-          if [ -f hotutils-app.js ]; then
-            echo "=== API/PLAYER STRING MATCHES ==="
-            grep -Eo '.{0,100}(graphql|/api/|players|gear|relic|star).{0,160}' hotutils-app.js | head -80 || true
-          fi
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: hotutils-probe
-          path: |
-            hotutils-probe.json
-            hotutils-app.js
+          name: hotutils-api-probe
+          path: hotutils-api-probe.json
           retention-days: 7
