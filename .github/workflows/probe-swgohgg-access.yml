@@ -2,6 +2,11 @@ name: Probe SWGOH.GG public data access
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - feature/character-importance-ranking
+    paths:
+      - .github/workflows/probe-swgohgg-access.yml
 
 permissions:
   contents: read
