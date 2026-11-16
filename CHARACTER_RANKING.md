@@ -30,9 +30,19 @@ against the pinned full unit catalog: The Ronin (`THERONIN`), Third Sister (`THI
 4. **Sort Score is audit metadata for now.** It is not combined with Rank as a second importance signal. It may later be used only as a small, separate donor-protection adjustment after testing on complete transfer chains.
 5. Base Tier, synergy/Omicron fields, Relic Gear Level and Ability Score remain available for auditing the source export; their effects are not scored again.
 
-The score is a relative weighting input for later chain evaluation, not a claim
-that a character is exactly two or three times as useful in gameplay. No donor
-protection or optimizer behavior is changed by this importer update.
+The score is a relative weighting input for chain evaluation, not a claim that a character is exactly two or three times as useful in gameplay.
+
+## Rank-weighted transfer-chain objective
+
+- The target's complete-build gain is added **without a Rank multiplier**.
+- Each donor's complete-build before/after delta is multiplied by that donor's Rank-derived `importance_score`.
+- Donor deltas are grouped by character before weighting, so multiple PATCH operations for one donor do not multiply its importance repeatedly.
+- The recursive donor-rebuild search compares up to three complete alternatives at each root donor. Child donor rebuilds use their best feasible result; the resulting whole recursive chain is ranked by the sum of Rank-weighted donor deltas.
+- The simpler breadth-first chain fallback also ranks same-depth terminal alternatives by Rank-weighted donor deltas. Exact set-combination preservation is a secondary tie-break.
+- If a donor is missing from Stack Rank, its neutral weight is 1.0. The target is never included in the donor weighting.
+- The final user report displays both the ordinary unweighted roster balance and the Rank-weighted balance. The recommendation status uses the Rank-weighted balance.
+
+This is a bounded search, not an exhaustive search of every physically possible mod permutation. It deliberately limits recursive alternative exploration to keep runtime manageable.
 
 ## Refreshing
 
