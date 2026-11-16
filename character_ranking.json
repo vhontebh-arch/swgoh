@@ -1,15 +1,17 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "source": "Stack Rank",
   "source_url": "https://swgoh.spineless.net/stackrank?omicronGac=true&omicronTw=true&omicronTb=true&omicronRaids=true&omicronConquest=true&allyCode=972824625&showFullDetails=true",
   "record_count": 313,
   "method": {
-    "primary_field": "final_tier",
-    "primary_direction": "ascending (1 is most important; 19 least important)",
-    "secondary_field": "rank",
-    "secondary_direction": "ascending (original Stack Rank order)",
-    "importance_score": "20 - final_tier",
-    "note": "Final Tier already includes Base Tier, Synergy Enhancement, Omicron Boost, Omicron Synergy Boost and Ability Score effects; these fields are retained for audit and are not scored again.",
+    "primary_field": "rank",
+    "primary_direction": "ascending (1 is most important; larger values are less important)",
+    "importance_score": "1 + 2 * (1 - (rank - 1) / (record_count - 1))^2; bounded 1.0..3.0",
+    "secondary_fields": [
+      "final_tier",
+      "sort_score"
+    ],
+    "note": "Rank is the sole primary importance signal. Final Tier and Sort Score are retained for audit and are not added to importance_score; Sort Score may later be used only as a small, separate donor-protection adjustment.",
     "omicron_boost_options": {
       "gac": true,
       "territory_war": true,
@@ -31,7 +33,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.3,
       "ability_score": 0,
-      "importance_score": 18,
+      "importance_score": 3,
       "source": "Stack Rank",
       "base_id": "GLREY"
     },
@@ -47,7 +49,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.3,
       "ability_score": 0,
-      "importance_score": 15,
+      "importance_score": 2.9872,
       "source": "Stack Rank",
       "base_id": "ADMIRALPIETT"
     },
@@ -63,7 +65,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 0,
-      "importance_score": 15,
+      "importance_score": 2.974441,
       "source": "Stack Rank",
       "base_id": "COMMANDERLUKESKYWALKER"
     },
@@ -79,7 +81,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.1,
       "ability_score": 0,
-      "importance_score": 15,
+      "importance_score": 2.961723,
       "source": "Stack Rank",
       "base_id": "C3POLEGENDARY"
     },
@@ -95,7 +97,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.1,
       "ability_score": 0,
-      "importance_score": 15,
+      "importance_score": 2.949047,
       "source": "Stack Rank",
       "base_id": "PADMEAMIDALA"
     },
@@ -111,7 +113,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.1,
       "ability_score": 0,
-      "importance_score": 15,
+      "importance_score": 2.936411,
       "source": "Stack Rank",
       "base_id": "CHEWBACCALEGENDARY"
     },
@@ -127,7 +129,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.1,
       "ability_score": 0,
-      "importance_score": 15,
+      "importance_score": 2.923817,
       "source": "Stack Rank",
       "base_id": "GENERALKENOBI"
     },
@@ -143,7 +145,7 @@
       "omicron_synergy_boost": 1,
       "relic_gear_level": 13.3,
       "ability_score": 0,
-      "importance_score": 14,
+      "importance_score": 2.911263,
       "source": "Stack Rank",
       "base_id": "EMPERORPALPATINE"
     },
@@ -159,7 +161,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 0,
-      "importance_score": 14,
+      "importance_score": 2.898751,
       "source": "Stack Rank",
       "base_id": "MARAJADE"
     },
@@ -175,7 +177,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 0,
-      "importance_score": 14,
+      "importance_score": 2.88628,
       "source": "Stack Rank",
       "base_id": "JEDIKNIGHTREVAN"
     },
@@ -191,7 +193,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.1,
       "ability_score": 0,
-      "importance_score": 14,
+      "importance_score": 2.873849,
       "source": "Stack Rank",
       "base_id": "ANAKINKNIGHT"
     },
@@ -207,7 +209,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.3,
       "ability_score": 0,
-      "importance_score": 14,
+      "importance_score": 2.86146,
       "source": "Stack Rank",
       "base_id": "VADER"
     },
@@ -223,7 +225,7 @@
       "omicron_synergy_boost": 1,
       "relic_gear_level": 13.1,
       "ability_score": 0,
-      "importance_score": 13,
+      "importance_score": 2.849112,
       "source": "Stack Rank",
       "base_id": "GEONOSIANBROODALPHA"
     },
@@ -239,7 +241,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 0,
-      "importance_score": 13,
+      "importance_score": 2.836806,
       "source": "Stack Rank",
       "base_id": "GRANDADMIRALTHRAWN"
     },
@@ -255,7 +257,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.1,
       "ability_score": 0,
-      "importance_score": 13,
+      "importance_score": 2.82454,
       "source": "Stack Rank",
       "base_id": "HERMITYODA"
     },
@@ -271,7 +273,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 3,
-      "importance_score": 15,
+      "importance_score": 2.812315,
       "source": "Stack Rank",
       "base_id": "BENSOLO"
     },
@@ -287,7 +289,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 0,
-      "importance_score": 13,
+      "importance_score": 2.800131,
       "source": "Stack Rank",
       "base_id": "BOSSK"
     },
@@ -303,7 +305,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 0,
-      "importance_score": 13,
+      "importance_score": 2.787989,
       "source": "Stack Rank",
       "base_id": "DASHRENDAR"
     },
@@ -319,7 +321,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.3,
       "ability_score": 0,
-      "importance_score": 13,
+      "importance_score": 2.775888,
       "source": "Stack Rank",
       "base_id": "BB8"
     },
@@ -335,7 +337,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.1,
       "ability_score": 0,
-      "importance_score": 13,
+      "importance_score": 2.763827,
       "source": "Stack Rank",
       "base_id": "R2D2_LEGENDARY"
     },
@@ -351,7 +353,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13,
       "ability_score": 0,
-      "importance_score": 13,
+      "importance_score": 2.751808,
       "source": "Stack Rank",
       "base_id": "CAPTAINREX"
     },
@@ -367,7 +369,7 @@
       "omicron_synergy_boost": 1,
       "relic_gear_level": 13.3,
       "ability_score": 0,
-      "importance_score": 12,
+      "importance_score": 2.73983,
       "source": "Stack Rank",
       "base_id": "NINTHSISTER"
     },
@@ -383,7 +385,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.3,
       "ability_score": 0,
-      "importance_score": 13,
+      "importance_score": 2.727893,
       "source": "Stack Rank",
       "base_id": "REYJEDITRAINING"
     },
@@ -399,7 +401,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 3,
-      "importance_score": 15,
+      "importance_score": 2.715997,
       "source": "Stack Rank",
       "base_id": "MAULS7"
     },
@@ -415,7 +417,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 3,
-      "importance_score": 15,
+      "importance_score": 2.704142,
       "source": "Stack Rank",
       "base_id": "COMMANDERAHSOKA"
     },
@@ -431,7 +433,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 3,
-      "importance_score": 14,
+      "importance_score": 2.692328,
       "source": "Stack Rank",
       "base_id": "DARTHMALGUS"
     },
@@ -447,7 +449,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 0,
-      "importance_score": 12,
+      "importance_score": 2.680556,
       "source": "Stack Rank",
       "base_id": "B2SUPERBATTLEDROID"
     },
@@ -463,7 +465,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 0,
-      "importance_score": 12,
+      "importance_score": 2.668824,
       "source": "Stack Rank",
       "base_id": "ENFYSNEST"
     },
@@ -479,7 +481,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.1,
       "ability_score": 0,
-      "importance_score": 12,
+      "importance_score": 2.657133,
       "source": "Stack Rank",
       "base_id": "SHAAKTI"
     },
@@ -495,7 +497,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13,
       "ability_score": 0,
-      "importance_score": 12,
+      "importance_score": 2.645484,
       "source": "Stack Rank",
       "base_id": "GRANDMASTERYODA"
     },
@@ -511,7 +513,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.1,
       "ability_score": 0,
-      "importance_score": 9,
+      "importance_score": 2.633876,
       "source": "Stack Rank",
       "base_id": "WAMPA"
     },
@@ -527,7 +529,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 0,
-      "importance_score": 15,
+      "importance_score": 2.622309,
       "source": "Stack Rank",
       "base_id": "HANSOLO"
     },
@@ -543,7 +545,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13,
       "ability_score": 0,
-      "importance_score": 12,
+      "importance_score": 2.610782,
       "source": "Stack Rank",
       "base_id": "C3POCHEWBACCA"
     },
@@ -559,7 +561,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13,
       "ability_score": 0,
-      "importance_score": 12,
+      "importance_score": 2.599297,
       "source": "Stack Rank",
       "base_id": "KELLERANBEQ"
     },
@@ -575,7 +577,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13,
       "ability_score": 0,
-      "importance_score": 12,
+      "importance_score": 2.587853,
       "source": "Stack Rank",
       "base_id": "OLDBENKENOBI"
     },
@@ -591,7 +593,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 0,
-      "importance_score": 12,
+      "importance_score": 2.576451,
       "source": "Stack Rank",
       "base_id": "AHSOKATANO"
     },
@@ -607,7 +609,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13,
       "ability_score": 0,
-      "importance_score": 12,
+      "importance_score": 2.565089,
       "source": "Stack Rank",
       "base_id": "GREEFKARGA"
     },
@@ -623,7 +625,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13,
       "ability_score": 0,
-      "importance_score": 12,
+      "importance_score": 2.553768,
       "source": "Stack Rank",
       "base_id": "MONMOTHMA"
     },
@@ -639,7 +641,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13,
       "ability_score": 0,
-      "importance_score": 12,
+      "importance_score": 2.542488,
       "source": "Stack Rank",
       "base_id": "THEMANDALORIAN"
     },
@@ -655,7 +657,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13,
       "ability_score": 0,
-      "importance_score": 12,
+      "importance_score": 2.53125,
       "source": "Stack Rank",
       "base_id": "THEMANDALORIANBESKARARMOR"
     },
@@ -671,7 +673,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13,
       "ability_score": 0,
-      "importance_score": 12,
+      "importance_score": 2.520053,
       "source": "Stack Rank",
       "base_id": "FENNECSHAND"
     },
@@ -687,7 +689,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13,
       "ability_score": 0,
-      "importance_score": 12,
+      "importance_score": 2.508896,
       "source": "Stack Rank",
       "base_id": "KUIIL"
     },
@@ -703,7 +705,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13,
       "ability_score": 0,
-      "importance_score": 12,
+      "importance_score": 2.497781,
       "source": "Stack Rank",
       "base_id": "IG11"
     },
@@ -719,7 +721,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 0,
-      "importance_score": 11,
+      "importance_score": 2.486707,
       "source": "Stack Rank",
       "base_id": "HONDO"
     },
@@ -735,7 +737,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 0,
-      "importance_score": 11,
+      "importance_score": 2.475674,
       "source": "Stack Rank",
       "base_id": "FINN"
     },
@@ -751,7 +753,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 0,
-      "importance_score": 11,
+      "importance_score": 2.464682,
       "source": "Stack Rank",
       "base_id": "GRANDMOFFTARKIN"
     },
@@ -767,7 +769,7 @@
       "omicron_synergy_boost": 1,
       "relic_gear_level": 13.2,
       "ability_score": 0,
-      "importance_score": 11,
+      "importance_score": 2.453731,
       "source": "Stack Rank",
       "base_id": "GEONOSIANSOLDIER"
     },
@@ -783,7 +785,7 @@
       "omicron_synergy_boost": 1,
       "relic_gear_level": 13,
       "ability_score": 0,
-      "importance_score": 11,
+      "importance_score": 2.442821,
       "source": "Stack Rank",
       "base_id": "STORMTROOPERHAN"
     },
@@ -799,7 +801,7 @@
       "omicron_synergy_boost": 1,
       "relic_gear_level": 13,
       "ability_score": 0,
-      "importance_score": 11,
+      "importance_score": 2.431953,
       "source": "Stack Rank",
       "base_id": "PRINCESSLEIA"
     },
@@ -815,7 +817,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 0,
-      "importance_score": 14,
+      "importance_score": 2.421125,
       "source": "Stack Rank",
       "base_id": "BASTILASHAN"
     },
@@ -831,7 +833,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 0,
-      "importance_score": 11,
+      "importance_score": 2.410339,
       "source": "Stack Rank",
       "base_id": "KYLEKATARN"
     },
@@ -847,7 +849,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13,
       "ability_score": 0,
-      "importance_score": 11,
+      "importance_score": 2.399593,
       "source": "Stack Rank",
       "base_id": "MACEWINDU"
     },
@@ -863,7 +865,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13,
       "ability_score": 0,
-      "importance_score": 11,
+      "importance_score": 2.388889,
       "source": "Stack Rank",
       "base_id": "CARADUNE"
     },
@@ -879,7 +881,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 0,
-      "importance_score": 10,
+      "importance_score": 2.378226,
       "source": "Stack Rank",
       "base_id": "OPERATIVE"
     },
@@ -895,7 +897,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 0,
-      "importance_score": 10,
+      "importance_score": 2.367604,
       "source": "Stack Rank",
       "base_id": "HOTHLEIA"
     },
@@ -911,7 +913,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 0,
-      "importance_score": 10,
+      "importance_score": 2.357023,
       "source": "Stack Rank",
       "base_id": "HERASYNDULLAS3"
     },
@@ -927,7 +929,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13,
       "ability_score": 0,
-      "importance_score": 10,
+      "importance_score": 2.346483,
       "source": "Stack Rank",
       "base_id": "MASTERQUIGON"
     },
@@ -943,7 +945,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 3,
-      "importance_score": 13,
+      "importance_score": 2.335984,
       "source": "Stack Rank",
       "base_id": "EPIXPOE"
     },
@@ -959,7 +961,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 3,
-      "importance_score": 13,
+      "importance_score": 2.325526,
       "source": "Stack Rank",
       "base_id": "EPIXFINN"
     },
@@ -975,7 +977,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 0,
-      "importance_score": 10,
+      "importance_score": 2.315109,
       "source": "Stack Rank",
       "base_id": "DISGUISEDCLONETROOPER"
     },
@@ -991,7 +993,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 0,
-      "importance_score": 10,
+      "importance_score": 2.304734,
       "source": "Stack Rank",
       "base_id": "VANGUARDTEMPLEGUARD"
     },
@@ -1007,7 +1009,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 0,
-      "importance_score": 10,
+      "importance_score": 2.294399,
       "source": "Stack Rank",
       "base_id": "SCORCH"
     },
@@ -1023,7 +1025,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 0,
-      "importance_score": 10,
+      "importance_score": 2.284106,
       "source": "Stack Rank",
       "base_id": "AMILYNHOLDO"
     },
@@ -1039,7 +1041,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 0,
-      "importance_score": 12,
+      "importance_score": 2.273854,
       "source": "Stack Rank",
       "base_id": "POGGLETHELESSER"
     },
@@ -1055,7 +1057,7 @@
       "omicron_synergy_boost": 1,
       "relic_gear_level": 12,
       "ability_score": 0,
-      "importance_score": 12,
+      "importance_score": 2.263642,
       "source": "Stack Rank",
       "base_id": "GEONOSIANSPY"
     },
@@ -1071,7 +1073,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 0,
-      "importance_score": 10,
+      "importance_score": 2.253472,
       "source": "Stack Rank",
       "base_id": "DENGAR"
     },
@@ -1087,7 +1089,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.3,
       "ability_score": 0,
-      "importance_score": 9,
+      "importance_score": 2.243343,
       "source": "Stack Rank",
       "base_id": "SEVENTHSISTER"
     },
@@ -1103,7 +1105,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 0,
-      "importance_score": 10,
+      "importance_score": 2.233255,
       "source": "Stack Rank",
       "base_id": "KANANJARRUSS3"
     },
@@ -1119,7 +1121,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 0,
-      "importance_score": 10,
+      "importance_score": 2.223208,
       "source": "Stack Rank",
       "base_id": "EZRABRIDGERS3"
     },
@@ -1135,7 +1137,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 0,
-      "importance_score": 9,
+      "importance_score": 2.213203,
       "source": "Stack Rank",
       "base_id": "BT1"
     },
@@ -1151,7 +1153,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 0,
-      "importance_score": 9,
+      "importance_score": 2.203238,
       "source": "Stack Rank",
       "base_id": "TRIPLEZERO"
     },
@@ -1167,7 +1169,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 0,
-      "importance_score": 10,
+      "importance_score": 2.193314,
       "source": "Stack Rank",
       "base_id": "HOTHHAN"
     },
@@ -1183,7 +1185,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 8,
       "ability_score": 3,
-      "importance_score": 13,
+      "importance_score": 2.183432,
       "source": "Stack Rank",
       "base_id": "IDENVERSIOEMPIRE"
     },
@@ -1199,7 +1201,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 3,
-      "importance_score": 12,
+      "importance_score": 2.173591,
       "source": "Stack Rank",
       "base_id": "JARJARBINKS"
     },
@@ -1215,7 +1217,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 3,
-      "importance_score": 15,
+      "importance_score": 2.16379,
       "source": "Stack Rank",
       "base_id": "DARTHREVAN"
     },
@@ -1231,7 +1233,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.3,
       "ability_score": 0,
-      "importance_score": 9,
+      "importance_score": 2.154031,
       "source": "Stack Rank",
       "base_id": "50RT"
     },
@@ -1247,7 +1249,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.1,
       "ability_score": 0,
-      "importance_score": 9,
+      "importance_score": 2.144313,
       "source": "Stack Rank",
       "base_id": "NUTEGUNRAY"
     },
@@ -1263,7 +1265,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13,
       "ability_score": 0,
-      "importance_score": 9,
+      "importance_score": 2.134636,
       "source": "Stack Rank",
       "base_id": "KRRSANTAN"
     },
@@ -1279,7 +1281,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 0,
-      "importance_score": 12,
+      "importance_score": 2.125,
       "source": "Stack Rank",
       "base_id": "BASTILASHANDARK"
     },
@@ -1295,7 +1297,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 3,
-      "importance_score": 15,
+      "importance_score": 2.115405,
       "source": "Stack Rank",
       "base_id": "VADERDUELSEND"
     },
@@ -1311,7 +1313,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13,
       "ability_score": 3,
-      "importance_score": 12,
+      "importance_score": 2.105851,
       "source": "Stack Rank",
       "base_id": "JANGOFETT"
     },
@@ -1327,7 +1329,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 3,
-      "importance_score": 12,
+      "importance_score": 2.096339,
       "source": "Stack Rank",
       "base_id": "B1BATTLEDROIDV2"
     },
@@ -1343,7 +1345,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 0,
-      "importance_score": 12,
+      "importance_score": 2.086867,
       "source": "Stack Rank",
       "base_id": "JOLEEBINDO"
     },
@@ -1359,7 +1361,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.1,
       "ability_score": 0,
-      "importance_score": 9,
+      "importance_score": 2.077437,
       "source": "Stack Rank",
       "base_id": "MAUL"
     },
@@ -1375,7 +1377,7 @@
       "omicron_synergy_boost": 1,
       "relic_gear_level": 12,
       "ability_score": 0,
-      "importance_score": 11,
+      "importance_score": 2.068047,
       "source": "Stack Rank",
       "base_id": "SUNFAC"
     },
@@ -1391,7 +1393,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.3,
       "ability_score": 0,
-      "importance_score": 9,
+      "importance_score": 2.058699,
       "source": "Stack Rank",
       "base_id": "FIFTHBROTHER"
     },
@@ -1407,7 +1409,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.3,
       "ability_score": 0,
-      "importance_score": 9,
+      "importance_score": 2.049392,
       "source": "Stack Rank",
       "base_id": "EIGHTHBROTHER"
     },
@@ -1423,7 +1425,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 0,
-      "importance_score": 11,
+      "importance_score": 2.040126,
       "source": "Stack Rank",
       "base_id": "STORMTROOPERLUKE"
     },
@@ -1439,7 +1441,7 @@
       "omicron_synergy_boost": 1,
       "relic_gear_level": 13.2,
       "ability_score": 0,
-      "importance_score": 8,
+      "importance_score": 2.030901,
       "source": "Stack Rank",
       "base_id": "SECONDSISTER"
     },
@@ -1455,7 +1457,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 0,
-      "importance_score": 9,
+      "importance_score": 2.021717,
       "source": "Stack Rank",
       "base_id": "ZEBS3"
     },
@@ -1471,7 +1473,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.1,
       "ability_score": 0,
-      "importance_score": 9,
+      "importance_score": 2.012574,
       "source": "Stack Rank",
       "base_id": "SABINEWRENS3"
     },
@@ -1487,7 +1489,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 3,
-      "importance_score": 11,
+      "importance_score": 2.003472,
       "source": "Stack Rank",
       "base_id": "GRIEVOUS"
     },
@@ -1503,7 +1505,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 0,
-      "importance_score": 8,
+      "importance_score": 1.994412,
       "source": "Stack Rank",
       "base_id": "DEPABILLABA"
     },
@@ -1519,7 +1521,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 0,
-      "importance_score": 8,
+      "importance_score": 1.985392,
       "source": "Stack Rank",
       "base_id": "DARTHTALON"
     },
@@ -1535,7 +1537,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13,
       "ability_score": 0,
-      "importance_score": 8,
+      "importance_score": 1.976414,
       "source": "Stack Rank",
       "base_id": "PADAWANSABINE"
     },
@@ -1551,7 +1553,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13,
       "ability_score": 0,
-      "importance_score": 8,
+      "importance_score": 1.967476,
       "source": "Stack Rank",
       "base_id": "VISASMARR"
     },
@@ -1567,7 +1569,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 0,
-      "importance_score": 11,
+      "importance_score": 1.95858,
       "source": "Stack Rank",
       "base_id": "MORGANELSBETH"
     },
@@ -1583,7 +1585,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 3,
-      "importance_score": 11,
+      "importance_score": 1.949725,
       "source": "Stack Rank",
       "base_id": "MAGNAGUARD"
     },
@@ -1599,7 +1601,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 3,
-      "importance_score": 11,
+      "importance_score": 1.940911,
       "source": "Stack Rank",
       "base_id": "ZAALBAR"
     },
@@ -1615,7 +1617,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 0,
-      "importance_score": 7,
+      "importance_score": 1.932138,
       "source": "Stack Rank",
       "base_id": "BOSSNASS"
     },
@@ -1631,7 +1633,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.1,
       "ability_score": 0,
-      "importance_score": 7,
+      "importance_score": 1.923406,
       "source": "Stack Rank",
       "base_id": "DARTHSIDIOUS"
     },
@@ -1647,7 +1649,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 0,
-      "importance_score": 8,
+      "importance_score": 1.914715,
       "source": "Stack Rank",
       "base_id": "CHOPPERS3"
     },
@@ -1663,7 +1665,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.1,
       "ability_score": 3,
-      "importance_score": 10,
+      "importance_score": 1.906065,
       "source": "Stack Rank",
       "base_id": "SHINHATI"
     },
@@ -1679,7 +1681,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 3,
-      "importance_score": 13,
+      "importance_score": 1.897456,
       "source": "Stack Rank",
       "base_id": "GRANDINQUISITOR"
     },
@@ -1695,7 +1697,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 0,
-      "importance_score": 7,
+      "importance_score": 1.888889,
       "source": "Stack Rank",
       "base_id": "DROIDEKA"
     },
@@ -1711,7 +1713,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 0,
-      "importance_score": 9,
+      "importance_score": 1.880362,
       "source": "Stack Rank",
       "base_id": "CALKESTIS"
     },
@@ -1727,7 +1729,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13,
       "ability_score": 0,
-      "importance_score": 6,
+      "importance_score": 1.871877,
       "source": "Stack Rank",
       "base_id": "ADMIRALACKBAR"
     },
@@ -1743,7 +1745,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13,
       "ability_score": 3,
-      "importance_score": 10,
+      "importance_score": 1.863433,
       "source": "Stack Rank",
       "base_id": "BOKATAN"
     },
@@ -1759,7 +1761,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 3,
-      "importance_score": 10,
+      "importance_score": 1.85503,
       "source": "Stack Rank",
       "base_id": "APPO"
     },
@@ -1775,7 +1777,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 9,
       "ability_score": 3,
-      "importance_score": 10,
+      "importance_score": 1.846667,
       "source": "Stack Rank",
       "base_id": "SCOUTTROOPER_V3"
     },
@@ -1791,7 +1793,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.3,
       "ability_score": 0,
-      "importance_score": 7,
+      "importance_score": 1.838346,
       "source": "Stack Rank",
       "base_id": "REY"
     },
@@ -1807,7 +1809,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 0,
-      "importance_score": 7,
+      "importance_score": 1.830067,
       "source": "Stack Rank",
       "base_id": "POE"
     },
@@ -1823,7 +1825,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 0,
-      "importance_score": 7,
+      "importance_score": 1.821828,
       "source": "Stack Rank",
       "base_id": "RESISTANCETROOPER"
     },
@@ -1839,7 +1841,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.1,
       "ability_score": 0,
-      "importance_score": 7,
+      "importance_score": 1.81363,
       "source": "Stack Rank",
       "base_id": "ADMINISTRATORLANDO"
     },
@@ -1855,7 +1857,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 0,
-      "importance_score": 6,
+      "importance_score": 1.805473,
       "source": "Stack Rank",
       "base_id": "BOOMADIER"
     },
@@ -1871,7 +1873,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 0,
-      "importance_score": 9,
+      "importance_score": 1.797358,
       "source": "Stack Rank",
       "base_id": "YOUNGCHEWBACCA"
     },
@@ -1887,7 +1889,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 0,
-      "importance_score": 9,
+      "importance_score": 1.789283,
       "source": "Stack Rank",
       "base_id": "SITHMARAUDER"
     },
@@ -1903,7 +1905,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 3,
-      "importance_score": 12,
+      "importance_score": 1.78125,
       "source": "Stack Rank",
       "base_id": "KYLORENUNMASKED"
     },
@@ -1919,7 +1921,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 3,
-      "importance_score": 12,
+      "importance_score": 1.773258,
       "source": "Stack Rank",
       "base_id": "CT7567"
     },
@@ -1935,7 +1937,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13,
       "ability_score": 3,
-      "importance_score": 9,
+      "importance_score": 1.765307,
       "source": "Stack Rank",
       "base_id": "COUNTDOOKU"
     },
@@ -1951,7 +1953,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13,
       "ability_score": 3,
-      "importance_score": 9,
+      "importance_score": 1.757396,
       "source": "Stack Rank",
       "base_id": "SMUGGLERHAN"
     },
@@ -1967,7 +1969,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.3,
       "ability_score": 0,
-      "importance_score": 6,
+      "importance_score": 1.749527,
       "source": "Stack Rank",
       "base_id": "BOBAFETT"
     },
@@ -1983,7 +1985,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 0,
-      "importance_score": 6,
+      "importance_score": 1.7417,
       "source": "Stack Rank",
       "base_id": "IG88"
     },
@@ -1999,7 +2001,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.1,
       "ability_score": 0,
-      "importance_score": 6,
+      "importance_score": 1.733913,
       "source": "Stack Rank",
       "base_id": "SNOWTROOPER"
     },
@@ -2015,7 +2017,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 0,
-      "importance_score": 9,
+      "importance_score": 1.726167,
       "source": "Stack Rank",
       "base_id": "ASAJJDARKDISCIPLE"
     },
@@ -2031,7 +2033,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 11,
       "ability_score": 3,
-      "importance_score": 12,
+      "importance_score": 1.718462,
       "source": "Stack Rank",
       "base_id": "BARRISSOFFEE"
     },
@@ -2047,7 +2049,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 0,
-      "importance_score": 9,
+      "importance_score": 1.710799,
       "source": "Stack Rank",
       "base_id": "CANDEROUSORDO"
     },
@@ -2063,7 +2065,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 9,
       "ability_score": 3,
-      "importance_score": 15,
+      "importance_score": 1.703176,
       "source": "Stack Rank",
       "base_id": "DARTHMALAK"
     },
@@ -2079,7 +2081,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 3,
-      "importance_score": 12,
+      "importance_score": 1.695595,
       "source": "Stack Rank",
       "base_id": "ARMORER"
     },
@@ -2095,7 +2097,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 3,
-      "importance_score": 12,
+      "importance_score": 1.688055,
       "source": "Stack Rank",
       "base_id": "ARCTROOPER501ST"
     },
@@ -2111,7 +2113,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 8,
       "ability_score": 0,
-      "importance_score": 15,
+      "importance_score": 1.680556,
       "source": "Stack Rank",
       "base_id": "STARKILLER"
     },
@@ -2127,7 +2129,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 3,
-      "importance_score": 12,
+      "importance_score": 1.673097,
       "source": "Stack Rank",
       "base_id": "CEREJUNDA"
     },
@@ -2143,7 +2145,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 0,
-      "importance_score": 9,
+      "importance_score": 1.66568,
       "source": "Stack Rank",
       "base_id": "ROYALGUARD"
     },
@@ -2159,7 +2161,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 0,
-      "importance_score": 9,
+      "importance_score": 1.658305,
       "source": "Stack Rank",
       "base_id": "CADBANE"
     },
@@ -2175,7 +2177,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 0,
-      "importance_score": 6,
+      "importance_score": 1.65097,
       "source": "Stack Rank",
       "base_id": "SANASTARROS"
     },
@@ -2191,7 +2193,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 0,
-      "importance_score": 6,
+      "importance_score": 1.643676,
       "source": "Stack Rank",
       "base_id": "GUNGANPHALANX"
     },
@@ -2207,7 +2209,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 0,
-      "importance_score": 5,
+      "importance_score": 1.636423,
       "source": "Stack Rank",
       "base_id": "CAPTAINTARPALS"
     },
@@ -2223,7 +2225,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 0,
-      "importance_score": 8,
+      "importance_score": 1.629212,
       "source": "Stack Rank",
       "base_id": "CINTA"
     },
@@ -2239,7 +2241,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13,
       "ability_score": 3,
-      "importance_score": 8,
+      "importance_score": 1.622041,
       "source": "Stack Rank",
       "base_id": "GENERALSYNDULLA"
     },
@@ -2255,7 +2257,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 3,
-      "importance_score": 11,
+      "importance_score": 1.614912,
       "source": "Stack Rank",
       "base_id": "YODADSV"
     },
@@ -2271,7 +2273,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 3,
-      "importance_score": 11,
+      "importance_score": 1.607824,
       "source": "Stack Rank",
       "base_id": "DARKTROOPER"
     },
@@ -2287,7 +2289,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 3,
-      "importance_score": 11,
+      "importance_score": 1.600777,
       "source": "Stack Rank",
       "base_id": "THERONIN"
     },
@@ -2303,7 +2305,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 0,
-      "importance_score": 5,
+      "importance_score": 1.593771,
       "source": "Stack Rank",
       "base_id": "TIEFIGHTERPILOT"
     },
@@ -2319,7 +2321,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.1,
       "ability_score": 0,
-      "importance_score": 5,
+      "importance_score": 1.586806,
       "source": "Stack Rank",
       "base_id": "FIRSTORDERSPECIALFORCESPILOT"
     },
@@ -2335,7 +2337,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.1,
       "ability_score": 0,
-      "importance_score": 5,
+      "importance_score": 1.579882,
       "source": "Stack Rank",
       "base_id": "RESISTANCEPILOT"
     },
@@ -2351,7 +2353,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13,
       "ability_score": 0,
-      "importance_score": 5,
+      "importance_score": 1.572999,
       "source": "Stack Rank",
       "base_id": "RANGETROOPER"
     },
@@ -2367,7 +2369,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 0,
-      "importance_score": 7,
+      "importance_score": 1.566157,
       "source": "Stack Rank",
       "base_id": "MISSIONVAO"
     },
@@ -2383,7 +2385,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 11,
       "ability_score": 3,
-      "importance_score": 8,
+      "importance_score": 1.559357,
       "source": "Stack Rank",
       "base_id": "FULCRUMAHSOKA"
     },
@@ -2399,7 +2401,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 11,
       "ability_score": 0,
-      "importance_score": 8,
+      "importance_score": 1.552597,
       "source": "Stack Rank",
       "base_id": "SAVAGEOPRESS"
     },
@@ -2415,7 +2417,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 3,
-      "importance_score": 11,
+      "importance_score": 1.545879,
       "source": "Stack Rank",
       "base_id": "STAP"
     },
@@ -2431,7 +2433,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 3,
-      "importance_score": 10,
+      "importance_score": 1.539201,
       "source": "Stack Rank",
       "base_id": "SAWGERRERA"
     },
@@ -2447,7 +2449,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 3,
-      "importance_score": 10,
+      "importance_score": 1.532565,
       "source": "Stack Rank",
       "base_id": "INQUISITORBARRISS"
     },
@@ -2463,7 +2465,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 0,
-      "importance_score": 8,
+      "importance_score": 1.52597,
       "source": "Stack Rank",
       "base_id": "JUHANI"
     },
@@ -2479,7 +2481,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 0,
-      "importance_score": 8,
+      "importance_score": 1.519416,
       "source": "Stack Rank",
       "base_id": "BISTAN"
     },
@@ -2495,7 +2497,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 11,
       "ability_score": 0,
-      "importance_score": 8,
+      "importance_score": 1.512903,
       "source": "Stack Rank",
       "base_id": "BIGGSDARKLIGHTER"
     },
@@ -2511,7 +2513,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 3,
-      "importance_score": 10,
+      "importance_score": 1.506431,
       "source": "Stack Rank",
       "base_id": "DARTHTRAYA"
     },
@@ -2527,7 +2529,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 3,
-      "importance_score": 10,
+      "importance_score": 1.5,
       "source": "Stack Rank",
       "base_id": "MARAJADESKYWALKER"
     },
@@ -2543,7 +2545,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 11,
       "ability_score": 3,
-      "importance_score": 10,
+      "importance_score": 1.49361,
       "source": "Stack Rank",
       "base_id": "NIGHTTROOPER"
     },
@@ -2559,7 +2561,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 11,
       "ability_score": 0,
-      "importance_score": 10,
+      "importance_score": 1.487262,
       "source": "Stack Rank",
       "base_id": "CAPTAINENOCH"
     },
@@ -2575,7 +2577,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 11,
       "ability_score": 3,
-      "importance_score": 10,
+      "importance_score": 1.480954,
       "source": "Stack Rank",
       "base_id": "DEATHTROOPERPERIDEA"
     },
@@ -2591,7 +2593,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 0,
-      "importance_score": 6,
+      "importance_score": 1.474688,
       "source": "Stack Rank",
       "base_id": "CARTHONASI"
     },
@@ -2607,7 +2609,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 11,
       "ability_score": 0,
-      "importance_score": 7,
+      "importance_score": 1.468462,
       "source": "Stack Rank",
       "base_id": "FIRSTORDEROFFICERMALE"
     },
@@ -2623,7 +2625,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 3,
-      "importance_score": 10,
+      "importance_score": 1.462278,
       "source": "Stack Rank",
       "base_id": "PAZVIZSLA"
     },
@@ -2639,7 +2641,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 9,
       "ability_score": 6,
-      "importance_score": 15,
+      "importance_score": 1.456135,
       "source": "Stack Rank",
       "base_id": "DOCTORAPHRA"
     },
@@ -2655,7 +2657,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 9,
       "ability_score": 3,
-      "importance_score": 13,
+      "importance_score": 1.450033,
       "source": "Stack Rank",
       "base_id": "GREATMOTHERS"
     },
@@ -2671,7 +2673,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 9,
       "ability_score": 3,
-      "importance_score": 13,
+      "importance_score": 1.443972,
       "source": "Stack Rank",
       "base_id": "LUTHENRAEL"
     },
@@ -2687,7 +2689,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 11,
       "ability_score": 0,
-      "importance_score": 7,
+      "importance_score": 1.437952,
       "source": "Stack Rank",
       "base_id": "WEDGEANTILLES"
     },
@@ -2703,7 +2705,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 9,
       "ability_score": 0,
-      "importance_score": 10,
+      "importance_score": 1.431973,
       "source": "Stack Rank",
       "base_id": "PAO"
     },
@@ -2719,7 +2721,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 9,
       "ability_score": 0,
-      "importance_score": 10,
+      "importance_score": 1.426036,
       "source": "Stack Rank",
       "base_id": "JAWASCAVENGER"
     },
@@ -2735,7 +2737,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 3,
-      "importance_score": 9,
+      "importance_score": 1.420139,
       "source": "Stack Rank",
       "base_id": "ADMIRALRADDUS"
     },
@@ -2751,7 +2753,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.1,
       "ability_score": 0,
-      "importance_score": 8,
+      "importance_score": 1.414283,
       "source": "Stack Rank",
       "base_id": "KLEYA"
     },
@@ -2767,7 +2769,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 3,
-      "importance_score": 6,
+      "importance_score": 1.408469,
       "source": "Stack Rank",
       "base_id": "COLONELSTARCK"
     },
@@ -2783,7 +2785,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.1,
       "ability_score": 3,
-      "importance_score": 6,
+      "importance_score": 1.402696,
       "source": "Stack Rank",
       "base_id": "SMUGGLERCHEWBACCA"
     },
@@ -2799,7 +2801,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 3,
-      "importance_score": 9,
+      "importance_score": 1.396963,
       "source": "Stack Rank",
       "base_id": "MERRIN"
     },
@@ -2815,7 +2817,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 3,
-      "importance_score": 9,
+      "importance_score": 1.391272,
       "source": "Stack Rank",
       "base_id": "ASAJVENTRESS"
     },
@@ -2831,7 +2833,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13,
       "ability_score": 3,
-      "importance_score": 6,
+      "importance_score": 1.385622,
       "source": "Stack Rank",
       "base_id": "HUYANG"
     },
@@ -2847,7 +2849,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13,
       "ability_score": 0,
-      "importance_score": 6,
+      "importance_score": 1.380013,
       "source": "Stack Rank",
       "base_id": "BADBATCHHUNTER"
     },
@@ -2863,7 +2865,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 0,
-      "importance_score": 6,
+      "importance_score": 1.374445,
       "source": "Stack Rank",
       "base_id": "JYNERSO"
     },
@@ -2879,7 +2881,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13,
       "ability_score": 0,
-      "importance_score": 3,
+      "importance_score": 1.368918,
       "source": "Stack Rank",
       "base_id": "LUKESKYWALKER"
     },
@@ -2895,7 +2897,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 11,
       "ability_score": 3,
-      "importance_score": 9,
+      "importance_score": 1.363433,
       "source": "Stack Rank",
       "base_id": "DARTHSION"
     },
@@ -2911,7 +2913,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 0,
-      "importance_score": 6,
+      "importance_score": 1.357988,
       "source": "Stack Rank",
       "base_id": "AAYLASECURA"
     },
@@ -2927,7 +2929,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 11,
       "ability_score": 0,
-      "importance_score": 9,
+      "importance_score": 1.352585,
       "source": "Stack Rank",
       "base_id": "L3_37"
     },
@@ -2943,7 +2945,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 0,
-      "importance_score": 6,
+      "importance_score": 1.347222,
       "source": "Stack Rank",
       "base_id": "CHIEFCHIRPA"
     },
@@ -2959,7 +2961,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 11,
       "ability_score": 3,
-      "importance_score": 9,
+      "importance_score": 1.341901,
       "source": "Stack Rank",
       "base_id": "VEERS"
     },
@@ -2975,7 +2977,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 0,
-      "importance_score": 6,
+      "importance_score": 1.336621,
       "source": "Stack Rank",
       "base_id": "CASSIANANDOR"
     },
@@ -2991,7 +2993,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 0,
-      "importance_score": 6,
+      "importance_score": 1.331381,
       "source": "Stack Rank",
       "base_id": "WICKET"
     },
@@ -3007,7 +3009,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13,
       "ability_score": 0,
-      "importance_score": 3,
+      "importance_score": 1.326183,
       "source": "Stack Rank",
       "base_id": "CHIEFNEBIT"
     },
@@ -3023,7 +3025,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 0,
-      "importance_score": 6,
+      "importance_score": 1.321026,
       "source": "Stack Rank",
       "base_id": "EWOKELDER"
     },
@@ -3039,7 +3041,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 0,
-      "importance_score": 6,
+      "importance_score": 1.315911,
       "source": "Stack Rank",
       "base_id": "FIRSTORDEREXECUTIONER"
     },
@@ -3055,7 +3057,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 8,
       "ability_score": 3,
-      "importance_score": 15,
+      "importance_score": 1.310836,
       "source": "Stack Rank",
       "base_id": "THIRDSISTER"
     },
@@ -3071,7 +3073,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 8,
       "ability_score": 3,
-      "importance_score": 15,
+      "importance_score": 1.305802,
       "source": "Stack Rank",
       "base_id": "JEDIKNIGHTLUKE"
     },
@@ -3087,7 +3089,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 9,
       "ability_score": 3,
-      "importance_score": 12,
+      "importance_score": 1.30081,
       "source": "Stack Rank",
       "base_id": "WATTAMBOR"
     },
@@ -3103,7 +3105,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 11,
       "ability_score": 0,
-      "importance_score": 6,
+      "importance_score": 1.295858,
       "source": "Stack Rank",
       "base_id": "DEATHTROOPER"
     },
@@ -3119,7 +3121,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 11,
       "ability_score": 0,
-      "importance_score": 6,
+      "importance_score": 1.290948,
       "source": "Stack Rank",
       "base_id": "PHASMA"
     },
@@ -3135,7 +3137,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 11,
       "ability_score": 0,
-      "importance_score": 6,
+      "importance_score": 1.286078,
       "source": "Stack Rank",
       "base_id": "JAWAENGINEER"
     },
@@ -3151,7 +3153,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 11,
       "ability_score": 0,
-      "importance_score": 6,
+      "importance_score": 1.28125,
       "source": "Stack Rank",
       "base_id": "SITHASSASSIN"
     },
@@ -3167,7 +3169,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 10,
       "ability_score": 3,
-      "importance_score": 15,
+      "importance_score": 1.276463,
       "source": "Stack Rank",
       "base_id": "MOFFGIDEONS1"
     },
@@ -3183,7 +3185,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 9,
       "ability_score": 0,
-      "importance_score": 9,
+      "importance_score": 1.271717,
       "source": "Stack Rank",
       "base_id": "SITHTROOPER"
     },
@@ -3199,7 +3201,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 9,
       "ability_score": 0,
-      "importance_score": 9,
+      "importance_score": 1.267012,
       "source": "Stack Rank",
       "base_id": "SHORETROOPER"
     },
@@ -3215,7 +3217,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 3,
-      "importance_score": 9,
+      "importance_score": 1.262348,
       "source": "Stack Rank",
       "base_id": "AURRA_SING"
     },
@@ -3231,7 +3233,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.1,
       "ability_score": 0,
-      "importance_score": 8,
+      "importance_score": 1.257725,
       "source": "Stack Rank",
       "base_id": "DEDRAMEERO"
     },
@@ -3247,7 +3249,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 10,
       "ability_score": 3,
-      "importance_score": 12,
+      "importance_score": 1.253143,
       "source": "Stack Rank",
       "base_id": "CT5555"
     },
@@ -3263,7 +3265,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 3,
-      "importance_score": 9,
+      "importance_score": 1.248603,
       "source": "Stack Rank",
       "base_id": "T3_M4"
     },
@@ -3279,7 +3281,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 10,
       "ability_score": 3,
-      "importance_score": 12,
+      "importance_score": 1.244103,
       "source": "Stack Rank",
       "base_id": "BOBAFETTSCION"
     },
@@ -3295,7 +3297,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 10,
       "ability_score": 3,
-      "importance_score": 12,
+      "importance_score": 1.239645,
       "source": "Stack Rank",
       "base_id": "GENERALHUX"
     },
@@ -3311,7 +3313,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 3,
-      "importance_score": 9,
+      "importance_score": 1.235228,
       "source": "Stack Rank",
       "base_id": "YODACHEWBACCA"
     },
@@ -3327,7 +3329,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 9,
       "ability_score": 3,
-      "importance_score": 12,
+      "importance_score": 1.230851,
       "source": "Stack Rank",
       "base_id": "PADAWANOBIWAN"
     },
@@ -3343,7 +3345,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 3,
-      "importance_score": 6,
+      "importance_score": 1.226516,
       "source": "Stack Rank",
       "base_id": "CLONEWARSCHEWBACCA"
     },
@@ -3359,7 +3361,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 9,
       "ability_score": 3,
-      "importance_score": 12,
+      "importance_score": 1.222222,
       "source": "Stack Rank",
       "base_id": "CT210408"
     },
@@ -3375,7 +3377,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 9,
       "ability_score": 3,
-      "importance_score": 12,
+      "importance_score": 1.217969,
       "source": "Stack Rank",
       "base_id": "KYLOREN"
     },
@@ -3391,7 +3393,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 11,
       "ability_score": 0,
-      "importance_score": 6,
+      "importance_score": 1.213757,
       "source": "Stack Rank",
       "base_id": "K2SO"
     },
@@ -3407,7 +3409,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 9,
       "ability_score": 0,
-      "importance_score": 9,
+      "importance_score": 1.209587,
       "source": "Stack Rank",
       "base_id": "BAZEMALBUS"
     },
@@ -3423,7 +3425,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 9,
       "ability_score": 0,
-      "importance_score": 9,
+      "importance_score": 1.205457,
       "source": "Stack Rank",
       "base_id": "CHIRRUTIMWE"
     },
@@ -3439,7 +3441,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 10,
       "ability_score": 0,
-      "importance_score": 9,
+      "importance_score": 1.201368,
       "source": "Stack Rank",
       "base_id": "HOTHREBELSCOUT"
     },
@@ -3455,7 +3457,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 9,
       "ability_score": 0,
-      "importance_score": 9,
+      "importance_score": 1.197321,
       "source": "Stack Rank",
       "base_id": "DATHCHA"
     },
@@ -3471,7 +3473,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 9,
       "ability_score": 0,
-      "importance_score": 9,
+      "importance_score": 1.193314,
       "source": "Stack Rank",
       "base_id": "SCARIFREBEL"
     },
@@ -3487,7 +3489,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 3,
-      "importance_score": 8,
+      "importance_score": 1.189349,
       "source": "Stack Rank",
       "base_id": "FOSITHTROOPER"
     },
@@ -3503,7 +3505,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.1,
       "ability_score": 0,
-      "importance_score": 8,
+      "importance_score": 1.185425,
       "source": "Stack Rank",
       "base_id": "VEL"
     },
@@ -3519,7 +3521,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 0,
-      "importance_score": 5,
+      "importance_score": 1.181542,
       "source": "Stack Rank",
       "base_id": "MAJORPARTAGAZ"
     },
@@ -3535,7 +3537,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 0,
-      "importance_score": 5,
+      "importance_score": 1.1777,
       "source": "Stack Rank",
       "base_id": "KXSECURITYDROID"
     },
@@ -3551,7 +3553,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 0,
-      "importance_score": 5,
+      "importance_score": 1.173899,
       "source": "Stack Rank",
       "base_id": "TARFFUL"
     },
@@ -3567,7 +3569,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 10,
       "ability_score": 3,
-      "importance_score": 11,
+      "importance_score": 1.170139,
       "source": "Stack Rank",
       "base_id": "CAPTAINDROGAN"
     },
@@ -3583,7 +3585,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 0,
-      "importance_score": 5,
+      "importance_score": 1.16642,
       "source": "Stack Rank",
       "base_id": "DIRECTORKRENNIC"
     },
@@ -3599,7 +3601,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 0,
-      "importance_score": 5,
+      "importance_score": 1.162742,
       "source": "Stack Rank",
       "base_id": "IMPERIALPROBEDROID"
     },
@@ -3615,7 +3617,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 9,
       "ability_score": 3,
-      "importance_score": 11,
+      "importance_score": 1.159106,
       "source": "Stack Rank",
       "base_id": "JEDIKNIGHTCAL"
     },
@@ -3631,7 +3633,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 9,
       "ability_score": 0,
-      "importance_score": 8,
+      "importance_score": 1.15551,
       "source": "Stack Rank",
       "base_id": "NIGHTSISTERSPIRIT"
     },
@@ -3647,7 +3649,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 3,
-      "importance_score": 8,
+      "importance_score": 1.151956,
       "source": "Stack Rank",
       "base_id": "PRINCESSKNEESAA"
     },
@@ -3663,7 +3665,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 10,
       "ability_score": 3,
-      "importance_score": 11,
+      "importance_score": 1.148443,
       "source": "Stack Rank",
       "base_id": "EMBO"
     },
@@ -3679,7 +3681,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 3,
-      "importance_score": 8,
+      "importance_score": 1.14497,
       "source": "Stack Rank",
       "base_id": "ZAMWESELL"
     },
@@ -3695,7 +3697,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 3,
-      "importance_score": 7,
+      "importance_score": 1.141539,
       "source": "Stack Rank",
       "base_id": "UNDERCOVERLANDO"
     },
@@ -3711,7 +3713,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 3,
-      "importance_score": 6,
+      "importance_score": 1.138149,
       "source": "Stack Rank",
       "base_id": "OMEGAS3"
     },
@@ -3727,7 +3729,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 0,
-      "importance_score": 1,
+      "importance_score": 1.1348,
       "source": "Stack Rank",
       "base_id": "UGNAUGHT"
     },
@@ -3743,7 +3745,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 3,
-      "importance_score": 13,
+      "importance_score": 1.131492,
       "source": "Stack Rank",
       "base_id": "ZORIIBLISS_V2"
     },
@@ -3759,7 +3761,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 9,
       "ability_score": 3,
-      "importance_score": 13,
+      "importance_score": 1.128226,
       "source": "Stack Rank",
       "base_id": "BADBATCHWRECKER"
     },
@@ -3775,7 +3777,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 3,
-      "importance_score": 6,
+      "importance_score": 1.125,
       "source": "Stack Rank",
       "base_id": "BRUTUS"
     },
@@ -3791,7 +3793,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 3,
-      "importance_score": 6,
+      "importance_score": 1.121815,
       "source": "Stack Rank",
       "base_id": "FIRSTORDERTROOPER"
     },
@@ -3807,7 +3809,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 3,
-      "importance_score": 5,
+      "importance_score": 1.118672,
       "source": "Stack Rank",
       "base_id": "TUSKENCHIEFTAIN"
     },
@@ -3823,7 +3825,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 3,
-      "importance_score": 3,
+      "importance_score": 1.11557,
       "source": "Stack Rank",
       "base_id": "ROSETICO"
     },
@@ -3839,7 +3841,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 9,
       "ability_score": 6,
-      "importance_score": 15,
+      "importance_score": 1.112508,
       "source": "Stack Rank",
       "base_id": "GENERALSKYWALKER"
     },
@@ -3855,7 +3857,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 3,
-      "importance_score": 6,
+      "importance_score": 1.109488,
       "source": "Stack Rank",
       "base_id": "HK47"
     },
@@ -3871,7 +3873,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 3,
-      "importance_score": 6,
+      "importance_score": 1.106509,
       "source": "Stack Rank",
       "base_id": "GREEDO"
     },
@@ -3887,7 +3889,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 3,
-      "importance_score": 6,
+      "importance_score": 1.103571,
       "source": "Stack Rank",
       "base_id": "IG90"
     },
@@ -3903,7 +3905,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 3,
-      "importance_score": 6,
+      "importance_score": 1.100674,
       "source": "Stack Rank",
       "base_id": "FIRSTORDERTIEPILOT"
     },
@@ -3919,7 +3921,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 10,
       "ability_score": 3,
-      "importance_score": 11,
+      "importance_score": 1.097818,
       "source": "Stack Rank",
       "base_id": "BOUSHH"
     },
@@ -3935,7 +3937,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 8,
       "ability_score": 6,
-      "importance_score": 15,
+      "importance_score": 1.095003,
       "source": "Stack Rank",
       "base_id": "TARONMALICOS"
     },
@@ -3951,7 +3953,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 9,
       "ability_score": 3,
-      "importance_score": 12,
+      "importance_score": 1.09223,
       "source": "Stack Rank",
       "base_id": "BADBATCHECHO"
     },
@@ -3967,7 +3969,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 0,
-      "importance_score": 3,
+      "importance_score": 1.089497,
       "source": "Stack Rank",
       "base_id": "TEEBO"
     },
@@ -3983,7 +3985,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 9,
       "ability_score": 3,
-      "importance_score": 9,
+      "importance_score": 1.086806,
       "source": "Stack Rank",
       "base_id": "DARTHNIHILUS"
     },
@@ -3999,7 +4001,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 9,
       "ability_score": 3,
-      "importance_score": 9,
+      "importance_score": 1.084155,
       "source": "Stack Rank",
       "base_id": "MOTHERTALZIN"
     },
@@ -4015,7 +4017,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 10,
       "ability_score": 0,
-      "importance_score": 6,
+      "importance_score": 1.081546,
       "source": "Stack Rank",
       "base_id": "QUIGONJINN"
     },
@@ -4031,7 +4033,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 9,
       "ability_score": 3,
-      "importance_score": 9,
+      "importance_score": 1.078978,
       "source": "Stack Rank",
       "base_id": "DAKA"
     },
@@ -4047,7 +4049,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 11,
       "ability_score": 0,
-      "importance_score": 3,
+      "importance_score": 1.076451,
       "source": "Stack Rank",
       "base_id": "JAWA"
     },
@@ -4063,7 +4065,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 9,
       "ability_score": 0,
-      "importance_score": 6,
+      "importance_score": 1.073964,
       "source": "Stack Rank",
       "base_id": "CC2224"
     },
@@ -4079,7 +4081,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 9,
       "ability_score": 0,
-      "importance_score": 6,
+      "importance_score": 1.07152,
       "source": "Stack Rank",
       "base_id": "HOTHREBELSOLDIER"
     },
@@ -4095,7 +4097,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 3,
-      "importance_score": 5,
+      "importance_score": 1.069116,
       "source": "Stack Rank",
       "base_id": "ITHANO"
     },
@@ -4111,7 +4113,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 3,
-      "importance_score": 5,
+      "importance_score": 1.066753,
       "source": "Stack Rank",
       "base_id": "HUNTERS3"
     },
@@ -4127,7 +4129,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 3,
-      "importance_score": 5,
+      "importance_score": 1.064431,
       "source": "Stack Rank",
       "base_id": "PAPLOO"
     },
@@ -4143,7 +4145,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 3,
-      "importance_score": 5,
+      "importance_score": 1.062151,
       "source": "Stack Rank",
       "base_id": "LOGRAY"
     },
@@ -4159,7 +4161,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 0,
-      "importance_score": 2,
+      "importance_score": 1.059911,
       "source": "Stack Rank",
       "base_id": "GARSAXON"
     },
@@ -4175,7 +4177,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 0,
-      "importance_score": 2,
+      "importance_score": 1.057713,
       "source": "Stack Rank",
       "base_id": "LOBOT"
     },
@@ -4191,7 +4193,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 0,
-      "importance_score": 2,
+      "importance_score": 1.055556,
       "source": "Stack Rank",
       "base_id": "EWOKSCOUT"
     },
@@ -4207,7 +4209,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 0,
-      "importance_score": 2,
+      "importance_score": 1.053439,
       "source": "Stack Rank",
       "base_id": "IG86SENTINELDROID"
     },
@@ -4223,7 +4225,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 9,
       "ability_score": 3,
-      "importance_score": 8,
+      "importance_score": 1.051364,
       "source": "Stack Rank",
       "base_id": "QIRA"
     },
@@ -4239,7 +4241,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 10,
       "ability_score": 0,
-      "importance_score": 5,
+      "importance_score": 1.04933,
       "source": "Stack Rank",
       "base_id": "TALIA"
     },
@@ -4255,7 +4257,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 10,
       "ability_score": 0,
-      "importance_score": 5,
+      "importance_score": 1.047337,
       "source": "Stack Rank",
       "base_id": "MAGMATROOPER"
     },
@@ -4271,7 +4273,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 10,
       "ability_score": 0,
-      "importance_score": 5,
+      "importance_score": 1.045385,
       "source": "Stack Rank",
       "base_id": "NIGHTSISTERACOLYTE"
     },
@@ -4287,7 +4289,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 11,
       "ability_score": 0,
-      "importance_score": 2,
+      "importance_score": 1.043475,
       "source": "Stack Rank",
       "base_id": "JEDIKNIGHTCONSULAR"
     },
@@ -4303,7 +4305,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 9,
       "ability_score": 0,
-      "importance_score": 5,
+      "importance_score": 1.041605,
       "source": "Stack Rank",
       "base_id": "YOUNGLANDO"
     },
@@ -4319,7 +4321,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 8,
       "ability_score": 3,
-      "importance_score": 11,
+      "importance_score": 1.039776,
       "source": "Stack Rank",
       "base_id": "IG12"
     },
@@ -4335,7 +4337,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 3,
-      "importance_score": 10,
+      "importance_score": 1.037989,
       "source": "Stack Rank",
       "base_id": "GOPHERANTS"
     },
@@ -4351,7 +4353,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 3,
-      "importance_score": 4,
+      "importance_score": 1.036243,
       "source": "Stack Rank",
       "base_id": "CAPTAINSILVO"
     },
@@ -4367,7 +4369,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13.2,
       "ability_score": 3,
-      "importance_score": 4,
+      "importance_score": 1.034537,
       "source": "Stack Rank",
       "base_id": "VANE"
     },
@@ -4383,7 +4385,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 3,
-      "importance_score": 13,
+      "importance_score": 1.032873,
       "source": "Stack Rank",
       "base_id": "CARSONTEVA"
     },
@@ -4399,7 +4401,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 9,
       "ability_score": 6,
-      "importance_score": 10,
+      "importance_score": 1.03125,
       "source": "Stack Rank",
       "base_id": "MOFFGIDEONS3"
     },
@@ -4415,7 +4417,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 9,
       "ability_score": 3,
-      "importance_score": 10,
+      "importance_score": 1.029668,
       "source": "Stack Rank",
       "base_id": "MARROK"
     },
@@ -4431,7 +4433,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 11,
       "ability_score": 0,
-      "importance_score": 1,
+      "importance_score": 1.028127,
       "source": "Stack Rank",
       "base_id": "CORUSCANTUNDERWORLDPOLICE"
     },
@@ -4447,7 +4449,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 9,
       "ability_score": 0,
-      "importance_score": 3,
+      "importance_score": 1.026627,
       "source": "Stack Rank",
       "base_id": "TUSKENRAIDER"
     },
@@ -4463,7 +4465,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13,
       "ability_score": 3,
-      "importance_score": 9,
+      "importance_score": 1.025168,
       "source": "Stack Rank",
       "base_id": "ZUCKUSS"
     },
@@ -4479,7 +4481,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 9,
       "ability_score": 3,
-      "importance_score": 6,
+      "importance_score": 1.023751,
       "source": "Stack Rank",
       "base_id": "NIGHTSISTERZOMBIE"
     },
@@ -4495,7 +4497,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 10,
       "ability_score": 0,
-      "importance_score": 3,
+      "importance_score": 1.022374,
       "source": "Stack Rank",
       "base_id": "URORRURRR"
     },
@@ -4511,7 +4513,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 10,
       "ability_score": 0,
-      "importance_score": 3,
+      "importance_score": 1.021039,
       "source": "Stack Rank",
       "base_id": "CLONESERGEANTPHASEI"
     },
@@ -4527,7 +4529,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 10,
       "ability_score": 0,
-      "importance_score": 3,
+      "importance_score": 1.019744,
       "source": "Stack Rank",
       "base_id": "TUSKENSHAMAN"
     },
@@ -4543,7 +4545,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 9,
       "ability_score": 0,
-      "importance_score": 3,
+      "importance_score": 1.018491,
       "source": "Stack Rank",
       "base_id": "LUMINARAUNDULI"
     },
@@ -4559,7 +4561,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 9,
       "ability_score": 0,
-      "importance_score": 3,
+      "importance_score": 1.017279,
       "source": "Stack Rank",
       "base_id": "JEDIKNIGHTGUARDIAN"
     },
@@ -4575,7 +4577,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 3,
-      "importance_score": 10,
+      "importance_score": 1.016108,
       "source": "Stack Rank",
       "base_id": "RANGERZEB"
     },
@@ -4591,7 +4593,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 11,
       "ability_score": 3,
-      "importance_score": 5,
+      "importance_score": 1.014978,
       "source": "Stack Rank",
       "base_id": "WRECKERS3"
     },
@@ -4607,7 +4609,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 11,
       "ability_score": 3,
-      "importance_score": 5,
+      "importance_score": 1.013889,
       "source": "Stack Rank",
       "base_id": "CROSSHAIRS3"
     },
@@ -4623,7 +4625,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 3,
-      "importance_score": 2,
+      "importance_score": 1.012841,
       "source": "Stack Rank",
       "base_id": "BODHIROOK"
     },
@@ -4639,7 +4641,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 3,
-      "importance_score": 11,
+      "importance_score": 1.011834,
       "source": "Stack Rank",
       "base_id": "LUKESTARKILLER"
     },
@@ -4655,7 +4657,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 9,
       "ability_score": 3,
-      "importance_score": 5,
+      "importance_score": 1.010869,
       "source": "Stack Rank",
       "base_id": "BADBATCHOMEGA"
     },
@@ -4671,7 +4673,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 9,
       "ability_score": 3,
-      "importance_score": 5,
+      "importance_score": 1.009944,
       "source": "Stack Rank",
       "base_id": "TUSKENHUNTRESS"
     },
@@ -4687,7 +4689,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 9,
       "ability_score": 3,
-      "importance_score": 5,
+      "importance_score": 1.009061,
       "source": "Stack Rank",
       "base_id": "YOUNGHAN"
     },
@@ -4703,7 +4705,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 10,
       "ability_score": 0,
-      "importance_score": 2,
+      "importance_score": 1.008218,
       "source": "Stack Rank",
       "base_id": "KITFISTO"
     },
@@ -4719,7 +4721,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 10,
       "ability_score": 0,
-      "importance_score": 2,
+      "importance_score": 1.007417,
       "source": "Stack Rank",
       "base_id": "PLOKOON"
     },
@@ -4735,7 +4737,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 9,
       "ability_score": 0,
-      "importance_score": 2,
+      "importance_score": 1.006657,
       "source": "Stack Rank",
       "base_id": "IMAGUNDI"
     },
@@ -4751,7 +4753,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 9,
       "ability_score": 0,
-      "importance_score": 2,
+      "importance_score": 1.005938,
       "source": "Stack Rank",
       "base_id": "EETHKOTH"
     },
@@ -4767,7 +4769,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 9,
       "ability_score": 0,
-      "importance_score": 2,
+      "importance_score": 1.00526,
       "source": "Stack Rank",
       "base_id": "IMPERIALSUPERCOMMANDO"
     },
@@ -4783,7 +4785,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 8,
       "ability_score": 6,
-      "importance_score": 11,
+      "importance_score": 1.004623,
       "source": "Stack Rank",
       "base_id": "JEDIMASTERMACEWINDU"
     },
@@ -4799,7 +4801,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 3,
-      "importance_score": 10,
+      "importance_score": 1.004027,
       "source": "Stack Rank",
       "base_id": "BISHOP"
     },
@@ -4815,7 +4817,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 3,
-      "importance_score": 10,
+      "importance_score": 1.003472,
       "source": "Stack Rank",
       "base_id": "R5D4"
     },
@@ -4831,7 +4833,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 9,
       "ability_score": 0,
-      "importance_score": 1,
+      "importance_score": 1.002959,
       "source": "Stack Rank",
       "base_id": "HUMANTHUG"
     },
@@ -4847,7 +4849,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 10,
       "ability_score": 3,
-      "importance_score": 9,
+      "importance_score": 1.002486,
       "source": "Stack Rank",
       "base_id": "4LOM"
     },
@@ -4863,7 +4865,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 9,
       "ability_score": 3,
-      "importance_score": 6,
+      "importance_score": 1.002055,
       "source": "Stack Rank",
       "base_id": "BADBATCHTECH"
     },
@@ -4879,7 +4881,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 10,
       "ability_score": 3,
-      "importance_score": 3,
+      "importance_score": 1.001664,
       "source": "Stack Rank",
       "base_id": "STORMTROOPER"
     },
@@ -4895,7 +4897,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 9,
       "ability_score": 3,
-      "importance_score": 3,
+      "importance_score": 1.001315,
       "source": "Stack Rank",
       "base_id": "NIGHTSISTERINITIATE"
     },
@@ -4911,7 +4913,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 3,
-      "importance_score": 8,
+      "importance_score": 1.001007,
       "source": "Stack Rank",
       "base_id": "REMNANTSNOWCOMMANDER"
     },
@@ -4927,7 +4929,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 10,
       "ability_score": 3,
-      "importance_score": 5,
+      "importance_score": 1.00074,
       "source": "Stack Rank",
       "base_id": "BATCHERS3"
     },
@@ -4943,7 +4945,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 8,
       "ability_score": 3,
-      "importance_score": 11,
+      "importance_score": 1.000514,
       "source": "Stack Rank",
       "base_id": "KIADIMUNDI"
     },
@@ -4959,7 +4961,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 13,
       "ability_score": 3,
-      "importance_score": 4,
+      "importance_score": 1.000329,
       "source": "Stack Rank",
       "base_id": "KIX"
     },
@@ -4975,7 +4977,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 9,
       "ability_score": 3,
-      "importance_score": 1,
+      "importance_score": 1.000185,
       "source": "Stack Rank",
       "base_id": "GAMORREANGUARD"
     },
@@ -4991,7 +4993,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 3,
-      "importance_score": 6,
+      "importance_score": 1.000082,
       "source": "Stack Rank",
       "base_id": "JAXXON"
     },
@@ -5007,7 +5009,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 12,
       "ability_score": 3,
-      "importance_score": 5,
+      "importance_score": 1.000021,
       "source": "Stack Rank",
       "base_id": "STORMTROOPERCONCEPT"
     },
@@ -5023,7 +5025,7 @@
       "omicron_synergy_boost": 0,
       "relic_gear_level": 9,
       "ability_score": 3,
-      "importance_score": 6,
+      "importance_score": 1,
       "source": "Stack Rank",
       "base_id": "QUIGGOLD"
     }
