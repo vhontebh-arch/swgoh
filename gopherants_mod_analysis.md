@@ -8,9 +8,9 @@
 - **Walidacja fizyczna całego łańcucha:** POTWIERDZONA
 - **Ocena:** KOMPROMIS — bilans Rank dodatni, ale co najmniej jeden dawca traci
 - **Interpretacja:** bilans obejmuje cel i wszystkich dotkniętych dawców, liczony tą samą nieprojekcyjną punktacją pełnego buildu.
-- **Łączny bilans profilu rosteru:** +146.86 pkt
-- **Bilans ważony Rank (cel i dawcy):** +144.95 pkt
-- **Ważony wkład celu:** +113.57 pkt
+- **Łączny bilans profilu rosteru:** +147.16 pkt
+- **Bilans ważony Rank (cel i dawcy):** +146.63 pkt
+- **Ważony wkład celu:** +112.99 pkt
 - **Liczba modów docelowych:** 6/6
 
 ## Uwagi o stanie dawców przed operacją
@@ -27,14 +27,14 @@ Wynik każdego buildu jest liczony bez projekcji przyszłych rolli i bez założ
 | Postać | Rola w łańcuchu | Wynik przed | Wynik po | Zmiana |
 |---|---|---:|---:|---:|
 | 50RT | DAWCA | 31.40 | 86.50 | +55.10 |
-| GOPHERANTS | CEL | 0.00 | 109.41 | +109.41 |
+| GOPHERANTS | CEL | 0.00 | 108.85 | +108.85 |
 | WATTAMBOR | DAWCA | 41.27 | 63.97 | +22.71 |
 | ADMIRALPIETT | DAWCA | 86.02 | 80.23 | -5.79 |
-| WAMPA | DAWCA | 112.20 | 109.23 | -2.98 |
+| WAMPA | DAWCA | 112.20 | 110.08 | -2.12 |
 | MARAJADE | DAWCA | 113.70 | 92.73 | -20.97 |
 | EMPERORPALPATINE | DAWCA | 108.44 | 97.82 | -10.62 |
 
-**ŁĄCZNA ZMIANA: +146.86 pkt.**
+**ŁĄCZNA ZMIANA: +147.16 pkt.**
 
 ## Docelowy zestaw — GOPHERANTS
 
@@ -66,8 +66,8 @@ Wynik każdego buildu jest liczony bez projekcji przyszłych rolli i bez założ
 - **Źródło:** EMPERORPALPATINE
 #### Triangle
 - **Obecny mod:** Pusty slot
-- **Proponowany mod:** Triangle / Health / Offense % 5.88% / secondary: Potency % 1.74%, Critical Chance % 2.89%, Speed 13, Health 803 / 5★ A lvl15
-- **Źródło:** MAGAZYN
+- **Proponowany mod:** Triangle / Health / Health % 5.88% / secondary: Protection 724, Tenacity % 1.98%, Speed 11, Health 1454 / 5★ A lvl15
+- **Źródło:** WAMPA
 #### Circle
 - **Obecny mod:** Pusty slot
 - **Proponowany mod:** Circle / Speed / Protection % 24% / secondary: Defense % 15.26%, Speed 16, Health 1181, Critical Chance % 2.93% / 6★ A lvl15
@@ -77,7 +77,7 @@ Wynik każdego buildu jest liczony bez projekcji przyszłych rolli i bez założ
 - **Proponowany mod:** Cross / Speed / Potency % 30% / secondary: Defense 15, Health 2082, Health % 3.6%, Speed 19 / 6★ A lvl15
 - **Źródło:** MARAJADE
 
-- **Zmiana potencjału buildu:** +109.4 pkt (optymistyczna projekcja do 15; brakujące rolle przypisane do najwyżej preferowanej secondary; dla 5A projekcja secondary do 6E; primary pozostaje bez zmian; bez slice i calibration).
+- **Zmiana potencjału buildu:** +108.9 pkt (optymistyczna projekcja do 15; brakujące rolle przypisane do najwyżej preferowanej secondary; dla 5A projekcja secondary do 6E; primary pozostaje bez zmian; bez slice i calibration).
 
 ## MOD — mody przenoszone na cel
 
@@ -85,7 +85,7 @@ Wynik każdego buildu jest liczony bez projekcji przyszłych rolli i bez założ
 - **EMPERORPALPATINE → GOPHERANTS:** Diamond / Speed / Defense % 20% / secondary: Tenacity % 8.31%, Offense % 1.33%, Speed 19, Health 1560 / 6★ A lvl15
 - **MARAJADE → GOPHERANTS:** Circle / Speed / Protection % 24% / secondary: Defense % 15.26%, Speed 16, Health 1181, Critical Chance % 2.93% / 6★ A lvl15
 - **MAGAZYN → GOPHERANTS:** Arrow / Health / Speed 30 / secondary: Critical Chance % 1.16%, Offense % 0.5%, Health 282, Health % 1.51% / 5★ D lvl15
-- **MAGAZYN → GOPHERANTS:** Triangle / Health / Offense % 5.88% / secondary: Potency % 1.74%, Critical Chance % 2.89%, Speed 13, Health 803 / 5★ A lvl15
+- **WAMPA → GOPHERANTS:** Triangle / Health / Health % 5.88% / secondary: Protection 724, Tenacity % 1.98%, Speed 11, Health 1454 / 5★ A lvl15
 - **MARAJADE → GOPHERANTS:** Cross / Speed / Potency % 30% / secondary: Defense 15, Health 2082, Health % 3.6%, Speed 19 / 6★ A lvl15
 
 ## PATCH — uzupełnienie dawców
@@ -101,13 +101,14 @@ Wynik każdego buildu jest liczony bez projekcji przyszłych rolli i bez założ
 - **MAGAZYN → WATTAMBOR:** Circle / Health / Protection % 23.5% / secondary: Speed 5, Protection 1147, Health % 0.73%, Health 1074 / 5★ B lvl15
 - **50RT → EMPERORPALPATINE:** Diamond / Speed / Defense % 11.75% / secondary: Critical Chance % 1.49%, Potency % 2.11%, Offense 70, Speed 5 / 5★ D lvl15
 - **MAGAZYN → 50RT:** Diamond / Health / Defense % 11.75% / secondary: Health 277, Speed 9, Offense 70, Protection 493 / 5★ C lvl15
+- **MAGAZYN → WAMPA:** Triangle / Health / Offense % 5.88% / secondary: Potency % 1.74%, Critical Chance % 2.89%, Speed 13, Health 803 / 5★ A lvl15
 
 ## Kolejność przekładania
 
 1. **Arrow — załóż na GOPHERANTS** mod z MAGAZYN: Arrow / Health / Speed 30 / secondary: Critical Chance % 1.16%, Offense % 0.5%, Health 282, Health % 1.51% / 5★ D lvl15
 2. **Square — załóż na GOPHERANTS** mod z MARAJADE: Square / Speed / Offense % 8.5% / secondary: Potency % 8.71%, Health 698, Tenacity % 4.38%, Speed 17 / 6★ A lvl15
 3. **Diamond — załóż na GOPHERANTS** mod z EMPERORPALPATINE: Diamond / Speed / Defense % 20% / secondary: Tenacity % 8.31%, Offense % 1.33%, Speed 19, Health 1560 / 6★ A lvl15
-4. **Triangle — załóż na GOPHERANTS** mod z MAGAZYN: Triangle / Health / Offense % 5.88% / secondary: Potency % 1.74%, Critical Chance % 2.89%, Speed 13, Health 803 / 5★ A lvl15
+4. **Triangle — załóż na GOPHERANTS** mod z WAMPA: Triangle / Health / Health % 5.88% / secondary: Protection 724, Tenacity % 1.98%, Speed 11, Health 1454 / 5★ A lvl15
 5. **Circle — załóż na GOPHERANTS** mod z MARAJADE: Circle / Speed / Protection % 24% / secondary: Defense % 15.26%, Speed 16, Health 1181, Critical Chance % 2.93% / 6★ A lvl15
 6. **Cross — załóż na GOPHERANTS** mod z MARAJADE: Cross / Speed / Potency % 30% / secondary: Defense 15, Health 2082, Health % 3.6%, Speed 19 / 6★ A lvl15
 
@@ -115,39 +116,40 @@ Wynik każdego buildu jest liczony bez projekcji przyszłych rolli i bez założ
 
 7. **PATCH — załóż na MARAJADE** mod z WATTAMBOR: Circle / Speed / Health % 5.88% / secondary: Offense % 0.5%, Potency % 4.24%, Health 337, Protection 982 / 5★ C lvl15
 8. **PATCH — załóż na EMPERORPALPATINE** mod z 50RT: Diamond / Speed / Defense % 11.75% / secondary: Critical Chance % 1.49%, Potency % 2.11%, Offense 70, Speed 5 / 5★ D lvl15
+9. **PATCH — załóż na WAMPA** mod z MAGAZYN (dostępny po wcześniejszym kroku): Triangle / Health / Offense % 5.88% / secondary: Potency % 1.74%, Critical Chance % 2.89%, Speed 13, Health 803 / 5★ A lvl15
 
 ### Uzupełnienie dawców — poziom 2
 
-9. **PATCH — załóż na MARAJADE** mod z EMPERORPALPATINE: Cross / Speed / Potency % 30% / secondary: Offense 199, Protection 1913, Speed 10, Defense % 5.94% / 6★ A lvl15
-10. **PATCH — załóż na 50RT** mod z MAGAZYN (dostępny po wcześniejszym kroku): Diamond / Health / Defense % 11.75% / secondary: Health 277, Speed 9, Offense 70, Protection 493 / 5★ C lvl15
+10. **PATCH — załóż na MARAJADE** mod z EMPERORPALPATINE: Cross / Speed / Potency % 30% / secondary: Offense 199, Protection 1913, Speed 10, Defense % 5.94% / 6★ A lvl15
+11. **PATCH — załóż na 50RT** mod z MAGAZYN (dostępny po wcześniejszym kroku): Diamond / Health / Defense % 11.75% / secondary: Health 277, Speed 9, Offense 70, Protection 493 / 5★ C lvl15
 
 ### Uzupełnienie dawców — poziom 3
 
-11. **PATCH — załóż na MARAJADE** mod z 50RT: Square / Speed / Offense % 5.88% / secondary: Critical Chance % 3.21%, Health 364, Potency % 1.55%, Speed 5 / 5★ D lvl15
+12. **PATCH — załóż na MARAJADE** mod z 50RT: Square / Speed / Offense % 5.88% / secondary: Critical Chance % 3.21%, Health 364, Potency % 1.55%, Speed 5 / 5★ D lvl15
 
 ### Uzupełnienie dawców — poziom 4
 
-12. **PATCH — załóż na 50RT** mod z WAMPA: Square / Health / Offense % 5.88% / secondary: Health % 0.97%, Health 266, Speed 13, Potency % 5% / 5★ A lvl15
+13. **PATCH — załóż na 50RT** mod z WAMPA: Square / Health / Offense % 5.88% / secondary: Health % 0.97%, Health 266, Speed 13, Potency % 5% / 5★ A lvl15
 
 ### Uzupełnienie dawców — poziom 5
 
-13. **PATCH — załóż na WAMPA** mod z MAGAZYN (dostępny po wcześniejszym kroku): Square / Health / Offense % 5.88% / secondary: Protection 827, Health 914, Speed 5, Offense 42 / 5★ C lvl15
+14. **PATCH — załóż na WAMPA** mod z MAGAZYN (dostępny po wcześniejszym kroku): Square / Health / Offense % 5.88% / secondary: Protection 827, Health 914, Speed 5, Offense 42 / 5★ C lvl15
 
 ### Uzupełnienie dawców — poziom 6
 
-14. **PATCH — załóż na EMPERORPALPATINE** mod z ADMIRALPIETT: Cross / Speed / Offense % 5.88% / secondary: Protection 1183, Speed 12, Potency % 1.62%, Tenacity % 3.33% / 5★ A lvl15
+15. **PATCH — załóż na EMPERORPALPATINE** mod z ADMIRALPIETT: Cross / Speed / Offense % 5.88% / secondary: Protection 1183, Speed 12, Potency % 1.62%, Tenacity % 3.33% / 5★ A lvl15
 
 ### Uzupełnienie dawców — poziom 7
 
-15. **PATCH — załóż na ADMIRALPIETT** mod z 50RT: Cross / Speed / Health % 5.88% / secondary: Offense 42, Protection 1099, Speed 4, Defense % 0.95% / 5★ D lvl15
+16. **PATCH — załóż na ADMIRALPIETT** mod z 50RT: Cross / Speed / Health % 5.88% / secondary: Offense 42, Protection 1099, Speed 4, Defense % 0.95% / 5★ D lvl15
 
 ### Uzupełnienie dawców — poziom 8
 
-16. **PATCH — załóż na 50RT** mod z MAGAZYN (dostępny po wcześniejszym kroku): Cross / Health / Tenacity % 24% / secondary: Potency % 2.71%, Speed 14, Offense 58, Health % 0.87% / 5★ A lvl15
+17. **PATCH — załóż na 50RT** mod z MAGAZYN (dostępny po wcześniejszym kroku): Cross / Health / Tenacity % 24% / secondary: Potency % 2.71%, Speed 14, Offense 58, Health % 0.87% / 5★ A lvl15
 
 ### Uzupełnienie dawców — poziom 9
 
-17. **PATCH — załóż na WATTAMBOR** mod z MAGAZYN (dostępny po wcześniejszym kroku): Circle / Health / Protection % 23.5% / secondary: Speed 5, Protection 1147, Health % 0.73%, Health 1074 / 5★ B lvl15
+18. **PATCH — załóż na WATTAMBOR** mod z MAGAZYN (dostępny po wcześniejszym kroku): Circle / Health / Protection % 23.5% / secondary: Speed 5, Protection 1147, Health % 0.73%, Health 1074 / 5★ B lvl15
 
 Zakładanie moda automatycznie przenosi poprzedni mod ze slotu do magazynu. Wszystkie powyższe kroki zostały sprawdzone na pełnym stanie slotów i magazynu.
 
@@ -158,6 +160,7 @@ Wyniki poniżej to ważony Rank bilans zmian danego dawcy i jego rekurencyjnych 
 
 - **EMPERORPALPATINE:** sprawdzono 5 kompletnych wariantów; wyniki: +23.9197, +23.4209, -10.8801, +74.9750, +10.5476; najlepszy: +74.9750.
 - **MARAJADE:** sprawdzono 3 kompletnych wariantów; wyniki: +106.2636, +109.3128, +67.6530; najlepszy: +109.3128.
+- **WAMPA:** sprawdzono 5 kompletnych wariantów; wyniki: +2.2585, -1.0634, -6.4892, -7.6481, -7.6481; najlepszy: +2.2585.
 
 ## Wpływ na postacie-dawców
 
@@ -178,10 +181,10 @@ Wyniki poniżej to ważony Rank bilans zmian danego dawcy i jego rekurencyjnych 
   - Kombinacja setów: Speed + Health (54.2%) → Speed + Health (54.2%).
   - Zmiana wyniku pełnego buildu po kolejnych PATCH-ach: Square -5.8 pkt.
   - ISTOTNY SPADEK wartości modów u dawcy.
-- **WAMPA — wynik pełnego buildu wg profilu:** 112.20 → 109.23 (-2.98 pkt).
-  - Σ modValue modów: 379.2 → 376.3 (-2.9) — surowy wskaźnik jakości modów, nie wynik profilu.
+- **WAMPA — wynik pełnego buildu wg profilu:** 112.20 → 110.08 (-2.12 pkt).
+  - Σ modValue modów: 379.2 → 377.5 (-1.7) — surowy wskaźnik jakości modów, nie wynik profilu.
   - Kombinacja setów: Triple Health (16.3%) → Triple Health (16.3%).
-  - Zmiana wyniku pełnego buildu po kolejnych PATCH-ach: Square -3.0 pkt.
+  - Zmiana wyniku pełnego buildu po kolejnych PATCH-ach: Square -3.0 pkt; Triangle +0.9 pkt.
   - ISTOTNY SPADEK wartości modów u dawcy.
 - **MARAJADE — wynik pełnego buildu wg profilu:** 113.70 → 92.73 (-20.97 pkt).
   - Σ modValue modów: 389.4 → 375.2 (-14.2) — surowy wskaźnik jakości modów, nie wynik profilu.
