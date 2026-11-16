@@ -3,14 +3,20 @@ import unittest
 from character_ranking import rank_importance_score, rank_weighted_donor_delta
 
 
+_NAMED_RANKS = {
+    10: ("Jedi Knight Revan", "JEDIKNIGHTREVAN"),
+    62: ("Scorch", "SCORCH"),
+    76: ("50R-T", "50RT"),
+    135: ("Sana Starros", "SANASTARROS"),
+    174: ("Merrin", "MERRIN"),
+    218: ("Vel", "VEL"),
+    302: ("4-LOM", "FOURLOM"),
+}
 RANKING = [
-    {"character": "Jedi Knight Revan", "base_id": "JEDIKNIGHTREVAN", "rank": 10},
-    {"character": "Scorch", "base_id": "SCORCH", "rank": 62},
-    {"character": "50R-T", "base_id": "50RT", "rank": 76},
-    {"character": "Sana Starros", "base_id": "SANASTARROS", "rank": 135},
-    {"character": "Merrin", "base_id": "MERRIN", "rank": 174},
-    {"character": "Vel", "base_id": "VEL", "rank": 218},
-    {"character": "4-LOM", "base_id": "FOURLOM", "rank": 302},
+    {"character": _NAMED_RANKS.get(rank, (f"Filler {rank}", f"FILLER{rank}"))[0],
+     "base_id": _NAMED_RANKS.get(rank, (f"Filler {rank}", f"FILLER{rank}"))[1],
+     "rank": rank}
+    for rank in range(1, 314)
 ]
 
 
