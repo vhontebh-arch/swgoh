@@ -1863,19 +1863,36 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
         for r in rows:
             if r.get("optimizerTarget"): r["chainStatus"]="BLOCKED"
 
+    affected_owner_ids = set()
+    for plan in plans:
+        if plan.get("target_owner"):
+            affected_owner_ids.add(str(plan["target_owner"]))
+        selected_owner = owner(plan.get("mod", {}))
+        if selected_owner:
+            affected_owner_ids.add(selected_owner)
+        affected_owner_ids.update(
+            str(move.get("owner", "")) for move in plan.get("moves", [])
+            if move.get("owner")
+        )
+    relevant_validation = [
+        item for item in validation
+        if str(item.get("owner", "") or "") in affected_owner_ids
+    ]
     rank_donor_moves = [
         {"owner": item.get("owner", ""), "gain": item.get("profileScoreDelta", 0.0)}
-        for item in validation
+        for item in relevant_validation
         if aliases.get(str(item.get("owner", "") or ""), str(item.get("owner", "") or "")) not in targets
         and item.get("profileScoreAvailable")
     ]
     target_profile_delta = sum(
         float(item.get("profileScoreDelta", 0.0) or 0.0)
-        for item in validation
+        for item in relevant_validation
         if aliases.get(str(item.get("owner", "") or ""), str(item.get("owner", "") or "")) in targets
         and item.get("profileScoreAvailable")
     )
-    all_profiled = bool(validation) and all(item.get("profileScoreAvailable") for item in validation)
+    all_profiled = bool(relevant_validation) and all(
+        item.get("profileScoreAvailable") for item in relevant_validation
+    )
     weighted_donor_delta = (
         rank_weighted_donor_delta(rank_donor_moves, ranking, aliases)
         if all_profiled else None
