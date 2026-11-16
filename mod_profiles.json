@@ -1090,172 +1090,185 @@
       "role": "support",
       "source_model": {
         "method": "direct SWGOH.GG Best Mods pages; equal-weight average of Top 1000 Kyber GAC and Top 100 Guilds",
-        "refreshed_at_utc": "2026-11-10T18:00:00Z",
+        "refreshed_at_utc": "2026-11-16T08:52:00Z",
         "sources": [
           {
             "name": "Top 1000 Kyber GAC",
             "url": "https://swgoh.gg/units/50r-t/best-mods/",
-            "units_fully_modded": 914,
+            "units_fully_modded": 911,
             "set_combinations_pct": {
-              "Speed + Health": 27.68,
-              "Triple Health": 14.3,
-              "Offense + Health": 12,
-              "Crit Damage + Crit Chance": 6.2,
-              "Offense + Crit Chance": 4.8
+              "Speed + Health": 27.77,
+              "Triple Health": 14.16,
+              "Offense + Health": 12.18,
+              "Crit Damage + Crit Chance": 6.14,
+              "Offense + Crit Chance": 5.04,
+              "Speed + Potency": 3.07,
+              "Triple Potency": 2.74,
+              "Offense + Potency": 2.3,
+              "Double Health + Potency": 2.08
             },
             "primary_pct": {
               "Arrow": {
                 "Speed": 84.98,
-                "Health": 7.11,
+                "Health": 7.5,
                 "Offense": 5.92,
-                "Protection": 0.79
+                "Critical Avoidance": 0.79
               },
               "Triangle": {
-                "Health": 38.33,
-                "Critical Damage": 23.32,
-                "Offense": 14.62,
-                "Protection": 11.46
+                "Health": 38.73,
+                "Critical Damage": 23.71,
+                "Offense": 15.81,
+                "Protection": 10.67
               },
               "Circle": {
-                "Health": 74.3,
-                "Protection": 25.69
+                "Health": 74.7,
+                "Protection": 25.29
               },
               "Cross": {
-                "Health": 41.5,
-                "Offense": 24.9,
-                "Protection": 9.88,
-                "Potency": 9.88
+                "Health": 40.31,
+                "Offense": 25.29,
+                "Potency": 11.46,
+                "Protection": 9.48
               }
             },
             "secondary_focus": {
               "Speed": {
-                "average": 14.7,
-                "focus_pct": 21.39
+                "average": 14.6,
+                "focus_pct": 21.37
               },
               "Offense": {
-                "average": 81.6,
-                "focus_pct": 8.79
+                "average": 83.6,
+                "focus_pct": 8.84
               },
               "Potency": {
-                "average": 4.58,
+                "average": 4.51,
                 "focus_pct": 8.05
               },
               "Health": {
-                "average": 852.8,
-                "focus_pct": 7.7
+                "average": 849.8,
+                "focus_pct": 7.62
               }
             }
           },
           {
             "name": "Top 100 Guilds",
             "url": "https://swgoh.gg/units/50r-t/best-mods/?s=GUILDTOP100",
-            "units_fully_modded": 4856,
+            "units_fully_modded": 4852,
             "set_combinations_pct": {
-              "Speed + Health": 27.16,
-              "Triple Health": 15.7,
-              "Crit Damage + Crit Chance": 12.3,
-              "Offense + Health": 5.3,
-              "Triple Potency": 2.8
+              "Speed + Health": 28.33,
+              "Triple Health": 14.85,
+              "Crit Damage + Crit Chance": 12.51,
+              "Offense + Health": 5.33,
+              "Triple Potency": 2.76,
+              "Speed + Potency": 2.72,
+              "Double Health + Defense": 2.28,
+              "Double Health + Potency": 2.12,
+              "Double Health + Tenacity": 1.95
             },
             "primary_pct": {
               "Arrow": {
-                "Speed": 89.68,
-                "Health": 4.09,
-                "Offense": 2.95,
-                "Protection": 1.36
+                "Speed": 90.47,
+                "Health": 3.78,
+                "Offense": 2.69,
+                "Critical Avoidance": 1.3
               },
               "Triangle": {
-                "Health": 44.8,
-                "Critical Damage": 16.22,
-                "Protection": 11.9,
-                "Offense": 11.9
+                "Health": 43.34,
+                "Critical Damage": 15.92,
+                "Offense": 14.1,
+                "Protection": 11.56
               },
               "Circle": {
-                "Health": 75.28,
-                "Protection": 24.71
+                "Health": 77.01,
+                "Protection": 22.98
               },
               "Cross": {
-                "Health": 47.46,
-                "Offense": 13.94,
-                "Protection": 12.2,
-                "Potency": 10.91
+                "Health": 46.4,
+                "Offense": 15.34,
+                "Protection": 12.21,
+                "Potency": 11.78
               }
             },
             "secondary_focus": {
               "Speed": {
-                "average": 13.4,
-                "focus_pct": 21.07
+                "average": 13.3,
+                "focus_pct": 21.06
               },
               "Health": {
-                "average": 774.5,
+                "average": 771,
                 "focus_pct": 8.05
               },
               "Offense": {
-                "average": 75.7,
-                "focus_pct": 7.89
+                "average": 76,
+                "focus_pct": 8.02
               },
               "Tenacity": {
-                "average": 4.14,
-                "focus_pct": 7.54
+                "average": 4.13,
+                "focus_pct": 7.46
               }
             }
           }
         ]
       },
       "set_combinations": {
-        "Speed + Health": 27.42,
-        "Triple Health": 15,
-        "Offense + Health": 8.65,
-        "Crit Damage + Crit Chance": 9.25,
-        "Offense + Crit Chance": 2.4,
-        "Triple Potency": 1.4
+        "Speed + Health": 28.05,
+        "Triple Health": 14.505,
+        "Offense + Health": 8.755,
+        "Crit Damage + Crit Chance": 9.325,
+        "Offense + Crit Chance": 2.52,
+        "Speed + Potency": 2.895,
+        "Triple Potency": 2.75,
+        "Offense + Potency": 1.15,
+        "Double Health + Potency": 2.1,
+        "Double Health + Defense": 1.14,
+        "Double Health + Tenacity": 0.975
       },
       "set_preferences": {
-        "Speed": 0.7602,
+        "Speed": 0.5573,
         "Health": 1,
-        "Triple Health": 0.4159,
-        "Offense": 0.3063,
-        "Critical Damage": 0.2564,
-        "Critical Chance": 0.323,
-        "Triple Potency": 0.0388
+        "Offense": 0.2238,
+        "Critical Damage": 0.1679,
+        "Critical Chance": 0.2133,
+        "Potency": 0.1602,
+        "Defense": 0.0205,
+        "Tenacity": 0.0176
       },
       "primary_preferences": {
         "Arrow": {
-          "Speed": 0.8871,
-          "Health": 0.0569,
-          "Offense": 0.0451,
-          "Protection": 0.0109
+          "Speed": 0.8887,
+          "Health": 0.0571,
+          "Offense": 0.0436,
+          "Critical Avoidance": 0.0106
         },
         "Triangle": {
-          "Health": 0.4818,
-          "Critical Damage": 0.2292,
-          "Offense": 0.1537,
-          "Protection": 0.1354
+          "Health": 0.4721,
+          "Critical Damage": 0.228,
+          "Offense": 0.1721,
+          "Protection": 0.1279
         },
         "Circle": {
-          "Health": 0.748,
-          "Protection": 0.252
+          "Health": 0.7586,
+          "Protection": 0.2414
         },
         "Cross": {
-          "Health": 0.5212,
-          "Offense": 0.2276,
-          "Protection": 0.1294,
-          "Potency": 0.1218
+          "Health": 0.5033,
+          "Offense": 0.2359,
+          "Potency": 0.1349,
+          "Protection": 0.1259
         }
       },
       "secondary_preferences": {
         "Speed": 1,
-        "Health": 0.3709,
-        "Health %": 0,
+        "Health": 0.3693,
+        "Offense": 0.3974,
+        "Defense": 0,
+        "Potency": 0.1897,
         "Protection": 0,
         "Protection %": 0,
-        "Offense": 0.3928,
+        "Health %": 0,
         "Offense %": 0,
-        "Defense": 0,
         "Defense %": 0,
-        "Potency": 0.1896,
-        "Potency %": 0,
-        "Tenacity": 0.1776,
+        "Tenacity": 0.1758,
         "Tenacity %": 0,
         "Critical Chance %": 0,
         "Critical Damage %": 0,
@@ -3443,6 +3456,180 @@
         "Potency": 0.3467
       }
     },
+    "CADBANE": {
+      "name": "Cad Bane",
+      "role": "support",
+      "source_model": {
+        "method": "direct SWGOH.GG Best Mods page read by ChatGPT",
+        "refreshed_at_utc": "2026-11-12T21:17:07Z",
+        "sources": [
+          {
+            "name": "Top 1000 Kyber GAC",
+            "url": "https://swgoh.gg/units/cad-bane/best-mods/",
+            "units_fully_modded": 982,
+            "set_combinations_pct": {
+              "Crit Damage + Crit Chance": 30.1,
+              "Offense + Health": 7.3,
+              "Crit Damage + Health": 6.3,
+              "Speed + Health": 4.3,
+              "Crit Damage + Potency": 4.1
+            },
+            "primary_pct": {
+              "Arrow": {
+                "Speed": 86.14,
+                "Offense": 8.78,
+                "Critical Avoidance": 2.36,
+                "Protection": 1.35
+              },
+              "Triangle": {
+                "Critical Damage": 65.2,
+                "Offense": 13.51,
+                "Critical Chance": 9.79,
+                "Protection": 5.4
+              },
+              "Circle": {
+                "Protection": 66.21,
+                "Health": 33.78
+              },
+              "Cross": {
+                "Potency": 38.85,
+                "Offense": 31.75,
+                "Protection": 15.54,
+                "Health": 7.43
+              }
+            },
+            "secondary_focus": {
+              "Speed": {
+                "average": 14.5,
+                "focus_pct": 20.45
+              },
+              "Offense": {
+                "average": 85.7,
+                "focus_pct": 9.15
+              },
+              "Critical Chance %": {
+                "average": 3.79,
+                "focus_pct": 8.5
+              },
+              "Potency": {
+                "average": 4.41,
+                "focus_pct": 8.06
+              }
+            }
+          },
+          {
+            "name": "Top 100 Guilds",
+            "url": "https://swgoh.gg/units/cad-bane/best-mods/?s=GUILDTOP100",
+            "units_fully_modded": 4960,
+            "set_combinations_pct": {
+              "Crit Damage + Crit Chance": 30.8,
+              "Crit Damage + Health": 6.1,
+              "Crit Damage + Potency": 4.6,
+              "Offense + Health": 4.4,
+              "Speed + Health": 3.9
+            },
+            "primary_pct": {
+              "Arrow": {
+                "Speed": 89.08,
+                "Offense": 5.81,
+                "Critical Avoidance": 1.76,
+                "Protection": 1.69
+              },
+              "Triangle": {
+                "Critical Damage": 55.29,
+                "Critical Chance": 13.72,
+                "Offense": 13.66,
+                "Protection": 7.97
+              },
+              "Circle": {
+                "Protection": 66.66,
+                "Health": 33.33
+              },
+              "Cross": {
+                "Potency": 35.22,
+                "Offense": 25.75,
+                "Protection": 19.41,
+                "Health": 9.15
+              }
+            },
+            "secondary_focus": {
+              "Speed": {
+                "average": 13.3,
+                "focus_pct": 20.18
+              },
+              "Critical Chance %": {
+                "average": 3.81,
+                "focus_pct": 8.62
+              },
+              "Offense": {
+                "average": 81.5,
+                "focus_pct": 8.51
+              },
+              "Potency": {
+                "average": 4.52,
+                "focus_pct": 7.93
+              }
+            }
+          }
+        ]
+      },
+      "set_combinations": {
+        "Crit Damage + Crit Chance": 30.45,
+        "Offense + Health": 5.85,
+        "Crit Damage + Health": 6.2,
+        "Speed + Health": 4.1,
+        "Crit Damage + Potency": 4.35
+      },
+      "set_preferences": {
+        "Crit Damage": 1,
+        "Crit Chance": 0.7427,
+        "Offense": 0.1427,
+        "Health": 0.3939,
+        "Speed": 0.1,
+        "Potency": 0.1061
+      },
+      "primary_preferences": {
+        "Arrow": {
+          "Speed": 0.8896,
+          "Offense": 0.0741,
+          "Critical Avoidance": 0.0209,
+          "Protection": 0.0154
+        },
+        "Triangle": {
+          "Critical Damage": 0.6529,
+          "Offense": 0.1472,
+          "Critical Chance": 0.1274,
+          "Protection": 0.0725
+        },
+        "Circle": {
+          "Protection": 0.6644,
+          "Health": 0.3356
+        },
+        "Cross": {
+          "Potency": 0.4045,
+          "Offense": 0.314,
+          "Protection": 0.1909,
+          "Health": 0.0906
+        }
+      },
+      "secondary_preferences": {
+        "Health": 0,
+        "Defense": 0,
+        "Offense": 0.4347,
+        "Potency": 0.3936,
+        "Protection": 0,
+        "Protection %": 0,
+        "Speed": 1,
+        "Health %": 0,
+        "Offense %": 0,
+        "Defense %": 0,
+        "Tenacity %": 0,
+        "Critical Chance %": 0.4214,
+        "Critical Damage %": 0,
+        "Critical Avoidance %": 0,
+        "Accuracy": 0
+      }
+    },
     "KLEYA": {
       "name": "Kleya Marki",
       "role": "attacker",
@@ -3637,7 +3824,7 @@
       "role": "support",
       "source_model": {
         "method": "direct SWGOH.GG Best Mods page read; equal-weight average of Top 1000 Kyber GAC and Top 100 Guilds",
-        "refreshed_at_utc": "2026-11-14T13:40:00Z",
+        "refreshed_at_utc": "2026-11-14T12:50:00Z",
         "sources": [
           {
             "name": "Top 1000 Kyber GAC",
@@ -3702,118 +3889,775 @@
           {
             "name": "Top 100 Guilds",
             "url": "https://swgoh.gg/units/starkiller-luke-concept/best-mods/?s=GUILDTOP100",
-            "units_fully_modded": 4338,
+            "units_fully_modded": 4462,
             "set_combinations_pct": {
-              "Speed + Potency": 62.05,
-              "Speed + Health": 14.15,
-              "Speed": 3.08,
-              "Triple Health": 2.95,
-              "Speed + Tenacity": 1.77,
-              "Speed + Defense": 1.63,
-              "Speed + Crit Chance": 1.52,
-              "Offense + Health": 1.45,
-              "Health": 1.19
+              "Speed + Potency": 62.77,
+              "Speed + Health": 13.64,
+              "Speed": 3.04,
+              "Triple Health": 2.84,
+              "Speed + Defense": 1.97,
+              "Speed + Tenacity": 1.92,
+              "Speed + Crit Chance": 1.45,
+              "Offense + Health": 1.25,
+              "Health": 0.82
             },
             "primary_pct": {
               "Arrow": {
-                "Speed": 93.96,
-                "Offense": 1.91,
-                "Health": 1.24,
-                "Protection": 1.08
+                "Speed": 97.92,
+                "Offense": 0.71,
+                "Health": 0.42,
+                "Protection": 0.24
               },
               "Triangle": {
-                "Critical Damage": 50.33,
-                "Critical Chance": 30.05,
-                "Offense": 7.54,
-                "Health": 4.9,
-                "Protection": 8.06,
-                "Defense": 5
+                "Critical Damage": 51.76,
+                "Critical Chance": 27.81,
+                "Offense": 8.17,
+                "Protection": 4.89
               },
               "Circle": {
-                "Protection": 70.69,
-                "Health": 29.3
+                "Protection": 71.72,
+                "Health": 28.27
               },
               "Cross": {
-                "Potency": 77.67,
-                "Protection": 7.54,
-                "Offense": 5.57,
-                "Health": 3.67,
-                "Defense": 6.2,
-                "Tenacity": 5.83
+                "Potency": 77.9,
+                "Protection": 7.24,
+                "Offense": 5.85,
+                "Health": 3.6
               }
             },
             "secondary_focus": {
               "Speed": {
-                "average": 14.7,
-                "focus_pct": 20.7
+                "average": 14.8,
+                "focus_pct": 20.72
               },
               "Potency": {
-                "average": 4.31,
-                "focus_pct": 9.86
+                "average": 4.4,
+                "focus_pct": 9.91
               },
               "Offense": {
-                "average": 73,
-                "focus_pct": 7.42
+                "average": 73.9,
+                "focus_pct": 7.5
               },
               "Tenacity": {
-                "average": 3.88,
-                "focus_pct": 7.14
+                "average": 3.97,
+                "focus_pct": 7.09
               }
             }
           }
         ]
       },
       "set_combinations": {
-        "Speed + Potency": 60.145,
-        "Speed + Health": 14.48,
-        "Speed + Tenacity": 3.165,
-        "Triple Health": 2.585,
-        "Speed + Crit Chance": 1.815,
-        "Speed + Defense": 1.76,
-        "Speed": 2.485,
-        "Offense + Health": 0.725,
-        "Health": 0.595
+        "Speed + Potency": 60.505,
+        "Speed + Health": 14.225,
+        "Speed + Tenacity": 3.24,
+        "Triple Health": 2.53,
+        "Speed + Crit Chance": 1.78,
+        "Speed + Defense": 1.93,
+        "Speed": 2.465,
+        "Offense + Health": 0.625,
+        "Health": 0.41
       },
       "set_preferences": {
         "Speed": 1,
-        "Potency": 0.7485,
-        "Health": 0.1802,
-        "Tenacity": 0.0394
+        "Potency": 0.7505,
+        "Health": 0.1763,
+        "Tenacity": 0.028,
+        "Crit Chance": 0.013,
+        "Defense": 0.012
       },
       "primary_preferences": {
         "Arrow": {
-          "Speed": 0.9663,
-          "Health": 0.0113,
-          "Offense": 0.0138,
-          "Protection": 0.0085
+          "Speed": 0.9812,
+          "Health %": 0.007,
+          "Offense %": 0.0076,
+          "Protection %": 0.0042
         },
         "Triangle": {
-          "Critical Damage": 0.5374,
-          "Critical Chance": 0.213,
-          "Offense": 0.0725,
-          "Protection": 0.0723,
-          "Health": 0.0628,
-          "Defense": 0.042
+          "Critical Damage %": 0.581,
+          "Critical Chance %": 0.216,
+          "Offense %": 0.0807,
+          "Protection %": 0.061,
+          "Health %": 0.042,
+          "Defense %": 0.0193
         },
         "Circle": {
-          "Protection": 0.6977,
-          "Health": 0.3023
+          "Protection %": 0.7028,
+          "Health %": 0.2972
         },
         "Cross": {
-          "Potency": 0.7388,
-          "Protection": 0.0648,
-          "Offense": 0.0502,
-          "Health": 0.0351,
-          "Tenacity": 0.0622,
-          "Defense": 0.0488
+          "Potency %": 0.7835,
+          "Protection %": 0.0671,
+          "Offense %": 0.0546,
+          "Health %": 0.0368,
+          "Tenacity %": 0.037,
+          "Defense %": 0.021
         }
       },
       "secondary_preferences": {
         "Speed": 1,
-        "Potency": 0.4881,
-        "Offense %": 0.178,
-        "Offense": 0.3521,
-        "Tenacity": 0.1715
+        "Potency %": 0.4891,
+        "Offense %": 0.3558,
+        "Offense": 0.3539,
+        "Tenacity %": 0.3405
+      }
+    },
+    "ADMIRALPIETT": {
+      "name": "Admiral Piett",
+      "role": "support",
+      "source_model": {
+        "method": "direct SWGOH.GG Best Mods page read; equal-weight average of Top 1000 Kyber GAC and Top 100 Guilds",
+        "refreshed_at_utc": "2026-11-14T12:47:00Z",
+        "sources": [
+          {
+            "name": "Top 1000 Kyber GAC",
+            "url": "https://swgoh.gg/units/admiral-piett/best-mods/",
+            "units_fully_modded": 974,
+            "set_combinations_pct": {
+              "Speed + Health": 53.5,
+              "Speed + Potency": 15.5,
+              "Speed": 11.8,
+              "Speed + Tenacity": 5,
+              "Speed + Defense": 4.3
+            },
+            "primary_pct": {
+              "Arrow": {
+                "Speed": 96.16,
+                "Protection": 1.72,
+                "Offense": 1.34,
+                "Health": 0.57
+              },
+              "Triangle": {
+                "Critical Damage": 21.83,
+                "Protection": 20.3,
+                "Offense": 19.15,
+                "Defense": 16.09
+              },
+              "Circle": {
+                "Protection": 64.17,
+                "Health": 35.82
+              },
+              "Cross": {
+                "Potency": 36.39,
+                "Protection": 17.24,
+                "Defense": 16.09,
+                "Offense": 13.21
+              }
+            },
+            "secondary_focus": {
+              "Speed": {
+                "average": 19.8,
+                "focus_pct": 20.56
+              },
+              "Offense": {
+                "average": 82.9,
+                "focus_pct": 8.08
+              },
+              "Potency": {
+                "average": 5.02,
+                "focus_pct": 7.99
+              },
+              "Health": {
+                "average": 829.5,
+                "focus_pct": 7.93
+              }
+            }
+          },
+          {
+            "name": "Top 100 Guilds",
+            "url": "https://swgoh.gg/units/admiral-piett/best-mods/?s=GUILDTOP100",
+            "units_fully_modded": 4959,
+            "set_combinations_pct": {
+              "Speed + Health": 54.94,
+              "Speed + Potency": 14.3,
+              "Speed": 8.5,
+              "Speed + Tenacity": 4.2,
+              "Speed + Defense": 4.1
+            },
+            "primary_pct": {
+              "Arrow": {
+                "Speed": 97.58,
+                "Protection": 0.73,
+                "Offense": 0.62,
+                "Critical Avoidance": 0.43
+              },
+              "Triangle": {
+                "Critical Damage": 23.57,
+                "Offense": 20.27,
+                "Defense": 16.64,
+                "Protection": 16.23
+              },
+              "Circle": {
+                "Protection": 59.53,
+                "Health": 40.46
+              },
+              "Cross": {
+                "Potency": 32.84,
+                "Defense": 17.96,
+                "Protection": 17.48,
+                "Offense": 15.02
+              }
+            },
+            "secondary_focus": {
+              "Speed": {
+                "average": 19.3,
+                "focus_pct": 20.76
+              },
+              "Potency": {
+                "average": 5.24,
+                "focus_pct": 8.2
+              },
+              "Offense": {
+                "average": 87.6,
+                "focus_pct": 8
+              },
+              "Protection": {
+                "average": 1514,
+                "focus_pct": 7.68
+              }
+            }
+          }
+        ]
+      },
+      "set_combinations": {
+        "Speed + Health": 54.22,
+        "Speed + Potency": 14.9,
+        "Speed": 10.15,
+        "Speed + Tenacity": 4.6,
+        "Speed + Defense": 4.2
+      },
+      "set_preferences": {
+        "Speed": 1,
+        "Health": 0.6009,
+        "Potency": 0.1652,
+        "Tenacity": 0.051,
+        "Defense": 0.0466
+      },
+      "primary_preferences": {
+        "Arrow": {
+          "Speed": 0.9728,
+          "Protection %": 0.0123,
+          "Offense %": 0.0098,
+          "Health %": 0.0029,
+          "Critical Avoidance %": 0.0022
+        },
+        "Triangle": {
+          "Critical Damage %": 0.2947,
+          "Protection %": 0.2371,
+          "Offense %": 0.2558,
+          "Defense %": 0.2124
+        },
+        "Circle": {
+          "Protection %": 0.6186,
+          "Health %": 0.3814
+        },
+        "Cross": {
+          "Potency %": 0.4165,
+          "Protection %": 0.2089,
+          "Defense %": 0.2048,
+          "Offense %": 0.1698
+        }
+      },
+      "secondary_preferences": {
+        "Speed": 1,
+        "Offense": 0.3892,
+        "Potency %": 0.3918,
+        "Health": 0.3838,
+        "Protection": 0.3717
+      }
+    },
+    "EMPERORPALPATINE": {
+      "name": "Emperor Palpatine",
+      "role": "support",
+      "source_model": {
+        "method": "direct SWGOH.GG Best Mods page read; equal-weight average of Top 1000 Kyber GAC and Top 100 Guilds",
+        "refreshed_at_utc": "2026-11-14T12:47:00Z",
+        "sources": [
+          {
+            "name": "Top 1000 Kyber GAC",
+            "url": "https://swgoh.gg/units/emperor-palpatine/best-mods/",
+            "units_fully_modded": 997,
+            "set_combinations_pct": {
+              "Speed + Potency": 49.64,
+              "Double Health + Potency": 7.7,
+              "Speed + Health": 7.2,
+              "Double Potency + Health": 6.8,
+              "Triple Potency": 6
+            },
+            "primary_pct": {
+              "Arrow": {
+                "Speed": 82.02,
+                "Protection": 10.9,
+                "Accuracy": 4.64,
+                "Health": 1.61
+              },
+              "Triangle": {
+                "Protection": 64.84,
+                "Offense": 12.92,
+                "Health": 9.29,
+                "Critical Damage": 8.88
+              },
+              "Circle": {
+                "Protection": 87.87,
+                "Health": 12.12
+              },
+              "Cross": {
+                "Potency": 73.53,
+                "Protection": 18.78,
+                "Offense": 4.24,
+                "Health": 2.42
+              }
+            },
+            "secondary_focus": {
+              "Speed": {
+                "average": 17.1,
+                "focus_pct": 20.89
+              },
+              "Potency": {
+                "average": 5.93,
+                "focus_pct": 12.21
+              },
+              "Protection": {
+                "average": 1509.3,
+                "focus_pct": 8.25
+              },
+              "Protection %": {
+                "average": 5.29,
+                "focus_pct": 7.35
+              }
+            }
+          },
+          {
+            "name": "Top 100 Guilds",
+            "url": "https://swgoh.gg/units/emperor-palpatine/best-mods/?s=GUILDTOP100",
+            "units_fully_modded": 4971,
+            "set_combinations_pct": {
+              "Speed + Potency": 44.37,
+              "Triple Potency": 8.3,
+              "Double Potency + Health": 8.1,
+              "Double Health + Potency": 6.1,
+              "Speed + Health": 5.7
+            },
+            "primary_pct": {
+              "Arrow": {
+                "Speed": 91.2,
+                "Protection": 5.39,
+                "Accuracy": 1.31,
+                "Offense": 0.72
+              },
+              "Triangle": {
+                "Protection": 57.79,
+                "Offense": 15.18,
+                "Critical Damage": 10.69,
+                "Health": 7.75
+              },
+              "Circle": {
+                "Protection": 80.41,
+                "Health": 19.58
+              },
+              "Cross": {
+                "Potency": 71.8,
+                "Protection": 16.59,
+                "Offense": 4.53,
+                "Health": 3.44
+              }
+            },
+            "secondary_focus": {
+              "Speed": {
+                "average": 16.2,
+                "focus_pct": 20.91
+              },
+              "Potency": {
+                "average": 5.61,
+                "focus_pct": 11.08
+              },
+              "Protection": {
+                "average": 1517.8,
+                "focus_pct": 8.08
+              },
+              "Offense": {
+                "average": 81.5,
+                "focus_pct": 7.47
+              }
+            }
+          }
+        ]
+      },
+      "set_combinations": {
+        "Speed + Potency": 47.005,
+        "Double Health + Potency": 6.9,
+        "Speed + Health": 6.45,
+        "Double Potency + Health": 7.45,
+        "Triple Potency": 7.15
+      },
+      "set_preferences": {
+        "Speed": 1,
+        "Double Health": 0.1215,
+        "Double Potency": 0.1312,
+        "Triple Potency": 0.1259,
+        "Potency": 0.8266,
+        "Health": 0.1136
+      },
+      "primary_preferences": {
+        "Arrow": {
+          "Speed": 0.8758,
+          "Protection %": 0.0824,
+          "Accuracy": 0.0301,
+          "Health %": 0.0081,
+          "Offense %": 0.0036
+        },
+        "Triangle": {
+          "Protection %": 0.6546,
+          "Offense %": 0.15,
+          "Health %": 0.091,
+          "Critical Damage %": 0.1045
+        },
+        "Circle": {
+          "Protection %": 0.8415,
+          "Health %": 0.1585
+        },
+        "Cross": {
+          "Potency %": 0.744,
+          "Protection %": 0.1811,
+          "Offense %": 0.0449,
+          "Health %": 0.03
+        }
+      },
+      "secondary_preferences": {
+        "Speed": 1,
+        "Potency %": 0.5572,
+        "Protection": 0.3907,
+        "Protection %": 0.3517,
+        "Offense": 0.3574
+      }
+    },
+    "MARAJADE": {
+      "name": "Mara Jade, The Emperor's Hand",
+      "role": "attacker",
+      "source_model": {
+        "method": "direct SWGOH.GG Best Mods page read; equal-weight average of Top 1000 Kyber GAC and Top 100 Guilds",
+        "refreshed_at_utc": "2026-11-14T12:47:00Z",
+        "sources": [
+          {
+            "name": "Top 1000 Kyber GAC",
+            "url": "https://swgoh.gg/units/mara-jade-the-emperors-hand/best-mods/",
+            "units_fully_modded": 971,
+            "set_combinations_pct": {
+              "Speed + Potency": 67.14,
+              "Speed + Health": 15.2,
+              "Speed + Crit Chance": 8.5,
+              "Speed": 2.8,
+              "Speed + Defense": 1.6
+            },
+            "primary_pct": {
+              "Arrow": {
+                "Speed": 95.85,
+                "Accuracy": 3.22,
+                "Protection": 0.76,
+                "Offense": 0.15
+              },
+              "Triangle": {
+                "Critical Damage": 42.17,
+                "Offense": 22.23,
+                "Protection": 17.33,
+                "Critical Chance": 8.12
+              },
+              "Circle": {
+                "Protection": 68.86,
+                "Health": 31.13
+              },
+              "Cross": {
+                "Potency": 89.87,
+                "Protection": 4.14,
+                "Offense": 3.68,
+                "Tenacity": 1.22
+              }
+            },
+            "secondary_focus": {
+              "Speed": {
+                "average": 22.2,
+                "focus_pct": 21
+              },
+              "Potency": {
+                "average": 6.13,
+                "focus_pct": 12.73
+              },
+              "Critical Chance": {
+                "average": 3.54,
+                "focus_pct": 7.34
+              },
+              "Offense": {
+                "average": 80.6,
+                "focus_pct": 7.27
+              }
+            }
+          },
+          {
+            "name": "Top 100 Guilds",
+            "url": "https://swgoh.gg/units/mara-jade-the-emperors-hand/best-mods/?s=GUILDTOP100",
+            "units_fully_modded": 4951,
+            "set_combinations_pct": {
+              "Speed + Potency": 53.54,
+              "Speed + Health": 15.8,
+              "Speed + Crit Chance": 14.4,
+              "Speed": 4.6,
+              "Speed + Tenacity": 1.7
+            },
+            "primary_pct": {
+              "Arrow": {
+                "Speed": 98,
+                "Accuracy": 1.01,
+                "Protection": 0.33,
+                "Critical Avoidance": 0.26
+              },
+              "Triangle": {
+                "Critical Damage": 40.39,
+                "Offense": 24.29,
+                "Protection": 14.67,
+                "Critical Chance": 10.71
+              },
+              "Circle": {
+                "Protection": 71.21,
+                "Health": 28.78
+              },
+              "Cross": {
+                "Potency": 84.19,
+                "Offense": 5.88,
+                "Protection": 5.05,
+                "Health": 2.45
+              }
+            },
+            "secondary_focus": {
+              "Speed": {
+                "average": 20.6,
+                "focus_pct": 20.87
+              },
+              "Potency": {
+                "average": 6,
+                "focus_pct": 11.57
+              },
+              "Offense": {
+                "average": 82.6,
+                "focus_pct": 7.54
+              },
+              "Critical Chance": {
+                "average": 3.72,
+                "focus_pct": 7.43
+              }
+            }
+          }
+        ]
+      },
+      "set_combinations": {
+        "Speed + Potency": 60.34,
+        "Speed + Health": 15.5,
+        "Speed + Crit Chance": 11.45,
+        "Speed": 3.7,
+        "Speed + Defense": 0.8,
+        "Speed + Tenacity": 0.85
+      },
+      "set_preferences": {
+        "Speed": 1,
+        "Potency": 0.6321,
+        "Health": 0.1625,
+        "Crit Chance": 0.12,
+        "Defense": 0.0084,
+        "Tenacity": 0.0089
+      },
+      "primary_preferences": {
+        "Arrow": {
+          "Speed": 0.9713,
+          "Accuracy": 0.0212,
+          "Protection %": 0.0055,
+          "Offense %": 0.0008,
+          "Critical Avoidance %": 0.0013
+        },
+        "Triangle": {
+          "Critical Damage %": 0.4589,
+          "Offense %": 0.2586,
+          "Protection %": 0.1779,
+          "Critical Chance %": 0.1047
+        },
+        "Circle": {
+          "Protection %": 0.7004,
+          "Health %": 0.2996
+        },
+        "Cross": {
+          "Potency %": 0.8859,
+          "Protection %": 0.0468,
+          "Offense %": 0.0487,
+          "Tenacity %": 0.0062,
+          "Health %": 0.0125
+        }
+      },
+      "secondary_preferences": {
+        "Speed": 1,
+        "Potency %": 0.5804,
+        "Critical Chance %": 0.3528,
+        "Offense": 0.3537
+      }
+    },
+    "CROSSHAIRS3": {
+      "name": "Crosshair (Scarred)",
+      "role": "attacker",
+      "source_model": {
+        "method": "direct SWGOH.GG Best Mods page read; equal-weight average of Top 1000 Kyber GAC and Top 100 Guilds",
+        "refreshed_at_utc": "2026-11-14T12:47:00Z",
+        "sources": [
+          {
+            "name": "Top 1000 Kyber GAC",
+            "url": "https://swgoh.gg/units/crosshair-scarred/best-mods/",
+            "units_fully_modded": 945,
+            "set_combinations_pct": {
+              "Offense + Crit Chance": 37.14,
+              "Offense + Health": 21.4,
+              "Crit Damage + Crit Chance": 9.8,
+              "Crit Damage + Health": 9.5,
+              "Offense": 3.4
+            },
+            "primary_pct": {
+              "Arrow": {
+                "Accuracy": 50.99,
+                "Speed": 34.75,
+                "Offense": 11.68,
+                "Critical Avoidance": 1.13
+              },
+              "Triangle": {
+                "Critical Damage": 76.63,
+                "Offense": 13.1,
+                "Health": 4.84,
+                "Critical Chance": 3.13
+              },
+              "Circle": {
+                "Protection": 58.97,
+                "Health": 41.02
+              },
+              "Cross": {
+                "Offense": 84.9,
+                "Protection": 5.98,
+                "Health": 3.13,
+                "Tenacity": 2.56
+              }
+            },
+            "secondary_focus": {
+              "Speed": {
+                "average": 17.5,
+                "focus_pct": 23.19
+              },
+              "Offense": {
+                "average": 86.1,
+                "focus_pct": 8.38
+              },
+              "Critical Chance": {
+                "average": 3.87,
+                "focus_pct": 8.09
+              },
+              "Offense %": {
+                "average": 3.25,
+                "focus_pct": 7.96
+              }
+            }
+          },
+          {
+            "name": "Top 100 Guilds",
+            "url": "https://swgoh.gg/units/crosshair-scarred/best-mods/?s=GUILDTOP100",
+            "units_fully_modded": 4832,
+            "set_combinations_pct": {
+              "Offense + Crit Chance": 40.58,
+              "Offense + Health": 17.6,
+              "Crit Damage + Crit Chance": 7.4,
+              "Crit Damage + Health": 5.6,
+              "Offense": 3.9
+            },
+            "primary_pct": {
+              "Arrow": {
+                "Speed": 50.12,
+                "Accuracy": 33.29,
+                "Offense": 14.38,
+                "Protection": 0.61
+              },
+              "Triangle": {
+                "Critical Damage": 63.99,
+                "Offense": 17.33,
+                "Health": 7.44,
+                "Critical Chance": 5.96
+              },
+              "Circle": {
+                "Health": 51.35,
+                "Protection": 48.64
+              },
+              "Cross": {
+                "Offense": 71.8,
+                "Health": 7.49,
+                "Protection": 7.03,
+                "Potency": 4.99
+              }
+            },
+            "secondary_focus": {
+              "Speed": {
+                "average": 15.4,
+                "focus_pct": 22.43
+              },
+              "Offense": {
+                "average": 85.9,
+                "focus_pct": 8.3
+              },
+              "Critical Chance": {
+                "average": 3.87,
+                "focus_pct": 8.09
+              },
+              "Health": {
+                "average": 788.4,
+                "focus_pct": 7.67
+              }
+            }
+          }
+        ]
+      },
+      "set_combinations": {
+        "Offense + Crit Chance": 38.86,
+        "Offense + Health": 19.5,
+        "Crit Damage + Crit Chance": 8.6,
+        "Crit Damage + Health": 7.55,
+        "Offense": 3.65
+      },
+      "set_preferences": {
+        "Offense": 1,
+        "Crit Damage": 0.2596,
+        "Crit Chance": 0.6238,
+        "Health": 0.3135
+      },
+      "primary_preferences": {
+        "Arrow": {
+          "Accuracy": 0.4279,
+          "Speed": 0.4309,
+          "Offense %": 0.1323,
+          "Critical Avoidance %": 0.0057,
+          "Protection %": 0.0031
+        },
+        "Triangle": {
+          "Critical Damage %": 0.7308,
+          "Offense %": 0.1581,
+          "Health %": 0.0638,
+          "Critical Chance %": 0.0472
+        },
+        "Circle": {
+          "Protection %": 0.5381,
+          "Health %": 0.4619
+        },
+        "Cross": {
+          "Offense %": 0.834,
+          "Protection %": 0.0692,
+          "Health %": 0.0565,
+          "Tenacity %": 0.0136,
+          "Potency %": 0.0266
+        }
+      },
+      "secondary_preferences": {
+        "Speed": 1,
+        "Offense": 0.3656,
+        "Critical Chance %": 0.3547,
+        "Offense %": 0.349,
+        "Health": 0.3363
       }
     },
     "STORMTROOPERLUKE": {
@@ -4920,6 +5764,24 @@
           "url": "https://swgoh.gg/units/finn/best-mods/?s=GUILDTOP100",
           "units_fully_modded": 4907,
           "updated_label": "8h ago"
+        }
+      ]
+    },
+    "CADBANE": {
+      "status": "refreshed",
+      "checked_at_utc": "2026-11-12T21:17:07Z",
+      "fetched_at_utc": "2026-11-12T21:17:07Z",
+      "source": "SWGOH.GG direct Best Mods page read by ChatGPT; Top 1000 Kyber GAC + Top 100 Guilds; TOP 4 secondary-stat focus per source",
+      "sources": [
+        {
+          "name": "Top 1000 Kyber GAC",
+          "url": "https://swgoh.gg/units/cad-bane/best-mods/",
+          "units_fully_modded": 982
+        },
+        {
+          "name": "Top 100 Guilds",
+          "url": "https://swgoh.gg/units/cad-bane/best-mods/?s=GUILDTOP100",
+          "units_fully_modded": 4960
         }
       ]
     },
