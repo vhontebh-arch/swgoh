@@ -1,0 +1,44 @@
+name: Validate Stack Rank import
+
+on:
+  push:
+    branches:
+      - feature/character-importance-ranking
+    paths:
+      - "character_ranking.py"
+      - "character_ranking.json"
+      - "data/stack_rank.tsv"
+      - "data/character_base_id_mapping.json"
+      - "tests/test_character_ranking.py"
+      - ".github/workflows/import-stack-rank.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/character-importance-ranking
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run Stack Rank import tests
+        run: python -m unittest discover -s tests -p "test_character_ranking.py" -v
+      - name: Verify generated JSON matches source snapshot
+        run: |
+          python character_ranking.py --input data/stack_rank.tsv --mapping data/character_base_id_mapping.json --output /tmp/character_ranking.json --expected-count 313
+          python - <<'PY'
+          import json
+          with open("/tmp/character_ranking.json", encoding="utf-8") as f:
+              generated = json.load(f)
+          with open("character_ranking.json", encoding="utf-8") as f:
+              committed = json.load(f)
+          for payload in (generated, committed):
+              payload.pop("snapshot_date", None)
+          assert generated == committed, "character_ranking.json is stale; regenerate and commit it"
+          print("Validated", generated["record_count"], "Stack Rank entries")
+          PY

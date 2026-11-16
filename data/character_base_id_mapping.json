@@ -1,0 +1,1906 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "player_roster_export",
+      "repository": "vhontebh-arch/swgoh",
+      "file": "Vhonte-972824625-characters.csv",
+      "ref": "feature/character-importance-ranking",
+      "description": "Base ID and Name fields from the user's current roster export"
+    },
+    {
+      "id": "unit_catalog_fallback",
+      "repository": "DrPivot/SWGOH-Guild-Progress",
+      "file": "data/unit_list.csv",
+      "commit": "f6f2e182cab19602a9d45399235eb26caf0f0cce",
+      "url": "https://github.com/DrPivot/SWGOH-Guild-Progress/blob/f6f2e182cab19602a9d45399235eb26caf0f0cce/data/unit_list.csv",
+      "description": "Fallback for Stack Rank characters absent from the user's roster export"
+    }
+  ],
+  "match_method": "Normalized display-name match; case, diacritics and punctuation ignored",
+  "record_count": 313,
+  "counts": {
+    "player_roster_export": 308,
+    "unit_catalog_fallback": 5
+  },
+  "characters": [
+    {
+      "character": "Rey",
+      "base_id": "GLREY",
+      "catalog_name": "Rey",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Admiral Piett",
+      "base_id": "ADMIRALPIETT",
+      "catalog_name": "Admiral Piett",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Commander Luke Skywalker",
+      "base_id": "COMMANDERLUKESKYWALKER",
+      "catalog_name": "Commander Luke Skywalker",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "C-3PO",
+      "base_id": "C3POLEGENDARY",
+      "catalog_name": "C-3PO",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Padmé Amidala",
+      "base_id": "PADMEAMIDALA",
+      "catalog_name": "Padmé Amidala",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Chewbacca",
+      "base_id": "CHEWBACCALEGENDARY",
+      "catalog_name": "Chewbacca",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "General Kenobi",
+      "base_id": "GENERALKENOBI",
+      "catalog_name": "General Kenobi",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Emperor Palpatine",
+      "base_id": "EMPERORPALPATINE",
+      "catalog_name": "Emperor Palpatine",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Mara Jade, The Emperor's Hand",
+      "base_id": "MARAJADE",
+      "catalog_name": "Mara Jade, The Emperor's Hand",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Jedi Knight Revan",
+      "base_id": "JEDIKNIGHTREVAN",
+      "catalog_name": "Jedi Knight Revan",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Jedi Knight Anakin",
+      "base_id": "ANAKINKNIGHT",
+      "catalog_name": "Jedi Knight Anakin",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Darth Vader",
+      "base_id": "VADER",
+      "catalog_name": "Darth Vader",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Geonosian Brood Alpha",
+      "base_id": "GEONOSIANBROODALPHA",
+      "catalog_name": "Geonosian Brood Alpha",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Grand Admiral Thrawn",
+      "base_id": "GRANDADMIRALTHRAWN",
+      "catalog_name": "Grand Admiral Thrawn",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Hermit Yoda",
+      "base_id": "HERMITYODA",
+      "catalog_name": "Hermit Yoda",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Ben Solo",
+      "base_id": "BENSOLO",
+      "catalog_name": "Ben Solo",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Bossk",
+      "base_id": "BOSSK",
+      "catalog_name": "Bossk",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Dash Rendar",
+      "base_id": "DASHRENDAR",
+      "catalog_name": "Dash Rendar",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "BB-8",
+      "base_id": "BB8",
+      "catalog_name": "BB-8",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "R2-D2",
+      "base_id": "R2D2_LEGENDARY",
+      "catalog_name": "R2-D2",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Captain Rex",
+      "base_id": "CAPTAINREX",
+      "catalog_name": "Captain Rex",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Ninth Sister",
+      "base_id": "NINTHSISTER",
+      "catalog_name": "Ninth Sister",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Rey (Jedi Training)",
+      "base_id": "REYJEDITRAINING",
+      "catalog_name": "Rey (Jedi Training)",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Maul",
+      "base_id": "MAULS7",
+      "catalog_name": "Maul",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Commander Ahsoka Tano",
+      "base_id": "COMMANDERAHSOKA",
+      "catalog_name": "Commander Ahsoka Tano",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Darth Malgus",
+      "base_id": "DARTHMALGUS",
+      "catalog_name": "Darth Malgus",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "B2 Super Battle Droid",
+      "base_id": "B2SUPERBATTLEDROID",
+      "catalog_name": "B2 Super Battle Droid",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Enfys Nest",
+      "base_id": "ENFYSNEST",
+      "catalog_name": "Enfys Nest",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Shaak Ti",
+      "base_id": "SHAAKTI",
+      "catalog_name": "Shaak Ti",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Grand Master Yoda",
+      "base_id": "GRANDMASTERYODA",
+      "catalog_name": "Grand Master Yoda",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Wampa",
+      "base_id": "WAMPA",
+      "catalog_name": "Wampa",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Han Solo",
+      "base_id": "HANSOLO",
+      "catalog_name": "Han Solo",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Threepio & Chewie",
+      "base_id": "C3POCHEWBACCA",
+      "catalog_name": "Threepio & Chewie",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Kelleran Beq",
+      "base_id": "KELLERANBEQ",
+      "catalog_name": "Kelleran Beq",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Obi-Wan Kenobi (Old Ben)",
+      "base_id": "OLDBENKENOBI",
+      "catalog_name": "Obi-Wan Kenobi (Old Ben)",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Ahsoka Tano (Snips)",
+      "base_id": "AHSOKATANO",
+      "catalog_name": "Ahsoka Tano (Snips)",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Greef Karga",
+      "base_id": "GREEFKARGA",
+      "catalog_name": "Greef Karga",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Mon Mothma",
+      "base_id": "MONMOTHMA",
+      "catalog_name": "Mon Mothma",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "The Mandalorian",
+      "base_id": "THEMANDALORIAN",
+      "catalog_name": "The Mandalorian",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "The Mandalorian (Beskar Armor)",
+      "base_id": "THEMANDALORIANBESKARARMOR",
+      "catalog_name": "The Mandalorian (Beskar Armor)",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Fennec Shand",
+      "base_id": "FENNECSHAND",
+      "catalog_name": "Fennec Shand",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Kuiil",
+      "base_id": "KUIIL",
+      "catalog_name": "Kuiil",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "IG-11",
+      "base_id": "IG11",
+      "catalog_name": "IG-11",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Hondo Ohnaka",
+      "base_id": "HONDO",
+      "catalog_name": "Hondo Ohnaka",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Finn",
+      "base_id": "FINN",
+      "catalog_name": "Finn",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Grand Moff Tarkin",
+      "base_id": "GRANDMOFFTARKIN",
+      "catalog_name": "Grand Moff Tarkin",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Geonosian Soldier",
+      "base_id": "GEONOSIANSOLDIER",
+      "catalog_name": "Geonosian Soldier",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Stormtrooper Han",
+      "base_id": "STORMTROOPERHAN",
+      "catalog_name": "Stormtrooper Han",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Princess Leia",
+      "base_id": "PRINCESSLEIA",
+      "catalog_name": "Princess Leia",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Bastila Shan",
+      "base_id": "BASTILASHAN",
+      "catalog_name": "Bastila Shan",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Kyle Katarn",
+      "base_id": "KYLEKATARN",
+      "catalog_name": "Kyle Katarn",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Mace Windu",
+      "base_id": "MACEWINDU",
+      "catalog_name": "Mace Windu",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Cara Dune",
+      "base_id": "CARADUNE",
+      "catalog_name": "Cara Dune",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "CX-2",
+      "base_id": "OPERATIVE",
+      "catalog_name": "CX-2",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Rebel Officer Leia Organa",
+      "base_id": "HOTHLEIA",
+      "catalog_name": "Rebel Officer Leia Organa",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Hera Syndulla",
+      "base_id": "HERASYNDULLAS3",
+      "catalog_name": "Hera Syndulla",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Master Qui-Gon",
+      "base_id": "MASTERQUIGON",
+      "catalog_name": "Master Qui-Gon",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Resistance Hero Poe",
+      "base_id": "EPIXPOE",
+      "catalog_name": "Resistance Hero Poe",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Resistance Hero Finn",
+      "base_id": "EPIXFINN",
+      "catalog_name": "Resistance Hero Finn",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Disguised Clone Trooper",
+      "base_id": "DISGUISEDCLONETROOPER",
+      "catalog_name": "Disguised Clone Trooper",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Temple Guard",
+      "base_id": "VANGUARDTEMPLEGUARD",
+      "catalog_name": "Temple Guard",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "RC-1262 \"Scorch\"",
+      "base_id": "SCORCH",
+      "catalog_name": "RC-1262 \"Scorch\"",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Amilyn Holdo",
+      "base_id": "AMILYNHOLDO",
+      "catalog_name": "Amilyn Holdo",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Poggle the Lesser",
+      "base_id": "POGGLETHELESSER",
+      "catalog_name": "Poggle the Lesser",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Geonosian Spy",
+      "base_id": "GEONOSIANSPY",
+      "catalog_name": "Geonosian Spy",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Dengar",
+      "base_id": "DENGAR",
+      "catalog_name": "Dengar",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Seventh Sister",
+      "base_id": "SEVENTHSISTER",
+      "catalog_name": "Seventh Sister",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Kanan Jarrus",
+      "base_id": "KANANJARRUSS3",
+      "catalog_name": "Kanan Jarrus",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Ezra Bridger",
+      "base_id": "EZRABRIDGERS3",
+      "catalog_name": "Ezra Bridger",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "BT-1",
+      "base_id": "BT1",
+      "catalog_name": "BT-1",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "0-0-0",
+      "base_id": "TRIPLEZERO",
+      "catalog_name": "0-0-0",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Captain Han Solo",
+      "base_id": "HOTHHAN",
+      "catalog_name": "Captain Han Solo",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Iden Versio",
+      "base_id": "IDENVERSIOEMPIRE",
+      "catalog_name": "Iden Versio",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Jar Jar Binks",
+      "base_id": "JARJARBINKS",
+      "catalog_name": "Jar Jar Binks",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Darth Revan",
+      "base_id": "DARTHREVAN",
+      "catalog_name": "Darth Revan",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "50R-T",
+      "base_id": "50RT",
+      "catalog_name": "50R-T",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Nute Gunray",
+      "base_id": "NUTEGUNRAY",
+      "catalog_name": "Nute Gunray",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Krrsantan",
+      "base_id": "KRRSANTAN",
+      "catalog_name": "Krrsantan",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Bastila Shan (Fallen)",
+      "base_id": "BASTILASHANDARK",
+      "catalog_name": "Bastila Shan (Fallen)",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Darth Vader (Duel's End)",
+      "base_id": "VADERDUELSEND",
+      "catalog_name": "Darth Vader (Duel's End)",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Jango Fett",
+      "base_id": "JANGOFETT",
+      "catalog_name": "Jango Fett",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "B1 Battle Droid",
+      "base_id": "B1BATTLEDROIDV2",
+      "catalog_name": "B1 Battle Droid",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Jolee Bindo",
+      "base_id": "JOLEEBINDO",
+      "catalog_name": "Jolee Bindo",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Darth Maul",
+      "base_id": "MAUL",
+      "catalog_name": "Darth Maul",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Sun Fac",
+      "base_id": "SUNFAC",
+      "catalog_name": "Sun Fac",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Fifth Brother",
+      "base_id": "FIFTHBROTHER",
+      "catalog_name": "Fifth Brother",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Eighth Brother",
+      "base_id": "EIGHTHBROTHER",
+      "catalog_name": "Eighth Brother",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Stormtrooper Luke",
+      "base_id": "STORMTROOPERLUKE",
+      "catalog_name": "Stormtrooper Luke",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Second Sister",
+      "base_id": "SECONDSISTER",
+      "catalog_name": "Second Sister",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Garazeb \"Zeb\" Orrelios",
+      "base_id": "ZEBS3",
+      "catalog_name": "Garazeb \"Zeb\" Orrelios",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Sabine Wren",
+      "base_id": "SABINEWRENS3",
+      "catalog_name": "Sabine Wren",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "General Grievous",
+      "base_id": "GRIEVOUS",
+      "catalog_name": "General Grievous",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Depa Billaba",
+      "base_id": "DEPABILLABA",
+      "catalog_name": "Depa Billaba",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Darth Talon",
+      "base_id": "DARTHTALON",
+      "catalog_name": "Darth Talon",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Padawan Sabine Wren",
+      "base_id": "PADAWANSABINE",
+      "catalog_name": "Padawan Sabine Wren",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Visas Marr",
+      "base_id": "VISASMARR",
+      "catalog_name": "Visas Marr",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Morgan Elsbeth",
+      "base_id": "MORGANELSBETH",
+      "catalog_name": "Morgan Elsbeth",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "IG-100 MagnaGuard",
+      "base_id": "MAGNAGUARD",
+      "catalog_name": "IG-100 MagnaGuard",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Zaalbar",
+      "base_id": "ZAALBAR",
+      "catalog_name": "Zaalbar",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Boss Nass",
+      "base_id": "BOSSNASS",
+      "catalog_name": "Boss Nass",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Darth Sidious",
+      "base_id": "DARTHSIDIOUS",
+      "catalog_name": "Darth Sidious",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Chopper",
+      "base_id": "CHOPPERS3",
+      "catalog_name": "Chopper",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Shin Hati",
+      "base_id": "SHINHATI",
+      "catalog_name": "Shin Hati",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Grand Inquisitor",
+      "base_id": "GRANDINQUISITOR",
+      "catalog_name": "Grand Inquisitor",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Droideka",
+      "base_id": "DROIDEKA",
+      "catalog_name": "Droideka",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Cal Kestis",
+      "base_id": "CALKESTIS",
+      "catalog_name": "Cal Kestis",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Admiral Ackbar",
+      "base_id": "ADMIRALACKBAR",
+      "catalog_name": "Admiral Ackbar",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Bo-Katan Kryze",
+      "base_id": "BOKATAN",
+      "catalog_name": "Bo-Katan Kryze",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "CC-1119 \"Appo\"",
+      "base_id": "APPO",
+      "catalog_name": "CC-1119 \"Appo\"",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Scout Trooper",
+      "base_id": "SCOUTTROOPER_V3",
+      "catalog_name": "Scout Trooper",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Rey (Scavenger)",
+      "base_id": "REY",
+      "catalog_name": "Rey (Scavenger)",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Poe Dameron",
+      "base_id": "POE",
+      "catalog_name": "Poe Dameron",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Resistance Trooper",
+      "base_id": "RESISTANCETROOPER",
+      "catalog_name": "Resistance Trooper",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Lando Calrissian",
+      "base_id": "ADMINISTRATORLANDO",
+      "catalog_name": "Lando Calrissian",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Gungan Boomadier",
+      "base_id": "BOOMADIER",
+      "catalog_name": "Gungan Boomadier",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Vandor Chewbacca",
+      "base_id": "YOUNGCHEWBACCA",
+      "catalog_name": "Vandor Chewbacca",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Sith Marauder",
+      "base_id": "SITHMARAUDER",
+      "catalog_name": "Sith Marauder",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Kylo Ren (Unmasked)",
+      "base_id": "KYLORENUNMASKED",
+      "catalog_name": "Kylo Ren (Unmasked)",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "CT-7567 \"Rex\"",
+      "base_id": "CT7567",
+      "catalog_name": "CT-7567 \"Rex\"",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Count Dooku",
+      "base_id": "COUNTDOOKU",
+      "catalog_name": "Count Dooku",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Veteran Smuggler Han Solo",
+      "base_id": "SMUGGLERHAN",
+      "catalog_name": "Veteran Smuggler Han Solo",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Boba Fett",
+      "base_id": "BOBAFETT",
+      "catalog_name": "Boba Fett",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "IG-88",
+      "base_id": "IG88",
+      "catalog_name": "IG-88",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Snowtrooper",
+      "base_id": "SNOWTROOPER",
+      "catalog_name": "Snowtrooper",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Asajj Ventress (Dark Disciple)",
+      "base_id": "ASAJJDARKDISCIPLE",
+      "catalog_name": "Asajj Ventress (Dark Disciple)",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Barriss Offee",
+      "base_id": "BARRISSOFFEE",
+      "catalog_name": "Barriss Offee",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Canderous Ordo",
+      "base_id": "CANDEROUSORDO",
+      "catalog_name": "Canderous Ordo",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Darth Malak",
+      "base_id": "DARTHMALAK",
+      "catalog_name": "Darth Malak",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "The Armorer",
+      "base_id": "ARMORER",
+      "catalog_name": "The Armorer",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "ARC Trooper",
+      "base_id": "ARCTROOPER501ST",
+      "catalog_name": "ARC Trooper",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Starkiller",
+      "base_id": "STARKILLER",
+      "catalog_name": "Starkiller",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Cere Junda",
+      "base_id": "CEREJUNDA",
+      "catalog_name": "Cere Junda",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Royal Guard",
+      "base_id": "ROYALGUARD",
+      "catalog_name": "Royal Guard",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Cad Bane",
+      "base_id": "CADBANE",
+      "catalog_name": "Cad Bane",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Sana Starros",
+      "base_id": "SANASTARROS",
+      "catalog_name": "Sana Starros",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Gungan Phalanx",
+      "base_id": "GUNGANPHALANX",
+      "catalog_name": "Gungan Phalanx",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Captain Tarpals",
+      "base_id": "CAPTAINTARPALS",
+      "catalog_name": "Captain Tarpals",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Cinta Kaz",
+      "base_id": "CINTA",
+      "catalog_name": "Cinta Kaz",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "General Syndulla",
+      "base_id": "GENERALSYNDULLA",
+      "catalog_name": "General Syndulla",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Yoda (Dark Side Vision)",
+      "base_id": "YODADSV",
+      "catalog_name": "Yoda (Dark Side Vision)",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Dark Trooper",
+      "base_id": "DARKTROOPER",
+      "catalog_name": "Dark Trooper",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "The Ronin",
+      "base_id": "THERONIN",
+      "catalog_name": "The Ronin",
+      "mapping_source": "unit_catalog_fallback"
+    },
+    {
+      "character": "TIE Fighter Pilot",
+      "base_id": "TIEFIGHTERPILOT",
+      "catalog_name": "TIE Fighter Pilot",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "First Order SF TIE Pilot",
+      "base_id": "FIRSTORDERSPECIALFORCESPILOT",
+      "catalog_name": "First Order SF TIE Pilot",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Resistance Pilot",
+      "base_id": "RESISTANCEPILOT",
+      "catalog_name": "Resistance Pilot",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Range Trooper",
+      "base_id": "RANGETROOPER",
+      "catalog_name": "Range Trooper",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Mission Vao",
+      "base_id": "MISSIONVAO",
+      "catalog_name": "Mission Vao",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Ahsoka Tano (Fulcrum)",
+      "base_id": "FULCRUMAHSOKA",
+      "catalog_name": "Ahsoka Tano (Fulcrum)",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Savage Opress",
+      "base_id": "SAVAGEOPRESS",
+      "catalog_name": "Savage Opress",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "STAP",
+      "base_id": "STAP",
+      "catalog_name": "STAP",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Saw Gerrera",
+      "base_id": "SAWGERRERA",
+      "catalog_name": "Saw Gerrera",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Inquisitor Barriss",
+      "base_id": "INQUISITORBARRISS",
+      "catalog_name": "Inquisitor Barriss",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Juhani",
+      "base_id": "JUHANI",
+      "catalog_name": "Juhani",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Bistan",
+      "base_id": "BISTAN",
+      "catalog_name": "Bistan",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Biggs Darklighter",
+      "base_id": "BIGGSDARKLIGHTER",
+      "catalog_name": "Biggs Darklighter",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Darth Traya",
+      "base_id": "DARTHTRAYA",
+      "catalog_name": "Darth Traya",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Mara Jade Skywalker",
+      "base_id": "MARAJADESKYWALKER",
+      "catalog_name": "Mara Jade Skywalker",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Night Trooper",
+      "base_id": "NIGHTTROOPER",
+      "catalog_name": "Night Trooper",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Captain Enoch",
+      "base_id": "CAPTAINENOCH",
+      "catalog_name": "Captain Enoch",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Death Trooper (Peridea)",
+      "base_id": "DEATHTROOPERPERIDEA",
+      "catalog_name": "Death Trooper (Peridea)",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Carth Onasi",
+      "base_id": "CARTHONASI",
+      "catalog_name": "Carth Onasi",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "First Order Officer",
+      "base_id": "FIRSTORDEROFFICERMALE",
+      "catalog_name": "First Order Officer",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Paz Vizsla",
+      "base_id": "PAZVIZSLA",
+      "catalog_name": "Paz Vizsla",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Doctor Aphra",
+      "base_id": "DOCTORAPHRA",
+      "catalog_name": "Doctor Aphra",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Great Mothers",
+      "base_id": "GREATMOTHERS",
+      "catalog_name": "Great Mothers",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Luthen Rael",
+      "base_id": "LUTHENRAEL",
+      "catalog_name": "Luthen Rael",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Wedge Antilles",
+      "base_id": "WEDGEANTILLES",
+      "catalog_name": "Wedge Antilles",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Pao",
+      "base_id": "PAO",
+      "catalog_name": "Pao",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Jawa Scavenger",
+      "base_id": "JAWASCAVENGER",
+      "catalog_name": "Jawa Scavenger",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Admiral Raddus",
+      "base_id": "ADMIRALRADDUS",
+      "catalog_name": "Admiral Raddus",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Kleya Marki",
+      "base_id": "KLEYA",
+      "catalog_name": "Kleya Marki",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Colonel Starck",
+      "base_id": "COLONELSTARCK",
+      "catalog_name": "Colonel Starck",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Veteran Smuggler Chewbacca",
+      "base_id": "SMUGGLERCHEWBACCA",
+      "catalog_name": "Veteran Smuggler Chewbacca",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Merrin",
+      "base_id": "MERRIN",
+      "catalog_name": "Merrin",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Asajj Ventress",
+      "base_id": "ASAJVENTRESS",
+      "catalog_name": "Asajj Ventress",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Huyang",
+      "base_id": "HUYANG",
+      "catalog_name": "Huyang",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Hunter",
+      "base_id": "BADBATCHHUNTER",
+      "catalog_name": "Hunter",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Jyn Erso",
+      "base_id": "JYNERSO",
+      "catalog_name": "Jyn Erso",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Luke Skywalker (Farmboy)",
+      "base_id": "LUKESKYWALKER",
+      "catalog_name": "Luke Skywalker (Farmboy)",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Darth Sion",
+      "base_id": "DARTHSION",
+      "catalog_name": "Darth Sion",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Aayla Secura",
+      "base_id": "AAYLASECURA",
+      "catalog_name": "Aayla Secura",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "L3-37",
+      "base_id": "L3_37",
+      "catalog_name": "L3-37",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Chief Chirpa",
+      "base_id": "CHIEFCHIRPA",
+      "catalog_name": "Chief Chirpa",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "General Veers",
+      "base_id": "VEERS",
+      "catalog_name": "General Veers",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Cassian Andor",
+      "base_id": "CASSIANANDOR",
+      "catalog_name": "Cassian Andor",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Wicket",
+      "base_id": "WICKET",
+      "catalog_name": "Wicket",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Chief Nebit",
+      "base_id": "CHIEFNEBIT",
+      "catalog_name": "Chief Nebit",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Ewok Elder",
+      "base_id": "EWOKELDER",
+      "catalog_name": "Ewok Elder",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "First Order Executioner",
+      "base_id": "FIRSTORDEREXECUTIONER",
+      "catalog_name": "First Order Executioner",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Third Sister",
+      "base_id": "THIRDSISTER",
+      "catalog_name": "Third Sister",
+      "mapping_source": "unit_catalog_fallback"
+    },
+    {
+      "character": "Jedi Knight Luke Skywalker",
+      "base_id": "JEDIKNIGHTLUKE",
+      "catalog_name": "Jedi Knight Luke Skywalker",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Wat Tambor",
+      "base_id": "WATTAMBOR",
+      "catalog_name": "Wat Tambor",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Death Trooper",
+      "base_id": "DEATHTROOPER",
+      "catalog_name": "Death Trooper",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Captain Phasma",
+      "base_id": "PHASMA",
+      "catalog_name": "Captain Phasma",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Jawa Engineer",
+      "base_id": "JAWAENGINEER",
+      "catalog_name": "Jawa Engineer",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Sith Assassin",
+      "base_id": "SITHASSASSIN",
+      "catalog_name": "Sith Assassin",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Moff Gideon",
+      "base_id": "MOFFGIDEONS1",
+      "catalog_name": "Moff Gideon",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Sith Empire Trooper",
+      "base_id": "SITHTROOPER",
+      "catalog_name": "Sith Empire Trooper",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Shoretrooper",
+      "base_id": "SHORETROOPER",
+      "catalog_name": "Shoretrooper",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Aurra Sing",
+      "base_id": "AURRA_SING",
+      "catalog_name": "Aurra Sing",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Dedra Meero",
+      "base_id": "DEDRAMEERO",
+      "catalog_name": "Dedra Meero",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "CT-5555 \"Fives\"",
+      "base_id": "CT5555",
+      "catalog_name": "CT-5555 \"Fives\"",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "T3-M4",
+      "base_id": "T3_M4",
+      "catalog_name": "T3-M4",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Boba Fett, Scion of Jango",
+      "base_id": "BOBAFETTSCION",
+      "catalog_name": "Boba Fett, Scion of Jango",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "General Hux",
+      "base_id": "GENERALHUX",
+      "catalog_name": "General Hux",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Yoda & Chewie",
+      "base_id": "YODACHEWBACCA",
+      "catalog_name": "Yoda & Chewie",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Padawan Obi-Wan",
+      "base_id": "PADAWANOBIWAN",
+      "catalog_name": "Padawan Obi-Wan",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Clone Wars Chewbacca",
+      "base_id": "CLONEWARSCHEWBACCA",
+      "catalog_name": "Clone Wars Chewbacca",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "CT-21-0408 \"Echo\"",
+      "base_id": "CT210408",
+      "catalog_name": "CT-21-0408 \"Echo\"",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Kylo Ren",
+      "base_id": "KYLOREN",
+      "catalog_name": "Kylo Ren",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "K-2SO",
+      "base_id": "K2SO",
+      "catalog_name": "K-2SO",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Baze Malbus",
+      "base_id": "BAZEMALBUS",
+      "catalog_name": "Baze Malbus",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Chirrut Îmwe",
+      "base_id": "CHIRRUTIMWE",
+      "catalog_name": "Chirrut Îmwe",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Hoth Rebel Scout",
+      "base_id": "HOTHREBELSCOUT",
+      "catalog_name": "Hoth Rebel Scout",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Dathcha",
+      "base_id": "DATHCHA",
+      "catalog_name": "Dathcha",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Scarif Rebel Pathfinder",
+      "base_id": "SCARIFREBEL",
+      "catalog_name": "Scarif Rebel Pathfinder",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Sith Trooper",
+      "base_id": "FOSITHTROOPER",
+      "catalog_name": "Sith Trooper",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Vel Sartha",
+      "base_id": "VEL",
+      "catalog_name": "Vel Sartha",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Major Partagaz",
+      "base_id": "MAJORPARTAGAZ",
+      "catalog_name": "Major Partagaz",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "KX Security Droid",
+      "base_id": "KXSECURITYDROID",
+      "catalog_name": "KX Security Droid",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Tarfful",
+      "base_id": "TARFFUL",
+      "catalog_name": "Tarfful",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Captain Drogan",
+      "base_id": "CAPTAINDROGAN",
+      "catalog_name": "Captain Drogan",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Director Krennic",
+      "base_id": "DIRECTORKRENNIC",
+      "catalog_name": "Director Krennic",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Imperial Probe Droid",
+      "base_id": "IMPERIALPROBEDROID",
+      "catalog_name": "Imperial Probe Droid",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Jedi Knight Cal Kestis",
+      "base_id": "JEDIKNIGHTCAL",
+      "catalog_name": "Jedi Knight Cal Kestis",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Nightsister Spirit",
+      "base_id": "NIGHTSISTERSPIRIT",
+      "catalog_name": "Nightsister Spirit",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Princess Kneesaa",
+      "base_id": "PRINCESSKNEESAA",
+      "catalog_name": "Princess Kneesaa",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Embo",
+      "base_id": "EMBO",
+      "catalog_name": "Embo",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Zam Wesell",
+      "base_id": "ZAMWESELL",
+      "catalog_name": "Zam Wesell",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Skiff Guard (Lando Calrissian)",
+      "base_id": "UNDERCOVERLANDO",
+      "catalog_name": "Skiff Guard (Lando Calrissian)",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Omega (Fugitive)",
+      "base_id": "OMEGAS3",
+      "catalog_name": "Omega (Fugitive)",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Ugnaught",
+      "base_id": "UGNAUGHT",
+      "catalog_name": "Ugnaught",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Zorii Bliss",
+      "base_id": "ZORIIBLISS_V2",
+      "catalog_name": "Zorii Bliss",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Wrecker",
+      "base_id": "BADBATCHWRECKER",
+      "catalog_name": "Wrecker",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Brutus",
+      "base_id": "BRUTUS",
+      "catalog_name": "Brutus",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "First Order Stormtrooper",
+      "base_id": "FIRSTORDERTROOPER",
+      "catalog_name": "First Order Stormtrooper",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Tusken Chieftain",
+      "base_id": "TUSKENCHIEFTAIN",
+      "catalog_name": "Tusken Chieftain",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Rose Tico",
+      "base_id": "ROSETICO",
+      "catalog_name": "Rose Tico",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "General Skywalker",
+      "base_id": "GENERALSKYWALKER",
+      "catalog_name": "General Skywalker",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "HK-47",
+      "base_id": "HK47",
+      "catalog_name": "HK-47",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Greedo",
+      "base_id": "GREEDO",
+      "catalog_name": "Greedo",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "IG-90",
+      "base_id": "IG90",
+      "catalog_name": "IG-90",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "First Order TIE Pilot",
+      "base_id": "FIRSTORDERTIEPILOT",
+      "catalog_name": "First Order TIE Pilot",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Boushh (Leia Organa)",
+      "base_id": "BOUSHH",
+      "catalog_name": "Boushh (Leia Organa)",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Taron Malicos",
+      "base_id": "TARONMALICOS",
+      "catalog_name": "Taron Malicos",
+      "mapping_source": "unit_catalog_fallback"
+    },
+    {
+      "character": "Echo",
+      "base_id": "BADBATCHECHO",
+      "catalog_name": "Echo",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Teebo",
+      "base_id": "TEEBO",
+      "catalog_name": "Teebo",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Darth Nihilus",
+      "base_id": "DARTHNIHILUS",
+      "catalog_name": "Darth Nihilus",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Mother Talzin",
+      "base_id": "MOTHERTALZIN",
+      "catalog_name": "Mother Talzin",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Qui-Gon Jinn",
+      "base_id": "QUIGONJINN",
+      "catalog_name": "Qui-Gon Jinn",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Old Daka",
+      "base_id": "DAKA",
+      "catalog_name": "Old Daka",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Jawa",
+      "base_id": "JAWA",
+      "catalog_name": "Jawa",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "CC-2224 \"Cody\"",
+      "base_id": "CC2224",
+      "catalog_name": "CC-2224 \"Cody\"",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Hoth Rebel Soldier",
+      "base_id": "HOTHREBELSOLDIER",
+      "catalog_name": "Hoth Rebel Soldier",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Captain Ithano",
+      "base_id": "ITHANO",
+      "catalog_name": "Captain Ithano",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Hunter (Mercenary)",
+      "base_id": "HUNTERS3",
+      "catalog_name": "Hunter (Mercenary)",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Paploo",
+      "base_id": "PAPLOO",
+      "catalog_name": "Paploo",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Logray",
+      "base_id": "LOGRAY",
+      "catalog_name": "Logray",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Gar Saxon",
+      "base_id": "GARSAXON",
+      "catalog_name": "Gar Saxon",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Lobot",
+      "base_id": "LOBOT",
+      "catalog_name": "Lobot",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Ewok Scout",
+      "base_id": "EWOKSCOUT",
+      "catalog_name": "Ewok Scout",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "IG-86 Sentinel Droid",
+      "base_id": "IG86SENTINELDROID",
+      "catalog_name": "IG-86 Sentinel Droid",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Qi'ra",
+      "base_id": "QIRA",
+      "catalog_name": "Qi'ra",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Talia",
+      "base_id": "TALIA",
+      "catalog_name": "Talia",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Magmatrooper",
+      "base_id": "MAGMATROOPER",
+      "catalog_name": "Magmatrooper",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Nightsister Acolyte",
+      "base_id": "NIGHTSISTERACOLYTE",
+      "catalog_name": "Nightsister Acolyte",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Jedi Consular",
+      "base_id": "JEDIKNIGHTCONSULAR",
+      "catalog_name": "Jedi Consular",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Young Lando Calrissian",
+      "base_id": "YOUNGLANDO",
+      "catalog_name": "Young Lando Calrissian",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "IG-12 & Grogu",
+      "base_id": "IG12",
+      "catalog_name": "IG-12 & Grogu",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Grogu & Anzellans",
+      "base_id": "GOPHERANTS",
+      "catalog_name": "Grogu & Anzellans",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Captain Silvo",
+      "base_id": "CAPTAINSILVO",
+      "catalog_name": "Captain Silvo",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Vane",
+      "base_id": "VANE",
+      "catalog_name": "Vane",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Captain Carson Teva",
+      "base_id": "CARSONTEVA",
+      "catalog_name": "Captain Carson Teva",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Dark Trooper Moff Gideon",
+      "base_id": "MOFFGIDEONS3",
+      "catalog_name": "Dark Trooper Moff Gideon",
+      "mapping_source": "unit_catalog_fallback"
+    },
+    {
+      "character": "Marrok",
+      "base_id": "MARROK",
+      "catalog_name": "Marrok",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Coruscant Underworld Police",
+      "base_id": "CORUSCANTUNDERWORLDPOLICE",
+      "catalog_name": "Coruscant Underworld Police",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Tusken Raider",
+      "base_id": "TUSKENRAIDER",
+      "catalog_name": "Tusken Raider",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Zuckuss",
+      "base_id": "ZUCKUSS",
+      "catalog_name": "Zuckuss",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Nightsister Zombie",
+      "base_id": "NIGHTSISTERZOMBIE",
+      "catalog_name": "Nightsister Zombie",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "URoRRuR'R'R",
+      "base_id": "URORRURRR",
+      "catalog_name": "URoRRuR'R'R",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Clone Sergeant - Phase I",
+      "base_id": "CLONESERGEANTPHASEI",
+      "catalog_name": "Clone Sergeant - Phase I",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Tusken Shaman",
+      "base_id": "TUSKENSHAMAN",
+      "catalog_name": "Tusken Shaman",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Luminara Unduli",
+      "base_id": "LUMINARAUNDULI",
+      "catalog_name": "Luminara Unduli",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Jedi Knight Guardian",
+      "base_id": "JEDIKNIGHTGUARDIAN",
+      "catalog_name": "Jedi Knight Guardian",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Zeb Orrelios (New Republic Pilot)",
+      "base_id": "RANGERZEB",
+      "catalog_name": "Zeb Orrelios (New Republic Pilot)",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Wrecker (Mercenary)",
+      "base_id": "WRECKERS3",
+      "catalog_name": "Wrecker (Mercenary)",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Crosshair (Scarred)",
+      "base_id": "CROSSHAIRS3",
+      "catalog_name": "Crosshair (Scarred)",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Bodhi Rook",
+      "base_id": "BODHIROOK",
+      "catalog_name": "Bodhi Rook",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Starkiller (Luke Concept)",
+      "base_id": "LUKESTARKILLER",
+      "catalog_name": "Starkiller (Luke Concept)",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Omega",
+      "base_id": "BADBATCHOMEGA",
+      "catalog_name": "Omega",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Tusken Warrior",
+      "base_id": "TUSKENHUNTRESS",
+      "catalog_name": "Tusken Warrior",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Young Han Solo",
+      "base_id": "YOUNGHAN",
+      "catalog_name": "Young Han Solo",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Kit Fisto",
+      "base_id": "KITFISTO",
+      "catalog_name": "Kit Fisto",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Plo Koon",
+      "base_id": "PLOKOON",
+      "catalog_name": "Plo Koon",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Ima-Gun Di",
+      "base_id": "IMAGUNDI",
+      "catalog_name": "Ima-Gun Di",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Eeth Koth",
+      "base_id": "EETHKOTH",
+      "catalog_name": "Eeth Koth",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Imperial Super Commando",
+      "base_id": "IMPERIALSUPERCOMMANDO",
+      "catalog_name": "Imperial Super Commando",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Jedi Master Mace Windu",
+      "base_id": "JEDIMASTERMACEWINDU",
+      "catalog_name": "Jedi Master Mace Windu",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Colonel Ward",
+      "base_id": "BISHOP",
+      "catalog_name": "Colonel Ward",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "R5-D4",
+      "base_id": "R5D4",
+      "catalog_name": "R5-D4",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Mob Enforcer",
+      "base_id": "HUMANTHUG",
+      "catalog_name": "Mob Enforcer",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "4-LOM",
+      "base_id": "4LOM",
+      "catalog_name": "4-LOM",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Tech",
+      "base_id": "BADBATCHTECH",
+      "catalog_name": "Tech",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Stormtrooper",
+      "base_id": "STORMTROOPER",
+      "catalog_name": "Stormtrooper",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Nightsister Initiate",
+      "base_id": "NIGHTSISTERINITIATE",
+      "catalog_name": "Nightsister Initiate",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Snowtrooper Commander",
+      "base_id": "REMNANTSNOWCOMMANDER",
+      "catalog_name": "Snowtrooper Commander",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Batcher",
+      "base_id": "BATCHERS3",
+      "catalog_name": "Batcher",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Ki-Adi-Mundi",
+      "base_id": "KIADIMUNDI",
+      "catalog_name": "Ki-Adi-Mundi",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Kix",
+      "base_id": "KIX",
+      "catalog_name": "Kix",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Gamorrean Guard",
+      "base_id": "GAMORREANGUARD",
+      "catalog_name": "Gamorrean Guard",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Jaxxon",
+      "base_id": "JAXXON",
+      "catalog_name": "Jaxxon",
+      "mapping_source": "unit_catalog_fallback"
+    },
+    {
+      "character": "Stormtrooper (Concept)",
+      "base_id": "STORMTROOPERCONCEPT",
+      "catalog_name": "Stormtrooper (Concept)",
+      "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Quiggold",
+      "base_id": "QUIGGOLD",
+      "catalog_name": "Quiggold",
+      "mapping_source": "player_roster_export"
+    }
+  ]
+}

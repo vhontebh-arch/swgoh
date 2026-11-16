@@ -1,0 +1,88 @@
+name: Probe SWGOH.GG public data access
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/character-importance-ranking
+    paths:
+      - .github/workflows/probe-swgohgg-access.yml
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Check public SWGOH.GG pages
+        id: probe
+        run: |
+          python - <<'PY'
+          import json
+          import time
+          import urllib.request
+          from urllib.error import HTTPError, URLError
+          from datetime import datetime, timezone
+
+          targets = [
+              ("unit_data_omega", "https://swgoh.gg/units/omega/data/"),
+              ("omicron_zeta_report", "https://swgoh.gg/stats/ability-report/"),
+              ("mod_meta_all", "https://swgoh.gg/stats/mod-meta-report/"),
+              ("mod_meta_top100_guilds", "https://swgoh.gg/stats/mod-meta-report/guilds_100_gp/"),
+              ("relic_player_data", "https://swgoh.gg/characters/relic-player-data/"),
+              ("unit_release_dates", "https://swgoh.gg/units/releases/"),
+          ]
+          headers = {
+              "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/130.0 Safari/537.36",
+              "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+              "Accept-Language": "en-US,en;q=0.9",
+          }
+          results = []
+          for name, url in targets:
+              entry = {"name": name, "url": url, "checked_at": datetime.now(timezone.utc).isoformat()}
+              request = urllib.request.Request(url, headers=headers)
+              try:
+                  with urllib.request.urlopen(request, timeout=30) as response:
+                      body = response.read()
+                      page = body.decode("utf-8", errors="replace")
+                      entry.update({
+                          "http_status": response.status,
+                          "final_url": response.url,
+                          "bytes": len(body),
+                          "content_type": response.headers.get("Content-Type", ""),
+                          "cloudflare_challenge": "cf-chl-" in page.lower() or "just a moment" in page.lower(),
+                          "has_swgoh_marker": "swgoh.gg" in page.lower(),
+                          "has_table": "<table" in page.lower() or 'role="table"' in page.lower(),
+                          "title_excerpt": page[page.lower().find("<title"):page.lower().find("</title>")+8][:300] if "<title" in page.lower() else "",
+                      })
+                      entry["usable_html"] = (
+                          response.status == 200 and len(body) > 5000
+                          and not entry["cloudflare_challenge"]
+                          and entry["has_swgoh_marker"]
+                      )
+              except HTTPError as exc:
+                  entry.update({"http_status": exc.code, "error": str(exc.reason), "usable_html": False})
+              except Exception as exc:
+                  entry.update({"error": f"{type(exc).__name__}: {exc}", "usable_html": False})
+              results.append(entry)
+              print(json.dumps(entry, ensure_ascii=False))
+              time.sleep(1)
+          summary = {
+              "generated_at": datetime.now(timezone.utc).isoformat(),
+              "results": results,
+              "usable_count": sum(bool(x.get("usable_html")) for x in results),
+              "total": len(results),
+          }
+          with open("swgohgg-access-results.json", "w", encoding="utf-8") as f:
+              json.dump(summary, f, ensure_ascii=False, indent=2)
+          PY
+      - name: Upload probe results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: swgohgg-access-results
+          path: swgohgg-access-results.json
+          if-no-files-found: warn
+          retention-days: 14

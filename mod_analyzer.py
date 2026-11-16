@@ -9,13 +9,16 @@ import csv
 import json
 import os
 
+from character_ranking import load_ranking_json, rank_weighted_donor_delta, rank_weighted_account_delta
 from update_mod_profiles import ensure_profiles, load_fresh_profiles
 
 INPUT_FILE = "mods.csv"
 OUTPUT_CSV = "mod_analysis.csv"
 OUTPUT_MD = "mod_analysis.md"
 PROFILE_FILE = "mod_profiles.json"
-ANALYZER_VERSION = "2026-11-14-actual-donor-rebuild-score-experiment-v1"
+ANALYZER_VERSION = "2026-11-16-rank-weighted-chain-selection-v2"
+CHAIN_ALTERNATIVE_CAP = 5
+CHAIN_SEARCH_DIAGNOSTICS = {}
 
 R5 = {
     "Critical Chance %": (1.125, 2.25), "Defense": (4.9, 9.8),
@@ -1102,14 +1105,17 @@ def apply_replacements(rows, target_base_ids, profiles=None, aliases=None, names
 
 
 
-def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None, aliases=None, names=None, protected_owners=None, gear_tiers=None):
+def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None, aliases=None, names=None, protected_owners=None, gear_tiers=None, ranking=None):
     """Plan physical same-slot mod transfers and report every affected owner's balance."""
+    global CHAIN_SEARCH_DIAGNOSTICS
+    CHAIN_SEARCH_DIAGNOSTICS = {}
     profiles = profiles or {}
     aliases = aliases or {}
     names = names or {}
     targets = set(target_base_ids)
     protected_owners = set(protected_owners or set())
     gear_tiers = gear_tiers or {}
+    ranking = ranking or []
 
     def recipient_gear(base_id):
         return integer(gear_tiers.get(aliases.get(base_id, base_id), -1), -1)
@@ -1210,8 +1216,8 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
     profiled_donor_moves = {}
     donor_rebuild_reserved = set()
 
-    def rebuild_profiled_donor(donor_id, donor_selected, visited):
-        """Rebuild all holes of one donor, recursively repairing every donor it borrows from."""
+    def rebuild_profiled_donor(donor_id, donor_selected, visited, explore_alternatives=True):
+        """Rebuild donor holes and choose among bounded complete recursive alternatives by Rank-weighted roster impact."""
         if donor_id in visited:
             return None, "wykryto cykl w łańcuchu dawców"
         donor_profile = profiles.get(donor_id)
@@ -1286,6 +1292,11 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
         # several donors deeper. Exclude only the mod(s) that opened the failed
         # child branch, then ask the full-build optimizer for the next candidate.
         excluded_mod_ids = set()
+        best_moves = None
+        best_rank_score = float("-inf")
+        best_reservations = set()
+        successful_variants = 0
+        variant_scores = []
         while True:
             donor_optimizer = optimize_target_build(
                 candidate_rows, {donor_id}, profiles, aliases, names, set(),
@@ -1297,18 +1308,30 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
             by_slot = {str(mod.get("slot", "") or ""): mod for mod in donor_build}
             built_combo = canonical_set_combo_from_mods(donor_build)
             if len(by_slot) != 6 or (required_combo and built_combo != required_combo):
+                if best_moves is not None:
+                    donor_rebuild_reserved.update(best_reservations)
+                    return best_moves, None
                 return None, (
                     "brak pełnego buildu zachowującego kombinację {}"
                     .format(required_combo or "zgodną z profilem")
                 )
             if not all(slot in by_slot for slot in hole_slots):
+                if best_moves is not None:
+                    donor_rebuild_reserved.update(best_reservations)
+                    return best_moves, None
                 return None, "nie udało się uzupełnić wszystkich slotów dawcy"
 
             replacements = {slot: by_slot[slot] for slot in hole_slots}
             replacement_ids = [rid(mod) for mod in replacements.values()]
             if len(replacement_ids) != len(set(replacement_ids)):
+                if best_moves is not None:
+                    donor_rebuild_reserved.update(best_reservations)
+                    return best_moves, None
                 return None, "optimizer wskazał ten sam mod dla kilku slotów"
             if any(mod_id in donor_rebuild_reserved for mod_id in replacement_ids):
+                if best_moves is not None:
+                    donor_rebuild_reserved.update(best_reservations)
+                    return best_moves, None
                 return None, "mod został już zarezerwowany przez inny łańcuch"
 
             reservation_snapshot = set(donor_rebuild_reserved)
@@ -1330,7 +1353,7 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                         exact_combo_frequency(donor_profile, donor_after)
                         - exact_combo_frequency(donor_profile, donor_before)
                     ),
-                    "strategy": "PROFILE_RECURSIVE_FULL_BUILD_BACKTRACK",
+                    "strategy": "PROFILE_RECURSIVE_FULL_BUILD_RANK",
                 })
 
             child_groups = {}
@@ -1344,7 +1367,8 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
             child_moves_all = []
             for child_id, child_selected in sorted(child_groups.items()):
                 child_moves, error = rebuild_profiled_donor(
-                    child_id, child_selected, visited | {donor_id}
+                    child_id, child_selected, visited | {donor_id},
+                    explore_alternatives=False,
                 )
                 if child_moves is None:
                     failed_child, failed_error = child_id, error
@@ -1352,8 +1376,32 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                 child_moves_all.extend(child_moves)
 
             if failed_child is None:
-                moves.extend(child_moves_all)
-                return moves, None
+                complete_moves = moves + child_moves_all
+                rank_score = rank_weighted_donor_delta(complete_moves, ranking, aliases)
+                if rank_score > best_rank_score:
+                    best_moves = complete_moves
+                    best_rank_score = rank_score
+                    best_reservations = set(donor_rebuild_reserved)
+                donor_rebuild_reserved.clear()
+                donor_rebuild_reserved.update(reservation_snapshot)
+                successful_variants += 1
+                variant_scores.append(round(rank_score, 4))
+                if explore_alternatives:
+                    CHAIN_SEARCH_DIAGNOSTICS[donor_id] = list(variant_scores)
+                if not explore_alternatives or successful_variants >= CHAIN_ALTERNATIVE_CAP:
+                    donor_rebuild_reserved.update(best_reservations)
+                    return best_moves, None
+                # Exclude one selected replacement at a time to obtain another
+                # complete build; cap exploration to keep recursive search bounded.
+                alternative_ids = [
+                    rid(replacements[slot]) for slot in sorted(replacements)
+                    if rid(replacements[slot]) and rid(replacements[slot]) not in excluded_mod_ids
+                ]
+                if not alternative_ids:
+                    donor_rebuild_reserved.update(best_reservations)
+                    return best_moves, None
+                excluded_mod_ids.add(alternative_ids[0])
+                continue
 
             # Undo every reservation made by this attempt before exploring the
             # next candidate. Otherwise a failed branch could poison alternatives.
@@ -1365,6 +1413,9 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
             }
             new_ids = failed_branch_ids - excluded_mod_ids
             if not new_ids:
+                if best_moves is not None:
+                    donor_rebuild_reserved.update(best_reservations)
+                    return best_moves, None
                 return None, "dawca {}: {}".format(failed_child, failed_error)
             excluded_mod_ids.update(new_ids)
 
@@ -1473,11 +1524,15 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                                 new_moves,False
                             ))
             if terminal_solutions:
-                # Lexicographic objective: shortest executable chain (BFS layer),
-                # then preserve the donor exact set-combination frequency,
-                # followed by donor profile-fit gain, set transition, and modValue.
-                # Exact combo preservation is a preference, not a hard constraint.
+                # Rank-weight every donor's complete delta; target gain is deliberately
+                # excluded here and remains unweighted in the outer account objective.
+                # Exact combo preservation is a tie-break, not a second importance signal.
+                for solution in terminal_solutions:
+                    solution["rank_weighted_gain"] = rank_weighted_donor_delta(
+                        solution["moves"], ranking, aliases
+                    )
                 terminal_solutions.sort(key=lambda solution: (
+                    solution.get("rank_weighted_gain", solution["gain"]),
                     solution.get("combo_delta", 0.0),
                     solution["gain"],
                     solution["set_delta"],
@@ -1816,7 +1871,55 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
         for r in rows:
             if r.get("optimizerTarget"): r["chainStatus"]="BLOCKED"
 
-    return {"safe":safe,"plans":plans,"validation":validation,"failed":failed}
+    affected_owner_ids = set()
+    for plan in plans:
+        if plan.get("target_owner"):
+            affected_owner_ids.add(str(plan["target_owner"]))
+        selected_owner = owner(plan.get("mod", {}))
+        if selected_owner:
+            affected_owner_ids.add(selected_owner)
+        affected_owner_ids.update(
+            str(move.get("owner", "")) for move in plan.get("moves", [])
+            if move.get("owner")
+        )
+    relevant_validation = [
+        item for item in validation
+        if str(item.get("owner", "") or "") in affected_owner_ids
+    ]
+    rank_donor_moves = [
+        {"owner": item.get("owner", ""), "gain": item.get("profileScoreDelta", 0.0)}
+        for item in relevant_validation
+        if aliases.get(str(item.get("owner", "") or ""), str(item.get("owner", "") or "")) not in targets
+        and item.get("profileScoreAvailable")
+    ]
+    rank_target_moves = [
+        {"owner": item.get("owner", ""), "gain": item.get("profileScoreDelta", 0.0)}
+        for item in relevant_validation
+        if aliases.get(str(item.get("owner", "") or ""), str(item.get("owner", "") or "")) in targets
+        and item.get("profileScoreAvailable")
+    ]
+    all_rank_moves = rank_target_moves + rank_donor_moves
+    all_profiled = bool(relevant_validation) and all(
+        item.get("profileScoreAvailable") for item in relevant_validation
+    )
+    weighted_donor_delta = (
+        rank_weighted_donor_delta(rank_donor_moves, ranking, aliases)
+        if all_profiled else None
+    )
+    weighted_target_delta = (
+        rank_weighted_account_delta(rank_target_moves, ranking, aliases)
+        if all_profiled else None
+    )
+    rank_weighted_total = (
+        round(rank_weighted_account_delta(all_rank_moves, ranking, aliases), 2)
+        if all_profiled else None
+    )
+    return {
+        "safe": safe, "plans": plans, "validation": validation, "failed": failed,
+        "rankWeightedTargetDelta": weighted_target_delta,
+        "rankWeightedDonorDelta": weighted_donor_delta,
+        "rankWeightedAccountDelta": rank_weighted_total,
+    }
 
 
 
@@ -2307,16 +2410,17 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
         for move in plan.get("moves", [])
     )
     donor_compromise = donor_compromise or unavailable_profile_losses
+    rank_weighted_total = chain_result.get("rankWeightedAccountDelta")
     if not chain_result.get("safe"):
         assessment = "BLOKADA — nie wykonuj przekładek"
-    elif account_delta is None:
-        assessment = "BILANS NIEPEŁNY — brakuje porównywalnego profilu dla co najmniej jednej postaci"
-    elif account_delta <= 0.05:
-        assessment = "BILANS NIEDODATNI — nie rekomenduję wykonania łańcucha"
+    elif rank_weighted_total is None:
+        assessment = "BILANS RANK NIEPEŁNY — brakuje porównywalnego profilu dla co najmniej jednej postaci"
+    elif rank_weighted_total <= 0.05:
+        assessment = "BILANS RANK NIEDODATNI — nie rekomenduję wykonania łańcucha"
     elif donor_compromise:
-        assessment = "KOMPROMIS — bilans rosteru dodatni, ale co najmniej jeden dawca traci"
+        assessment = "KOMPROMIS — bilans Rank dodatni, ale co najmniej jeden dawca traci"
     else:
-        assessment = "REKOMENDACJA — dodatni bilans całego rosteru, bez wykrytej straty u dawców"
+        assessment = "REKOMENDACJA — dodatni bilans Rank całego łańcucha, bez wykrytej straty u dawców"
 
     lines += [
         "## Status",
@@ -2331,6 +2435,16 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
                 "NIEOBLICZALNY — brak profilu/oceny dla jednej z postaci"
                 if account_delta is None else "{:+.2f} pkt".format(account_delta)
             )
+        ),
+        "- **Bilans ważony Rank (cel i dawcy):** {}".format(
+            "NIEOBLICZALNY — brak profilu/oceny dla jednej z postaci"
+            if chain_result.get("rankWeightedAccountDelta") is None
+            else "{:+.2f} pkt".format(chain_result["rankWeightedAccountDelta"])
+        ),
+        "- **Ważony wkład celu:** {}".format(
+            "NIEOBLICZALNY"
+            if chain_result.get("rankWeightedTargetDelta") is None
+            else "{:+.2f} pkt".format(chain_result["rankWeightedTargetDelta"])
         ),
         "- **Liczba modów docelowych:** {}/6".format(
             min(6, max((len(opt.get("mods", [])) for opt in optimizer.values()), default=0))
@@ -2584,6 +2698,22 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
             else:
                 lines.append("- Łańcuch nie przeszedł walidacji fizycznej.")
 
+    if CHAIN_SEARCH_DIAGNOSTICS:
+        lines += [
+            "## Diagnostyka przeszukiwania wariantów łańcucha",
+            "",
+            "Limit kompletnych wariantów na głównego dawcę: **{}**.".format(CHAIN_ALTERNATIVE_CAP),
+            "Wyniki poniżej to ważony Rank bilans zmian danego dawcy i jego rekurencyjnych pod-dawców; wyższy wynik jest lepszy.",
+            "",
+        ]
+        for donor_id, scores in sorted(CHAIN_SEARCH_DIAGNOSTICS.items()):
+            lines.append("- **{}:** sprawdzono {} kompletnych wariantów; wyniki: {}; najlepszy: {:+.4f}.".format(
+                display_name(donor_id), len(scores),
+                ", ".join("{:+.4f}".format(score) for score in scores),
+                max(scores),
+            ))
+        lines.append("")
+
     if chain_result.get("safe") and donor_costs:
         lines += ["## Wpływ na postacie-dawców", ""]
         if donor_costs:
@@ -2709,7 +2839,15 @@ def main(argv=None):
         default=[],
         help="BASE_ID postaci do optymalizacji modów; można powtórzyć lub podać listę rozdzieloną przecinkami.",
     )
+    parser.add_argument(
+        "--chain-alternative-cap", type=int, default=5,
+        help="Maksymalna liczba kompletnych wariantów odbudowy każdego głównego dawcy (domyślnie 5).",
+    )
     args = parser.parse_args(argv)
+    if args.chain_alternative_cap < 1:
+        parser.error("--chain-alternative-cap musi być co najmniej 1")
+    global CHAIN_ALTERNATIVE_CAP
+    CHAIN_ALTERNATIVE_CAP = args.chain_alternative_cap
 
     if not os.path.exists(INPUT_FILE):
         raise FileNotFoundError(INPUT_FILE)
@@ -2779,6 +2917,7 @@ def main(argv=None):
     def rid(row):
         return str(row.get("id", "") or "")
 
+    ranking = load_ranking_json("character_ranking.json")
     optimizer = optimize_target_build(rows, target_ids, profiles, aliases, names, protected_owners)
 
     # Resolve a provisional physical chain, fetch profiles only for owners
@@ -2787,7 +2926,7 @@ def main(argv=None):
     attempted_profile_units = set(target_ids)
     while True:
         chain_result = apply_optimizer_replacements(
-            rows, optimizer, target_ids, profiles, aliases, names, protected_owners, gear_tiers
+            rows, optimizer, target_ids, profiles, aliases, names, protected_owners, gear_tiers, ranking
         )
         chain_donor_ids = set()
 
