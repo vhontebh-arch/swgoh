@@ -15,12 +15,6 @@ on:
       - "tests/test_rank_weighted_chain_selection.py"
       - "tests/test_required_primary_constraints.py"
   workflow_dispatch:
-    inputs:
-      target:
-        description: "Target BASE_ID"
-        required: true
-        default: "GOPHERANTS"
-        type: string
 
 permissions:
   contents: write
