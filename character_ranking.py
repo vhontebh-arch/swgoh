@@ -28,10 +28,19 @@ def load_base_id_mapping(path: str | Path = DEFAULT_MAPPING) -> dict[str, dict[s
         seen_ids.add(base_id)
     return by_name
 
+def rank_importance_score(rank: int, record_count: int) -> float:
+    """Bounded Rank-derived value: 3.0 at Rank 1, 1.0 at the last rank."""
+    if record_count < 2:
+        raise ValueError("record_count must be at least 2")
+    if not 1 <= rank <= record_count:
+        raise ValueError(f"Rank must be within 1..{record_count}")
+    percentile = (rank - 1) / (record_count - 1)
+    return round(1.0 + 2.0 * (1.0 - percentile) ** 2, 6)
+
 def load_stack_rank(path: str | Path, mapping_path: str | Path | None = None) -> list[dict[str, Any]]:
     mapping = load_base_id_mapping(mapping_path) if mapping_path else None
     with Path(path).open("r", encoding="utf-8-sig", newline="") as handle:
-        reader = csv.DictReader(handle, delimiter="\t")
+        reader = csv.DictReader(handle, delimiter="\\t")
         if reader.fieldnames != EXPECTED_COLUMNS:
             raise ValueError("Unexpected Stack Rank columns. Expected: " + ", ".join(EXPECTED_COLUMNS))
         result, seen_names, seen_ranks = [], set(), set()
@@ -55,14 +64,21 @@ def load_stack_rank(path: str | Path, mapping_path: str | Path | None = None) ->
             if not 1 <= row["base_tier"] <= 19: raise ValueError(f"Base Tier outside 1..19 for {name}")
             if row["rank"] < 1 or row["rank"] in seen_ranks: raise ValueError(f"Invalid or duplicate Rank for {name}")
             seen_ranks.add(row["rank"])
-            row["importance_score"], row["source"] = 20-row["final_tier"], SOURCE_NAME
             result.append(row)
+    if not result: raise ValueError("Stack Rank contains no character rows")
+    expected_ranks = set(range(1, len(result) + 1))
+    if seen_ranks != expected_ranks:
+        raise ValueError("Stack Rank values must form a continuous sequence from 1 to record count")
+    for row in result:
+        row["importance_score"] = rank_importance_score(row["rank"], len(result))
+        row["source"] = SOURCE_NAME
     if mapping is not None and len(result) != len(mapping):
         raise ValueError(f"Stack Rank has {len(result)} rows but mapping has {len(mapping)} entries")
     return sorted(result, key=lambda item:item["rank"])
 
 def rank_characters(rows):
-    return sorted(rows, key=lambda item:(item["final_tier"],item["rank"]))
+    """Return characters in source Rank order (1 is most important)."""
+    return sorted(rows, key=lambda item:item["rank"])
 
 def get_character_rank(ranking, character):
     key = str(character).strip().casefold()
@@ -71,13 +87,13 @@ def get_character_rank(ranking, character):
 def build_payload(input_path: str | Path, mapping_path: str | Path = DEFAULT_MAPPING):
     rows = load_stack_rank(input_path, mapping_path)
     mapping_payload = json.loads(Path(mapping_path).read_text(encoding="utf-8"))
-    return {"schema_version":3,"source":SOURCE_NAME,"source_url":SOURCE_URL,
+    return {"schema_version":4,"source":SOURCE_NAME,"source_url":SOURCE_URL,
         "snapshot_date":datetime.now().date().isoformat(),"record_count":len(rows),
         "base_id_mapping":mapping_payload["sources"],
-        "method":{"primary_field":"final_tier","primary_direction":"ascending (1 is most important; 19 least important)",
-        "secondary_field":"rank","secondary_direction":"ascending (original Stack Rank order)",
-        "importance_score":"20 - final_tier",
-        "note":"Final Tier already includes Base Tier, Synergy Enhancement, Omicron Boost, Omicron Synergy Boost and Ability Score effects; these fields are retained for audit and are not scored again.",
+        "method":{"primary_field":"rank","primary_direction":"ascending (1 is most important; larger values are less important)",
+        "importance_score":"1 + 2 * (1 - (rank - 1) / (record_count - 1))^2; bounded 1.0..3.0",
+        "secondary_fields":["final_tier","sort_score"],
+        "note":"Rank is the sole primary importance signal. Final Tier and Sort Score are retained for audit and are not added to importance_score; Sort Score may later be used only as a small, separate donor-protection adjustment.",
         "omicron_boost_options":{"gac":True,"territory_war":True,"territory_battle":True,"raids":True,"conquest":True}},
         "characters":rows}
 
@@ -91,7 +107,7 @@ def main():
     payload=build_payload(args.input,args.mapping)
     if args.expected_count is not None and payload["record_count"]!=args.expected_count:
         raise SystemExit(f"Expected {args.expected_count} records, got {payload['record_count']}")
-    Path(args.output).write_text(json.dumps(payload,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+    Path(args.output).write_text(json.dumps(payload,ensure_ascii=False,indent=2)+"\\n",encoding="utf-8")
     print(f"Imported {payload['record_count']} Stack Rank characters with baseIds -> {args.output}")
 
 if __name__=="__main__": main()
