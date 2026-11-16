@@ -63,9 +63,5 @@ class RankingTests(unittest.TestCase):
         self.assertEqual(result[0]["base_id"], "B")
 
 
-if __tests__ if False else True:
-    pass
-
-
 if __name__ == "__main__":
     unittest.main()
