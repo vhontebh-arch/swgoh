@@ -88,7 +88,7 @@ def fetch_page(url: str) -> str:
     for endpoint in candidates:
         try:
             request = Request(endpoint, headers={"User-Agent": USER_AGENT})
-            with urlopen(request, timeout=60) as response:
+            with urlopen(request, timeout=18) as response:
                 body = response.read().decode("utf-8", errors="replace")
             if len(body) < 5000:
                 raise RuntimeError("response unexpectedly short")
@@ -102,6 +102,7 @@ def fetch_page(url: str) -> str:
             return body
         except Exception as exc:
             errors.append(f"{urlsplit(endpoint).netloc}: {exc}")
+            print(f"Fetch failed via {urlsplit(endpoint).netloc}: {exc}", flush=True)
     raise RuntimeError("Unable to fetch page: " + "; ".join(errors))
 
 
