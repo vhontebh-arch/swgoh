@@ -9,7 +9,7 @@ import csv
 import json
 import os
 
-from character_ranking import load_ranking_json, rank_weighted_donor_delta
+from character_ranking import load_ranking_json, rank_weighted_donor_delta, rank_weighted_account_delta
 from update_mod_profiles import ensure_profiles, load_fresh_profiles
 
 INPUT_FILE = "mods.csv"
@@ -1884,12 +1884,13 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
         if aliases.get(str(item.get("owner", "") or ""), str(item.get("owner", "") or "")) not in targets
         and item.get("profileScoreAvailable")
     ]
-    target_profile_delta = sum(
-        float(item.get("profileScoreDelta", 0.0) or 0.0)
+    rank_target_moves = [
+        {"owner": item.get("owner", ""), "gain": item.get("profileScoreDelta", 0.0)}
         for item in relevant_validation
         if aliases.get(str(item.get("owner", "") or ""), str(item.get("owner", "") or "")) in targets
         and item.get("profileScoreAvailable")
-    )
+    ]
+    all_rank_moves = rank_target_moves + rank_donor_moves
     all_profiled = bool(relevant_validation) and all(
         item.get("profileScoreAvailable") for item in relevant_validation
     )
@@ -1897,12 +1898,17 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
         rank_weighted_donor_delta(rank_donor_moves, ranking, aliases)
         if all_profiled else None
     )
+    weighted_target_delta = (
+        rank_weighted_account_delta(rank_target_moves, ranking, aliases)
+        if all_profiled else None
+    )
     rank_weighted_total = (
-        round(target_profile_delta + weighted_donor_delta, 2)
-        if all_profiled and weighted_donor_delta is not None else None
+        round(rank_weighted_account_delta(all_rank_moves, ranking, aliases), 2)
+        if all_profiled else None
     )
     return {
         "safe": safe, "plans": plans, "validation": validation, "failed": failed,
+        "rankWeightedTargetDelta": weighted_target_delta,
         "rankWeightedDonorDelta": weighted_donor_delta,
         "rankWeightedAccountDelta": rank_weighted_total,
     }
@@ -2422,10 +2428,15 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
                 if account_delta is None else "{:+.2f} pkt".format(account_delta)
             )
         ),
-        "- **Bilans ważony Rank (cel bez wagi, dawcy z wagą Rank):** {}".format(
+        "- **Bilans ważony Rank (cel i dawcy):** {}".format(
             "NIEOBLICZALNY — brak profilu/oceny dla jednej z postaci"
             if chain_result.get("rankWeightedAccountDelta") is None
             else "{:+.2f} pkt".format(chain_result["rankWeightedAccountDelta"])
+        ),
+        "- **Ważony wkład celu:** {}".format(
+            "NIEOBLICZALNY"
+            if chain_result.get("rankWeightedTargetDelta") is None
+            else "{:+.2f} pkt".format(chain_result["rankWeightedTargetDelta"])
         ),
         "- **Liczba modów docelowych:** {}/6".format(
             min(6, max((len(opt.get("mods", [])) for opt in optimizer.values()), default=0))
