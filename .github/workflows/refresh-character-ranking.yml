@@ -16,7 +16,7 @@ permissions:
 
 concurrency:
   group: character-importance-ranking
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   refresh:
