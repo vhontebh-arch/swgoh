@@ -10,6 +10,7 @@ on:
       - "mod_analyzer.py"
       - "character_ranking.py"
       - "character_ranking.json"
+      - "mod_profiles.json"
   workflow_dispatch:
     inputs:
       target:
@@ -19,7 +20,7 @@ on:
         type: string
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   analyze:
@@ -51,3 +52,15 @@ jobs:
           path: |
             mod_analysis.csv
             mod_analysis.md
+
+      - name: Commit generated analysis report to this analysis branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add mod_analysis.csv mod_analysis.md
+          if git diff --cached --quiet; then
+            echo "No report changes to commit."
+            exit 0
+          fi
+          git commit -m "Add Grogu Health Triangle analysis report"
+          git push
