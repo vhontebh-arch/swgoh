@@ -34,13 +34,14 @@ The score is a relative weighting input for chain evaluation, not a claim that a
 
 ## Rank-weighted transfer-chain objective
 
-- The target's complete-build gain is added **without a Rank multiplier**.
-- Each donor's complete-build before/after delta is multiplied by that donor's Rank-derived `importance_score`.
-- Donor deltas are grouped by character before weighting, so multiple PATCH operations for one donor do not multiply its importance repeatedly.
+- Every affected character's complete-build before/after delta, including the target, is multiplied by that character's Rank-derived `importance_score`.
+- Positive and negative deltas use exactly the same rule. There is no special multiplier exemption for the target.
+- Deltas are grouped by character before weighting, so multiple PATCH operations for one character do not multiply its importance repeatedly.
 - The recursive donor-rebuild search compares up to three complete alternatives at each root donor. Child donor rebuilds use their best feasible result; the resulting whole recursive chain is ranked by the sum of Rank-weighted donor deltas.
 - The simpler breadth-first chain fallback also ranks same-depth terminal alternatives by Rank-weighted donor deltas. Exact set-combination preservation is a secondary tie-break.
-- If a donor is missing from Stack Rank, its neutral weight is 1.0. The target is never included in the donor weighting.
-- The final user report displays both the ordinary unweighted roster balance and the Rank-weighted balance. The recommendation status uses the Rank-weighted balance.
+- If an affected character is missing from Stack Rank, its neutral weight is 1.0.
+- The recursive donor-branch search compares alternatives by weighted donor impact. For a fixed target mod, the target contribution is constant across those donor alternatives, so weighting it symmetrically does not change their relative order. The account-level result and comparisons between target improvements do include the target's Rank weight.
+- The final user report displays both the ordinary unweighted roster balance and the fully Rank-weighted balance, including a separate weighted target contribution. The recommendation status uses the fully Rank-weighted balance.
 
 This is a bounded search, not an exhaustive search of every physically possible mod permutation. It deliberately limits recursive alternative exploration to keep runtime manageable.
 
