@@ -4,9 +4,9 @@ from pathlib import Path
 from character_ranking import DEFAULT_MAPPING, EXPECTED_COLUMNS, SOURCE_NAME, build_payload, get_character_rank, load_base_id_mapping, load_stack_rank, rank_characters, rank_importance_score
 
 def tsv(rows):
-    lines=["\\t".join(EXPECTED_COLUMNS)]
-    lines.extend("\\t".join(str(v) for v in row) for row in rows)
-    return "\\n".join(lines)+"\\n"
+    lines=["\t".join(EXPECTED_COLUMNS)]
+    lines.extend("\t".join(str(v) for v in row) for row in rows)
+    return "\n".join(lines)+"\n"
 
 def row(rank,name,final_tier,base_tier=None,synergy=0,omicron=0):
     values={"Rank":rank,"Character":name,"Sort Score":"5.00","SubSort Score":"12.1000","Final Tier":final_tier,"Base Tier":base_tier if base_tier is not None else final_tier,"Synergy Enhancement":synergy,"Omicron Boost":omicron,"Omicron Synergy Boost":0,"Relic Gear Level":"13.3","Ability Score":0}
