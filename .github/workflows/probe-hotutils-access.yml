@@ -17,6 +17,17 @@ jobs:
           python - <<'PY'
           import json, re, urllib.request
           from html.parser import HTMLParser
+
+          class Tags(HTMLParser):
+              def __init__(self):
+                  super().__init__()
+                  self.scripts = []
+              def handle_starttag(self, tag, attrs):
+                  if tag == "script":
+                      d = dict(attrs)
+                      if d.get("src"):
+                          self.scripts.append(d["src"])
+
           url = "https://players.hotutils.com/units/ADMIRALACKBAR"
           req = urllib.request.Request(url, headers={
               "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/131.0.0.0 Safari/537.36",
@@ -28,17 +39,20 @@ jobs:
               with urllib.request.urlopen(req, timeout=40) as response:
                   body = response.read()
                   html = body.decode("utf-8", "replace")
+                  tags = Tags()
+                  tags.feed(html)
+                  title_match = re.search(r"<title[^>]*>(.*?)</title>", html, re.I|re.S)
                   result.update({
                       "status": response.status,
                       "final_url": response.geturl(),
                       "content_type": response.headers.get("Content-Type"),
                       "bytes": len(body),
-                      "has_players_text": bool(re.search(r"players", html, re.I)),
-                      "has_ackbar_text": bool(re.search(r"admiral ackbar", html, re.I)),
+                      "has_players_text": bool(re.search("players", html, re.I)),
+                      "has_ackbar_text": bool(re.search("admiral ackbar", html, re.I)),
                       "has_challenge_marker": any(x in html.lower() for x in ["cloudflare", "just a moment", "checking your browser"]),
-                      "title": (re.search(r"<title[^>]*>(.*?)</title>", html, re.I|re.S).group(1).strip() if re.search(r"<title[^>]*>(.*?)</title>", html, re.I|re.S) else None),
-                      "script_sources": re.findall(r'<script[^>]+src=["\\']([^"\\']+)', html, re.I),
-                      "api_like_strings": sorted(set(re.findall(r'["\\']([^"\\']*(?:/api/|graphql|players?)[^"\\']*)["\\']', html, re.I)))[:100],
+                      "title": title_match.group(1).strip() if title_match else None,
+                      "script_sources": tags.scripts,
+                      "api_like_strings": sorted(set(re.findall(r'"([^"]*(?:/api/|graphql|players?)[^"]*)"', html, re.I)))[:100],
                       "html_excerpt": html[:12000],
                   })
           except Exception as e:
