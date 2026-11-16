@@ -1,100 +1,70 @@
 # SWGOH Character Importance Ranking
 
-Standalone character-ranking component. It does not import or depend on the mod
-optimizer. Any script can import `rank_characters` / `get_character_rank`,
-or consume the generated JSON file.
+This experimental component imports the personalized **Stack Rank** export for
+ally code `972-824-625`. Stack Rank is the only source used to assess character
+importance in this branch. No SWGOH.GG relic counts, release-age cohorts,
+HotUtils usage, GAC-only ranking, or popularity proxy is mixed into the result.
 
-## Input
+## Source snapshot
 
-CSV required columns:
+- Raw input: `data/stack_rank.tsv` (313 character rows; original columns retained).
+- Generated output: `character_ranking.json`.
+- Source page: [Stack Rank](https://swgoh.spineless.net/stackrank?omicronGac=true&omicronTw=true&omicronTb=true&omicronRaids=true&omicronConquest=true&allyCode=972824625&showFullDetails=true)
+- Export settings: Omicron Boost enabled for GAC, Territory War, Territory Battle,
+  Raids and Conquest; full details enabled.
+- The snapshot in this repository was supplied on 2026-11-16.
 
-- `baseId`
-- `name`
-- `global_relic_r5_plus_players`
+Stack Rank is roster-personalized. Do not replace its `Final Tier` values with
+base tiers from a public character list or another dataset.
 
-Optional count columns:
+## Interpretation
 
-- `global_relic_r7_plus_players`
-- `global_relic_r9_plus_players`
+1. `Final Tier` is the primary importance measure. Lower tier means greater
+   importance (tier 1 is highest; tier 19 is lowest).
+2. `Rank` is the original overall position from the source and is retained as
+   a secondary ordering value. It is not the same as `Final Tier`.
+3. `importance_score = 20 - final_tier` is a simple inverse representation;
+   it does not add another signal.
+4. `Base Tier`, `Synergy Enhancement`, `Omicron Boost`,
+   `Omicron Synergy Boost`, `Relic Gear Level` and `Ability Score` are
+   retained for audit. They are not scored a second time because their effects
+   are already represented in `Final Tier`.
+5. `Sort Score` and `SubSort Score` are retained as source sort metadata,
+   not independent importance signals.
 
-Optional `release_date` column (ISO `YYYY-MM-DD`). Alternatively provide
-metadata JSON keyed by baseId:
+The ranking module is standalone. It does not yet map every display name to a
+game `baseId`, and it is not connected to `mod_analyzer.py` or
+`protected_owners.json`. No mod protection behavior changes in this branch.
 
-```json
-{
-  "characters": {
-    "50RT": {"release_date": "2024-01-01"}
-  }
-}
-```
+## Refreshing the snapshot
 
-The input is deliberately a neutral contract: it can be exported by the
-existing SWGOH data pipeline or assembled by a future collector. The ranking
-module does not fetch data and does not modify source data.
+The Stack Rank page is dynamic and no supported public export endpoint has
+been established. Therefore refresh is intentionally manual:
 
-## Scoring
-
-1. Convert each available relic-tier count into a percentile across the
-   supplied character population (ties receive a mid-rank).
-2. Combine available tiers using weights R5+ 50%, R7+ 30%, R9+ 20%.
-   Missing tiers are ignored and the remaining weights are renormalized.
-3. Compare that combined score with characters released within +/- 365 days.
-   The final score is 55% global standing + 45% age-cohort standing.
-4. If fewer than five dated peers exist, age adjustment is omitted for that
-   character; the output explicitly reports this.
-
-This intentionally balances two signals: established broad usage remains
-important, but a recent character can rank highly relative to its release
-cohort instead of being automatically buried by older characters.
-
-## Run
+1. Open the source URL above with the same ally code and all five Omicron
+   Boost options enabled.
+2. Export/copy the complete table including all columns.
+3. Replace `data/stack_rank.tsv` with the tab-delimited export.
+4. Regenerate `character_ranking.json` and run the tests:
 
 ```bash
-python character_ranking.py --input optimization_status.csv --metadata character_release_dates.json
+python character_ranking.py --input data/stack_rank.tsv --output character_ranking.json
+python -m unittest discover -s tests -p "test_character_ranking.py" -v
 ```
 
-Output: `character_ranking.json` (versioned schema).
+5. Commit both the raw snapshot and generated JSON to
+   `feature/character-importance-ranking`.
 
-## Import from another script
+The workflow validates the committed snapshot and generated output; it does not
+pretend to fetch fresh data from the website. No automated website scraping is
+configured.
+
+## Python interface
 
 ```python
-from character_ranking import load_character_data, rank_characters, get_character_rank
+from character_ranking import load_stack_rank, rank_characters, get_character_rank
 
-rows = load_character_data("character_counts.csv", "character_release_dates.json")
-ranking = rank_characters(rows)
-fifty_rt = get_character_rank(ranking, "50RT")
+rows = load_stack_rank("data/stack_rank.tsv")
+importance_order = rank_characters(rows)
+grogu = get_character_rank(rows, "Grogu & Anzellans")
 ```
-
-## Important limitations of the first version
-
-- The currently available dataset contains R5+ counts only. R7+/R9+ are
-  supported but do not contribute until the upstream data supplies them.
-- Release dates must be supplied as metadata. Unknown dates fall back to the
-  global score and are marked as not age-adjusted.
-- The weights and 365-day cohort window are explicit defaults, not claims of
-  objective truth. They should be evaluated against a sample of old and new
-  characters before the ranking is used to protect donors automatically.
-
-
-## Automated live data refresh
-
-`update_character_ranking.py` downloads:
-
-- SWGOH.GG Relic Player Data (all-player population)
-- SWGOH.GG Unit Releases
-- canonical Comlink game data and ENG_US localization from the `optimizer-data` branch
-
-It joins SWGOH.GG rows to game `baseId` values using the localized unit names,
-then derives cumulative relic populations:
-
-- R5+ = R5 + R6 + R7 + R8 + R9 + R10
-- R7+ = R7 + R8 + R9 + R10
-- R9+ = R9 + R10
-
-The refresh workflow runs the tests, validates the source joins and monotonic
-counts, then publishes `character_counts.csv`, `character_release_dates.json`
-and `character_ranking.json` on this feature branch. It does not touch
-`optimizer-v2` or the optimizer code.
-
-Rows without a known release date (launch-era units) use the global score.
-Future releases are excluded until they appear in relic-player data.

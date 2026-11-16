@@ -1,0 +1,314 @@
+Rank	Character	Sort Score	SubSort Score	Final Tier	Base Tier	Synergy Enhancement	Omicron Boost	Omicron Synergy Boost	Relic Gear Level	Ability Score
+1	Rey	2.00	1.1000	2	2	0	0	0	13.3	0
+2	Admiral Piett	5.00	12.1000	5	8	3	0	0	13.3	0
+3	Commander Luke Skywalker	5.00	12.4000	5	8	3	0	0	13.2	0
+4	C-3PO	5.00	12.7000	5	8	3	0	0	13.1	0
+5	Padmé Amidala	5.00	12.7000	5	8	3	0	0	13.1	0
+6	Chewbacca	5.00	12.7000	5	8	3	0	0	13.1	0
+7	General Kenobi	5.00	12.7000	5	8	3	0	0	13.1	0
+8	Emperor Palpatine	5.00	13.1000	6	8	2	0	1	13.3	0
+9	Mara Jade, The Emperor's Hand	5.00	13.4000	6	8	2	1	0	13.2	0
+10	Jedi Knight Revan	6.00	5.4000	6	6	0	0	0	13.2	0
+11	Jedi Knight Anakin	6.00	13.7000	6	8	2	0	0	13.1	0
+12	Darth Vader	6.00	14.1000	6	9	3	0	0	13.3	0
+13	Geonosian Brood Alpha	6.00	14.7000	7	8	1	0	1	13.1	0
+14	Grand Admiral Thrawn	7.00	6.4000	7	7	0	0	0	13.2	0
+15	Hermit Yoda	7.00	6.7000	7	7	0	0	0	13.1	0
+16	Ben Solo	7.00	13.4000	5	9	4	1	0	13.2	3
+17	Bossk	7.00	14.4000	7	8	1	0	0	13.2	0
+18	Dash Rendar	7.00	14.4000	7	8	1	0	0	13.2	0
+19	BB-8	7.00	16.1000	7	10	3	0	0	13.3	0
+20	R2-D2	7.00	16.7000	7	10	3	0	0	13.1	0
+21	Captain Rex	7.00	17.0000	7	10	3	0	0	13	0
+22	Ninth Sister	7.00	18.1000	8	11	3	0	1	13.3	0
+23	Rey (Jedi Training)	7.00	18.1000	7	12	5	0	0	13.3	0
+24	Maul	8.00	4.4000	5	5	0	0	0	13.2	3
+25	Commander Ahsoka Tano	8.00	4.4000	5	5	0	0	0	13.2	3
+26	Darth Malgus	8.00	5.4000	6	6	0	1	0	13.2	3
+27	B2 Super Battle Droid	8.00	7.4000	8	8	0	0	0	13.2	0
+28	Enfys Nest	8.00	7.4000	8	8	0	0	0	13.2	0
+29	Shaak Ti	8.00	7.7000	8	8	0	0	0	13.1	0
+30	Grand Master Yoda	8.00	8.0000	8	8	0	0	0	13	0
+31	Wampa	8.00	10.7000	11	11	0	3	0	13.1	0
+32	Han Solo	8.00	16.0000	5	8	3	0	0	12	0
+33	Threepio & Chewie	8.00	17.0000	8	9	1	0	0	13	0
+34	Kelleran Beq	8.00	18.0000	8	10	2	0	0	13	0
+35	Obi-Wan Kenobi (Old Ben)	8.00	18.0000	8	10	2	0	0	13	0
+36	Ahsoka Tano (Snips)	8.00	18.4000	8	11	3	0	0	13.2	0
+37	Greef Karga	8.00	19.0000	8	11	3	0	0	13	0
+38	Mon Mothma	8.00	19.0000	8	11	3	0	0	13	0
+39	The Mandalorian	8.00	19.0000	8	11	3	0	0	13	0
+40	The Mandalorian (Beskar Armor)	8.00	19.0000	8	11	3	0	0	13	0
+41	Fennec Shand	8.00	19.0000	8	11	3	0	0	13	0
+42	Kuiil	8.00	19.0000	8	11	3	0	0	13	0
+43	IG-11	8.00	19.0000	8	11	3	0	0	13	0
+44	Hondo Ohnaka	8.00	19.4000	9	11	2	1	0	13.2	0
+45	Finn	8.00	19.4000	9	11	2	1	0	13.2	0
+46	Grand Moff Tarkin	8.00	20.4000	9	12	3	1	0	13.2	0
+47	Geonosian Soldier	8.00	22.4000	9	14	5	0	1	13.2	0
+48	Stormtrooper Han	8.00	23.0000	9	14	5	0	1	13	0
+49	Princess Leia	8.00	23.0000	9	14	5	0	1	13	0
+50	Bastila Shan	9.00	17.0000	6	8	2	0	0	12	0
+51	Kyle Katarn	9.00	20.4000	9	12	3	0	0	13.2	0
+52	Mace Windu	9.00	21.0000	9	12	3	0	0	13	0
+53	Cara Dune	9.00	21.0000	9	12	3	0	0	13	0
+54	CX-2	9.00	21.4000	10	12	2	1	0	13.2	0
+55	Rebel Officer Leia Organa	9.00	24.4000	10	15	5	1	0	13.2	0
+56	Hera Syndulla	9.00	25.4000	10	16	6	1	0	13.2	0
+57	Master Qui-Gon	10.00	10.0000	10	10	0	0	0	13	0
+58	Resistance Hero Poe	10.00	17.4000	7	11	4	0	0	13.2	3
+59	Resistance Hero Finn	10.00	17.4000	7	11	4	0	0	13.2	3
+60	Disguised Clone Trooper	10.00	21.4000	10	12	2	0	0	13.2	0
+61	Temple Guard	10.00	21.4000	10	12	2	0	0	13.2	0
+62	RC-1262 "Scorch"	10.00	21.4000	10	12	2	0	0	13.2	0
+63	Amilyn Holdo	10.00	21.4000	10	12	2	0	0	13.2	0
+64	Poggle the Lesser	10.00	22.0000	8	11	3	1	0	12	0
+65	Geonosian Spy	10.00	22.0000	8	11	3	0	1	12	0
+66	Dengar	10.00	22.4000	10	13	3	0	0	13.2	0
+67	Seventh Sister	10.00	23.1000	11	13	2	1	0	13.3	0
+68	Kanan Jarrus	10.00	23.4000	10	14	4	0	0	13.2	0
+69	Ezra Bridger	10.00	23.4000	10	14	4	0	0	13.2	0
+70	BT-1	10.00	24.4000	11	14	3	1	0	13.2	0
+71	0-0-0	10.00	24.4000	11	14	3	1	0	13.2	0
+72	Captain Han Solo	10.00	24.4000	10	15	5	0	0	13.2	0
+73	Iden Versio	10.00	33.0000	7	11	4	0	0	8	3
+74	Jar Jar Binks	11.00	7.4000	8	8	0	0	0	13.2	3
+75	Darth Revan	11.00	8.0000	5	5	0	0	0	12	3
+76	50R-T	11.00	10.1000	11	11	0	0	0	13.3	0
+77	Nute Gunray	11.00	10.7000	11	11	0	0	0	13.1	0
+78	Krrsantan	11.00	11.0000	11	11	0	0	0	13	0
+79	Bastila Shan (Fallen)	11.00	11.0000	8	8	0	0	0	12	0
+80	Darth Vader (Duel's End)	11.00	16.0000	5	8	3	0	0	12	3
+81	Jango Fett	11.00	19.0000	8	11	3	0	0	13	3
+82	B1 Battle Droid	11.00	20.4000	8	13	5	0	0	13.2	3
+83	Jolee Bindo	11.00	22.0000	8	11	3	0	0	12	0
+84	Darth Maul	11.00	22.7000	11	12	1	0	0	13.1	0
+85	Sun Fac	11.00	23.0000	9	11	2	0	1	12	0
+86	Fifth Brother	11.00	23.1000	11	13	2	0	0	13.3	0
+87	Eighth Brother	11.00	23.1000	11	13	2	0	0	13.3	0
+88	Stormtrooper Luke	11.00	26.0000	9	14	5	1	0	12	0
+89	Second Sister	11.00	26.4000	12	15	3	1	1	13.2	0
+90	Garazeb "Zeb" Orrelios	11.00	27.4000	11	17	6	0	0	13.2	0
+91	Sabine Wren	11.00	27.7000	11	17	6	0	0	13.1	0
+92	General Grievous	12.00	8.4000	9	9	0	0	0	13.2	3
+93	Depa Billaba	12.00	11.4000	12	12	0	0	0	13.2	0
+94	Darth Talon	12.00	11.4000	12	12	0	0	0	13.2	0
+95	Padawan Sabine Wren	12.00	12.0000	12	12	0	0	0	13	0
+96	Visas Marr	12.00	12.0000	12	12	0	0	0	13	0
+97	Morgan Elsbeth	12.00	12.0000	9	9	0	0	0	12	0
+98	IG-100 MagnaGuard	12.00	20.4000	9	12	3	0	0	13.2	3
+99	Zaalbar	12.00	21.4000	9	13	4	0	0	13.2	3
+100	Boss Nass	12.00	26.4000	13	14	1	1	0	13.2	0
+101	Darth Sidious	12.00	27.7000	13	15	2	1	0	13.1	0
+102	Chopper	12.00	28.4000	12	17	5	0	0	13.2	0
+103	Shin Hati	13.00	9.7000	10	10	0	0	0	13.1	3
+104	Grand Inquisitor	13.00	10.0000	7	7	0	0	0	12	3
+105	Droideka	13.00	12.4000	13	13	0	0	0	13.2	0
+106	Cal Kestis	13.00	14.0000	11	11	0	1	0	12	0
+107	Admiral Ackbar	13.00	14.0000	14	14	0	1	0	13	0
+108	Bo-Katan Kryze	13.00	21.0000	10	11	1	0	0	13	3
+109	CC-1119 "Appo"	13.00	21.4000	10	12	2	0	0	13.2	3
+110	Scout Trooper	13.00	22.0000	10	10	0	0	0	9	3
+111	Rey (Scavenger)	13.00	27.1000	13	15	2	0	0	13.3	0
+112	Poe Dameron	13.00	27.4000	13	15	2	0	0	13.2	0
+113	Resistance Trooper	13.00	27.4000	13	15	2	0	0	13.2	0
+114	Lando Calrissian	13.00	27.7000	13	15	2	0	0	13.1	0
+115	Gungan Boomadier	13.00	28.4000	14	15	1	1	0	13.2	0
+116	Vandor Chewbacca	14.00	10.4000	11	11	0	0	0	13.2	0
+117	Sith Marauder	14.00	10.4000	11	11	0	0	0	13.2	0
+118	Kylo Ren (Unmasked)	14.00	11.0000	8	8	0	0	0	12	3
+119	CT-7567 "Rex"	14.00	11.0000	8	8	0	0	0	12	3
+120	Count Dooku	14.00	11.0000	11	11	0	0	0	13	3
+121	Veteran Smuggler Han Solo	14.00	11.0000	11	11	0	0	0	13	3
+122	Boba Fett	14.00	13.1000	14	14	0	0	0	13.3	0
+123	IG-88	14.00	13.4000	14	14	0	0	0	13.2	0
+124	Snowtrooper	14.00	13.7000	14	14	0	0	0	13.1	0
+125	Asajj Ventress (Dark Disciple)	14.00	14.0000	11	11	0	0	0	12	0
+126	Barriss Offee	14.00	14.0000	8	8	0	0	0	11	3
+127	Canderous Ordo	14.00	14.0000	11	11	0	0	0	12	0
+128	Darth Malak	14.00	17.0000	5	5	0	0	0	9	3
+129	The Armorer	14.00	17.4000	8	10	2	0	0	13.2	3
+130	ARC Trooper	14.00	18.4000	8	11	3	0	0	13.2	3
+131	Starkiller	14.00	20.0000	5	5	0	0	0	8	0
+132	Cere Junda	14.00	22.0000	8	11	3	0	0	12	3
+133	Royal Guard	14.00	28.0000	11	14	3	0	0	12	0
+134	Cad Bane	14.00	28.0000	11	14	3	0	0	12	0
+135	Sana Starros	14.00	28.4000	14	15	1	0	0	13.2	0
+136	Gungan Phalanx	14.00	28.4000	14	15	1	0	0	13.2	0
+137	Captain Tarpals	14.00	30.4000	15	16	1	1	0	13.2	0
+138	Cinta Kaz	15.00	11.4000	12	12	0	0	0	13.2	0
+139	General Syndulla	15.00	12.0000	12	12	0	0	0	13	3
+140	Yoda (Dark Side Vision)	15.00	12.0000	9	9	0	0	0	12	3
+141	Dark Trooper	15.00	12.0000	9	9	0	0	0	12	3
+142	The Ronin	15.00	12.0000	9	9	0	0	0	12	3
+143	TIE Fighter Pilot	15.00	14.4000	15	15	0	0	0	13.2	0
+144	First Order SF TIE Pilot	15.00	14.7000	15	15	0	0	0	13.1	0
+145	Resistance Pilot	15.00	14.7000	15	15	0	0	0	13.1	0
+146	Range Trooper	15.00	15.0000	15	15	0	0	0	13	0
+147	Mission Vao	15.00	16.0000	13	13	0	1	0	12	0
+148	Ahsoka Tano (Fulcrum)	15.00	18.0000	12	12	0	3	0	11	3
+149	Savage Opress	15.00	18.0000	12	12	0	0	0	11	0
+150	STAP	15.00	22.4000	9	14	5	0	0	13.2	3
+151	Saw Gerrera	15.00	25.0000	10	12	2	1	0	12	3
+152	Inquisitor Barriss	15.00	28.0000	10	15	5	1	0	12	3
+153	Juhani	15.00	29.0000	12	14	2	0	0	12	0
+154	Bistan	15.00	32.0000	12	17	5	0	0	12	0
+155	Biggs Darklighter	15.00	32.0000	12	14	2	0	0	11	0
+156	Darth Traya	16.00	13.0000	10	10	0	0	0	12	3
+157	Mara Jade Skywalker	16.00	13.0000	10	10	0	0	0	12	3
+158	Night Trooper	16.00	16.0000	10	10	0	0	0	11	3
+159	Captain Enoch	16.00	16.0000	10	10	0	0	0	11	0
+160	Death Trooper (Peridea)	16.00	16.0000	10	10	0	0	0	11	3
+161	Carth Onasi	16.00	17.0000	14	14	0	1	0	12	0
+162	First Order Officer	16.00	19.0000	13	13	0	0	0	11	0
+163	Paz Vizsla	16.00	20.4000	10	11	1	0	0	13.2	3
+164	Doctor Aphra	16.00	26.0000	5	9	4	1	0	9	6
+165	Great Mothers	16.00	28.0000	7	9	2	0	0	9	3
+166	Luthen Rael	16.00	30.0000	7	11	4	0	0	9	3
+167	Wedge Antilles	16.00	34.0000	13	15	2	0	0	11	0
+168	Pao	16.00	39.0000	10	17	7	0	0	9	0
+169	Jawa Scavenger	16.00	39.0000	10	17	7	0	0	9	0
+170	Admiral Raddus	17.00	10.4000	11	11	0	0	0	13.2	3
+171	Kleya Marki	17.00	11.7000	12	12	0	1	0	13.1	0
+172	Colonel Starck	17.00	13.4000	14	14	0	0	0	13.2	3
+173	Veteran Smuggler Chewbacca	17.00	13.7000	14	14	0	0	0	13.1	3
+174	Merrin	17.00	14.0000	11	11	0	0	0	12	3
+175	Asajj Ventress	17.00	14.0000	11	11	0	0	0	12	3
+176	Huyang	17.00	14.0000	14	14	0	0	0	13	3
+177	Hunter	17.00	14.0000	14	14	0	0	0	13	0
+178	Jyn Erso	17.00	17.0000	14	14	0	0	0	12	0
+179	Luke Skywalker (Farmboy)	17.00	17.0000	17	17	0	0	0	13	0
+180	Darth Sion	17.00	17.0000	11	11	0	0	0	11	3
+181	Aayla Secura	17.00	17.0000	14	14	0	0	0	12	0
+182	L3-37	17.00	17.0000	11	11	0	0	0	11	0
+183	Chief Chirpa	17.00	17.0000	14	14	0	0	0	12	0
+184	General Veers	17.00	17.0000	11	11	0	0	0	11	3
+185	Cassian Andor	17.00	17.0000	14	14	0	0	0	12	0
+186	Wicket	17.00	17.0000	14	14	0	0	0	12	0
+187	Chief Nebit	17.00	17.0000	17	17	0	0	0	13	0
+188	Ewok Elder	17.00	17.0000	14	14	0	0	0	12	0
+189	First Order Executioner	17.00	17.0000	14	14	0	0	0	12	0
+190	Third Sister	17.00	20.0000	5	5	0	0	0	8	3
+191	Jedi Knight Luke Skywalker	17.00	20.0000	5	5	0	0	0	8	3
+192	Wat Tambor	17.00	20.0000	8	8	0	0	0	9	3
+193	Death Trooper	17.00	20.0000	14	14	0	0	0	11	0
+194	Captain Phasma	17.00	20.0000	14	14	0	0	0	11	0
+195	Jawa Engineer	17.00	20.0000	14	14	0	0	0	11	0
+196	Sith Assassin	17.00	20.0000	14	14	0	0	0	11	0
+197	Moff Gideon	17.00	22.0000	5	8	3	0	0	10	3
+198	Sith Empire Trooper	17.00	23.0000	11	11	0	0	0	9	0
+199	Shoretrooper	17.00	23.0000	11	11	0	0	0	9	0
+200	Aurra Sing	17.00	24.4000	11	14	3	0	0	13.2	3
+201	Dedra Meero	17.00	26.7000	12	15	3	1	0	13.1	0
+202	CT-5555 "Fives"	17.00	28.0000	8	11	3	0	0	10	3
+203	T3-M4	17.00	28.0000	11	14	3	0	0	12	3
+204	Boba Fett, Scion of Jango	17.00	28.0000	8	11	3	0	0	10	3
+205	General Hux	17.00	28.0000	8	11	3	0	0	10	3
+206	Yoda & Chewie	17.00	28.0000	11	14	3	0	0	12	3
+207	Padawan Obi-Wan	17.00	30.0000	8	10	2	0	0	9	3
+208	Clone Wars Chewbacca	17.00	30.4000	14	17	3	0	0	13.2	3
+209	CT-21-0408 "Echo"	17.00	31.0000	8	11	3	0	0	9	3
+210	Kylo Ren	17.00	31.0000	8	11	3	0	0	9	3
+211	K-2SO	17.00	37.0000	14	17	3	0	0	11	0
+212	Baze Malbus	17.00	37.0000	11	14	3	0	0	9	0
+213	Chirrut Îmwe	17.00	37.0000	11	14	3	0	0	9	0
+214	Hoth Rebel Scout	17.00	37.0000	11	17	6	0	0	10	0
+215	Dathcha	17.00	40.0000	11	17	6	0	0	9	0
+216	Scarif Rebel Pathfinder	17.00	40.0000	11	17	6	0	0	9	0
+217	Sith Trooper	18.00	11.4000	12	12	0	0	0	13.2	3
+218	Vel Sartha	18.00	11.7000	12	12	0	0	0	13.1	0
+219	Major Partagaz	18.00	14.4000	15	15	0	0	0	13.2	0
+220	KX Security Droid	18.00	14.4000	15	15	0	0	0	13.2	0
+221	Tarfful	18.00	18.0000	15	15	0	0	0	12	0
+222	Captain Drogan	18.00	18.0000	9	9	0	0	0	10	3
+223	Director Krennic	18.00	18.0000	15	15	0	0	0	12	0
+224	Imperial Probe Droid	18.00	18.0000	15	15	0	0	0	12	0
+225	Jedi Knight Cal Kestis	18.00	21.0000	9	9	0	0	0	9	3
+226	Nightsister Spirit	18.00	24.0000	12	12	0	0	0	9	0
+227	Princess Kneesaa	18.00	26.4000	12	15	3	0	0	13.2	3
+228	Embo	18.00	29.0000	9	11	2	0	0	10	3
+229	Zam Wesell	18.00	31.0000	12	16	4	0	0	12	3
+230	Skiff Guard (Lando Calrissian)	19.00	12.4000	13	13	0	0	0	13.2	3
+231	Omega (Fugitive)	19.00	13.4000	14	14	0	1	0	13.2	3
+232	Ugnaught	19.00	18.4000	19	19	0	0	0	13.2	0
+233	Zorii Bliss	19.00	22.0000	7	12	5	0	0	12	3
+234	Wrecker	19.00	31.0000	7	12	5	0	0	9	3
+235	Brutus	20.00	13.4000	14	14	0	0	0	13.2	3
+236	First Order Stormtrooper	20.00	13.4000	14	14	0	0	0	13.2	3
+237	Tusken Chieftain	20.00	14.4000	15	15	0	1	0	13.2	3
+238	Rose Tico	20.00	16.4000	17	17	0	0	0	13.2	3
+239	General Skywalker	20.00	17.0000	5	5	0	0	0	9	6
+240	HK-47	20.00	17.0000	14	14	0	0	0	12	3
+241	Greedo	20.00	17.0000	14	14	0	0	0	12	3
+242	IG-90	20.00	17.0000	14	14	0	0	0	12	3
+243	First Order TIE Pilot	20.00	17.0000	14	14	0	0	0	12	3
+244	Boushh (Leia Organa)	20.00	18.0000	9	9	0	1	0	10	3
+245	Taron Malicos	20.00	20.0000	5	5	0	0	0	8	6
+246	Echo	20.00	20.0000	8	8	0	0	0	9	3
+247	Teebo	20.00	20.0000	17	17	0	0	0	12	0
+248	Darth Nihilus	20.00	23.0000	11	11	0	0	0	9	3
+249	Mother Talzin	20.00	23.0000	11	11	0	0	0	9	3
+250	Qui-Gon Jinn	20.00	23.0000	14	14	0	0	0	10	0
+251	Old Daka	20.00	23.0000	11	11	0	0	0	9	3
+252	Jawa	20.00	23.0000	17	17	0	0	0	11	0
+253	CC-2224 "Cody"	20.00	26.0000	14	14	0	0	0	9	0
+254	Hoth Rebel Soldier	20.00	43.0000	14	17	3	0	0	9	0
+255	Captain Ithano	21.00	14.4000	15	15	0	0	0	13.2	3
+256	Hunter (Mercenary)	21.00	14.4000	15	15	0	0	0	13.2	3
+257	Paploo	21.00	18.0000	15	15	0	0	0	12	3
+258	Logray	21.00	18.0000	15	15	0	0	0	12	3
+259	Gar Saxon	21.00	21.0000	18	18	0	0	0	12	0
+260	Lobot	21.00	21.0000	18	18	0	0	0	12	0
+261	Ewok Scout	21.00	21.0000	18	18	0	0	0	12	0
+262	IG-86 Sentinel Droid	21.00	21.0000	18	18	0	0	0	12	0
+263	Qi'ra	21.00	24.0000	12	12	0	0	0	9	3
+264	Talia	21.00	24.0000	15	15	0	0	0	10	0
+265	Magmatrooper	21.00	24.0000	15	15	0	0	0	10	0
+266	Nightsister Acolyte	21.00	24.0000	15	15	0	0	0	10	0
+267	Jedi Consular	21.00	24.0000	18	18	0	0	0	11	0
+268	Young Lando Calrissian	21.00	27.0000	15	15	0	0	0	9	0
+269	IG-12 & Grogu	21.00	34.0000	9	10	1	0	0	8	3
+270	Grogu & Anzellans	22.00	13.0000	10	10	0	0	0	12	3
+271	Captain Silvo	22.00	15.4000	16	16	0	0	0	13.2	3
+272	Vane	22.00	15.4000	16	16	0	0	0	13.2	3
+273	Captain Carson Teva	22.00	20.0000	7	10	3	0	0	12	3
+274	Dark Trooper Moff Gideon	22.00	22.0000	10	10	0	0	0	9	6
+275	Marrok	22.00	22.0000	10	10	0	0	0	9	3
+276	Coruscant Underworld Police	22.00	25.0000	19	19	0	0	0	11	0
+277	Tusken Raider	22.00	29.0000	17	17	0	1	0	9	0
+278	Zuckuss	23.00	11.0000	11	11	0	0	0	13	3
+279	Nightsister Zombie	23.00	26.0000	14	14	0	0	0	9	3
+280	URoRRuR'R'R	23.00	26.0000	17	17	0	0	0	10	0
+281	Clone Sergeant - Phase I	23.00	26.0000	17	17	0	0	0	10	0
+282	Tusken Shaman	23.00	26.0000	17	17	0	0	0	10	0
+283	Luminara Unduli	23.00	29.0000	17	17	0	0	0	9	0
+284	Jedi Knight Guardian	23.00	29.0000	17	17	0	0	0	9	0
+285	Zeb Orrelios (New Republic Pilot)	24.00	13.0000	10	10	0	1	0	12	3
+286	Wrecker (Mercenary)	24.00	21.0000	15	15	0	0	0	11	3
+287	Crosshair (Scarred)	24.00	21.0000	15	15	0	0	0	11	3
+288	Bodhi Rook	24.00	21.0000	18	18	0	0	0	12	3
+289	Starkiller (Luke Concept)	24.00	25.0000	9	13	4	0	0	12	3
+290	Omega	24.00	27.0000	15	15	0	0	0	9	3
+291	Tusken Warrior	24.00	27.0000	15	15	0	0	0	9	3
+292	Young Han Solo	24.00	27.0000	15	15	0	0	0	9	3
+293	Kit Fisto	24.00	27.0000	18	18	0	0	0	10	0
+294	Plo Koon	24.00	27.0000	18	18	0	0	0	10	0
+295	Ima-Gun Di	24.00	30.0000	18	18	0	0	0	9	0
+296	Eeth Koth	24.00	30.0000	18	18	0	0	0	9	0
+297	Imperial Super Commando	24.00	30.0000	18	18	0	0	0	9	0
+298	Jedi Master Mace Windu	24.00	34.0000	9	10	1	0	0	8	6
+299	Colonel Ward	25.00	13.0000	10	10	0	0	0	12	3
+300	R5-D4	25.00	13.0000	10	10	0	0	0	12	3
+301	Mob Enforcer	25.00	31.0000	19	19	0	0	0	9	0
+302	4-LOM	26.00	20.0000	11	11	0	0	0	10	3
+303	Tech	26.00	26.0000	14	14	0	0	0	9	3
+304	Stormtrooper	26.00	26.0000	17	17	0	0	0	10	3
+305	Nightsister Initiate	26.00	29.0000	17	17	0	0	0	9	3
+306	Snowtrooper Commander	27.00	15.0000	12	12	0	0	0	12	3
+307	Batcher	27.00	24.0000	15	15	0	0	0	10	3
+308	Ki-Adi-Mundi	27.00	36.0000	9	12	3	0	0	8	3
+309	Kix	28.00	16.0000	16	16	0	0	0	13	3
+310	Gamorrean Guard	28.00	31.0000	19	19	0	0	0	9	3
+311	Jaxxon	29.00	17.0000	14	14	0	0	0	12	3
+312	Stormtrooper (Concept)	30.00	18.0000	15	15	0	0	0	12	3
+313	Quiggold	32.00	26.0000	14	14	0	0	0	9	3
