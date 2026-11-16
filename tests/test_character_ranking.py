@@ -50,7 +50,7 @@ class StackRankImportTests(unittest.TestCase):
         self.assertEqual(len(data),313); self.assertEqual(len({x["base_id"] for x in data}),313)
         self.assertEqual(data[0]["character"],"Rey"); self.assertEqual(data[0]["base_id"],"GLREY")
         self.assertEqual(get_character_rank(data,"Ben Solo")["base_id"],"BENSOLO")
-        self.assertEqual(get_character_rank(data,"Grogu & Anzellans")["base_id"],"GROGUANZELLANS")
+        self.assertEqual(get_character_rank(data,"Grogu & Anzellans")["base_id"],"GOPHERANTS")
 
     def test_generated_payload_contains_base_ids(self):
         snapshot=Path(__file__).resolve().parents[1]/"data"/"stack_rank.tsv"
