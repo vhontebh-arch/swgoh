@@ -40,7 +40,7 @@ def rank_importance_score(rank: int, record_count: int) -> float:
 def load_stack_rank(path: str | Path, mapping_path: str | Path | None = None) -> list[dict[str, Any]]:
     mapping = load_base_id_mapping(mapping_path) if mapping_path else None
     with Path(path).open("r", encoding="utf-8-sig", newline="") as handle:
-        reader = csv.DictReader(handle, delimiter="\\t")
+        reader = csv.DictReader(handle, delimiter="\t")
         if reader.fieldnames != EXPECTED_COLUMNS:
             raise ValueError("Unexpected Stack Rank columns. Expected: " + ", ".join(EXPECTED_COLUMNS))
         result, seen_names, seen_ranks = [], set(), set()
@@ -107,7 +107,7 @@ def main():
     payload=build_payload(args.input,args.mapping)
     if args.expected_count is not None and payload["record_count"]!=args.expected_count:
         raise SystemExit(f"Expected {args.expected_count} records, got {payload['record_count']}")
-    Path(args.output).write_text(json.dumps(payload,ensure_ascii=False,indent=2)+"\\n",encoding="utf-8")
+    Path(args.output).write_text(json.dumps(payload,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
     print(f"Imported {payload['record_count']} Stack Rank characters with baseIds -> {args.output}")
 
 if __name__=="__main__": main()
