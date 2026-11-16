@@ -4,9 +4,12 @@ on:
   push:
     branches:
       - feature/character-importance-ranking
+      - experiment/rank-weighted-chain-selection
     paths:
       - "character_ranking.py"
       - "tests/test_character_ranking.py"
+      - "tests/test_rank_weighted_chain_selection.py"
+      - "mod_analyzer.py"
       - ".github/workflows/test-character-ranking.yml"
   workflow_dispatch:
 
@@ -19,4 +22,6 @@ jobs:
         with:
           python-version: "3.12"
       - name: Run unit tests
-        run: python -m unittest discover -s tests -p "test_character_ranking.py" -v
+        run: python -m unittest discover -s tests -p "test_*ranking*.py" -v
+      - name: Run Rank-weighted chain tests
+        run: python -m unittest discover -s tests -p "test_rank_weighted_chain_selection.py" -v
