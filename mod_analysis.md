@@ -6,9 +6,11 @@
 
 - **Wykonalność fizyczna:** POTWIERDZONA
 - **Walidacja fizyczna całego łańcucha:** POTWIERDZONA
-- **Ocena:** BILANS NIEDODATNI — nie rekomenduję wykonania łańcucha
+- **Ocena:** BILANS RANK NIEDODATNI — nie rekomenduję wykonania łańcucha
 - **Interpretacja:** bilans obejmuje cel i wszystkich dotkniętych dawców, liczony tą samą nieprojekcyjną punktacją pełnego buildu.
-- **Łączny bilans profilu rosteru:** -3.83 pkt
+- **Łączny bilans profilu rosteru:** -2.08 pkt
+- **Bilans ważony Rank (cel i dawcy):** -1.60 pkt
+- **Ważony wkład celu:** +107.51 pkt
 - **Liczba modów docelowych:** 6/6
 
 ## Bilans całej operacji — ta sama punktacja przed/po
@@ -18,13 +20,13 @@ Wynik każdego buildu jest liczony bez projekcji przyszłych rolli i bez założ
 | Postać | Rola w łańcuchu | Wynik przed | Wynik po | Zmiana |
 |---|---|---:|---:|---:|
 | 50RT | CEL | 69.86 | 119.77 | +49.91 |
-| ADMIRALPIETT | DAWCA | 87.03 | 79.89 | -7.13 |
-| STORMTROOPERLUKE | DAWCA | 121.96 | 90.76 | -31.19 |
-| LUKESTARKILLER | DAWCA | 109.49 | 100.62 | -8.87 |
+| ADMIRALPIETT | DAWCA | 87.03 | 81.24 | -5.79 |
+| STORMTROOPERLUKE | DAWCA | 121.96 | 90.23 | -31.73 |
+| LUKESTARKILLER | DAWCA | 109.49 | 101.57 | -7.92 |
 | MARAJADE | DAWCA | 97.00 | 97.01 | +0.01 |
 | EMPERORPALPATINE | DAWCA | 96.39 | 89.84 | -6.56 |
 
-**ŁĄCZNA ZMIANA: -3.83 pkt.**
+**ŁĄCZNA ZMIANA: -2.08 pkt.**
 
 ## Docelowy zestaw — 50RT
 
@@ -86,14 +88,12 @@ Wynik każdego buildu jest liczony bez projekcji przyszłych rolli i bez założ
 
 ## PATCH — uzupełnienie dawców
 
-- **ADMIRALPIETT → STORMTROOPERLUKE:** Arrow / Speed / Speed 32 / secondary: Critical Chance % 9.28%, Potency % 1.53%, Health 1122, Defense % 8.45% / 6★ A lvl15
+- **MAGAZYN → STORMTROOPERLUKE:** Arrow / Speed / Speed 30 / secondary: Offense % 1%, Tenacity % 5.02%, Health 322, Protection 1305 / 5★ A lvl15
 - **MARAJADE → STORMTROOPERLUKE:** Circle / Speed / Health % 5.88% / secondary: Potency % 1.38%, Speed 5, Defense % 4.06%, Health 1024 / 5★ A lvl15
 - **MARAJADE → STORMTROOPERLUKE:** Cross / Speed / Potency % 30% / secondary: Offense 199, Protection 1913, Speed 10, Defense % 5.94% / 6★ A lvl15
 - **LUKESTARKILLER → STORMTROOPERLUKE:** Diamond / Speed / Defense % 20% / secondary: Defense 21, Speed 13, Tenacity % 13.01%, Offense 71 / 6★ A lvl15
 - **MAGAZYN → STORMTROOPERLUKE:** Square / Health / Offense % 5.88% / secondary: Critical Chance % 3.35%, Protection 459, Speed 20, Potency % 1.71% / 5★ A lvl15
 - **MAGAZYN → STORMTROOPERLUKE:** Triangle / Health / Defense % 11.75% / secondary: Speed 15, Offense 33, Health % 0.97%, Defense 4 / 5★ C lvl15
-- **LUKESTARKILLER → ADMIRALPIETT:** Arrow / Speed / Speed 30 / secondary: Offense % 1.02%, Tenacity % 1.66%, Offense 107, Critical Chance % 3.6% / 5★ A lvl15
-- **MAGAZYN → LUKESTARKILLER:** Arrow / Speed / Speed 30 / secondary: Offense % 1%, Tenacity % 5.02%, Health 322, Protection 1305 / 5★ A lvl15
 - **EMPERORPALPATINE → LUKESTARKILLER:** Diamond / Speed / Defense % 20% / secondary: Offense 116, Protection % 5.98%, Health % 5.46%, Speed 16 / 6★ A lvl15
 - **MAGAZYN → EMPERORPALPATINE:** Diamond / Speed / Defense % 11.75% / secondary: Speed 5, Health % 1.53%, Potency % 4.01%, Protection 757 / 5★ C lvl15
 - **MAGAZYN → MARAJADE:** Circle / Speed / Health % 5.88% / secondary: Speed 5, Critical Chance % 1.51%, Health 682, Protection 823 / 5★ D lvl15
@@ -112,7 +112,7 @@ Wynik każdego buildu jest liczony bez projekcji przyszłych rolli i bez założ
 
 ### Uzupełnienie dawców — poziom 1
 
-7. **PATCH — załóż na STORMTROOPERLUKE** mod z ADMIRALPIETT: Arrow / Speed / Speed 32 / secondary: Critical Chance % 9.28%, Potency % 1.53%, Health 1122, Defense % 8.45% / 6★ A lvl15
+7. **PATCH — załóż na STORMTROOPERLUKE** mod z MAGAZYN (dostępny po wcześniejszym kroku): Arrow / Speed / Speed 30 / secondary: Offense % 1%, Tenacity % 5.02%, Health 322, Protection 1305 / 5★ A lvl15
 
 ### Uzupełnienie dawców — poziom 2
 
@@ -136,54 +136,53 @@ Wynik każdego buildu jest liczony bez projekcji przyszłych rolli i bez założ
 
 ### Uzupełnienie dawców — poziom 7
 
-13. **PATCH — załóż na ADMIRALPIETT** mod z LUKESTARKILLER: Arrow / Speed / Speed 30 / secondary: Offense % 1.02%, Tenacity % 1.66%, Offense 107, Critical Chance % 3.6% / 5★ A lvl15
+13. **PATCH — załóż na LUKESTARKILLER** mod z EMPERORPALPATINE: Diamond / Speed / Defense % 20% / secondary: Offense 116, Protection % 5.98%, Health % 5.46%, Speed 16 / 6★ A lvl15
 
 ### Uzupełnienie dawców — poziom 8
 
-14. **PATCH — załóż na LUKESTARKILLER** mod z MAGAZYN (dostępny po wcześniejszym kroku): Arrow / Speed / Speed 30 / secondary: Offense % 1%, Tenacity % 5.02%, Health 322, Protection 1305 / 5★ A lvl15
+14. **PATCH — załóż na EMPERORPALPATINE** mod z MAGAZYN (dostępny po wcześniejszym kroku): Diamond / Speed / Defense % 11.75% / secondary: Speed 5, Health % 1.53%, Potency % 4.01%, Protection 757 / 5★ C lvl15
 
 ### Uzupełnienie dawców — poziom 9
 
-15. **PATCH — załóż na LUKESTARKILLER** mod z EMPERORPALPATINE: Diamond / Speed / Defense % 20% / secondary: Offense 116, Protection % 5.98%, Health % 5.46%, Speed 16 / 6★ A lvl15
+15. **PATCH — załóż na MARAJADE** mod z MAGAZYN (dostępny po wcześniejszym kroku): Circle / Speed / Health % 5.88% / secondary: Speed 5, Critical Chance % 1.51%, Health 682, Protection 823 / 5★ D lvl15
 
 ### Uzupełnienie dawców — poziom 10
 
-16. **PATCH — załóż na EMPERORPALPATINE** mod z MAGAZYN (dostępny po wcześniejszym kroku): Diamond / Speed / Defense % 11.75% / secondary: Speed 5, Health % 1.53%, Potency % 4.01%, Protection 757 / 5★ C lvl15
+16. **PATCH — załóż na MARAJADE** mod z LUKESTARKILLER: Cross / Speed / Potency % 30% / secondary: Defense 15, Health 2082, Health % 3.6%, Speed 19 / 6★ A lvl15
 
 ### Uzupełnienie dawców — poziom 11
 
-17. **PATCH — załóż na MARAJADE** mod z MAGAZYN (dostępny po wcześniejszym kroku): Circle / Speed / Health % 5.88% / secondary: Speed 5, Critical Chance % 1.51%, Health 682, Protection 823 / 5★ D lvl15
+17. **PATCH — załóż na LUKESTARKILLER** mod z ADMIRALPIETT: Cross / Speed / Offense % 5.88% / secondary: Protection 1183, Speed 12, Potency % 1.62%, Tenacity % 3.33% / 5★ A lvl15
 
 ### Uzupełnienie dawców — poziom 12
 
-18. **PATCH — załóż na MARAJADE** mod z LUKESTARKILLER: Cross / Speed / Potency % 30% / secondary: Defense 15, Health 2082, Health % 3.6%, Speed 19 / 6★ A lvl15
-
-### Uzupełnienie dawców — poziom 13
-
-19. **PATCH — załóż na LUKESTARKILLER** mod z ADMIRALPIETT: Cross / Speed / Offense % 5.88% / secondary: Protection 1183, Speed 12, Potency % 1.62%, Tenacity % 3.33% / 5★ A lvl15
-
-### Uzupełnienie dawców — poziom 14
-
-20. **PATCH — załóż na ADMIRALPIETT** mod z MAGAZYN (dostępny po wcześniejszym kroku): Cross / Speed / Health % 5.88% / secondary: Offense 42, Protection 1099, Speed 4, Defense % 0.95% / 5★ D lvl15
+18. **PATCH — załóż na ADMIRALPIETT** mod z MAGAZYN (dostępny po wcześniejszym kroku): Cross / Speed / Health % 5.88% / secondary: Offense 42, Protection 1099, Speed 4, Defense % 0.95% / 5★ D lvl15
 
 Zakładanie moda automatycznie przenosi poprzedni mod ze slotu do magazynu. Wszystkie powyższe kroki zostały sprawdzone na pełnym stanie slotów i magazynu.
 
+## Diagnostyka przeszukiwania wariantów łańcucha
+
+Limit kompletnych wariantów na głównego dawcę: **5**.
+Wyniki poniżej to ważony Rank bilans zmian danego dawcy i jego rekurencyjnych pod-dawców; wyższy wynik jest lepszy.
+
+- **STORMTROOPERLUKE:** sprawdzono 5 kompletnych wariantów; wyniki: -112.9827, -109.0928, -112.7621, -110.5143, -111.6628; najlepszy: -109.0928.
+
 ## Wpływ na postacie-dawców
 
-- **ADMIRALPIETT — wynik pełnego buildu wg profilu:** 87.03 → 79.89 (-7.13 pkt).
-  - Σ modValue modów: 335.6 → 366.2 (+30.6) — surowy wskaźnik jakości modów, nie wynik profilu.
+- **ADMIRALPIETT — wynik pełnego buildu wg profilu:** 87.03 → 81.24 (-5.79 pkt).
+  - Σ modValue modów: 335.6 → 338.3 (+2.7) — surowy wskaźnik jakości modów, nie wynik profilu.
   - Kombinacja setów: Speed + Health (54.2%) → Speed + Health (54.2%).
-  - Zmiana wyniku pełnego buildu po kolejnych PATCH-ach: Square -1.3 pkt; Square -5.8 pkt.
+  - Zmiana wyniku pełnego buildu po kolejnych PATCH-ach: Square -5.8 pkt.
   - ISTOTNY SPADEK wartości modów u dawcy.
-- **STORMTROOPERLUKE — wynik pełnego buildu wg profilu:** 121.96 → 90.76 (-31.19 pkt).
-  - Σ modValue modów: 394.9 → 360.7 (-34.2) — surowy wskaźnik jakości modów, nie wynik profilu.
+- **STORMTROOPERLUKE — wynik pełnego buildu wg profilu:** 121.96 → 90.23 (-31.73 pkt).
+  - Σ modValue modów: 394.9 → 377.1 (-17.8) — surowy wskaźnik jakości modów, nie wynik profilu.
   - Kombinacja setów: Speed + Health (60.1%) → Speed + Health (60.1%).
-  - Zmiana wyniku pełnego buildu po kolejnych PATCH-ach: Square -31.2 pkt; Square +0.0 pkt; Square +0.0 pkt; Square +0.0 pkt; Square +0.0 pkt; Square +0.0 pkt.
+  - Zmiana wyniku pełnego buildu po kolejnych PATCH-ach: Square -31.7 pkt; Square +0.0 pkt; Square +0.0 pkt; Square +0.0 pkt; Square +0.0 pkt; Square +0.0 pkt.
   - ISTOTNY SPADEK wartości modów u dawcy.
-- **LUKESTARKILLER — wynik pełnego buildu wg profilu:** 109.49 → 100.62 (-8.87 pkt).
-  - Σ modValue modów: 384.2 → 390.0 (+5.8) — surowy wskaźnik jakości modów, nie wynik profilu.
+- **LUKESTARKILLER — wynik pełnego buildu wg profilu:** 109.49 → 101.57 (-7.92 pkt).
+  - Σ modValue modów: 384.2 → 401.5 (+17.3) — surowy wskaźnik jakości modów, nie wynik profilu.
   - Kombinacja setów: Speed + Potency (60.5%) → Speed + Potency (60.5%).
-  - Zmiana wyniku pełnego buildu po kolejnych PATCH-ach: Square -1.0 pkt; Square -3.4 pkt; Square -4.5 pkt.
+  - Zmiana wyniku pełnego buildu po kolejnych PATCH-ach: Square -3.4 pkt; Square -4.5 pkt.
   - ISTOTNY SPADEK wartości modów u dawcy.
 - **MARAJADE — wynik pełnego buildu wg profilu:** 97.00 → 97.01 (+0.01 pkt).
   - Σ modValue modów: 351.4 → 353.1 (+1.7) — surowy wskaźnik jakości modów, nie wynik profilu.
