@@ -6,6 +6,9 @@ on:
       - experiment/rank-weighted-chain-selection
     paths:
       - ".github/workflows/run-rank-weighted-mod-analysis.yml"
+      - "mod_analyzer.py"
+      - "character_ranking.py"
+      - "character_ranking.json"
   workflow_dispatch:
     inputs:
       target:
