@@ -1,4 +1,4 @@
-name: Probe HotUtils character data
+name: Probe HotUtils unit coverage
 on:
   workflow_dispatch:
   push:
@@ -12,48 +12,70 @@ jobs:
   probe:
     runs-on: ubuntu-latest
     steps:
-      - name: Test HotUtils Players API
+      - name: Probe catalogue, segments and representative units
         run: |
           python - <<'PY'
-          import json, urllib.request, urllib.error
-          base="https://players.hotutils.com"
-          version="mwiyyicv"
-          endpoints=[
-            "/api/units/ADMIRALACKBAR/players?v="+version,
-            "/api/units/ADMIRALACKBAR/stats?v="+version,
-            "/api/units/ADMIRALACKBAR/top/players?v="+version,
-          ]
-          out=[]
-          for path in endpoints:
-            url=base+path
-            req=urllib.request.Request(url,headers={
-              "User-Agent":"Mozilla/5.0 Chrome/131.0.0.0 Safari/537.36",
-              "Accept":"application/json, text/plain, */*",
-              "Referer":base+"/units/ADMIRALACKBAR",
-              "Origin":base,
-            })
-            item={"url":url}
-            try:
-              with urllib.request.urlopen(req,timeout=40) as r:
-                body=r.read()
-                item.update({"status":r.status,"content_type":r.headers.get("Content-Type"),
-                             "bytes":len(body),"sample":body[:6000].decode("utf-8","replace")})
-                try:
-                  data=json.loads(body)
-                  item["json_type"]=type(data).__name__
-                  if isinstance(data,dict): item["json_keys"]=list(data.keys())
-                  if isinstance(data,list): item["list_length"]=len(data)
-                except Exception: pass
-            except urllib.error.HTTPError as e:
-              item.update({"status":e.code,"error_body":e.read(3000).decode("utf-8","replace")})
-            except Exception as e: item["error"]=repr(e)
-            out.append(item)
-          open("hotutils-api-probe.json","w").write(json.dumps(out,indent=2))
+          import json, time, urllib.request, urllib.error
+          BASE="https://players.hotutils.com"
+          V="mwiyyicv"
+          H={"User-Agent":"Mozilla/5.0 Chrome/131.0.0.0 Safari/537.36","Accept":"application/json, text/plain, */*","Referer":BASE+"/units"}
+          def get(path):
+              req=urllib.request.Request(BASE+"/api"+path+("&" if "?" in path else "?")+"v="+V,headers=H)
+              try:
+                  with urllib.request.urlopen(req,timeout=40) as r:
+                      b=r.read()
+                      try: d=json.loads(b)
+                      except: d={"_raw":b[:1000].decode("utf-8","replace")}
+                      return {"status":r.status,"bytes":len(b),"data":d}
+              except urllib.error.HTTPError as e:
+                  return {"status":e.code,"error":e.read(1000).decode("utf-8","replace")}
+              except Exception as e: return {"error":repr(e)}
+          out={}
+          cat=get("/units")
+          out["catalogue"]={"status":cat.get("status"),"bytes":cat.get("bytes")}
+          d=cat.get("data")
+          if isinstance(d,dict):
+              out["catalogue"]["keys"]=list(d.keys())
+              units=d.get("units",d.get("data",[]))
+          elif isinstance(d,list): units=d
+          else: units=[]
+          out["catalogue"]["count"]=len(units)
+          out["catalogue"]["sample"]=units[:3]
+          ids=[]
+          for u in units:
+              if isinstance(u,dict):
+                  uid=u.get("baseId") or u.get("id") or u.get("unitId")
+                  if uid: ids.append(uid)
+          out["catalogue"]["id_count"]=len(ids)
+          # Representative mix of old, new, GL, support, attacker, ship if catalog contains them.
+          wanted=["ADMIRALACKBAR","GROGUANZELLANS","JARJAR","GRANDMASTERYODA","DARTHVADER","GLREY","GLLEIA","SUPREMELEADERKYLOREN","JEDIKNIGHTLUKE","GENERALSKYWALKER","BB8","C3PO","HERMITYODA","AHSOKATANO","MACEWINDU"]
+          chosen=[x for x in wanted if x in ids]
+          if len(chosen)<10: chosen += [x for x in ids if x not in chosen][:10-len(chosen)]
+          out["representative"]={}
+          for uid in chosen:
+              x=get("/units/"+uid+"/players")
+              z=x.get("data",{}) if isinstance(x.get("data"),dict) else {}
+              out["representative"][uid]={"status":x.get("status"),"bytes":x.get("bytes"),
+                  "available":z.get("available"),"segment":z.get("segment"),"owners":z.get("owners"),
+                  "segmentPlayers":z.get("segmentPlayers"),"computedAt":z.get("computedAt"),
+                  "level_count":sum(i.get("count",0) for i in z.get("levels",[]) if isinstance(i,dict)),
+                  "levelsUnknown":z.get("levelsUnknown"),"rarity_count":sum(i.get("count",0) for i in z.get("rarity",[]) if isinstance(i,dict)),
+                  "gear_count":sum(i.get("count",0) for i in z.get("gear",[]) if isinstance(i,dict)),
+                  "relic_count":sum(i.get("count",0) for i in z.get("relic",[]) if isinstance(i,dict))}
+              time.sleep(0.5)
+          # Test whether segment is selectable or ignored.
+          out["segment_tests"]={}
+          for seg in ["kyber","kyber9m","all","allplayers","top100guilds"]:
+              x=get("/units/ADMIRALACKBAR/players?segment="+seg)
+              z=x.get("data",{}) if isinstance(x.get("data"),dict) else {}
+              out["segment_tests"][seg]={"status":x.get("status"),"segment":z.get("segment"),
+                  "owners":z.get("owners"),"segmentPlayers":z.get("segmentPlayers"),"available":z.get("available")}
+          open("hotutils-coverage.json","w").write(json.dumps(out,indent=2))
           print(json.dumps(out,indent=2))
           PY
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: hotutils-api-probe
-          path: hotutils-api-probe.json
+          name: hotutils-coverage
+          path: hotutils-coverage.json
           retention-days: 7
