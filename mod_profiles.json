@@ -4857,6 +4857,213 @@
         "Critical Avoidance %": 0,
         "Accuracy": 0
       }
+    },
+    "GOPHERANTS": {
+      "name": "Grogu & Anzellans",
+      "role": "support",
+      "source_model": {
+        "method": "direct SWGOH.GG Best Mods page read by ChatGPT",
+        "fetched_at_utc": "2026-11-16T08:13:00Z",
+        "refreshed_at_utc": "2026-11-16T08:13:00Z",
+        "sources": [
+          {
+            "name": "Top 1000 Kyber GAC",
+            "url": "https://swgoh.gg/units/grogu-anzellans/best-mods/",
+            "units_fully_modded": 962,
+            "set_combinations": {
+              "Speed + Health": 39.5,
+              "Speed + Tenacity": 26.29,
+              "Double Health + Defense": 9.97,
+              "Speed + Defense": 5.09,
+              "Triple Health": 4.57,
+              "Speed": 2.07,
+              "Speed + Potency": 1.97,
+              "Health + Double Defense": 1.35,
+              "Double Health + Tenacity": 1.03
+            },
+            "primary_pct": {
+              "Arrow": {
+                "Speed": 86.17,
+                "Health": 8.21,
+                "Defense": 2.49,
+                "Protection": 1.87,
+                "Critical Avoidance": 0.72,
+                "Offense": 0.31,
+                "Accuracy": 0.2
+              },
+              "Triangle": {
+                "Health": 61.22,
+                "Protection": 20.16,
+                "Defense": 9.97,
+                "Offense": 3.43,
+                "Critical Chance": 2.59,
+                "Critical Damage": 2.59
+              },
+              "Circle": {
+                "Health": 74.22,
+                "Protection": 25.77
+              },
+              "Cross": {
+                "Health": 35.34,
+                "Tenacity": 31.8,
+                "Protection": 18.39,
+                "Defense": 6.96,
+                "Potency": 4.88,
+                "Offense": 2.59
+              }
+            },
+            "secondary_focus_avg": {
+              "Speed": {
+                "average": 18.8,
+                "focus_pct": 21.14
+              },
+              "Health %": {
+                "average": 3.34,
+                "focus_pct": 8.2
+              },
+              "Health": {
+                "average": 779.4,
+                "focus_pct": 8.08
+              },
+              "Tenacity": {
+                "average": 4.54,
+                "focus_pct": 8.01
+              }
+            }
+          },
+          {
+            "name": "Top 100 Guilds",
+            "url": "https://swgoh.gg/units/grogu-anzellans/best-mods/?s=GUILDTOP100",
+            "units_fully_modded": 4869,
+            "set_combinations": {
+              "Speed + Health": 27.78,
+              "Speed + Tenacity": 24.41,
+              "Double Health + Defense": 21.01,
+              "Triple Health": 9.11,
+              "Speed": 2.19,
+              "Health + Double Defense": 1.99,
+              "Speed + Defense": 1.74,
+              "Speed + Potency": 1.56,
+              "Double Health + Tenacity": 1.23
+            },
+            "primary_pct": {
+              "Arrow": {
+                "Speed": 79.27,
+                "Health": 13.37,
+                "Defense": 3.24,
+                "Protection": 2.19,
+                "Critical Avoidance": 1,
+                "Offense": 0.65,
+                "Accuracy": 0.24
+              },
+              "Triangle": {
+                "Health": 56.54,
+                "Defense": 15.17,
+                "Protection": 13.76,
+                "Offense": 5.68,
+                "Critical Chance": 4.88,
+                "Critical Damage": 3.94
+              },
+              "Circle": {
+                "Health": 76.89,
+                "Protection": 23.1
+              },
+              "Cross": {
+                "Health": 36.16,
+                "Tenacity": 33.8,
+                "Protection": 12.19,
+                "Defense": 9.73,
+                "Potency": 4.9,
+                "Offense": 3.18
+              }
+            },
+            "secondary_focus_avg": {
+              "Speed": {
+                "average": 16.1,
+                "focus_pct": 21.03
+              },
+              "Health": {
+                "average": 772.2,
+                "focus_pct": 8.34
+              },
+              "Tenacity": {
+                "average": 4.47,
+                "focus_pct": 8.31
+              },
+              "Health %": {
+                "average": 2.96,
+                "focus_pct": 7.62
+              }
+            }
+          }
+        ]
+      },
+      "set_combinations": {
+        "Speed + Health": 33.64,
+        "Speed + Tenacity": 25.35,
+        "Double Health + Defense": 15.49,
+        "Speed + Defense": 3.415,
+        "Triple Health": 6.84,
+        "Speed": 2.13,
+        "Speed + Potency": 1.765,
+        "Health + Double Defense": 1.67,
+        "Double Health + Tenacity": 1.13
+      },
+      "set_preferences": {
+        "Speed": 1,
+        "Health": 0.8864,
+        "Tenacity": 0.3994,
+        "Defense": 0.3103,
+        "Potency": 0.0266
+      },
+      "primary_preferences": {
+        "Arrow": {
+          "Speed": 0.8275,
+          "Health": 0.1079,
+          "Defense": 0.0287,
+          "Protection": 0.0203,
+          "Critical Avoidance": 0.0086,
+          "Offense": 0.0048,
+          "Accuracy": 0.0022
+        },
+        "Triangle": {
+          "Health": 0.589,
+          "Protection": 0.1697,
+          "Defense": 0.1257,
+          "Offense": 0.0456,
+          "Critical Chance": 0.0374,
+          "Critical Damage": 0.0327
+        },
+        "Circle": {
+          "Health": 0.7556,
+          "Protection": 0.2444
+        },
+        "Cross": {
+          "Health": 0.3576,
+          "Tenacity": 0.3281,
+          "Protection": 0.153,
+          "Defense": 0.0835,
+          "Potency": 0.0489,
+          "Offense": 0.0289
+        }
+      },
+      "secondary_preferences": {
+        "Speed": 1,
+        "Health": 0.3894,
+        "Health %": 0.3751,
+        "Tenacity": 0.387,
+        "Protection": 0,
+        "Protection %": 0,
+        "Defense": 0,
+        "Defense %": 0,
+        "Offense": 0,
+        "Offense %": 0,
+        "Potency %": 0,
+        "Critical Chance %": 0,
+        "Critical Damage %": 0,
+        "Critical Avoidance %": 0,
+        "Accuracy": 0
+      }
     }
   },
   "profile_status": {
