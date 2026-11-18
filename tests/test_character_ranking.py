@@ -45,17 +45,17 @@ class StackRankImportTests(unittest.TestCase):
             path.write_text(tsv([row(1,"A",2),row(3,"B",5)]),encoding="utf-8")
             with self.assertRaises(ValueError): load_stack_rank(path)
 
-    def test_mapping_has_313_unique_ids_and_names(self):
+    def test_mapping_has_315_unique_ids_and_names(self):
         mapping=load_base_id_mapping(DEFAULT_MAPPING)
-        self.assertEqual(len(mapping),313)
-        self.assertEqual(len({x["base_id"] for x in mapping.values()}),313)
+        self.assertEqual(len(mapping),315)
+        self.assertEqual(len({x["base_id"] for x in mapping.values()}),315)
         expected={"the ronin":"THERONIN","third sister":"THIRDSISTER","taron malicos":"TARONMALICOS","dark trooper moff gideon":"MOFFGIDEONS3","jaxxon":"JAXXON"}
         for name,base_id in expected.items(): self.assertEqual(mapping[name]["base_id"],base_id)
 
-    def test_repository_snapshot_maps_all_313_characters(self):
+    def test_repository_snapshot_maps_all_315_characters(self):
         root=Path(__file__).resolve().parents[1]
         data=load_stack_rank(root/"data"/"stack_rank.tsv",DEFAULT_MAPPING)
-        self.assertEqual(len(data),313); self.assertEqual(len({x["base_id"] for x in data}),313)
+        self.assertEqual(len(data),315); self.assertEqual(len({x["base_id"] for x in data}),313)
         self.assertEqual(data[0]["character"],"Rey"); self.assertEqual(data[0]["base_id"],"GLREY")
         self.assertEqual(get_character_rank(data,"Ben Solo")["base_id"],"BENSOLO")
         self.assertEqual(get_character_rank(data,"Grogu & Anzellans")["base_id"],"GOPHERANTS")
@@ -63,7 +63,7 @@ class StackRankImportTests(unittest.TestCase):
     def test_generated_payload_contains_rank_method_and_base_ids(self):
         snapshot=Path(__file__).resolve().parents[1]/"data"/"stack_rank.tsv"
         payload=build_payload(snapshot)
-        self.assertEqual(payload["source"],SOURCE_NAME); self.assertEqual(payload["record_count"],313)
+        self.assertEqual(payload["source"],SOURCE_NAME); self.assertEqual(payload["record_count"],315)
         self.assertEqual(payload["schema_version"],4)
         self.assertEqual(payload["method"]["primary_field"],"rank")
         self.assertTrue(all(x["source"]==SOURCE_NAME and x["base_id"] for x in payload["characters"]))
