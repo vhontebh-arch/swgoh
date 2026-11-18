@@ -27,6 +27,7 @@ concurrency:
 
 permissions:
   contents: write
+  actions: write
 
 jobs:
   analyze:
@@ -41,7 +42,43 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Sync one canonical data snapshot
+      - name: Request a fresh canonical SWGOH snapshot
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          requested_at="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+          echo "Żądanie świeżego snapshotu: $requested_at"
+
+          gh api --method POST "repos/${{ github.repository }}/actions/workflows/update-swgoh.yml/dispatches" \
+            -f ref=main \
+            -f inputs[skip_optimizer_v2]=true
+
+          run_id=""
+          for attempt in $(seq 1 120); do
+            run_id="$(gh run list \
+              --workflow update-swgoh.yml \
+              --branch main \
+              --event workflow_dispatch \
+              --limit 20 \
+              --json databaseId,createdAt \
+              --jq '.[] | select(.createdAt >= "'"$requested_at"'") | .databaseId' | head -n 1)"
+            if [ -n "$run_id" ]; then
+              break
+            fi
+            echo "Oczekiwanie na utworzenie uruchomienia producenta ($attempt/120)..."
+            sleep 5
+          done
+
+          if [ -z "$run_id" ]; then
+            echo "ERROR: Nie odnaleziono uruchomienia producenta po dispatch."
+            exit 1
+          fi
+
+          echo "Oczekiwanie na zakończenie aktualizacji danych (run $run_id)..."
+          gh run watch "$run_id" --exit-status --interval 10
+
+      - name: Sync the newly published canonical snapshot
         run: |
           set -e
           python sync_optimizer_data.py
