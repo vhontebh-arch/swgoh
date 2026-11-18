@@ -5077,6 +5077,197 @@
         "Critical Avoidance %": 0,
         "Accuracy": 0
       }
+    },
+    "REY": {
+      "name": "Rey",
+      "role": "attacker",
+      "source_model": {
+        "method": "SWGOH.GG Best Mods pages manually read by ChatGPT; equal-weight average of Top 1000 Kyber GAC and Top 100 Guilds",
+        "refreshed_at_utc": "2026-11-18T12:05:07.380Z",
+        "sources": [
+          {
+            "name": "Top 1000 Kyber GAC",
+            "url": "https://swgoh.gg/units/rey/best-mods/",
+            "units_fully_modded": 947,
+            "set_combinations_pct": {
+              "Offense + Health": 88.38,
+              "Speed + Health": 3.59,
+              "Offense + Defense": 0.31,
+              "Double Health + Tenacity": 0.21
+            },
+            "primary_pct": {
+              "Arrow": {
+                "Health": 45.82,
+                "Offense": 34.74,
+                "Speed": 18.69,
+                "Critical Avoidance": 0.63,
+                "Accuracy": 0.1
+              },
+              "Triangle": {
+                "Health": 55.64,
+                "Offense": 39.28,
+                "Critical Damage": 4.22,
+                "Critical Chance": 0.31,
+                "Defense": 0.31,
+                "Protection": 0.21
+              },
+              "Circle": {
+                "Health": 97.99,
+                "Protection": 2
+              },
+              "Cross": {
+                "Health": 57.76,
+                "Offense": 40.44,
+                "Protection": 0.63,
+                "Defense": 0.52,
+                "Tenacity": 0.42,
+                "Potency": 0.21
+              }
+            },
+            "secondary_focus": {
+              "Speed": {
+                "average": 20.3,
+                "focus_pct": 24.3
+              },
+              "Offense %": {
+                "average": 5.07,
+                "focus_pct": 13.51
+              },
+              "Offense": {
+                "average": 106.2,
+                "focus_pct": 10.32
+              },
+              "Health %": {
+                "average": 5.01,
+                "focus_pct": 9.36
+              }
+            }
+          },
+          {
+            "name": "Top 100 Guilds",
+            "url": "https://swgoh.gg/units/rey/best-mods/?s=GUILDTOP100",
+            "units_fully_modded": 4871,
+            "set_combinations_pct": {
+              "Offense + Health": 72.65,
+              "Speed + Health": 10.59,
+              "Offense + Crit Chance": 0.41
+            },
+            "primary_pct": {
+              "Arrow": {
+                "Health": 34.28,
+                "Speed": 33.89,
+                "Offense": 30.69,
+                "Critical Avoidance": 0.86,
+                "Protection": 0.12,
+                "Defense": 0.08,
+                "Accuracy": 0.06
+              },
+              "Triangle": {
+                "Health": 48.96,
+                "Offense": 38.94,
+                "Critical Damage": 8.29,
+                "Critical Chance": 1.49,
+                "Protection": 1.29,
+                "Defense": 1
+              },
+              "Circle": {
+                "Health": 92.75,
+                "Protection": 7.24
+              },
+              "Cross": {
+                "Health": 51.44,
+                "Offense": 43.46,
+                "Protection": 1.84,
+                "Defense": 1.08,
+                "Tenacity": 1.08,
+                "Potency": 1.06
+              }
+            },
+            "secondary_focus": {
+              "Speed": {
+                "average": 20.3,
+                "focus_pct": 23.87
+              },
+              "Offense %": {
+                "average": 4.66,
+                "focus_pct": 11.52
+              },
+              "Offense": {
+                "average": 105,
+                "focus_pct": 10.39
+              },
+              "Health %": {
+                "average": 4.75,
+                "focus_pct": 8.7
+              }
+            }
+          }
+        ]
+      },
+      "set_combinations": {
+        "Offense + Health": 80.515,
+        "Speed + Health": 7.09,
+        "Offense + Defense": 0.155,
+        "Double Health + Tenacity": 0.105,
+        "Offense + Crit Chance": 0.205
+      },
+      "set_preferences": {
+        "Offense": 0.9232,
+        "Health": 1,
+        "Speed": 0.0809,
+        "Defense": 0.0018,
+        "Double Health": 0.0012,
+        "Tenacity": 0.0012,
+        "Crit Chance": 0.0023
+      },
+      "primary_preferences": {
+        "Arrow": {
+          "Health": 0.4006,
+          "Offense": 0.3272,
+          "Speed": 0.263,
+          "Critical Avoidance": 0.0075,
+          "Accuracy": 0.0008,
+          "Protection": 0.0006,
+          "Defense": 0.0004
+        },
+        "Triangle": {
+          "Health": 0.5232,
+          "Offense": 0.3912,
+          "Critical Damage": 0.0626,
+          "Critical Chance": 0.009,
+          "Defense": 0.0066,
+          "Protection": 0.0075
+        },
+        "Circle": {
+          "Health": 0.9538,
+          "Protection": 0.0462
+        },
+        "Cross": {
+          "Health": 0.5462,
+          "Offense": 0.4196,
+          "Protection": 0.0124,
+          "Defense": 0.008,
+          "Tenacity": 0.0075,
+          "Potency": 0.0064
+        }
+      },
+      "secondary_preferences": {
+        "Speed": 1,
+        "Offense %": 0.5196,
+        "Offense": 0.4299,
+        "Health %": 0.3749,
+        "Potency": 0,
+        "Protection": 0,
+        "Protection %": 0,
+        "Health": 0,
+        "Defense": 0,
+        "Defense %": 0,
+        "Tenacity %": 0,
+        "Critical Chance %": 0,
+        "Critical Damage %": 0,
+        "Critical Avoidance %": 0,
+        "Accuracy": 0
+      }
     }
   },
   "profile_status": {
@@ -5789,6 +5980,131 @@
       "status": "refreshed",
       "fetched_at_utc": "2026-11-13T19:29:00Z",
       "checked_at_utc": "2026-11-13T19:29:00Z"
+    },
+    "REY": {
+      "status": "refreshed",
+      "checked_at_utc": "2026-11-18T12:05:07.380Z",
+      "fetched_at_utc": "2026-11-18T12:05:07.380Z",
+      "source": "SWGOH.GG Best Mods pages manually read by ChatGPT; TOP 4 Secondary Stat Focus retained per source",
+      "sources": [
+        {
+          "name": "Top 1000 Kyber GAC",
+          "url": "https://swgoh.gg/units/rey/best-mods/",
+          "units_fully_modded": 947,
+          "set_combinations_pct": {
+            "Offense + Health": 88.38,
+            "Speed + Health": 3.59,
+            "Offense + Defense": 0.31,
+            "Double Health + Tenacity": 0.21
+          },
+          "primary_pct": {
+            "Arrow": {
+              "Health": 45.82,
+              "Offense": 34.74,
+              "Speed": 18.69,
+              "Critical Avoidance": 0.63,
+              "Accuracy": 0.1
+            },
+            "Triangle": {
+              "Health": 55.64,
+              "Offense": 39.28,
+              "Critical Damage": 4.22,
+              "Critical Chance": 0.31,
+              "Defense": 0.31,
+              "Protection": 0.21
+            },
+            "Circle": {
+              "Health": 97.99,
+              "Protection": 2
+            },
+            "Cross": {
+              "Health": 57.76,
+              "Offense": 40.44,
+              "Protection": 0.63,
+              "Defense": 0.52,
+              "Tenacity": 0.42,
+              "Potency": 0.21
+            }
+          },
+          "secondary_focus": {
+            "Speed": {
+              "average": 20.3,
+              "focus_pct": 24.3
+            },
+            "Offense %": {
+              "average": 5.07,
+              "focus_pct": 13.51
+            },
+            "Offense": {
+              "average": 106.2,
+              "focus_pct": 10.32
+            },
+            "Health %": {
+              "average": 5.01,
+              "focus_pct": 9.36
+            }
+          }
+        },
+        {
+          "name": "Top 100 Guilds",
+          "url": "https://swgoh.gg/units/rey/best-mods/?s=GUILDTOP100",
+          "units_fully_modded": 4871,
+          "set_combinations_pct": {
+            "Offense + Health": 72.65,
+            "Speed + Health": 10.59,
+            "Offense + Crit Chance": 0.41
+          },
+          "primary_pct": {
+            "Arrow": {
+              "Health": 34.28,
+              "Speed": 33.89,
+              "Offense": 30.69,
+              "Critical Avoidance": 0.86,
+              "Protection": 0.12,
+              "Defense": 0.08,
+              "Accuracy": 0.06
+            },
+            "Triangle": {
+              "Health": 48.96,
+              "Offense": 38.94,
+              "Critical Damage": 8.29,
+              "Critical Chance": 1.49,
+              "Protection": 1.29,
+              "Defense": 1
+            },
+            "Circle": {
+              "Health": 92.75,
+              "Protection": 7.24
+            },
+            "Cross": {
+              "Health": 51.44,
+              "Offense": 43.46,
+              "Protection": 1.84,
+              "Defense": 1.08,
+              "Tenacity": 1.08,
+              "Potency": 1.06
+            }
+          },
+          "secondary_focus": {
+            "Speed": {
+              "average": 20.3,
+              "focus_pct": 23.87
+            },
+            "Offense %": {
+              "average": 4.66,
+              "focus_pct": 11.52
+            },
+            "Offense": {
+              "average": 105,
+              "focus_pct": 10.39
+            },
+            "Health %": {
+              "average": 4.75,
+              "focus_pct": 8.7
+            }
+          }
+        }
+      ]
     }
   }
 }
