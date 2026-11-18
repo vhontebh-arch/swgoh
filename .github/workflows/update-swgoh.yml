@@ -1077,6 +1077,8 @@ jobs:
           head -n 6 mods.csv
 
       - name: Sync canonical mod profiles
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           set -e
           python sync_optimizer_data.py --files mod_profiles.json
