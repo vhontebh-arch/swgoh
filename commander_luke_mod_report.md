@@ -1,109 +1,106 @@
-# Raport modów — GLREY
+# Raport modów — COMMANDERLUKESKYWALKER
 
-**Raport użytkowy.** Pokazuje wyłącznie docelowe mody, kolejność przekładek i wpływ na dawców.
+**Raport użytkowy.** Pokazuje docelowe mody, kolejność przekładek i wpływ na dawców.
+
+**Uruchomienie:** [GitHub Actions #44341960400](https://github.com/vhontebh-arch/swgoh/actions/runs/44341960400) — cap 1/2/3/5/8 zakończone powodzeniem; CSV i MD są identyczne we wszystkich pięciu przebiegach (SHA-256 MD: `5d4dd7056088e77fe3b8d1f71e4ee8bbb7d88991140873dbe137251ab5cb97c7`).
+**Snapshot:** `optimizer-data` commit `cb7e5c084a11aa06fd7055831d64e8797e7d9193`, opublikowany 2026-11-18 16:00:16 UTC; 382 jednostki rosteru, 2196 modów.
 
 ## Status
 
-- **Wykonalność fizyczna:** ZABLOKOWANA
-- **Walidacja fizyczna całego łańcucha:** ZABLOKOWANA
-- **Ocena:** BLOKADA — nie wykonuj przekładek
-- **Interpretacja:** bilans obejmuje cel i wszystkich dotkniętych dawców, liczony tą samą nieprojekcyjną punktacją pełnego buildu.
-- **Łączny bilans profilu rosteru:** NIEZATWIERDZONY — łańcuch przekładek jest zablokowany
+- **Wykonalność fizyczna:** POTWIERDZONA
+- **Walidacja fizyczna całego łańcucha:** POTWIERDZONA
+- **Ocena:** KOMPROMIS — wynik modelu rośnie o 4.72 pkt, ale build traci 16 Speed z modów. Nie traktuj tego jako bezwarunkowej rekomendacji do wykonania.
+- **Łączny bilans profilu rosteru:** +4.72 pkt
 - **Liczba modów docelowych:** 6/6
 
-## Docelowy zestaw — GLREY
+## Bilans całej operacji — ta sama punktacja przed/po
+
+| Postać | Rola w łańcuchu | Wynik przed | Wynik po | Zmiana |
+|---|---|---:|---:|---:|
+| COMMANDERLUKESKYWALKER | CEL | 154.51 | 159.24 | +4.72 |
+
+**ŁĄCZNA ZMIANA: +4.72 pkt.**
+
+### Kontrola rzeczywistej szybkości z modów
+
+- **Przed:** 124 Speed z sześciu modów.
+- **Po:** 108 Speed z sześciu modów.
+- **Zmiana:** **−16 Speed**.
+- Źródło różnicy: wymiana Arrow z primary Speed 32 na Arrow z primary Health 16% i secondary Speed 16. Pozostałe pięć slotów nie zmienia sumy Speed.
+- Zysk punktowy wynika z lepszego dopasowania pozostałych secondary i zachowania kombinacji Offense + Tenacity; nie kompensuje automatycznie utraty 16 Speed w rzeczywistej statystyce postaci.
+
+## Docelowy zestaw — COMMANDERLUKESKYWALKER
 
 ### Profil SWGOH.GG
 
-**Najczęstszy układ w profilu:** Offense + Health
-**Układ po tej operacji:** Offense + Health
-**Zgodność z głównym układem profilu:** TAK.
-**Częstość układu po operacji w profilu:** 80.5%.
-
-- Top 1000 Kyber GAC — 947 postaci z kompletnymi 6 modami
-- Top 100 Guilds — 4871 postaci z kompletnymi 6 modami
-- Najczęstsze kombinacje: Offense + Health (80.5%); Speed + Health (7.1%); Offense + Crit Chance (0.2%)
-- Priorytet secondary: Speed, Offense %, Offense, Health %
+- **Najczęstszy układ:** Offense + Tenacity
+- **Układ po tej operacji:** Offense + Tenacity
+- **Częstość układu po operacji:** 26.3%.
+- Top 1000 Kyber GAC — 983 postaci z kompletnymi 6 modami.
+- Top 100 Guilds — 4960 postaci z kompletnymi 6 modami.
+- Kolejne kombinacje: Crit Damage + Potency (9.6%); Offense + Health (7.3%).
+- **Priorytet secondary:** Speed, Tenacity, Offense, Offense %.
 
 ### Sześć modów docelowych
 
 #### Arrow
-- **Obecny mod:** Arrow / Offense / Offense % 8.5% / secondary: Speed 14, Defense % 8.89%, Health 1516, Protection 1576 / 6★ A lvl15
-- **Proponowany mod:** Arrow / Offense / Health % 16% / secondary: Offense 117, Critical Chance % 5.16%, Offense % 1.4%, Speed 16 / 6★ C lvl15
-- **Źródło:** MAGAZYN
-  - Zmiana dopasowania do profilu: +4.5 pkt (7.5 → 12.0).
-#### Square
-- **Obecny mod:** Square / Offense / Offense % 8.5% / secondary: Protection 488, Speed 24, Offense 96, Defense % 8.17% / 6★ A lvl15
-- **Proponowany mod:** pozostaje bez zmian — Square / Offense / Offense % 8.5% / secondary: Protection 488, Speed 24, Offense 96, Defense % 8.17% / 6★ A lvl15
-- **Korzyść:** zachowanie obecnej konfiguracji slotu.
-#### Diamond
-- **Obecny mod:** Diamond / Offense / Defense % 20% / secondary: Offense 98, Health 591, Speed 28, Critical Chance % 2.87% / 6★ A lvl15
-- **Proponowany mod:** Diamond / Offense / Defense % 20% / secondary: Speed 21, Offense % 5.76%, Defense 22, Critical Chance % 2.08% / 6★ A lvl15
-- **Źródło:** COMMANDERLUKESKYWALKER
-  - Zmiana dopasowania do profilu: +0.8 pkt (15.7 → 16.5).
-#### Triangle
-- **Obecny mod:** Triangle / Offense / Offense % 8.5% / secondary: Offense 139, Speed 15, Tenacity % 3.65%, Defense 34 / 6★ A lvl15
-- **Proponowany mod:** Triangle / Health / Protection % 24% / secondary: Defense 24, Offense % 5.92%, Speed 13, Health 983 / 6★ A lvl15
-- **Źródło:** GRANDADMIRALTHRAWN
-  - Zmiana dopasowania do profilu: +2.2 pkt (11.8 → 14.0).
-#### Circle
-- **Obecny mod:** Circle / Health / Health % 16% / secondary: Defense % 2.81%, Critical Chance % 4.06%, Health 1818, Speed 22 / 6★ A lvl15
-- **Proponowany mod:** Circle / Offense / Protection % 24% / secondary: Health 1100, Offense % 2.65%, Defense % 6%, Speed 24 / 6★ A lvl15
-- **Źródło:** COMMANDERLUKESKYWALKER
-  - Zmiana dopasowania do profilu: +2.6 pkt (12.5 → 15.1).
-#### Cross
-- **Obecny mod:** Cross / Health / Offense % 8.5% / secondary: Potency % 5.12%, Defense % 5.92%, Speed 19, Protection % 10.77% / 6★ A lvl15
-- **Proponowany mod:** Cross / Health / Health % 16% / secondary: Health 694, Protection 1743, Speed 20, Offense 116 / 6★ A lvl15
-- **Źródło:** STORMTROOPERLUKE
-  - Zmiana dopasowania do profilu: +5.7 pkt (10.0 → 15.7).
+- **Obecny mod:** Arrow / Tenacity / Speed 32 / secondary: Protection 482, Tenacity % 6.25%, Potency % 10.89%, Offense % 4.17% / 6★ A lvl15.
+- **Proponowany mod:** Arrow / Offense / Health % 16% / secondary: Offense 117, Critical Chance % 5.16%, Offense % 1.4%, Speed 16 / 6★ C lvl15.
+- **Źródło:** MAGAZYN.
 
-- **Zmiana potencjału buildu:** +15.8 pkt (optymistyczna projekcja do 15; brakujące rolle przypisane do najwyżej preferowanej secondary; dla 5A projekcja secondary do 6E; primary pozostaje bez zmian; bez slice i calibration).
+#### Square
+- **Obecny i końcowy mod:** Square / Offense / Offense % 8.5% / secondary: Tenacity % 7.59%, Speed 20, Protection 1881, Critical Chance % 3.53% / 6★ A lvl15.
+- Bez zmiany.
+
+#### Diamond
+- **Obecny i końcowy mod:** Diamond / Offense / Defense % 20% / secondary: Speed 21, Offense % 5.76%, Defense 22, Critical Chance % 2.08% / 6★ A lvl15.
+- Bez zmiany.
+
+#### Triangle
+- **Obecny i końcowy mod:** Triangle / Tenacity / Critical Chance % 20% / secondary: Health 1688, Protection % 3.69%, Speed 17, Defense % 8.3% / 6★ A lvl15.
+- Bez zmiany.
+
+#### Circle
+- **Obecny i końcowy mod:** Circle / Offense / Protection % 24% / secondary: Health 1100, Offense % 2.65%, Defense % 6%, Speed 24 / 6★ A lvl15.
+- Bez zmiany.
+
+#### Cross
+- **Obecny mod:** Cross / Offense / Offense % 8.5% / secondary: Speed 10, Health 845, Potency % 7.21%, Critical Chance % 10.17% / 6★ A lvl15.
+- **Proponowany mod:** Cross / Tenacity / Offense % 5.88% / secondary: Speed 10, Potency % 1.43%, Protection 1422, Offense 80 / 5★ B lvl15.
+- **Źródło:** MAGAZYN.
 
 ## MOD — mody przenoszone na cel
 
-Brak zatwierdzonych transferów MOD.
+- **MAGAZYN → COMMANDERLUKESKYWALKER:** Arrow / Offense / Health % 16% / secondary: Offense 117, Critical Chance % 5.16%, Offense % 1.4%, Speed 16 / 6★ C lvl15.
+- **MAGAZYN → COMMANDERLUKESKYWALKER:** Cross / Tenacity / Offense % 5.88% / secondary: Speed 10, Potency % 1.43%, Protection 1422, Offense 80 / 5★ B lvl15.
 
 ## PATCH — uzupełnienie dawców
 
-Nie jest wymagany żaden PATCH.
+Nie jest wymagany żaden PATCH. Oba proponowane mody pochodzą z magazynu; nie ma dawców ani kosztu u innych postaci.
 
 ## Kolejność przekładania
 
-**Nie wykonuj jeszcze żadnej przekładki.** Poniższy build jest wariantem roboczym; walidacja nie zatwierdziła pełnego łańcucha.
+**Nie wykonuj przekładki automatycznie.** Najpierw zdecyduj, czy akceptujesz spadek o 16 Speed w zamian za wzrost punktacji profilu o 4.72 pkt.
 
-### Co blokuje zatwierdzenie
+1. Arrow — załóż na COMMANDERLUKESKYWALKER mod z MAGAZYN opisany powyżej.
+2. Cross — załóż na COMMANDERLUKESKYWALKER mod z MAGAZYN opisany powyżej.
 
-- **walidacja fizyczna:** transfer PATCH narusza Stack Rank: GLREY -> COMMANDERLUKESKYWALKER
-- **walidacja fizyczna:** transfer PATCH narusza Stack Rank: GLREY -> ASAJJDARKDISCIPLE
-- **walidacja fizyczna:** transfer PATCH narusza Stack Rank: GLREY -> ASAJJDARKDISCIPLE
-- **walidacja fizyczna:** końcowy stan slotów po symulacji różni się od stanu zaplanowanego
-## Diagnostyka przeszukiwania wariantów łańcucha
+Zakładanie moda automatycznie przenosi poprzedni mod ze slotu do magazynu. Walidator potwierdził brak konfliktu i podwójnego użycia modów.
 
-Limit kompletnych wariantów na głównego dawcę: **5**.
-Wyniki poniżej to ważony Rank bilans zmian danego dawcy i jego rekurencyjnych pod-dawców; wyższy wynik jest lepszy.
+## Stan końcowy
 
-- **COMMANDERLUKESKYWALKER:** sprawdzono 2 kompletnych wariantów; wyniki: +28.3198, +26.3498; najlepszy: +28.3198.
-- **GRANDADMIRALTHRAWN:** sprawdzono 5 kompletnych wariantów; wyniki: -0.8812, -1.3992, -3.4338, -3.7572, -3.8992; najlepszy: -0.8812.
-- **STORMTROOPERLUKE:** sprawdzono 5 kompletnych wariantów; wyniki: -9.8922, -11.1122, -11.2360, -11.3320, -11.3320; najlepszy: -9.8922.
+- **Punktacja celu:** 154.51 → 159.24 (**+4.72**).
+- **Szybkość z modów:** 124 → 108 (**−16**).
+- **Sety:** przed i po 4× Offense + 2× Tenacity.
+- **Dawcy/PATCH:** brak.
+- **Profile:** Commander Luke Skywalker — dostępny i świeży; preflight przeszedł.
+- **Pięć capów:** wszystkie zakończone powodzeniem, identyczne wyniki.
 
-## Kontrola profili użytych w łańcuchu
+**Klasyfikacja: KOMPROMIS.** Przekładka jest fizycznie wykonalna i zwiększa punktację używanego modelu, ale obniża szybkość postaci o 16. To istotny koszt, którego sam dodatni bilans punktowy nie powinien ukrywać.
 
-- ASAJJDARKDISCIPLE: profil dostępny, 2 źródła.
-- COMMANDERLUKESKYWALKER: profil dostępny, 2 źródła.
-- GLREY: profil dostępny, 2 źródła.
-- GRANDADMIRALTHRAWN: profil dostępny, 2 źródła.
-- LUKESTARKILLER: profil dostępny, 2 źródła.
-- STORMTROOPERLUKE: profil dostępny, 2 źródła.
+## Założenia i ograniczenia
 
-## Założenia projekcji
-
-- Poziom 15 jest traktowany jako osiągalny bez ograniczenia materiałami.
-- Brakujące secondary są liczone jako wartość średnia rolla, a nie maksymalna; ich przyszły przydział do statystyk jest uśredniony według profilu zamiast przypisywany do najlepszego secondary.
-- Slice i calibration nie wpływają na ranking ani wynik buildu. Mogą pojawić się wyłącznie jako osobne sugestie inwestycyjne i można je pominąć.
-- Primary pozostaje dokładnie na wartości z eksportu; zależy od obecnej liczby gwiazdek, a podniesienie moda do poziomu 15 go nie zmienia. Nie zakładamy slice 5★ → 6★.
-
-## Jak czytać opisy modów
-
-Każdy opis zawiera slot, set, primary, wszystkie dostępne secondary oraz gwiazdki, tier i poziom. Dzięki temu mod można znaleźć w grze bez korzystania z wewnętrznego ID.
-
-Plik CSV pozostaje technicznym zapleczem optymalizatora; nie jest instrukcją ręcznego przekładania.
+- Punktacja porównuje pełny build przed/po bez projekcji przyszłych rolli i bez założeń o slice.
+- Osobna projekcja potencjału nie jest traktowana jako aktualny wynik.
+- Nie ma automatycznej ochrony dawcy; w tym wariancie nie ma jednak żadnego dawcy.
+- Opisy modów zawierają slot, set, gwiazdki, tier, poziom, primary i wszystkie secondary; ID pozostają wyłącznie techniczne.
