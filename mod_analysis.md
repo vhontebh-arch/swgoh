@@ -4,12 +4,22 @@
 
 ## Status
 
-- **Wykonalność fizyczna:** ZABLOKOWANA
-- **Walidacja fizyczna całego łańcucha:** ZABLOKOWANA
-- **Ocena:** BLOKADA — nie wykonuj przekładek
+- **Wykonalność fizyczna:** POTWIERDZONA
+- **Walidacja fizyczna całego łańcucha:** POTWIERDZONA
+- **Ocena:** REKOMENDACJA — dodatni bilans całego łańcucha, bez wykrytej straty u dawców
 - **Interpretacja:** bilans obejmuje cel i wszystkich dotkniętych dawców, liczony tą samą nieprojekcyjną punktacją pełnego buildu.
-- **Łączny bilans profilu rosteru:** NIEZATWIERDZONY — łańcuch przekładek jest zablokowany
+- **Łączny bilans profilu rosteru:** +0.59 pkt
 - **Liczba modów docelowych:** 6/6
+
+## Bilans całej operacji — ta sama punktacja przed/po
+
+Wynik każdego buildu jest liczony bez projekcji przyszłych rolli i bez założeń o slice. Suma obejmuje cel oraz każdego dawcę bezpośredniego i pośredniego.
+
+| Postać | Rola w łańcuchu | Wynik przed | Wynik po | Zmiana |
+|---|---|---:|---:|---:|
+| GLREY | CEL | 167.45 | 168.04 | +0.59 |
+
+**ŁĄCZNA ZMIANA: +0.59 pkt.**
 
 ## Docelowy zestaw — GLREY
 
@@ -29,39 +39,35 @@
 
 #### Arrow
 - **Obecny mod:** Arrow / Offense / Offense % 8.5% / secondary: Speed 14, Defense % 8.89%, Health 1516, Protection 1576 / 6★ A lvl15
-- **Proponowany mod:** Arrow / Offense / Health % 16% / secondary: Offense 117, Critical Chance % 5.16%, Offense % 1.4%, Speed 16 / 6★ C lvl15
-- **Źródło:** MAGAZYN
-  - Zmiana dopasowania do profilu: +4.5 pkt (7.5 → 12.0).
+- **Proponowany mod:** pozostaje bez zmian — Arrow / Offense / Offense % 8.5% / secondary: Speed 14, Defense % 8.89%, Health 1516, Protection 1576 / 6★ A lvl15
+- **Korzyść:** zachowanie obecnej konfiguracji slotu.
 #### Square
 - **Obecny mod:** Square / Offense / Offense % 8.5% / secondary: Protection 488, Speed 24, Offense 96, Defense % 8.17% / 6★ A lvl15
 - **Proponowany mod:** pozostaje bez zmian — Square / Offense / Offense % 8.5% / secondary: Protection 488, Speed 24, Offense 96, Defense % 8.17% / 6★ A lvl15
 - **Korzyść:** zachowanie obecnej konfiguracji slotu.
 #### Diamond
 - **Obecny mod:** Diamond / Offense / Defense % 20% / secondary: Offense 98, Health 591, Speed 28, Critical Chance % 2.87% / 6★ A lvl15
-- **Proponowany mod:** Diamond / Offense / Defense % 20% / secondary: Speed 21, Offense % 5.76%, Defense 22, Critical Chance % 2.08% / 6★ A lvl15
-- **Źródło:** COMMANDERLUKESKYWALKER
-  - Zmiana dopasowania do profilu: +0.8 pkt (15.7 → 16.5).
+- **Proponowany mod:** pozostaje bez zmian — Diamond / Offense / Defense % 20% / secondary: Offense 98, Health 591, Speed 28, Critical Chance % 2.87% / 6★ A lvl15
+- **Korzyść:** zachowanie obecnej konfiguracji slotu.
 #### Triangle
 - **Obecny mod:** Triangle / Offense / Offense % 8.5% / secondary: Offense 139, Speed 15, Tenacity % 3.65%, Defense 34 / 6★ A lvl15
-- **Proponowany mod:** Triangle / Health / Protection % 24% / secondary: Defense 24, Offense % 5.92%, Speed 13, Health 983 / 6★ A lvl15
-- **Źródło:** GRANDADMIRALTHRAWN
-  - Zmiana dopasowania do profilu: +2.2 pkt (11.8 → 14.0).
+- **Proponowany mod:** pozostaje bez zmian — Triangle / Offense / Offense % 8.5% / secondary: Offense 139, Speed 15, Tenacity % 3.65%, Defense 34 / 6★ A lvl15
+- **Korzyść:** zachowanie obecnej konfiguracji slotu.
 #### Circle
 - **Obecny mod:** Circle / Health / Health % 16% / secondary: Defense % 2.81%, Critical Chance % 4.06%, Health 1818, Speed 22 / 6★ A lvl15
-- **Proponowany mod:** Circle / Offense / Protection % 24% / secondary: Health 1100, Offense % 2.65%, Defense % 6%, Speed 24 / 6★ A lvl15
-- **Źródło:** COMMANDERLUKESKYWALKER
-  - Zmiana dopasowania do profilu: +2.6 pkt (12.5 → 15.1).
+- **Proponowany mod:** pozostaje bez zmian — Circle / Health / Health % 16% / secondary: Defense % 2.81%, Critical Chance % 4.06%, Health 1818, Speed 22 / 6★ A lvl15
+- **Korzyść:** zachowanie obecnej konfiguracji slotu.
 #### Cross
 - **Obecny mod:** Cross / Health / Offense % 8.5% / secondary: Potency % 5.12%, Defense % 5.92%, Speed 19, Protection % 10.77% / 6★ A lvl15
-- **Proponowany mod:** Cross / Health / Health % 16% / secondary: Health 694, Protection 1743, Speed 20, Offense 116 / 6★ A lvl15
-- **Źródło:** STORMTROOPERLUKE
-  - Zmiana dopasowania do profilu: +5.7 pkt (10.0 → 15.7).
+- **Proponowany mod:** Cross / Health / Tenacity % 24% / secondary: Potency % 2.71%, Speed 14, Offense 58, Health % 0.87% / 5★ A lvl15
+- **Źródło:** MAGAZYN
+  - Zmiana dopasowania do profilu: +0.6 pkt (10.0 → 10.6).
 
-- **Zmiana potencjału buildu:** +15.8 pkt (optymistyczna projekcja do 15; brakujące rolle przypisane do najwyżej preferowanej secondary; dla 5A projekcja secondary do 6E; primary pozostaje bez zmian; bez slice i calibration).
+- **Zmiana potencjału buildu:** +0.6 pkt (optymistyczna projekcja do 15; brakujące rolle przypisane do najwyżej preferowanej secondary; dla 5A projekcja secondary do 6E; primary pozostaje bez zmian; bez slice i calibration).
 
 ## MOD — mody przenoszone na cel
 
-Brak zatwierdzonych transferów MOD.
+- **MAGAZYN → GLREY:** Cross / Health / Tenacity % 24% / secondary: Potency % 2.71%, Speed 14, Offense 58, Health % 0.87% / 5★ A lvl15
 
 ## PATCH — uzupełnienie dawców
 
@@ -69,31 +75,13 @@ Nie jest wymagany żaden PATCH.
 
 ## Kolejność przekładania
 
-**Nie wykonuj jeszcze żadnej przekładki.** Poniższy build jest wariantem roboczym; walidacja nie zatwierdziła pełnego łańcucha.
+1. **Cross — załóż na GLREY** mod z MAGAZYN: Cross / Health / Tenacity % 24% / secondary: Potency % 2.71%, Speed 14, Offense 58, Health % 0.87% / 5★ A lvl15
 
-### Co blokuje zatwierdzenie
-
-- **walidacja fizyczna:** transfer PATCH narusza Stack Rank: GLREY -> COMMANDERLUKESKYWALKER
-- **walidacja fizyczna:** transfer PATCH narusza Stack Rank: GLREY -> ASAJJDARKDISCIPLE
-- **walidacja fizyczna:** transfer PATCH narusza Stack Rank: GLREY -> ASAJJDARKDISCIPLE
-- **walidacja fizyczna:** końcowy stan slotów po symulacji różni się od stanu zaplanowanego
-## Diagnostyka przeszukiwania wariantów łańcucha
-
-Limit kompletnych wariantów na głównego dawcę: **5**.
-Wyniki poniżej to ważony Rank bilans zmian danego dawcy i jego rekurencyjnych pod-dawców; wyższy wynik jest lepszy.
-
-- **COMMANDERLUKESKYWALKER:** sprawdzono 2 kompletnych wariantów; wyniki: +28.3198, +26.3498; najlepszy: +28.3198.
-- **GRANDADMIRALTHRAWN:** sprawdzono 5 kompletnych wariantów; wyniki: -0.8812, -1.3992, -3.4338, -3.7572, -3.8992; najlepszy: -0.8812.
-- **STORMTROOPERLUKE:** sprawdzono 5 kompletnych wariantów; wyniki: -9.8922, -11.1122, -11.2360, -11.3320, -11.3320; najlepszy: -9.8922.
+Zakładanie moda automatycznie przenosi poprzedni mod ze slotu do magazynu. Wszystkie powyższe kroki zostały sprawdzone na pełnym stanie slotów i magazynu.
 
 ## Kontrola profili użytych w łańcuchu
 
-- ASAJJDARKDISCIPLE: profil dostępny, 2 źródła.
-- COMMANDERLUKESKYWALKER: profil dostępny, 2 źródła.
 - GLREY: profil dostępny, 2 źródła.
-- GRANDADMIRALTHRAWN: profil dostępny, 2 źródła.
-- LUKESTARKILLER: profil dostępny, 2 źródła.
-- STORMTROOPERLUKE: profil dostępny, 2 źródła.
 
 ## Założenia projekcji
 
