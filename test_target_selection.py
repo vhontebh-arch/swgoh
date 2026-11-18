@@ -121,8 +121,13 @@ class TargetSelectionTests(unittest.TestCase):
         aliases = {"target-instance": "TARGET", "glrey-instance": "GLREY"}
         profiles = {"TARGET": profile}
 
+        ranking = [
+            {"base_id": "TARGET", "rank": 2},
+            {"base_id": "GLREY", "rank": 3},
+        ]
         unrestricted = optimize_target_build(
-            [dict(row) for row in rows], {"TARGET"}, profiles, aliases
+            [dict(row) for row in rows], {"TARGET"}, profiles, aliases,
+            ranking=ranking,
         )
         self.assertEqual(
             next(mod for mod in unrestricted["TARGET"]["mods"] if mod["slot"] == "Arrow")["id"],
@@ -131,7 +136,7 @@ class TargetSelectionTests(unittest.TestCase):
 
         protected = optimize_target_build(
             [dict(row) for row in rows], {"TARGET"}, profiles, aliases,
-            protected_owners={"GLREY"},
+            protected_owners={"GLREY"}, ranking=ranking,
         )
         self.assertEqual(
             next(mod for mod in protected["TARGET"]["mods"] if mod["slot"] == "Arrow")["id"],
