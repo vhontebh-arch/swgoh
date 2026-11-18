@@ -116,7 +116,7 @@ jobs:
           if not targets:
               raise SystemExit("Brak celów w mod_analysis_target.json lub parametrze workflow.")
 
-          command = [sys.executable, "mod_analyzer.py"]
+          command = [sys.executable, "mod_analyzer.py", "--chain-alternative-cap", "8"]
           unique_targets = list(dict.fromkeys(targets))
           for target in unique_targets:
               command.extend(["--target", target])
