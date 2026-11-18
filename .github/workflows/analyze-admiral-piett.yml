@@ -121,3 +121,5 @@ jobs:
             mod_analysis.csv
             mod_analysis.md
           if-no-files-found: error
+
+# Dedicated analysis reads only a single hash-verified optimizer-data snapshot.
