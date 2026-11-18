@@ -29,15 +29,28 @@ def make_mod(mod_id, owner="", equipped=False, slot="Arrow", value=10, mod_set="
     return row
 
 
-def run_plan(rows, selected, aliases=None, profiles=None):
+def run_plan(rows, selected, aliases=None, profiles=None, ranking=None):
     aliases = aliases or {TARGET: "TARGET"}
     return apply_optimizer_replacements(
         rows, {"TARGET": {"mods": [selected]}}, {"TARGET"},
-        aliases=aliases, profiles=profiles, ranking=TEST_RANKING,
+        aliases=aliases, profiles=profiles, ranking=ranking or TEST_RANKING,
     )
 
 
 class TransferChainTests(unittest.TestCase):
+    def test_more_important_donor_cannot_transfer_mod_to_lower_ranked_target(self):
+        selected = make_mod("selected-mod", DONOR, True, value=20)
+        result = run_plan(
+            [selected], selected,
+            {TARGET: "TARGET", DONOR: "DONOR"},
+            ranking=[
+                {"base_id": "TARGET", "rank": 2},
+                {"base_id": "DONOR", "rank": 1},
+            ],
+        )
+        self.assertFalse(result["safe"])
+        self.assertTrue(any("Stack Rank" in reason for _, reason in result["failed"]))
+
     def test_donor_combo_changes_patch_choice_and_is_rendered_in_report(self):
         from mod_analyzer import append_donor_combo_report
 
