@@ -10,6 +10,7 @@ on:
 
 permissions:
   contents: read
+  actions: write
 
 jobs:
   analyze:
@@ -18,7 +19,7 @@ jobs:
       matrix:
         alternative_cap: [1, 2, 3, 5, 8]
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 50
     steps:
       - uses: actions/checkout@v4
         with:
@@ -26,6 +27,43 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Request a fresh canonical SWGOH snapshot
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          requested_at="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+          gh api --method POST "repos/${{ github.repository }}/actions/workflows/update-swgoh.yml/dispatches" \
+            -f ref=main \
+            -f inputs[skip_optimizer_v2]=true
+          run_id=""
+          for attempt in $(seq 1 120); do
+            run_id="$(gh run list \
+              --workflow update-swgoh.yml \
+              --branch main \
+              --event workflow_dispatch \
+              --limit 20 \
+              --json databaseId,createdAt \
+              --jq '.[] | select(.createdAt >= "'"$requested_at"'") | .databaseId' | head -n 1)"
+            if [ -n "$run_id" ]; then break; fi
+            echo "Oczekiwanie na utworzenie aktualizacji danych ($attempt/120)..."
+            sleep 5
+          done
+          if [ -z "$run_id" ]; then
+            echo "ERROR: Nie odnaleziono uruchomienia producenta snapshotu."
+            exit 1
+          fi
+          gh run watch "$run_id" --exit-status --interval 10
+      - name: Sync and verify the newly published snapshot
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          set -e
+          python sync_optimizer_data.py
+          python -m json.tool c3po.json >/dev/null
+          python -m json.tool mod_profiles.json >/dev/null
+      - name: Preflight target profile
+        run: python optimizer_preflight.py --target ADMIRALPIETT
       - name: Install runtime dependency
         run: python -m pip install requests
       - name: Compile optimizer
