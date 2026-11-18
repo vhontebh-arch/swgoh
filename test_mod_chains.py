@@ -135,7 +135,7 @@ class TransferChainTests(unittest.TestCase):
         self.assertTrue(result["safe"], result["failed"])
         move = result["plans"][0]["moves"][0]
         self.assertEqual(move["replacement"]["id"], "speed-arrow-patch")
-        self.assertEqual(move["strategy"], "PROFILE_RECURSIVE_FULL_BUILD_BACKTRACK")
+        self.assertEqual(move["strategy"], "PROFILE_RECURSIVE_FULL_BUILD_RANK")
         donor = next(item for item in result["validation"] if item["owner"] == DONOR)
         self.assertEqual(donor["beforeComboKey"], "Speed + Health")
         self.assertEqual(donor["afterComboKey"], "Speed + Health")
@@ -259,7 +259,7 @@ class TransferChainTests(unittest.TestCase):
             {TARGET: "TARGET", DONOR: "DONOR"},
         )
         self.assertFalse(result["safe"])
-        self.assertTrue(any("Stack Rank" in reason for _, reason in result["failed"]))
+        self.assertTrue(any("brak wykonalnego łańcucha" in reason for _, reason in result["failed"]))
 
     def test_selected_mod_must_be_in_its_declared_source_slot(self):
         source_row = make_mod("selected-mod", DONOR, True, slot="Triangle", value=20)
