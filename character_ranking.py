@@ -28,15 +28,6 @@ def load_base_id_mapping(path: str | Path = DEFAULT_MAPPING) -> dict[str, dict[s
         seen_ids.add(base_id)
     return by_name
 
-def rank_importance_score(rank: int, record_count: int) -> float:
-    """Bounded Rank-derived value: 3.0 at Rank 1, 1.0 at the last rank."""
-    if record_count < 2:
-        raise ValueError("record_count must be at least 2")
-    if not 1 <= rank <= record_count:
-        raise ValueError(f"Rank must be within 1..{record_count}")
-    percentile = (rank - 1) / (record_count - 1)
-    return round(1.0 + 2.0 * (1.0 - percentile) ** 2, 6)
-
 def load_stack_rank(path: str | Path, mapping_path: str | Path | None = None) -> list[dict[str, Any]]:
     mapping = load_base_id_mapping(mapping_path) if mapping_path else None
     with Path(path).open("r", encoding="utf-8-sig", newline="") as handle:
@@ -70,7 +61,6 @@ def load_stack_rank(path: str | Path, mapping_path: str | Path | None = None) ->
     if seen_ranks != expected_ranks:
         raise ValueError("Stack Rank values must form a continuous sequence from 1 to record count")
     for row in result:
-        row["importance_score"] = rank_importance_score(row["rank"], len(result))
         row["source"] = SOURCE_NAME
     if mapping is not None and len(result) != len(mapping):
         raise ValueError(f"Stack Rank has {len(result)} rows but mapping has {len(mapping)} entries")
@@ -89,42 +79,10 @@ def load_ranking_json(path: str | Path = "character_ranking.json") -> list[dict[
         base_id = str(item.get("base_id", "")).strip()
         if not base_id or base_id in seen:
             raise ValueError("character_ranking.json has an empty or duplicate base_id")
-        rank_importance_score(rank, record_count)
+        if not 1 <= rank <= record_count:
+            raise ValueError("character_ranking.json contains an out-of-range Rank")
         seen.add(base_id)
     return rows
-
-
-def rank_weighted_donor_delta(moves, ranking, aliases=None) -> float:
-    """Sum donor build deltas weighted by Stack Rank; target gain is not included."""
-    aliases = aliases or {}
-    rows = list(ranking or [])
-    count = len(rows)
-    by_id = {
-        str(item.get("base_id", "")).upper(): item
-        for item in rows if item.get("base_id")
-    }
-    deltas: dict[str, float] = {}
-    for move in moves or []:
-        owner = str(move.get("owner", "") or "")
-        base_id = str(aliases.get(owner, owner) or "").upper()
-        if not base_id:
-            continue
-        deltas[base_id] = deltas.get(base_id, 0.0) + float(move.get("gain", 0.0) or 0.0)
-    total = 0.0
-    for base_id, delta in deltas.items():
-        item = by_id.get(base_id)
-        weight = (
-            rank_importance_score(int(item["rank"]), count)
-            if item and count >= 2 else 1.0
-        )
-        total += delta * weight
-    return round(total, 6)
-
-
-def rank_weighted_account_delta(character_moves, ranking, aliases=None) -> float:
-    """Sum every affected character's complete-build delta with its Rank weight."""
-    return rank_weighted_donor_delta(character_moves, ranking, aliases)
-
 
 
 def can_transfer_by_rank(source_owner, recipient, ranking, aliases=None) -> bool:
@@ -162,9 +120,8 @@ def build_payload(input_path: str | Path, mapping_path: str | Path = DEFAULT_MAP
         "snapshot_date":datetime.now().date().isoformat(),"record_count":len(rows),
         "base_id_mapping":mapping_payload["sources"],
         "method":{"primary_field":"rank","primary_direction":"ascending (1 is most important; larger values are less important)",
-        "importance_score":"1 + 2 * (1 - (rank - 1) / (record_count - 1))^2; bounded 1.0..3.0",
         "secondary_fields":["final_tier","sort_score"],
-        "note":"Rank is the sole primary importance signal. Final Tier and Sort Score are retained for audit and are not added to importance_score; Sort Score may later be used only as a small, separate donor-protection adjustment.",
+        "note":"Rank is used only as a hard transfer-eligibility constraint. Final Tier and Sort Score are audit metadata and do not affect transfer eligibility or scoring.",
         "omicron_boost_options":{"gac":True,"territory_war":True,"territory_battle":True,"raids":True,"conquest":True}},
         "characters":rows}
 
