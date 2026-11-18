@@ -6,13 +6,13 @@ W raportach przeznaczonych do ręcznego wykonania mod identyfikowany jest wyłą
 
 - Modów: **2196**
 - UPGRADE: **30**
-- SLICE: **1150**
-- SLICE_6E: **240**
+- SLICE: **1152**
+- SLICE_6E: **237**
 - CALIBRATE: **106**
 - EQUIP: **0**
 - REPLACE: **3**
 - PATCH: **3**
-- KEEP: **664**
+- KEEP: **665**
 
 ## Globalny optimizer 6-slotowy
 
