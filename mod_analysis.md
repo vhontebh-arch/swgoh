@@ -38,23 +38,26 @@
 - **Korzyść:** zachowanie obecnej konfiguracji slotu.
 #### Diamond
 - **Obecny mod:** Diamond / Offense / Defense % 20% / secondary: Offense 98, Health 591, Speed 28, Critical Chance % 2.87% / 6★ A lvl15
-- **Proponowany mod:** pozostaje bez zmian — Diamond / Offense / Defense % 20% / secondary: Offense 98, Health 591, Speed 28, Critical Chance % 2.87% / 6★ A lvl15
-- **Korzyść:** zachowanie obecnej konfiguracji slotu.
+- **Proponowany mod:** Diamond / Offense / Defense % 20% / secondary: Speed 21, Offense % 5.76%, Defense 22, Critical Chance % 2.08% / 6★ A lvl15
+- **Źródło:** COMMANDERLUKESKYWALKER
+  - Zmiana dopasowania do profilu: +0.8 pkt (15.7 → 16.5).
 #### Triangle
 - **Obecny mod:** Triangle / Offense / Offense % 8.5% / secondary: Offense 139, Speed 15, Tenacity % 3.65%, Defense 34 / 6★ A lvl15
-- **Proponowany mod:** pozostaje bez zmian — Triangle / Offense / Offense % 8.5% / secondary: Offense 139, Speed 15, Tenacity % 3.65%, Defense 34 / 6★ A lvl15
-- **Korzyść:** zachowanie obecnej konfiguracji slotu.
+- **Proponowany mod:** Triangle / Health / Protection % 24% / secondary: Defense 24, Offense % 5.92%, Speed 13, Health 983 / 6★ A lvl15
+- **Źródło:** GRANDADMIRALTHRAWN
+  - Zmiana dopasowania do profilu: +2.2 pkt (11.8 → 14.0).
 #### Circle
 - **Obecny mod:** Circle / Health / Health % 16% / secondary: Defense % 2.81%, Critical Chance % 4.06%, Health 1818, Speed 22 / 6★ A lvl15
-- **Proponowany mod:** pozostaje bez zmian — Circle / Health / Health % 16% / secondary: Defense % 2.81%, Critical Chance % 4.06%, Health 1818, Speed 22 / 6★ A lvl15
-- **Korzyść:** zachowanie obecnej konfiguracji slotu.
+- **Proponowany mod:** Circle / Offense / Protection % 24% / secondary: Health 1100, Offense % 2.65%, Defense % 6%, Speed 24 / 6★ A lvl15
+- **Źródło:** COMMANDERLUKESKYWALKER
+  - Zmiana dopasowania do profilu: +2.6 pkt (12.5 → 15.1).
 #### Cross
 - **Obecny mod:** Cross / Health / Offense % 8.5% / secondary: Potency % 5.12%, Defense % 5.92%, Speed 19, Protection % 10.77% / 6★ A lvl15
 - **Proponowany mod:** Cross / Health / Health % 16% / secondary: Health 694, Protection 1743, Speed 20, Offense 116 / 6★ A lvl15
 - **Źródło:** STORMTROOPERLUKE
   - Zmiana dopasowania do profilu: +5.7 pkt (10.0 → 15.7).
 
-- **Zmiana potencjału buildu:** +10.2 pkt (optymistyczna projekcja do 15; brakujące rolle przypisane do najwyżej preferowanej secondary; dla 5A projekcja secondary do 6E; primary pozostaje bez zmian; bez slice i calibration).
+- **Zmiana potencjału buildu:** +15.8 pkt (optymistyczna projekcja do 15; brakujące rolle przypisane do najwyżej preferowanej secondary; dla 5A projekcja secondary do 6E; primary pozostaje bez zmian; bez slice i calibration).
 
 ## MOD — mody przenoszone na cel
 
@@ -70,18 +73,26 @@ Nie jest wymagany żaden PATCH.
 
 ### Co blokuje zatwierdzenie
 
-- **walidacja fizyczna:** transfer PATCH narusza Stack Rank: GLREY -> STORMTROOPERLUKE
+- **walidacja fizyczna:** transfer PATCH narusza Stack Rank: GLREY -> COMMANDERLUKESKYWALKER
+- **walidacja fizyczna:** transfer PATCH narusza Stack Rank: GLREY -> ASAJJDARKDISCIPLE
+- **walidacja fizyczna:** transfer PATCH narusza Stack Rank: GLREY -> ASAJJDARKDISCIPLE
 - **walidacja fizyczna:** końcowy stan slotów po symulacji różni się od stanu zaplanowanego
 ## Diagnostyka przeszukiwania wariantów łańcucha
 
 Limit kompletnych wariantów na głównego dawcę: **5**.
 Wyniki poniżej to ważony Rank bilans zmian danego dawcy i jego rekurencyjnych pod-dawców; wyższy wynik jest lepszy.
 
-- **STORMTROOPERLUKE:** sprawdzono 5 kompletnych wariantów; wyniki: -9.2097, -9.8922, -11.1122, -11.2360, -11.3320; najlepszy: -9.2097.
+- **COMMANDERLUKESKYWALKER:** sprawdzono 2 kompletnych wariantów; wyniki: +28.3198, +26.3498; najlepszy: +28.3198.
+- **GRANDADMIRALTHRAWN:** sprawdzono 5 kompletnych wariantów; wyniki: -0.8812, -1.3992, -3.4338, -3.7572, -3.8992; najlepszy: -0.8812.
+- **STORMTROOPERLUKE:** sprawdzono 5 kompletnych wariantów; wyniki: -9.8922, -11.1122, -11.2360, -11.3320, -11.3320; najlepszy: -9.8922.
 
 ## Kontrola profili użytych w łańcuchu
 
+- ASAJJDARKDISCIPLE: profil dostępny, 2 źródła.
+- COMMANDERLUKESKYWALKER: profil dostępny, 2 źródła.
 - GLREY: profil dostępny, 2 źródła.
+- GRANDADMIRALTHRAWN: profil dostępny, 2 źródła.
+- LUKESTARKILLER: profil dostępny, 2 źródła.
 - STORMTROOPERLUKE: profil dostępny, 2 źródła.
 
 ## Założenia projekcji
