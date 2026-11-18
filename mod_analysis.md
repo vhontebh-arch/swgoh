@@ -4,15 +4,15 @@ Model rozdziela **jakość obecnych rolli**, **potencjał dalszego rozwoju**, **
 
 W raportach przeznaczonych do ręcznego wykonania mod identyfikowany jest wyłącznie przez slot, set, primary, secondary, gwiazdki, tier i poziom; wewnętrzne ID nie są pokazywane.
 
-- Modów: **2196**
+- Modów: **2194**
 - UPGRADE: **30**
-- SLICE: **1152**
-- SLICE_6E: **237**
+- SLICE: **1151**
+- SLICE_6E: **238**
 - CALIBRATE: **106**
 - EQUIP: **0**
 - REPLACE: **3**
 - PATCH: **3**
-- KEEP: **665**
+- KEEP: **663**
 
 ## Globalny optimizer 6-slotowy
 
