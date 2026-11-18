@@ -1313,6 +1313,7 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                 required_set_combo=required_combo,
                 excluded_mod_ids=excluded_mod_ids,
                 projected=False,
+                ranking=ranking,
             )
             donor_build = donor_optimizer.get(donor_id, {}).get("mods", [])
             by_slot = {str(mod.get("slot", "") or ""): mod for mod in donor_build}
@@ -2025,13 +2026,14 @@ def project_mod_for_build(row, profile):
     return projected
 
 
-def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, names=None, protected_owners=None, required_set_combo=None, excluded_mod_ids=None, projected=True):
+def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, names=None, protected_owners=None, required_set_combo=None, excluded_mod_ids=None, projected=True, ranking=None):
     """Independently implemented full-build optimizer inspired by Grandivory."""
     profiles = profiles or {}
     aliases = aliases or {}
     names = names or {}
     protected_owners = set(protected_owners or set())
     excluded_mod_ids = {str(value) for value in (excluded_mod_ids or set())}
+    ranking = ranking or []
     slots = ("Square", "Diamond", "Circle", "Arrow", "Triangle", "Cross")
     primary_points, secondary_points, max_rolls = PROFILE_PRIMARY_POINTS, PROFILE_SECONDARY_POINTS, PROFILE_MAX_ROLLS
     speed_reference = 150.0
@@ -2154,8 +2156,21 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
                     continue
                 if integer(row.get("dots")) < 5:
                     continue
-                if is_true(row.get("equipped")) and base(row) in protected_owners:
-                    continue
+                if is_true(row.get("equipped")):
+                    source_owner = base(row)
+                    # Stack Rank is a hard eligibility gate during candidate
+                    # selection, not a post-selection validation. An equipped
+                    # mod from a higher-priority owner (lower Rank) must never
+                    # enter the target's candidate pool. Inventory mods remain
+                    # unrestricted; a target's own current mod is unchanged.
+                    if not source_owner:
+                        continue
+                    if source_owner in protected_owners and source_owner != target_id:
+                        continue
+                    if source_owner != target_id and not can_transfer_by_rank(
+                        source_owner, target_id, ranking, aliases
+                    ):
+                        continue
                 name = str(row.get("set", "") or "")
                 unchanged = slot in current_by_slot and rid(current_by_slot[slot]) == rid(row)
                 key = (
@@ -2921,7 +2936,7 @@ def main(argv=None):
         return str(row.get("id", "") or "")
 
     ranking = load_ranking_json("character_ranking.json")
-    optimizer = optimize_target_build(rows, target_ids, profiles, aliases, names, protected_owners)
+    optimizer = optimize_target_build(rows, target_ids, profiles, aliases, names, protected_owners, ranking=ranking)
 
     # Resolve a provisional physical chain, fetch profiles only for owners
     # that actually appear in it, then re-run. Repeat if the improved ranking
