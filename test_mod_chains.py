@@ -516,5 +516,53 @@ class TargetSetCombinationSelectionTests(unittest.TestCase):
         self.assertIsNone(match)
 
 
+class DisplacedTargetStackRankTests(unittest.TestCase):
+    def test_displaced_target_mod_cannot_patch_lower_ranked_donor(self):
+        selected = make_mod("luke-selected-cross", DONOR, True, "Cross", 20, "Speed", 4)
+        donor_mods = [
+            make_mod("luke-square", DONOR, True, "Square", 10, "Speed", 3),
+            make_mod("luke-diamond", DONOR, True, "Diamond", 10, "Speed", 3),
+            make_mod("luke-triangle", DONOR, True, "Triangle", 10, "Speed", 3),
+            make_mod("luke-circle", DONOR, True, "Circle", 10, "Health", 3),
+            make_mod("luke-arrow", DONOR, True, "Arrow", 10, "Health", 3),
+        ]
+        # This displaced target mod has the better local fit, but the target
+        # (Rank 1) must not donate it to the lower-ranked donor (Rank 3).
+        displaced_target = make_mod(
+            "rey-displaced-cross", TARGET, True, "Cross", 100, "Speed", 6
+        )
+        inventory_patch = make_mod(
+            "inventory-cross-patch", value=10, slot="Cross",
+            mod_set="Speed", speed_roll=3,
+        )
+        profile = {
+            "set_preferences": {"Speed": 1.0, "Health": 0.8},
+            "primary_preferences": {
+                "Arrow": {"Speed": 1.0},
+                "Triangle": {"Speed": 1.0},
+                "Circle": {"Health": 1.0},
+                "Cross": {"Speed": 1.0},
+            },
+            "secondary_preferences": {"Speed": 1.0},
+            "set_combinations": {"Speed + Health": 73.84},
+        }
+        result = run_plan(
+            [selected, *donor_mods, displaced_target, inventory_patch],
+            selected,
+            {TARGET: "TARGET", DONOR: "DONOR"},
+            {"DONOR": profile},
+        )
+        self.assertTrue(result["safe"], result["failed"])
+        self.assertEqual(len(result["plans"]), 1)
+        self.assertEqual(
+            result["plans"][0]["moves"][0]["replacement"]["id"],
+            "inventory-cross-patch",
+        )
+        self.assertNotEqual(
+            result["plans"][0]["moves"][0]["replacement"]["id"],
+            "rey-displaced-cross",
+        )
+
+
 if __name__ == "__main__":
     unittest.main()
