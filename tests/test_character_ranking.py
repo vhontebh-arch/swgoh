@@ -55,7 +55,7 @@ class StackRankImportTests(unittest.TestCase):
     def test_repository_snapshot_maps_all_315_characters(self):
         root=Path(__file__).resolve().parents[1]
         data=load_stack_rank(root/"data"/"stack_rank.tsv",DEFAULT_MAPPING)
-        self.assertEqual(len(data),315); self.assertEqual(len({x["base_id"] for x in data}),313)
+        self.assertEqual(len(data),315); self.assertEqual(len({x["base_id"] for x in data}),315)
         self.assertEqual(data[0]["character"],"Rey"); self.assertEqual(data[0]["base_id"],"GLREY")
         self.assertEqual(get_character_rank(data,"Ben Solo")["base_id"],"BENSOLO")
         self.assertEqual(get_character_rank(data,"Grogu & Anzellans")["base_id"],"GOPHERANTS")
