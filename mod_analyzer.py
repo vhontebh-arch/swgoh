@@ -9,7 +9,7 @@ import csv
 import json
 import os
 
-from character_ranking import load_ranking_json, rank_weighted_donor_delta, rank_weighted_account_delta, can_transfer_by_rank
+from character_ranking import load_ranking_json, can_transfer_by_rank
 from update_mod_profiles import ensure_profiles, load_fresh_profiles
 
 INPUT_FILE = "mods.csv"
@@ -1221,7 +1221,7 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
     donor_rebuild_reserved = set()
 
     def rebuild_profiled_donor(donor_id, donor_selected, visited, explore_alternatives=True):
-        """Rebuild donor holes and choose among bounded complete recursive alternatives by Rank-weighted roster impact."""
+        """Rebuild donor holes and compare bounded complete alternatives by donor build impact."""
         if donor_id in visited:
             return None, "wykryto cykl w łańcuchu dawców"
         donor_profile = profiles.get(donor_id)
@@ -1300,7 +1300,7 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
         # child branch, then ask the full-build optimizer for the next candidate.
         excluded_mod_ids = set()
         best_moves = None
-        best_rank_score = float("-inf")
+        best_chain_score = float("-inf")
         best_reservations = set()
         successful_variants = 0
         variant_scores = []
@@ -1384,15 +1384,15 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
 
             if failed_child is None:
                 complete_moves = moves + child_moves_all
-                rank_score = rank_weighted_donor_delta(complete_moves, ranking, aliases)
-                if rank_score > best_rank_score:
+                chain_score = sum(float(move.get("gain", 0.0) or 0.0) for move in complete_moves)
+                if chain_score > best_chain_score:
                     best_moves = complete_moves
-                    best_rank_score = rank_score
+                    best_chain_score = chain_score
                     best_reservations = set(donor_rebuild_reserved)
                 donor_rebuild_reserved.clear()
                 donor_rebuild_reserved.update(reservation_snapshot)
                 successful_variants += 1
-                variant_scores.append(round(rank_score, 4))
+                variant_scores.append(round(chain_score, 4))
                 if explore_alternatives:
                     CHAIN_SEARCH_DIAGNOSTICS[donor_id] = list(variant_scores)
                 if not explore_alternatives or successful_variants >= CHAIN_ALTERNATIVE_CAP:
@@ -1537,15 +1537,10 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                                 new_moves,False
                             ))
             if terminal_solutions:
-                # Rank-weight every donor's complete delta; target gain is deliberately
-                # excluded here and remains unweighted in the outer account objective.
-                # Exact combo preservation is a tie-break, not a second importance signal.
-                for solution in terminal_solutions:
-                    solution["rank_weighted_gain"] = rank_weighted_donor_delta(
-                        solution["moves"], ranking, aliases
-                    )
+                # Rank only controls transfer eligibility. Among feasible chains,
+                # use the existing unweighted donor-impact criteria.
                 terminal_solutions.sort(key=lambda solution: (
-                    solution.get("rank_weighted_gain", solution["gain"]),
+                    solution["gain"],
                     solution.get("combo_delta", 0.0),
                     solution["gain"],
                     solution["set_delta"],
@@ -1928,23 +1923,12 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
     all_profiled = bool(relevant_validation) and all(
         item.get("profileScoreAvailable") for item in relevant_validation
     )
-    weighted_donor_delta = (
-        rank_weighted_donor_delta(rank_donor_moves, ranking, aliases)
-        if all_profiled else None
-    )
-    weighted_target_delta = (
-        rank_weighted_account_delta(rank_target_moves, ranking, aliases)
-        if all_profiled else None
-    )
-    rank_weighted_total = (
-        round(rank_weighted_account_delta(all_rank_moves, ranking, aliases), 2)
-        if all_profiled else None
-    )
+    donor_delta = round(sum(float(item.get("profileScoreDelta", 0.0) or 0.0) for item in rank_donor_moves), 2) if all_profiled else None
+    target_delta = round(sum(float(item.get("profileScoreDelta", 0.0) or 0.0) for item in rank_target_moves), 2) if all_profiled else None
+    account_delta = round(sum(float(item.get("profileScoreDelta", 0.0) or 0.0) for item in all_rank_moves), 2) if all_profiled else None
     return {
         "safe": safe, "plans": plans, "validation": validation, "failed": failed,
-        "rankWeightedTargetDelta": weighted_target_delta,
-        "rankWeightedDonorDelta": weighted_donor_delta,
-        "rankWeightedAccountDelta": rank_weighted_total,
+        "targetDelta": target_delta, "donorDelta": donor_delta, "accountDelta": account_delta,
     }
 
 
@@ -2436,17 +2420,17 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
         for move in plan.get("moves", [])
     )
     donor_compromise = donor_compromise or unavailable_profile_losses
-    rank_weighted_total = chain_result.get("rankWeightedAccountDelta")
+    account_delta = chain_result.get("accountDelta")
     if not chain_result.get("safe"):
         assessment = "BLOKADA — nie wykonuj przekładek"
-    elif rank_weighted_total is None:
-        assessment = "BILANS RANK NIEPEŁNY — brakuje porównywalnego profilu dla co najmniej jednej postaci"
-    elif rank_weighted_total <= 0.05:
-        assessment = "BILANS RANK NIEDODATNI — nie rekomenduję wykonania łańcucha"
+    elif account_delta is None:
+        assessment = "BILANS NIEPEŁNY — brakuje porównywalnego profilu dla co najmniej jednej postaci"
+    elif account_delta <= 0.05:
+        assessment = "BILANS NIEDODATNI — nie rekomenduję wykonania łańcucha"
     elif donor_compromise:
-        assessment = "KOMPROMIS — bilans Rank dodatni, ale co najmniej jeden dawca traci"
+        assessment = "KOMPROMIS — bilans całego łańcucha dodatni, ale co najmniej jeden dawca traci"
     else:
-        assessment = "REKOMENDACJA — dodatni bilans Rank całego łańcucha, bez wykrytej straty u dawców"
+        assessment = "REKOMENDACJA — dodatni bilans całego łańcucha, bez wykrytej straty u dawców"
 
     lines += [
         "## Status",
@@ -2461,16 +2445,6 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
                 "NIEOBLICZALNY — brak profilu/oceny dla jednej z postaci"
                 if account_delta is None else "{:+.2f} pkt".format(account_delta)
             )
-        ),
-        "- **Bilans ważony Rank (cel i dawcy):** {}".format(
-            "NIEOBLICZALNY — brak profilu/oceny dla jednej z postaci"
-            if chain_result.get("rankWeightedAccountDelta") is None
-            else "{:+.2f} pkt".format(chain_result["rankWeightedAccountDelta"])
-        ),
-        "- **Ważony wkład celu:** {}".format(
-            "NIEOBLICZALNY"
-            if chain_result.get("rankWeightedTargetDelta") is None
-            else "{:+.2f} pkt".format(chain_result["rankWeightedTargetDelta"])
         ),
         "- **Liczba modów docelowych:** {}/6".format(
             min(6, max((len(opt.get("mods", [])) for opt in optimizer.values()), default=0))
