@@ -1,4 +1,4 @@
-# Raport modów — 50RT
+# Raport modów — GLREY
 
 **Raport użytkowy.** Pokazuje wyłącznie docelowe mody, kolejność przekładek i wpływ na dawców.
 
@@ -11,54 +11,50 @@
 - **Łączny bilans profilu rosteru:** NIEZATWIERDZONY — łańcuch przekładek jest zablokowany
 - **Liczba modów docelowych:** 6/6
 
-## Docelowy zestaw — 50RT
+## Docelowy zestaw — GLREY
 
 ### Profil SWGOH.GG
 
-**Najczęstszy układ w profilu:** Speed + Health
-**Układ po tej operacji:** Speed + Health
+**Najczęstszy układ w profilu:** Offense + Health
+**Układ po tej operacji:** Offense + Health
 **Zgodność z głównym układem profilu:** TAK.
-**Częstość układu po operacji w profilu:** 28.1%.
+**Częstość układu po operacji w profilu:** 80.5%.
 
-- Top 1000 Kyber GAC — 911 postaci z kompletnymi 6 modami
-- Top 100 Guilds — 4852 postaci z kompletnymi 6 modami
-- Najczęstsze kombinacje: Speed + Health (28.1%); Triple Health (14.5%); Crit Damage + Crit Chance (9.3%)
-- Priorytet secondary: Speed, Offense, Health, Potency
+- Top 1000 Kyber GAC — 947 postaci z kompletnymi 6 modami
+- Top 100 Guilds — 4871 postaci z kompletnymi 6 modami
+- Najczęstsze kombinacje: Offense + Health (80.5%); Speed + Health (7.1%); Offense + Crit Chance (0.2%)
+- Priorytet secondary: Speed, Offense %, Offense, Health %
 
 ### Sześć modów docelowych
 
 #### Arrow
-- **Obecny mod:** Arrow / Health / Speed 30 / secondary: Health 742, Tenacity % 1.64%, Critical Chance % 2.15%, Defense % 2.53% / 5★ C lvl15
-- **Proponowany mod:** Arrow / Speed / Protection % 24% / secondary: Health 770, Defense % 9.48%, Protection 1035, Speed 24 / 6★ A lvl15
-- **Źródło:** STORMTROOPERLUKE
-  - Zmiana dopasowania do profilu: +6.9 pkt (7.4 → 14.3).
+- **Obecny mod:** Arrow / Offense / Offense % 8.5% / secondary: Speed 14, Defense % 8.89%, Health 1516, Protection 1576 / 6★ A lvl15
+- **Proponowany mod:** Arrow / Offense / Health % 16% / secondary: Offense 117, Critical Chance % 5.16%, Offense % 1.4%, Speed 16 / 6★ C lvl15
+- **Źródło:** MAGAZYN
+  - Zmiana dopasowania do profilu: +4.5 pkt (7.5 → 12.0).
 #### Square
-- **Obecny mod:** Square / Health / Offense % 5.88% / secondary: Critical Chance % 3.35%, Protection 459, Speed 20, Potency % 1.71% / 5★ A lvl15
-- **Proponowany mod:** Square / Speed / Offense % 8.5% / secondary: Potency % 8.71%, Health 698, Tenacity % 4.38%, Speed 17 / 6★ A lvl15
-- **Źródło:** STORMTROOPERLUKE
-  - Zmiana dopasowania do profilu: +1.8 pkt (10.0 → 11.8).
+- **Obecny mod:** Square / Offense / Offense % 8.5% / secondary: Protection 488, Speed 24, Offense 96, Defense % 8.17% / 6★ A lvl15
+- **Proponowany mod:** pozostaje bez zmian — Square / Offense / Offense % 8.5% / secondary: Protection 488, Speed 24, Offense 96, Defense % 8.17% / 6★ A lvl15
+- **Korzyść:** zachowanie obecnej konfiguracji slotu.
 #### Diamond
-- **Obecny mod:** Diamond / Health / Defense % 11.75% / secondary: Health 277, Speed 9, Offense 70, Protection 493 / 5★ C lvl15
-- **Proponowany mod:** Diamond / Speed / Defense % 20% / secondary: Tenacity % 5.13%, Potency % 3.46%, Speed 24, Protection 1994 / 6★ A lvl15
-- **Źródło:** STORMTROOPERLUKE
-  - Zmiana dopasowania do profilu: +4.6 pkt (7.9 → 12.5).
+- **Obecny mod:** Diamond / Offense / Defense % 20% / secondary: Offense 98, Health 591, Speed 28, Critical Chance % 2.87% / 6★ A lvl15
+- **Proponowany mod:** pozostaje bez zmian — Diamond / Offense / Defense % 20% / secondary: Offense 98, Health 591, Speed 28, Critical Chance % 2.87% / 6★ A lvl15
+- **Korzyść:** zachowanie obecnej konfiguracji slotu.
 #### Triangle
-- **Obecny mod:** Triangle / Potency / Critical Damage % 42% / secondary: Health % 5.16%, Tenacity % 4.33%, Offense 67, Speed 21 / 6★ A lvl15
-- **Proponowany mod:** Triangle / Health / Critical Damage % 42% / secondary: Protection 764, Speed 23, Protection % 4.06%, Defense % 13.03% / 6★ A lvl15
-- **Źródło:** STORMTROOPERLUKE
-  - Zmiana dopasowania do profilu: -2.0 pkt (14.5 → 12.5).
+- **Obecny mod:** Triangle / Offense / Offense % 8.5% / secondary: Offense 139, Speed 15, Tenacity % 3.65%, Defense 34 / 6★ A lvl15
+- **Proponowany mod:** pozostaje bez zmian — Triangle / Offense / Offense % 8.5% / secondary: Offense 139, Speed 15, Tenacity % 3.65%, Defense 34 / 6★ A lvl15
+- **Korzyść:** zachowanie obecnej konfiguracji slotu.
 #### Circle
-- **Obecny mod:** Circle / Speed / Health % 5.88% / secondary: Speed 5, Critical Chance % 1.51%, Health 682, Protection 1529 / 5★ C lvl15
-- **Proponowany mod:** Circle / Speed / Protection % 24% / secondary: Defense % 15.26%, Speed 16, Health 1181, Critical Chance % 2.93% / 6★ A lvl15
-- **Źródło:** STORMTROOPERLUKE
-  - Zmiana dopasowania do profilu: +5.9 pkt (4.3 → 10.3).
+- **Obecny mod:** Circle / Health / Health % 16% / secondary: Defense % 2.81%, Critical Chance % 4.06%, Health 1818, Speed 22 / 6★ A lvl15
+- **Proponowany mod:** pozostaje bez zmian — Circle / Health / Health % 16% / secondary: Defense % 2.81%, Critical Chance % 4.06%, Health 1818, Speed 22 / 6★ A lvl15
+- **Korzyść:** zachowanie obecnej konfiguracji slotu.
 #### Cross
-- **Obecny mod:** Cross / Speed / Health % 5.88% / secondary: Offense 42, Protection 1099, Speed 4, Defense % 0.95% / 5★ D lvl15
+- **Obecny mod:** Cross / Health / Offense % 8.5% / secondary: Potency % 5.12%, Defense % 5.92%, Speed 19, Protection % 10.77% / 6★ A lvl15
 - **Proponowany mod:** Cross / Health / Health % 16% / secondary: Health 694, Protection 1743, Speed 20, Offense 116 / 6★ A lvl15
 - **Źródło:** STORMTROOPERLUKE
-  - Zmiana dopasowania do profilu: +13.8 pkt (3.5 → 17.3).
+  - Zmiana dopasowania do profilu: +5.7 pkt (10.0 → 15.7).
 
-- **Zmiana potencjału buildu:** +49.9 pkt (optymistyczna projekcja do 15; brakujące rolle przypisane do najwyżej preferowanej secondary; dla 5A projekcja secondary do 6E; primary pozostaje bez zmian; bez slice i calibration).
+- **Zmiana potencjału buildu:** +10.2 pkt (optymistyczna projekcja do 15; brakujące rolle przypisane do najwyżej preferowanej secondary; dla 5A projekcja secondary do 6E; primary pozostaje bez zmian; bez slice i calibration).
 
 ## MOD — mody przenoszone na cel
 
@@ -74,20 +70,18 @@ Nie jest wymagany żaden PATCH.
 
 ### Co blokuje zatwierdzenie
 
-- **walidacja fizyczna:** transfer PATCH narusza Stack Rank: 50RT -> STORMTROOPERLUKE
-- **walidacja fizyczna:** transfer PATCH narusza Stack Rank: 50RT -> STORMTROOPERLUKE
-- **walidacja fizyczna:** transfer PATCH narusza Stack Rank: 50RT -> STORMTROOPERLUKE
+- **walidacja fizyczna:** transfer PATCH narusza Stack Rank: GLREY -> STORMTROOPERLUKE
 - **walidacja fizyczna:** końcowy stan slotów po symulacji różni się od stanu zaplanowanego
 ## Diagnostyka przeszukiwania wariantów łańcucha
 
 Limit kompletnych wariantów na głównego dawcę: **5**.
 Wyniki poniżej to ważony Rank bilans zmian danego dawcy i jego rekurencyjnych pod-dawców; wyższy wynik jest lepszy.
 
-- **STORMTROOPERLUKE:** sprawdzono 5 kompletnych wariantów; wyniki: -43.7950, -44.9715, -45.0547, -45.4897, -46.5222; najlepszy: -43.7950.
+- **STORMTROOPERLUKE:** sprawdzono 5 kompletnych wariantów; wyniki: -9.2097, -9.8922, -11.1122, -11.2360, -11.3320; najlepszy: -9.2097.
 
 ## Kontrola profili użytych w łańcuchu
 
-- 50RT: profil dostępny, 2 źródła.
+- GLREY: profil dostępny, 2 źródła.
 - STORMTROOPERLUKE: profil dostępny, 2 źródła.
 
 ## Założenia projekcji
