@@ -1197,6 +1197,7 @@ jobs:
           git add \
             c3po.json \
             mod_profiles.json \
+            swgoh_972824625.json \
             roster.csv \
             ships.csv \
             mods.csv \
