@@ -32,7 +32,7 @@ permissions:
 jobs:
   analyze:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 50
     steps:
       - name: Checkout optimizer-v2
         uses: actions/checkout@v4
