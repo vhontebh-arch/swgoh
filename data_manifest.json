@@ -17,7 +17,7 @@
       "sha256": "20040aa239955fee4a54210d99a2a7732c08b28f2ca7d2ddddd07e64e6716c19",
       "git_blob_sha": "e63fa626c8f10e2d432b88f31f38087ec9bc523e",
       "source_branch": "main",
-      "source_commit": "1c0ecc0214df6928eb053583c75906f86c39211c"
+      "source_commit": "e44571e7ad299857b529cb131a1d19aa8ff9cade"
     },
     "roster.csv": {
       "role": "derived character roster",
@@ -25,7 +25,7 @@
       "sha256": "68b8eda49ec0c168d238b5637fdad5d29bd459687241ab942c48630363b6995d",
       "git_blob_sha": "2e10ea4d11cda7ce91f31b232eba1f6eeac8ee6a",
       "source_branch": "main",
-      "source_commit": "1c0ecc0214df6928eb053583c75906f86c39211c"
+      "source_commit": "e44571e7ad299857b529cb131a1d19aa8ff9cade"
     },
     "c3po.json": {
       "role": "C3PO inventory export",
@@ -33,7 +33,7 @@
       "sha256": "5075e8ce03175166eb836d5aa1e3c3de7674f84fc48e1471bd6a26e9ccce2c14",
       "git_blob_sha": "2e3fe397cf1e2a850047fc0781a97e774d525b90",
       "source_branch": "main",
-      "source_commit": "1c0ecc0214df6928eb053583c75906f86c39211c"
+      "source_commit": "e44571e7ad299857b529cb131a1d19aa8ff9cade"
     },
     "mod_profiles.json": {
       "role": "shared SWGOH.GG mod profiles",
@@ -41,15 +41,15 @@
       "sha256": "86a3c8eff4949474caba1dbe4ba803b58355cc52a1945ba09e47fc9aaac942d5",
       "git_blob_sha": "a32274c97778587a7464511832f312359359b846",
       "source_branch": "main",
-      "source_commit": "1c0ecc0214df6928eb053583c75906f86c39211c"
+      "source_commit": "e44571e7ad299857b529cb131a1d19aa8ff9cade"
     },
     "swgoh_972824625.json": {
       "role": "raw Comlink player export",
       "bytes": 3344833,
-      "sha256": "3852b36845670e5b0ae0ca8723032b71d6aefa428dbf5ae886638c3b10a78550",
-      "git_blob_sha": "40b79d5d21e0bc3ab81d87d5b1dd854efa458b87",
+      "sha256": "92b254f826d3bb1668fec27cb9159da4eda55b88235a0f5fefdf7476a599def9",
+      "git_blob_sha": "94dc6906201a63e5db9fd0b1723c6372be85f28c",
       "source_branch": "main",
-      "source_commit": "1c0ecc0214df6928eb053583c75906f86c39211c"
+      "source_commit": "e44571e7ad299857b529cb131a1d19aa8ff9cade"
     },
     "data.json": {
       "role": "normalized current game data",
@@ -57,7 +57,7 @@
       "sha256": "27743e9cd77c150560485ec37d6edca6a1a9395d3d7e7b12d517d01d4060112c",
       "git_blob_sha": "6d6bf00a6103748d369fcd91b7381d18870ffedd",
       "source_branch": "main",
-      "source_commit": "1c0ecc0214df6928eb053583c75906f86c39211c"
+      "source_commit": "e44571e7ad299857b529cb131a1d19aa8ff9cade"
     },
     "localization.json": {
       "role": "current ENG_US localization",
@@ -65,7 +65,7 @@
       "sha256": "c40fe48f9811e21810971fa2fdb3f60ce699855913be1947cef595b7da823c4c",
       "git_blob_sha": "47a6ebe94a60cb7487dfadc48ea87056a0c8ef20",
       "source_branch": "main",
-      "source_commit": "1c0ecc0214df6928eb053583c75906f86c39211c"
+      "source_commit": "e44571e7ad299857b529cb131a1d19aa8ff9cade"
     },
     "ships.csv": {
       "role": "derived ship roster",
@@ -73,7 +73,7 @@
       "sha256": "8aa0b20343de5cde0330c9964a703736629faa467ce2ad67e14fb068f76f78f9",
       "git_blob_sha": "43c8efc2d7264c52a62cf9fba3dfebdbbed94158",
       "source_branch": "main",
-      "source_commit": "1c0ecc0214df6928eb053583c75906f86c39211c"
+      "source_commit": "e44571e7ad299857b529cb131a1d19aa8ff9cade"
     }
   },
   "notes": [
@@ -92,12 +92,12 @@
     "Added Grogu & Anzellans profile from fresh Top 1000 Kyber GAC and Top 100 Guilds Best Mods pages; updated canonical snapshot manifest."
   ],
   "snapshot": {
-    "published_at": "2026-11-18T10:36:27.661351+00:00",
-    "player_export_acquired_at": "2026-11-18T10:36:07Z",
+    "published_at": "2026-11-18T10:37:16.794248+00:00",
+    "player_export_acquired_at": "2026-11-18T10:37:03Z",
     "producer_repository": "vhontebh-arch/swgoh",
     "producer_branch": "main",
-    "producer_commit": "1c0ecc0214df6928eb053583c75906f86c39211c",
-    "c3po_source_commit": "1c0ecc0214df6928eb053583c75906f86c39211c",
+    "producer_commit": "e44571e7ad299857b529cb131a1d19aa8ff9cade",
+    "c3po_source_commit": "e44571e7ad299857b529cb131a1d19aa8ff9cade",
     "player_roster_units": 382,
     "character_rows": 316,
     "ship_rows": 66,
