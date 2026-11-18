@@ -1212,7 +1212,10 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
             current = eq.get((target_owner, slot))
             if current and rid(current) != rid(selected):
                 recycled = dict(current)
-                recycled["_source_owner"] = owner(current)
+                # Once removed from a target, the mod enters inventory.
+                # It no longer carries the target owner's Stack Rank as a
+                # transfer restriction for a subsequent donor PATCH.
+                recycled.pop("_source_owner", None)
                 recycled["equipped"] = "False"
                 recycled["assignedTo"] = ""
                 displaced_target_mods.append(recycled)
