@@ -4,23 +4,12 @@
 
 ## Status
 
-- **Wykonalność fizyczna:** POTWIERDZONA
-- **Walidacja fizyczna całego łańcucha:** POTWIERDZONA
-- **Ocena:** BILANS NIEDODATNI — nie rekomenduję wykonania łańcucha
+- **Wykonalność fizyczna:** ZABLOKOWANA
+- **Walidacja fizyczna całego łańcucha:** ZABLOKOWANA
+- **Ocena:** BLOKADA — nie wykonuj przekładek
 - **Interpretacja:** bilans obejmuje cel i wszystkich dotkniętych dawców, liczony tą samą nieprojekcyjną punktacją pełnego buildu.
-- **Łączny bilans profilu rosteru:** +0.00 pkt
+- **Łączny bilans profilu rosteru:** NIEZATWIERDZONY — łańcuch przekładek jest zablokowany
 - **Liczba modów docelowych:** 6/6
-
-## Bilans całej operacji — ta sama punktacja przed/po
-
-Wynik każdego buildu jest liczony bez projekcji przyszłych rolli i bez założeń o slice. Suma obejmuje cel oraz każdego dawcę bezpośredniego i pośredniego.
-
-| Postać | Rola w łańcuchu | Wynik przed | Wynik po | Zmiana |
-|---|---|---:|---:|---:|
-| STORMTROOPERLUKE | DAWCA | 121.96 | 112.06 | -9.89 |
-| GLREY | CEL | 167.71 | 177.96 | +10.25 |
-
-**ŁĄCZNA ZMIANA: +0.00 pkt.**
 
 ## Docelowy zestaw — GLREY
 
@@ -49,62 +38,56 @@ Wynik każdego buildu jest liczony bez projekcji przyszłych rolli i bez założ
 - **Korzyść:** zachowanie obecnej konfiguracji slotu.
 #### Diamond
 - **Obecny mod:** Diamond / Offense / Defense % 20% / secondary: Offense 98, Health 591, Speed 28, Critical Chance % 2.87% / 6★ A lvl15
-- **Proponowany mod:** pozostaje bez zmian — Diamond / Offense / Defense % 20% / secondary: Offense 98, Health 591, Speed 28, Critical Chance % 2.87% / 6★ A lvl15
-- **Korzyść:** zachowanie obecnej konfiguracji slotu.
+- **Proponowany mod:** Diamond / Offense / Defense % 20% / secondary: Speed 21, Offense % 5.76%, Defense 22, Critical Chance % 2.08% / 6★ A lvl15
+- **Źródło:** COMMANDERLUKESKYWALKER
+  - Zmiana dopasowania do profilu: +0.8 pkt (15.7 → 16.5).
 #### Triangle
 - **Obecny mod:** Triangle / Offense / Offense % 8.5% / secondary: Offense 139, Speed 15, Tenacity % 3.65%, Defense 34 / 6★ A lvl15
-- **Proponowany mod:** pozostaje bez zmian — Triangle / Offense / Offense % 8.5% / secondary: Offense 139, Speed 15, Tenacity % 3.65%, Defense 34 / 6★ A lvl15
-- **Korzyść:** zachowanie obecnej konfiguracji slotu.
+- **Proponowany mod:** Triangle / Health / Protection % 24% / secondary: Defense 24, Offense % 5.92%, Speed 13, Health 983 / 6★ A lvl15
+- **Źródło:** GRANDADMIRALTHRAWN
+  - Zmiana dopasowania do profilu: +2.2 pkt (11.8 → 14.0).
 #### Circle
 - **Obecny mod:** Circle / Health / Health % 16% / secondary: Defense % 2.81%, Critical Chance % 4.06%, Health 1818, Speed 22 / 6★ A lvl15
-- **Proponowany mod:** pozostaje bez zmian — Circle / Health / Health % 16% / secondary: Defense % 2.81%, Critical Chance % 4.06%, Health 1818, Speed 22 / 6★ A lvl15
-- **Korzyść:** zachowanie obecnej konfiguracji slotu.
+- **Proponowany mod:** Circle / Offense / Protection % 24% / secondary: Health 1100, Offense % 2.65%, Defense % 6%, Speed 24 / 6★ A lvl15
+- **Źródło:** COMMANDERLUKESKYWALKER
+  - Zmiana dopasowania do profilu: +2.6 pkt (12.5 → 15.1).
 #### Cross
 - **Obecny mod:** Cross / Health / Offense % 8.5% / secondary: Potency % 5.12%, Defense % 5.92%, Speed 19, Protection % 10.77% / 6★ A lvl15
 - **Proponowany mod:** Cross / Health / Health % 16% / secondary: Health 694, Protection 1743, Speed 20, Offense 116 / 6★ A lvl15
 - **Źródło:** STORMTROOPERLUKE
   - Zmiana dopasowania do profilu: +5.7 pkt (10.0 → 15.7).
 
-- **Zmiana potencjału buildu:** +10.2 pkt (optymistyczna projekcja do 15; brakujące rolle przypisane do najwyżej preferowanej secondary; dla 5A projekcja secondary do 6E; primary pozostaje bez zmian; bez slice i calibration).
+- **Zmiana potencjału buildu:** +15.8 pkt (optymistyczna projekcja do 15; brakujące rolle przypisane do najwyżej preferowanej secondary; dla 5A projekcja secondary do 6E; primary pozostaje bez zmian; bez slice i calibration).
 
 ## MOD — mody przenoszone na cel
 
-- **MAGAZYN → GLREY:** Arrow / Offense / Health % 16% / secondary: Offense 117, Critical Chance % 5.16%, Offense % 1.4%, Speed 16 / 6★ C lvl15
-- **STORMTROOPERLUKE → GLREY:** Cross / Health / Health % 16% / secondary: Health 694, Protection 1743, Speed 20, Offense 116 / 6★ A lvl15
+Brak zatwierdzonych transferów MOD.
 
 ## PATCH — uzupełnienie dawców
 
-- **MAGAZYN → STORMTROOPERLUKE:** Cross / Health / Tenacity % 24% / secondary: Potency % 2.71%, Speed 14, Offense 58, Health % 0.87% / 5★ A lvl15
+Nie jest wymagany żaden PATCH.
 
 ## Kolejność przekładania
 
-1. **Arrow — załóż na GLREY** mod z MAGAZYN: Arrow / Offense / Health % 16% / secondary: Offense 117, Critical Chance % 5.16%, Offense % 1.4%, Speed 16 / 6★ C lvl15
-2. **Cross — załóż na GLREY** mod z STORMTROOPERLUKE: Cross / Health / Health % 16% / secondary: Health 694, Protection 1743, Speed 20, Offense 116 / 6★ A lvl15
+**Nie wykonuj jeszcze żadnej przekładki.** Poniższy build jest wariantem roboczym; walidacja nie zatwierdziła pełnego łańcucha.
 
-### Uzupełnienie dawców — poziom 1
+### Co blokuje zatwierdzenie
 
-3. **PATCH — załóż na STORMTROOPERLUKE** mod z MAGAZYN (dostępny po wcześniejszym kroku): Cross / Health / Tenacity % 24% / secondary: Potency % 2.71%, Speed 14, Offense 58, Health % 0.87% / 5★ A lvl15
-
-Zakładanie moda automatycznie przenosi poprzedni mod ze slotu do magazynu. Wszystkie powyższe kroki zostały sprawdzone na pełnym stanie slotów i magazynu.
-
+- **walidacja profilu dawcy:** COMMANDERLUKESKYWALKER: końcowa kombinacja brak pełnej kombinacji narusza wymaganą Offense + Tenacity
 ## Diagnostyka przeszukiwania wariantów łańcucha
 
-Limit kompletnych wariantów na głównego dawcę: **5**.
+Limit kompletnych wariantów na głównego dawcę: **8**.
 Wyniki poniżej to ważony Rank bilans zmian danego dawcy i jego rekurencyjnych pod-dawców; wyższy wynik jest lepszy.
 
-- **STORMTROOPERLUKE:** sprawdzono 5 kompletnych wariantów; wyniki: -9.8922, -11.1122, -11.2360, -11.3320, -11.3320; najlepszy: -9.8922.
-
-## Wpływ na postacie-dawców
-
-- **STORMTROOPERLUKE — wynik pełnego buildu wg profilu:** 121.96 → 112.06 (-9.89 pkt).
-  - Σ modValue modów: 394.9 → 392.2 (-2.7) — surowy wskaźnik jakości modów, nie wynik profilu.
-  - Kombinacja setów: Speed + Health (60.1%) → Speed + Health (60.1%).
-  - Zmiana wyniku pełnego buildu po kolejnych PATCH-ach: Cross -9.9 pkt.
-  - ISTOTNY SPADEK wartości modów u dawcy.
+- **COMMANDERLUKESKYWALKER:** sprawdzono 2 kompletnych wariantów; wyniki: +16.7080, +63.7237; najlepszy: +63.7237.
+- **GRANDADMIRALTHRAWN:** sprawdzono 8 kompletnych wariantów; wyniki: -0.8812, -1.3992, -3.4338, -3.7572, -3.8992, -3.8992, -4.3675, -5.0000; najlepszy: -0.8812.
+- **STORMTROOPERLUKE:** sprawdzono 8 kompletnych wariantów; wyniki: -11.1122, -11.2360, -11.3320, -11.3320, -11.7097, -13.1772, -13.2505, -13.6122; najlepszy: -11.1122.
 
 ## Kontrola profili użytych w łańcuchu
 
+- COMMANDERLUKESKYWALKER: profil dostępny, 2 źródła.
 - GLREY: profil dostępny, 2 źródła.
+- GRANDADMIRALTHRAWN: profil dostępny, 2 źródła.
 - STORMTROOPERLUKE: profil dostępny, 2 źródła.
 
 ## Założenia projekcji
