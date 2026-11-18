@@ -4,29 +4,12 @@
 
 ## Status
 
-- **Wykonalność fizyczna:** POTWIERDZONA
-- **Walidacja fizyczna całego łańcucha:** POTWIERDZONA
-- **Ocena:** KOMPROMIS — bilans Rank dodatni, ale co najmniej jeden dawca traci
+- **Wykonalność fizyczna:** ZABLOKOWANA
+- **Walidacja fizyczna całego łańcucha:** ZABLOKOWANA
+- **Ocena:** BLOKADA — nie wykonuj przekładek
 - **Interpretacja:** bilans obejmuje cel i wszystkich dotkniętych dawców, liczony tą samą nieprojekcyjną punktacją pełnego buildu.
-- **Łączny bilans profilu rosteru:** -0.62 pkt
-- **Bilans ważony Rank (cel i dawcy):** +1.86 pkt
-- **Ważony wkład celu:** +107.51 pkt
+- **Łączny bilans profilu rosteru:** NIEZATWIERDZONY — łańcuch przekładek jest zablokowany
 - **Liczba modów docelowych:** 6/6
-
-## Bilans całej operacji — ta sama punktacja przed/po
-
-Wynik każdego buildu jest liczony bez projekcji przyszłych rolli i bez założeń o slice. Suma obejmuje cel oraz każdego dawcę bezpośredniego i pośredniego.
-
-| Postać | Rola w łańcuchu | Wynik przed | Wynik po | Zmiana |
-|---|---|---:|---:|---:|
-| 50RT | CEL | 69.86 | 119.77 | +49.91 |
-| ADMIRALPIETT | DAWCA | 87.03 | 81.24 | -5.79 |
-| STORMTROOPERLUKE | DAWCA | 121.96 | 91.11 | -30.84 |
-| LUKESTARKILLER | DAWCA | 109.49 | 101.57 | -7.92 |
-| MARAJADE | DAWCA | 97.00 | 97.58 | +0.58 |
-| EMPERORPALPATINE | DAWCA | 97.37 | 90.82 | -6.56 |
-
-**ŁĄCZNA ZMIANA: -0.62 pkt.**
 
 ## Docelowy zestaw — 50RT
 
@@ -79,123 +62,32 @@ Wynik każdego buildu jest liczony bez projekcji przyszłych rolli i bez założ
 
 ## MOD — mody przenoszone na cel
 
-- **STORMTROOPERLUKE → 50RT:** Square / Speed / Offense % 8.5% / secondary: Potency % 8.71%, Health 698, Tenacity % 4.38%, Speed 17 / 6★ A lvl15
-- **STORMTROOPERLUKE → 50RT:** Diamond / Speed / Defense % 20% / secondary: Tenacity % 5.13%, Potency % 3.46%, Speed 24, Protection 1994 / 6★ A lvl15
-- **STORMTROOPERLUKE → 50RT:** Circle / Speed / Protection % 24% / secondary: Defense % 15.26%, Speed 16, Health 1181, Critical Chance % 2.93% / 6★ A lvl15
-- **STORMTROOPERLUKE → 50RT:** Arrow / Speed / Protection % 24% / secondary: Health 770, Defense % 9.48%, Protection 1035, Speed 24 / 6★ A lvl15
-- **STORMTROOPERLUKE → 50RT:** Triangle / Health / Critical Damage % 42% / secondary: Protection 764, Speed 23, Protection % 4.06%, Defense % 13.03% / 6★ A lvl15
-- **STORMTROOPERLUKE → 50RT:** Cross / Health / Health % 16% / secondary: Health 694, Protection 1743, Speed 20, Offense 116 / 6★ A lvl15
+Brak zatwierdzonych transferów MOD.
 
 ## PATCH — uzupełnienie dawców
 
-- **MAGAZYN → STORMTROOPERLUKE:** Arrow / Speed / Speed 30 / secondary: Offense % 1%, Tenacity % 5.02%, Health 322, Protection 1305 / 5★ A lvl15
-- **MAGAZYN → STORMTROOPERLUKE:** Circle / Speed / Health % 5.88% / secondary: Speed 5, Critical Chance % 1.51%, Health 682, Protection 1529 / 5★ C lvl15
-- **MARAJADE → STORMTROOPERLUKE:** Cross / Speed / Potency % 30% / secondary: Offense 199, Protection 1913, Speed 10, Defense % 5.94% / 6★ A lvl15
-- **LUKESTARKILLER → STORMTROOPERLUKE:** Diamond / Speed / Defense % 20% / secondary: Defense 21, Speed 13, Tenacity % 13.01%, Offense 71 / 6★ A lvl15
-- **MAGAZYN → STORMTROOPERLUKE:** Square / Health / Offense % 5.88% / secondary: Critical Chance % 3.35%, Protection 459, Speed 20, Potency % 1.71% / 5★ A lvl15
-- **MAGAZYN → STORMTROOPERLUKE:** Triangle / Health / Defense % 11.75% / secondary: Speed 15, Offense 33, Health % 0.97%, Defense 4 / 5★ C lvl15
-- **EMPERORPALPATINE → LUKESTARKILLER:** Diamond / Speed / Defense % 20% / secondary: Offense 116, Protection % 5.98%, Health % 5.46%, Speed 16 / 6★ A lvl15
-- **MAGAZYN → EMPERORPALPATINE:** Diamond / Speed / Defense % 11.75% / secondary: Speed 5, Health % 1.53%, Potency % 4.01%, Protection 757 / 5★ C lvl15
-- **LUKESTARKILLER → MARAJADE:** Cross / Speed / Potency % 30% / secondary: Defense 15, Health 2082, Health % 3.6%, Speed 19 / 6★ A lvl15
-- **ADMIRALPIETT → LUKESTARKILLER:** Cross / Speed / Offense % 5.88% / secondary: Protection 1183, Speed 12, Potency % 1.62%, Tenacity % 3.33% / 5★ A lvl15
-- **MAGAZYN → ADMIRALPIETT:** Cross / Speed / Health % 5.88% / secondary: Offense 42, Protection 1099, Speed 4, Defense % 0.95% / 5★ D lvl15
+Nie jest wymagany żaden PATCH.
 
 ## Kolejność przekładania
 
-1. **Arrow — załóż na 50RT** mod z STORMTROOPERLUKE: Arrow / Speed / Protection % 24% / secondary: Health 770, Defense % 9.48%, Protection 1035, Speed 24 / 6★ A lvl15
-2. **Square — załóż na 50RT** mod z STORMTROOPERLUKE: Square / Speed / Offense % 8.5% / secondary: Potency % 8.71%, Health 698, Tenacity % 4.38%, Speed 17 / 6★ A lvl15
-3. **Diamond — załóż na 50RT** mod z STORMTROOPERLUKE: Diamond / Speed / Defense % 20% / secondary: Tenacity % 5.13%, Potency % 3.46%, Speed 24, Protection 1994 / 6★ A lvl15
-4. **Triangle — załóż na 50RT** mod z STORMTROOPERLUKE: Triangle / Health / Critical Damage % 42% / secondary: Protection 764, Speed 23, Protection % 4.06%, Defense % 13.03% / 6★ A lvl15
-5. **Circle — załóż na 50RT** mod z STORMTROOPERLUKE: Circle / Speed / Protection % 24% / secondary: Defense % 15.26%, Speed 16, Health 1181, Critical Chance % 2.93% / 6★ A lvl15
-6. **Cross — załóż na 50RT** mod z STORMTROOPERLUKE: Cross / Health / Health % 16% / secondary: Health 694, Protection 1743, Speed 20, Offense 116 / 6★ A lvl15
+**Nie wykonuj jeszcze żadnej przekładki.** Poniższy build jest wariantem roboczym; walidacja nie zatwierdziła pełnego łańcucha.
 
-### Uzupełnienie dawców — poziom 1
+### Co blokuje zatwierdzenie
 
-7. **PATCH — załóż na STORMTROOPERLUKE** mod z MAGAZYN (dostępny po wcześniejszym kroku): Arrow / Speed / Speed 30 / secondary: Offense % 1%, Tenacity % 5.02%, Health 322, Protection 1305 / 5★ A lvl15
-
-### Uzupełnienie dawców — poziom 2
-
-8. **PATCH — załóż na STORMTROOPERLUKE** mod z MAGAZYN (dostępny po wcześniejszym kroku): Circle / Speed / Health % 5.88% / secondary: Speed 5, Critical Chance % 1.51%, Health 682, Protection 1529 / 5★ C lvl15
-
-### Uzupełnienie dawców — poziom 3
-
-9. **PATCH — załóż na STORMTROOPERLUKE** mod z MARAJADE: Cross / Speed / Potency % 30% / secondary: Offense 199, Protection 1913, Speed 10, Defense % 5.94% / 6★ A lvl15
-
-### Uzupełnienie dawców — poziom 4
-
-10. **PATCH — załóż na STORMTROOPERLUKE** mod z LUKESTARKILLER: Diamond / Speed / Defense % 20% / secondary: Defense 21, Speed 13, Tenacity % 13.01%, Offense 71 / 6★ A lvl15
-
-### Uzupełnienie dawców — poziom 5
-
-11. **PATCH — załóż na STORMTROOPERLUKE** mod z MAGAZYN (mod automatycznie wyparty z 50RT): Square / Health / Offense % 5.88% / secondary: Critical Chance % 3.35%, Protection 459, Speed 20, Potency % 1.71% / 5★ A lvl15
-
-### Uzupełnienie dawców — poziom 6
-
-12. **PATCH — załóż na STORMTROOPERLUKE** mod z MAGAZYN (dostępny po wcześniejszym kroku): Triangle / Health / Defense % 11.75% / secondary: Speed 15, Offense 33, Health % 0.97%, Defense 4 / 5★ C lvl15
-
-### Uzupełnienie dawców — poziom 7
-
-13. **PATCH — załóż na LUKESTARKILLER** mod z EMPERORPALPATINE: Diamond / Speed / Defense % 20% / secondary: Offense 116, Protection % 5.98%, Health % 5.46%, Speed 16 / 6★ A lvl15
-
-### Uzupełnienie dawców — poziom 8
-
-14. **PATCH — załóż na EMPERORPALPATINE** mod z MAGAZYN (dostępny po wcześniejszym kroku): Diamond / Speed / Defense % 11.75% / secondary: Speed 5, Health % 1.53%, Potency % 4.01%, Protection 757 / 5★ C lvl15
-
-### Uzupełnienie dawców — poziom 9
-
-15. **PATCH — załóż na MARAJADE** mod z LUKESTARKILLER: Cross / Speed / Potency % 30% / secondary: Defense 15, Health 2082, Health % 3.6%, Speed 19 / 6★ A lvl15
-
-### Uzupełnienie dawców — poziom 10
-
-16. **PATCH — załóż na LUKESTARKILLER** mod z ADMIRALPIETT: Cross / Speed / Offense % 5.88% / secondary: Protection 1183, Speed 12, Potency % 1.62%, Tenacity % 3.33% / 5★ A lvl15
-
-### Uzupełnienie dawców — poziom 11
-
-17. **PATCH — załóż na ADMIRALPIETT** mod z MAGAZYN (dostępny po wcześniejszym kroku): Cross / Speed / Health % 5.88% / secondary: Offense 42, Protection 1099, Speed 4, Defense % 0.95% / 5★ D lvl15
-
-Zakładanie moda automatycznie przenosi poprzedni mod ze slotu do magazynu. Wszystkie powyższe kroki zostały sprawdzone na pełnym stanie slotów i magazynu.
-
+- **walidacja fizyczna:** transfer PATCH narusza Stack Rank: 50RT -> STORMTROOPERLUKE
+- **walidacja fizyczna:** transfer PATCH narusza Stack Rank: 50RT -> STORMTROOPERLUKE
+- **walidacja fizyczna:** transfer PATCH narusza Stack Rank: 50RT -> STORMTROOPERLUKE
+- **walidacja fizyczna:** końcowy stan slotów po symulacji różni się od stanu zaplanowanego
 ## Diagnostyka przeszukiwania wariantów łańcucha
 
 Limit kompletnych wariantów na głównego dawcę: **5**.
 Wyniki poniżej to ważony Rank bilans zmian danego dawcy i jego rekurencyjnych pod-dawców; wyższy wynik jest lepszy.
 
-- **STORMTROOPERLUKE:** sprawdzono 5 kompletnych wariantów; wyniki: -112.8111, -105.6358, -107.0574, -108.2059, -109.0933; najlepszy: -105.6358.
-
-## Wpływ na postacie-dawców
-
-- **ADMIRALPIETT — wynik pełnego buildu wg profilu:** 87.03 → 81.24 (-5.79 pkt).
-  - Σ modValue modów: 335.6 → 338.3 (+2.7) — surowy wskaźnik jakości modów, nie wynik profilu.
-  - Kombinacja setów: Speed + Health (54.2%) → Speed + Health (54.2%).
-  - Zmiana wyniku pełnego buildu po kolejnych PATCH-ach: Square -5.8 pkt.
-  - ISTOTNY SPADEK wartości modów u dawcy.
-- **STORMTROOPERLUKE — wynik pełnego buildu wg profilu:** 121.96 → 91.11 (-30.84 pkt).
-  - Σ modValue modów: 394.9 → 379.4 (-15.5) — surowy wskaźnik jakości modów, nie wynik profilu.
-  - Kombinacja setów: Speed + Health (60.1%) → Speed + Health (60.1%).
-  - Zmiana wyniku pełnego buildu po kolejnych PATCH-ach: Square -30.8 pkt; Square +0.0 pkt; Square +0.0 pkt; Square +0.0 pkt; Square +0.0 pkt; Square +0.0 pkt.
-  - ISTOTNY SPADEK wartości modów u dawcy.
-- **LUKESTARKILLER — wynik pełnego buildu wg profilu:** 109.49 → 101.57 (-7.92 pkt).
-  - Σ modValue modów: 384.2 → 401.5 (+17.3) — surowy wskaźnik jakości modów, nie wynik profilu.
-  - Kombinacja setów: Speed + Potency (60.5%) → Speed + Potency (60.5%).
-  - Zmiana wyniku pełnego buildu po kolejnych PATCH-ach: Square -3.4 pkt; Square -4.5 pkt.
-  - ISTOTNY SPADEK wartości modów u dawcy.
-- **MARAJADE — wynik pełnego buildu wg profilu:** 97.00 → 97.58 (+0.58 pkt).
-  - Σ modValue modów: 351.4 → 349.8 (-1.6) — surowy wskaźnik jakości modów, nie wynik profilu.
-  - Kombinacja setów: Speed + Potency (60.3%) → Speed + Potency (60.3%).
-  - Zmiana wyniku pełnego buildu po kolejnych PATCH-ach: Square +0.6 pkt.
-- **EMPERORPALPATINE — wynik pełnego buildu wg profilu:** 97.37 → 90.82 (-6.56 pkt).
-  - Σ modValue modów: 444.0 → 423.0 (-21.0) — surowy wskaźnik jakości modów, nie wynik profilu.
-  - Kombinacja setów: Speed + Potency (47.0%) → Speed + Potency (47.0%).
-  - Zmiana wyniku pełnego buildu po kolejnych PATCH-ach: Square -6.6 pkt.
-  - ISTOTNY SPADEK wartości modów u dawcy.
+- **STORMTROOPERLUKE:** sprawdzono 5 kompletnych wariantów; wyniki: -43.7950, -44.9715, -45.0547, -45.4897, -46.5222; najlepszy: -43.7950.
 
 ## Kontrola profili użytych w łańcuchu
 
 - 50RT: profil dostępny, 2 źródła.
-- ADMIRALPIETT: profil dostępny, 2 źródła.
-- EMPERORPALPATINE: profil dostępny, 2 źródła.
-- LUKESTARKILLER: profil dostępny, 2 źródła.
-- MARAJADE: profil dostępny, 2 źródła.
 - STORMTROOPERLUKE: profil dostępny, 2 źródła.
 
 ## Założenia projekcji
