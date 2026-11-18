@@ -226,3 +226,12 @@ Podczas wyboru PATCH-a optymalizator porównuje sześciomodową kombinację set�
 - Jeżeli profil dawcy jest dostępny, koszt PATCH należy oceniać przez porównanie punktacji jego pełnego wyposażonego buildu przed i po zmianie, z uwzględnieniem bonusów setów. Nie wolno zastępować tej oceny różnicą punktacji dwóch pojedynczych modów.
 - Jeżeli profil dawcy nie jest dostępny, dopuszczalny jest dotychczasowy fallback modValue, ale raport musi ujawniać brak oceny profilowej.
 - Testy regresyjne muszą potwierdzać identyczną punktację pojedynczego moda w analizie profilu i optymalizatorze oraz kontrolować zmianę wyniku pełnego buildu dawcy.
+
+## Twarde ograniczenie transferów według Stack Rank
+
+- `Rank = 1` oznacza najwyższy priorytet. Mod wyposażony wolno przenieść wyłącznie od postaci o Rank większym lub równym Rank odbiorcy.
+- Postać ważniejsza (niższy numer Rank) nigdy nie może być dawcą dla postaci mniej ważnej (wyższy numer Rank).
+- Reguła dotyczy transferu MOD oraz każdego kolejnego PATCH w łańcuchu, również rekurencyjnym.
+- Mod z magazynu jest zwolniony z ograniczenia, ponieważ nie ma właściciela.
+- Brak Rank dawcy lub odbiorcy blokuje transfer. Nieznany ranking nie może być traktowany jako neutralny.
+- Pozostała ocena opłacalności łańcucha nie ulega zmianie; Rank działa tu jako twardy warunek dopuszczalności, a nie dodatkowa punktacja.
