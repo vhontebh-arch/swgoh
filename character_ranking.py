@@ -126,6 +126,27 @@ def rank_weighted_account_delta(character_moves, ranking, aliases=None) -> float
     return rank_weighted_donor_delta(character_moves, ranking, aliases)
 
 
+
+def can_transfer_by_rank(source_owner, recipient, ranking, aliases=None) -> bool:
+    """Fail-closed Stack Rank gate for equipped-mod transfers.
+
+    Rank 1 is most important. A source may donate only to an equal- or
+    higher-ranked recipient (recipient Rank <= source Rank). Inventory
+    transfers are exempt and should be passed with an empty source_owner.
+    """
+    if not str(source_owner or "").strip():
+        return True
+    aliases = aliases or {}
+    source_id = str(aliases.get(str(source_owner), source_owner) or "").upper()
+    recipient_id = str(aliases.get(str(recipient), recipient) or "").upper()
+    by_id = {str(item.get("base_id", "")).upper(): int(item.get("rank", 0) or 0)
+             for item in (ranking or []) if item.get("base_id")}
+    source_rank = by_id.get(source_id, 0)
+    recipient_rank = by_id.get(recipient_id, 0)
+    if source_rank < 1 or recipient_rank < 1:
+        return False
+    return source_rank >= recipient_rank
+
 def rank_characters(rows):
     """Return characters in source Rank order (1 is most important)."""
     return sorted(rows, key=lambda item:item["rank"])
