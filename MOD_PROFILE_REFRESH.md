@@ -21,8 +21,9 @@
 5. **Secondary Stat Focus: wymagane są wyłącznie cztery najwyżej sklasyfikowane statystyki (TOP 4) z każdego źródła.** Dla każdej z nich zapisujemy nazwę, `focus_pct` i `average`, zachowując dokładną kolejność podaną przez SWGOH.GG. Nie kopiujemy ani nie wymagamy pozycji 5–12. TOP 4 odczytujemy niezależnie dla każdego slice — listy mogą zawierać inne statystyki lub inną kolejność.
 6. Pozostałe wymagane sekcje (kombinacje setów i primary stats) odczytuje się normalnie dla każdego źródła.
 7. Profil pochodny (set_combinations, set_preferences, primary_preferences, secondary_preferences) można wyliczyć dopiero po odczytaniu i walidacji wymaganych sekcji. Przy wyliczaniu preferencji drugorzędnych należy korzystać z dostępnych TOP 4 obu źródeł; brakujące pozycje poza TOP 4 nie mogą być uzupełniane domysłem.
-8. ChatGPT aktualizuje `mod_profiles.json` bezpośrednio na branchu `optimizer-v2`, zachowując pozostałe profile bez zmian.
+8. ChatGPT aktualizuje `mod_profiles.json` wyłącznie na branchu `optimizer-data` — jest to jedyne źródło prawdy dla profili.
 9. Po zapisie ponownie odczytuje plik z GitHuba i sprawdza JSON, BASE_ID, źródła, timestamp oraz niezmienność pozostałych profili.
+10. Branch `main` synchronizuje profile z `optimizer-data` przez `sync_optimizer_data.py --files mod_profiles.json` przed analizą i publikacją snapshotu. Branch `optimizer-v2` pobiera ten sam plik z tego samego snapshotu. Kopie na tych branchach są wyłącznie lokalnymi danymi roboczymi i nie wolno ich edytować niezależnie.
 
 ## Dokładny algorytm profilu pochodnego
 
