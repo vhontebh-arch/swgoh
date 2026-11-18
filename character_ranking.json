@@ -2,7 +2,7 @@
   "schema_version": 4,
   "source": "Stack Rank",
   "source_url": "https://swgoh.spineless.net/stackrank?omicronGac=true&omicronTw=true&omicronTb=true&omicronRaids=true&omicronConquest=true&allyCode=972824625&showFullDetails=true",
-  "record_count": 313,
+  "record_count": 315,
   "method": {
     "primary_field": "rank",
     "primary_direction": "ascending (1 is most important; larger values are less important)",
@@ -4714,9 +4714,39 @@
       "ability_score": 3,
       "source": "Stack Rank",
       "base_id": "QUIGGOLD"
+    },
+    {
+      "character": "Mercenary Guard Droid (B1)",
+      "rank": 314,
+      "sort_score": 38,
+      "subsort_score": 20,
+      "final_tier": 17,
+      "base_tier": 17,
+      "synergy_enhancement": 0,
+      "omicron_boost": 0,
+      "omicron_synergy_boost": 0,
+      "relic_gear_level": 12,
+      "ability_score": 6,
+      "source": "Stack Rank",
+      "base_id": "B1MERCDROID"
+    },
+    {
+      "character": "Adelphi Ranger",
+      "rank": 315,
+      "sort_score": 38,
+      "subsort_score": 20,
+      "final_tier": 17,
+      "base_tier": 17,
+      "synergy_enhancement": 0,
+      "omicron_boost": 0,
+      "omicron_synergy_boost": 0,
+      "relic_gear_level": 12,
+      "ability_score": 6,
+      "source": "Stack Rank",
+      "base_id": "ADELPHIRANGER"
     }
   ],
-  "snapshot_date": "2026-11-16",
+  "snapshot_date": "2026-11-18",
   "base_id_mapping": [
     {
       "id": "player_roster_export",
