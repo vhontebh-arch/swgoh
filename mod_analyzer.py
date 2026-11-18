@@ -2165,7 +2165,11 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
                     # unrestricted; a target's own current mod is unchanged.
                     if not source_owner:
                         continue
-                    if source_owner in protected_owners and source_owner != target_id:
+                    raw_source_owner = str(row.get("assignedTo", "") or "")
+                    if source_owner != target_id and (
+                        source_owner in protected_owners
+                        or raw_source_owner in protected_owners
+                    ):
                         continue
                     if source_owner != target_id and not can_transfer_by_rank(
                         source_owner, target_id, ranking, aliases
