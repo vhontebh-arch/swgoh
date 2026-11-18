@@ -9,9 +9,9 @@ DONOR_B = "donor-b-instance"
 TEST_RANKING = [
     {"base_id": "TARGET", "rank": 1},
     {"base_id": "TARGET_B", "rank": 2},
-    {"base_id": "DONOR", "rank": 100},
-    {"base_id": "DONOR_A", "rank": 150},
-    {"base_id": "DONOR_B", "rank": 200},
+    {"base_id": "DONOR", "rank": 3},
+    {"base_id": "DONOR_A", "rank": 4},
+    {"base_id": "DONOR_B", "rank": 5},
 ]
 
 
@@ -250,7 +250,7 @@ class TransferChainTests(unittest.TestCase):
         self.assertIsNone(moves[0]["removed"])
         self.assertEqual(moves[0]["replacement"]["id"], "inventory-patch")
 
-    def test_target_current_can_be_recycled_to_repair_source(self):
+    def test_higher_priority_target_mod_cannot_be_recycled_to_lower_priority_donor(self):
         selected = make_mod("selected-mod", DONOR, True, value=20)
         target_current = make_mod("target-current", TARGET, True, value=5)
         result = run_plan(
@@ -258,11 +258,8 @@ class TransferChainTests(unittest.TestCase):
             selected,
             {TARGET: "TARGET", DONOR: "DONOR"},
         )
-        self.assertTrue(result["safe"], result["failed"])
-        moves = result["plans"][0]["moves"]
-        self.assertEqual(len(moves), 1)
-        self.assertEqual(moves[0]["replacement"]["id"], "target-current")
-        self.assertIsNone(moves[0]["removed"])
+        self.assertFalse(result["safe"])
+        self.assertTrue(any("Stack Rank" in reason for _, reason in result["failed"]))
 
     def test_selected_mod_must_be_in_its_declared_source_slot(self):
         source_row = make_mod("selected-mod", DONOR, True, slot="Triangle", value=20)
