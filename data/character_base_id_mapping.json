@@ -18,10 +18,10 @@
     }
   ],
   "match_method": "Normalized display-name match; case, diacritics and punctuation ignored",
-  "record_count": 313,
+  "record_count": 315,
   "counts": {
     "player_roster_export": 308,
-    "unit_catalog_fallback": 5
+    "unit_catalog_fallback": 7
   },
   "characters": [
     {
@@ -1901,6 +1901,18 @@
       "base_id": "QUIGGOLD",
       "catalog_name": "Quiggold",
       "mapping_source": "player_roster_export"
+    },
+    {
+      "character": "Mercenary Guard Droid (B1)",
+      "base_id": "B1MERCDROID",
+      "catalog_name": "Mercenary Guard Droid (B1)",
+      "mapping_source": "unit_catalog_fallback"
+    },
+    {
+      "character": "Adelphi Ranger",
+      "base_id": "ADELPHIRANGER",
+      "catalog_name": "Adelphi Ranger",
+      "mapping_source": "unit_catalog_fallback"
     }
   ]
 }
