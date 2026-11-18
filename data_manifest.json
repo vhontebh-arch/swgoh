@@ -46,8 +46,8 @@
     "swgoh_972824625.json": {
       "role": "raw Comlink player export",
       "bytes": 3344833,
-      "sha256": "20f3a58a9dbc500d2ce59fea7fedfeec471fc0a9a008ca5be4fcf0a2220c67da",
-      "git_blob_sha": "a05ff9acaf876525b44f8fa65f0b61f029686e16",
+      "sha256": "3852b36845670e5b0ae0ca8723032b71d6aefa428dbf5ae886638c3b10a78550",
+      "git_blob_sha": "40b79d5d21e0bc3ab81d87d5b1dd854efa458b87",
       "source_branch": "main",
       "source_commit": "1c0ecc0214df6928eb053583c75906f86c39211c"
     },
@@ -92,12 +92,12 @@
     "Added Grogu & Anzellans profile from fresh Top 1000 Kyber GAC and Top 100 Guilds Best Mods pages; updated canonical snapshot manifest."
   ],
   "snapshot": {
-    "published_at": "2026-11-18T10:34:46.885139+00:00",
-    "player_export_acquired_at": "2026-11-18T10:34:29Z",
+    "published_at": "2026-11-18T10:36:27.661351+00:00",
+    "player_export_acquired_at": "2026-11-18T10:36:07Z",
     "producer_repository": "vhontebh-arch/swgoh",
     "producer_branch": "main",
     "producer_commit": "1c0ecc0214df6928eb053583c75906f86c39211c",
-    "c3po_source_commit": "5e2acfc2f2069a44a33fd2a498c908da3d4c24ce",
+    "c3po_source_commit": "1c0ecc0214df6928eb053583c75906f86c39211c",
     "player_roster_units": 382,
     "character_rows": 316,
     "ship_rows": 66,
