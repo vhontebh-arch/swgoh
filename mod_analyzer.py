@@ -1281,12 +1281,6 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                 local_ids.add(mod_id)
         for row in displaced_target_mods:
             mod_id = rid(row)
-            source_owner = str(row.get("_source_owner", "") or owner(row))
-            # A target's displaced mod is not automatically a valid donor
-            # replacement. Apply the same Stack Rank gate as every other
-            # equipped-mod transfer before exposing it to the donor optimizer.
-            if source_owner and not transfer_allowed(source_owner, donor_id):
-                continue
             if (mod_id and mod_id not in selected_ids and mod_id not in local_ids
                     and mod_id not in donor_rebuild_reserved
                     and str(row.get("slot", "") or "") in hole_slots):

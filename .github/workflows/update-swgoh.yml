@@ -10,7 +10,6 @@ on:
   push:
     branches:
       - optimizer-v2
-      - fix/stack-rank-donor-patch-eligibility
     paths:
       - "mod_analyzer.py"
       - "ship_analysis.py"
@@ -116,7 +115,7 @@ jobs:
           if not targets:
               raise SystemExit("Brak celów w mod_analysis_target.json lub parametrze workflow.")
 
-          command = [sys.executable, "mod_analyzer.py", "--chain-alternative-cap", "8"]
+          command = [sys.executable, "mod_analyzer.py"]
           unique_targets = list(dict.fromkeys(targets))
           for target in unique_targets:
               command.extend(["--target", target])
