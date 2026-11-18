@@ -7,6 +7,11 @@ on:
         description: "Optional main commit SHA pinning the canonical c3po.json snapshot; empty uses latest main"
         required: false
         type: string
+      skip_optimizer_v2:
+        description: "Skip automatic optimizer-v2 dispatch (used when optimizer-v2 requested this refresh)"
+        required: false
+        default: false
+        type: boolean
   push:
     paths:
       - "mod_analyzer.py"
@@ -1218,7 +1223,7 @@ jobs:
           python publish_optimizer_data.py
 
       - name: Trigger optimizer-v2 consumer
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main' && inputs.skip_optimizer_v2 != true
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
