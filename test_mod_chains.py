@@ -464,6 +464,71 @@ class ProfileSetAliasTests(unittest.TestCase):
 
 
 class TargetSetCombinationSelectionTests(unittest.TestCase):
+    def test_full_build_optimizer_excludes_higher_priority_equipped_donor_before_scoring(self):
+        from mod_analyzer import optimize_target_build
+
+        rows = [
+            make_mod("speed-square", slot="Square", mod_set="Speed"),
+            make_mod("speed-diamond", slot="Diamond", mod_set="Speed"),
+            make_mod("speed-arrow", slot="Arrow", mod_set="Speed"),
+            make_mod("speed-cross", slot="Cross", mod_set="Speed"),
+            make_mod("health-triangle", slot="Triangle", mod_set="Health"),
+            make_mod("inventory-health-circle", slot="Circle", value=10, mod_set="Health"),
+            make_mod("rank-1-health-circle", "important-donor-instance", True,
+                     slot="Circle", value=90, mod_set="Health"),
+        ]
+        profile = {
+            "set_preferences": {"Speed": 1.0, "Health": 0.8},
+            "secondary_preferences": {"Speed": 1.0},
+            "set_combinations": {"Speed + Health": 73.84},
+        }
+        aliases = {
+            "target-instance": "TARGET",
+            "important-donor-instance": "IMPORTANT_DONOR",
+        }
+        ranking = [
+            {"base_id": "IMPORTANT_DONOR", "rank": 1},
+            {"base_id": "TARGET", "rank": 2},
+        ]
+        result = optimize_target_build(
+            rows, {"TARGET"}, {"TARGET": profile},
+            aliases=aliases, ranking=ranking,
+        )["TARGET"]["mods"]
+        chosen = {row["id"] for row in result}
+        self.assertIn("inventory-health-circle", chosen)
+        self.assertNotIn("rank-1-health-circle", chosen)
+
+    def test_full_build_optimizer_fails_closed_when_equipped_donor_rank_is_unknown(self):
+        from mod_analyzer import optimize_target_build
+
+        rows = [
+            make_mod("speed-square", slot="Square", mod_set="Speed"),
+            make_mod("speed-diamond", slot="Diamond", mod_set="Speed"),
+            make_mod("speed-arrow", slot="Arrow", mod_set="Speed"),
+            make_mod("speed-cross", slot="Cross", mod_set="Speed"),
+            make_mod("health-triangle", slot="Triangle", mod_set="Health"),
+            make_mod("inventory-health-circle", slot="Circle", value=10, mod_set="Health"),
+            make_mod("unknown-rank-health-circle", "unknown-donor-instance", True,
+                     slot="Circle", value=90, mod_set="Health"),
+        ]
+        profile = {
+            "set_preferences": {"Speed": 1.0, "Health": 0.8},
+            "secondary_preferences": {"Speed": 1.0},
+            "set_combinations": {"Speed + Health": 73.84},
+        }
+        aliases = {
+            "target-instance": "TARGET",
+            "unknown-donor-instance": "UNKNOWN_DONOR",
+        }
+        ranking = [{"base_id": "TARGET", "rank": 2}]
+        result = optimize_target_build(
+            rows, {"TARGET"}, {"TARGET": profile},
+            aliases=aliases, ranking=ranking,
+        )["TARGET"]["mods"]
+        chosen = {row["id"] for row in result}
+        self.assertIn("inventory-health-circle", chosen)
+        self.assertNotIn("unknown-rank-health-circle", chosen)
+
     def test_optimizer_selects_dominant_observed_combo_even_without_secondary_stat_focus(self):
         from mod_analyzer import optimize_target_build, canonical_set_combo_from_mods
 
