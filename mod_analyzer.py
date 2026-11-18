@@ -70,11 +70,14 @@ def blocked_profile_donor_ids(chain_result):
     """Return donors whose recursive full-build rebuild made the selected target chain infeasible."""
     blocked = set()
     for item in (chain_result or {}).get("failed", []):
+        category = str(item[0] or "") if isinstance(item, (tuple, list)) and item else ""
         reason = item[1] if isinstance(item, (tuple, list)) and len(item) > 1 else str(item)
         text = str(reason or "")
-        if "dawca " not in text or " zablokowany" not in text:
-            continue
-        donor_id = text.split("dawca ", 1)[1].split(" zablokowany", 1)[0].strip()
+        donor_id = ""
+        if category == "walidacja profilu dawcy" and ":" in text:
+            donor_id = text.split(":", 1)[0].strip()
+        elif "dawca " in text and " zablokowany" in text:
+            donor_id = text.split("dawca ", 1)[1].split(" zablokowany", 1)[0].strip()
         if donor_id:
             blocked.add(donor_id)
     return blocked
