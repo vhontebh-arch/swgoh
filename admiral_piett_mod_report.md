@@ -1,6 +1,8 @@
 # ADMIRAL PIETT — RAPORT MODÓW (Zestaw kompletny: 6/6)
 
-## 1. Cel i profil docelowy
+## 1. MOD — przekładki
+
+### Cel i profil docelowy
 
 - **Cel:** ADMIRALPIETT (Stack Rank 2, Sort Score 5; G13 R8).
 - **Profil:** Speed + Health.
@@ -22,7 +24,7 @@ Rank służy wyłącznie do dopuszczania lub blokowania transferu. Nie jest wag�
 
 Warunek: Rank dawcy musi być większy lub równy Rankowi odbiorcy. Mody zdjęte z celu trafiają do magazynu i tracą powiązanie z Rankiem poprzedniego właściciela. Żaden transfer w przedstawionym łańcuchu nie narusza ograniczenia.
 
-## 2. MOD — przekładki na ADMIRALPIETT
+### Sześć modów docelowych
 
 ### MOD 1 — MAGAZYN → ADMIRALPIETT
 - **Slot:** Arrow
@@ -66,7 +68,7 @@ Warunek: Rank dawcy musi być większy lub równy Rankowi odbiorcy. Mody zdjęte
 - **Secondary:** Defense 15; Health 2082; Health 3,6%; Speed 19
 - **Obecny mod Pietta:** Speed, 5★ A, lvl 15; Offense 5,88%; Protection 1183; Speed 12; Potency 1,62%; Tenacity 3,33%
 
-## 3. PATCH — uzupełnienie dawców
+## 2. PATCH — uzupełnienie dawców
 
 ### PATCH 1 — 50RT → MARAJADE
 - **Slot:** Circle
@@ -116,7 +118,9 @@ Warunek: Rank dawcy musi być większy lub równy Rankowi odbiorcy. Mody zdjęte
 
 Założenie moda na zajęty slot przenosi poprzedni mod do magazynu. Wszystkie jedenaście kroków tworzy zamknięty łańcuch; żaden mod nie jest użyty dwukrotnie.
 
-## 5. Koszt u dawców i bilans końcowy
+## 4. Stan końcowy
+
+### Koszt u dawców i bilans końcowy
 
 ### Bilans punktacji pełnego buildu
 
@@ -144,7 +148,7 @@ Bilans to zwykła suma zmian punktacji pełnych buildów; Rank nie jest używany
 - Speed: pełny set 1 → 1, ale jego jakość jest osłabiona.
 - **Koszt/korzyść:** poprawa wyniku i wartości modów, przy zmianie kompozycji setów.
 
-## 6. Stan końcowy i walidacja
+### Stan końcowy i walidacja
 
 ### ADMIRALPIETT — zestaw końcowy
 | Slot | Set | Primary | Speed secondary | Źródło |
