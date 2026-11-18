@@ -1,7 +1,7 @@
 import tempfile
 import unittest
 from pathlib import Path
-from character_ranking import DEFAULT_MAPPING, EXPECTED_COLUMNS, SOURCE_NAME, build_payload, get_character_rank, load_base_id_mapping, load_stack_rank, rank_characters, rank_importance_score
+from character_ranking import DEFAULT_MAPPING, EXPECTED_COLUMNS, SOURCE_NAME, build_payload, get_character_rank, load_base_id_mapping, load_stack_rank, rank_characters
 
 def tsv(rows):
     lines=["\t".join(EXPECTED_COLUMNS)]
@@ -13,7 +13,7 @@ def row(rank,name,final_tier,base_tier=None,synergy=0,omicron=0):
     return [values[c] for c in EXPECTED_COLUMNS]
 
 class StackRankImportTests(unittest.TestCase):
-    def test_import_uses_rank_for_importance_and_keeps_tier_as_audit(self):
+    def test_import_preserves_rank_and_keeps_tier_as_audit_only(self):
         with tempfile.TemporaryDirectory() as tmp:
             path=Path(tmp)/"stack.tsv"
             path.write_text(tsv([row(1,"A",18),row(2,"B",2,8,3),row(3,"C",5,5)]),encoding="utf-8")
@@ -21,17 +21,8 @@ class StackRankImportTests(unittest.TestCase):
         self.assertEqual([x["character"] for x in data],["A","B","C"])
         self.assertEqual(data[1]["rank"],2)
         self.assertEqual(data[1]["final_tier"],2)
-        self.assertEqual(data[1]["importance_score"],rank_importance_score(2,3))
-        self.assertGreater(data[0]["importance_score"],data[1]["importance_score"])
-        self.assertGreater(data[1]["importance_score"],data[2]["importance_score"])
+        self.assertNotIn("importance_score",data[1])
 
-    def test_rank_importance_is_bounded_and_monotonic(self):
-        self.assertEqual(rank_importance_score(1,313),3.0)
-        self.assertEqual(rank_importance_score(313,313),1.0)
-        scores=[rank_importance_score(rank,313) for rank in range(1,314)]
-        self.assertTrue(all(a>b for a,b in zip(scores,scores[1:])))
-        with self.assertRaises(ValueError): rank_importance_score(0,313)
-        with self.assertRaises(ValueError): rank_importance_score(1,1)
 
     def test_primary_sort_is_source_rank_only(self):
         rows=[{"character":"B","rank":1,"final_tier":19},{"character":"A","rank":9,"final_tier":2},{"character":"C","rank":3,"final_tier":1}]
