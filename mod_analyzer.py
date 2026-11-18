@@ -2158,10 +2158,6 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
                     continue
                 if is_true(row.get("equipped")):
                     source_owner = base(row)
-                    if rid(row) == "glrey-arrow":
-                        print("DEBUG_PROTECTED", repr(source_owner), repr(protected_owners),
-                              source_owner in protected_owners, repr(target_id),
-                              repr(row.get("assignedTo")), repr(aliases))
                     # Stack Rank is a hard eligibility gate during candidate
                     # selection, not a post-selection validation. An equipped
                     # mod from a higher-priority owner (lower Rank) must never
