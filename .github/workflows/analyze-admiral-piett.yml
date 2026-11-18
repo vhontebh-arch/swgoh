@@ -43,3 +43,5 @@ jobs:
           path: |
             mod_analysis.csv
             mod_analysis.md
+
+# Trigger a fresh Admiral Piett optimization analysis (2026-11-18).
