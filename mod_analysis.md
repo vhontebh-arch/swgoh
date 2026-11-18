@@ -86,7 +86,7 @@ W raportach przeznaczonych do ręcznego wykonania mod identyfikowany jest wyłą
 | CALIBRATE | Cross Protection % 24% | POSTAĆ: REYJEDITRAINING | Health | 6A | 15 | 100.0% | 61.2% | 34.1% | 0.0% | 83.3% | 61.2% | calibration |
 | CALIBRATE | Triangle Critical Damage % 42% | POSTAĆ: 50RT | Potency | 6A | 15 | 100.0% | 78.3% | 33.8% | 0.0% | 70.0% | 78.3% | calibration |
 | CALIBRATE | Triangle Health % 16% | POSTAĆ: LUKESTARKILLER | Potency | 6A | 15 | 100.0% | 65.1% | 33.8% | 0.0% | 83.3% | 65.1% | calibration |
-| CALIBRATE | Cross Tenacity % 35% | POSTAĆ: REY | Critical Damage | 6A | 15 | 100.0% | 63.0% | 33.2% | 0.0% | 83.3% | 63.0% | calibration |
+| CALIBRATE | Circle Protection % 24% | POSTAĆ: REY | Critical Damage | 6A | 15 | 100.0% | 73.8% | 32.9% | 0.0% | 87.5% | 73.8% | calibration |
 | CALIBRATE | Triangle Health % 16% | POSTAĆ: OPERATIVE | Speed | 6A | 15 | 100.0% | 62.8% | 32.7% | 0.0% | 66.7% | 62.8% | calibration |
 | CALIBRATE | Triangle Critical Damage % 42% | POSTAĆ: VADER | Critical Damage | 6A | 15 | 100.0% | 82.0% | 32.6% | 0.0% | 76.7% | 82.0% | calibration |
 | CALIBRATE | Circle Protection % 24% | POSTAĆ: COMMANDERLUKESKYWALKER | Offense | 6A | 15 | 100.0% | 76.0% | 32.4% | 0.0% | 80.0% | 76.0% | calibration |
