@@ -37,11 +37,11 @@
     },
     "mod_profiles.json": {
       "role": "shared SWGOH.GG mod profiles",
-      "bytes": 181706,
-      "sha256": "27d03620c547069b8470322eebef5075c84d391b08c647e27fcb9907898c929c",
-      "git_blob_sha": "9db64acbd1e1b20556d62d0de0d6fc5d16095c8f",
-      "source_branch": "main",
-      "source_commit": "12e4cbbacfe1c646b738aea8e47b52d3ddb6a2ce"
+      "bytes": 181651,
+      "sha256": "a12a017662b89100f549349b95f55fe19f3a2da4a9e812c25dcb3b2879a274fe",
+      "git_blob_sha": "d392cf900cdd7539e1a3fa372b7f266108f461c2",
+      "source_branch": "optimizer-data",
+      "source_commit": "a481e8d4abd293caf1cdf970ad29c3f1c5ad0adc"
     },
     "swgoh_972824625.json": {
       "role": "raw Comlink player export",
@@ -104,6 +104,6 @@
     "mod_rows": 2196,
     "c3po_unequipped_mods": 489
   },
-  "profiles_published_at": "2026-11-18T12:06:51.719Z",
-  "profiles_source_commit": "d531c9d115389536c09f165b14f8492b4eaa95ed"
+  "profiles_published_at": "2026-11-18T12:10:14.833Z",
+  "profiles_source_commit": "a481e8d4abd293caf1cdf970ad29c3f1c5ad0adc"
 }
