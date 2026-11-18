@@ -79,6 +79,8 @@ jobs:
           gh run watch "$run_id" --exit-status --interval 10
 
       - name: Sync the newly published canonical snapshot
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           set -e
           python sync_optimizer_data.py
