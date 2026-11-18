@@ -47,3 +47,5 @@ jobs:
 # Trigger a fresh Admiral Piett optimization analysis (2026-11-18).
 
 # Re-run against the refreshed C3PO inventory snapshot (2026-11-18 13:56Z).
+
+# Re-run after correcting displaced-target mods to inventory semantics (2026-11-18).
