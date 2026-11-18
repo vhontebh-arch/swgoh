@@ -2,6 +2,7 @@ import unittest
 
 from mod_analyzer import (
     apply_optimizer_replacements,
+    account_balance_summary,
     blocked_profile_donor_ids,
     equipped_mod_ids_for_donors,
 )
@@ -595,6 +596,28 @@ class FailedDonorFallbackHelpersTests(unittest.TestCase):
             ),
             {"luke-mod-1", "luke-mod-2"},
         )
+
+
+class AccountBalanceSummaryTests(unittest.TestCase):
+    def test_total_matches_sum_of_target_and_all_donor_rows(self):
+        validation = [
+            {"owner": "rey-unit", "profileScoreAvailable": True, "profileScoreDelta": 12.35},
+            {"owner": "barriss-unit", "profileScoreAvailable": True, "profileScoreDelta": -2.77},
+            {"owner": "bt1-unit", "profileScoreAvailable": True, "profileScoreDelta": -43.16},
+            {"owner": "luke-unit", "profileScoreAvailable": True, "profileScoreDelta": -9.89},
+        ]
+        aliases = {
+            "rey-unit": "GLREY",
+            "barriss-unit": "INQUISITORBARRISS",
+            "bt1-unit": "BT1",
+            "luke-unit": "STORMTROOPERLUKE",
+        }
+        profiles = {base_id: {"profile": True} for base_id in aliases.values()}
+        items, total = account_balance_summary(
+            validation, set(aliases), profiles, aliases
+        )
+        self.assertEqual(len(items), 4)
+        self.assertEqual(total, -43.47)
 
 
 if __name__ == "__main__":
