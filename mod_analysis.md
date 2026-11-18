@@ -8,7 +8,7 @@
 - **Walidacja fizyczna całego łańcucha:** POTWIERDZONA
 - **Ocena:** BILANS NIEDODATNI — nie rekomenduję wykonania łańcucha
 - **Interpretacja:** bilans obejmuje cel i wszystkich dotkniętych dawców, liczony tą samą nieprojekcyjną punktacją pełnego buildu.
-- **Łączny bilans profilu rosteru:** +0.00 pkt
+- **Łączny bilans profilu rosteru:** -43.47 pkt
 - **Liczba modów docelowych:** 6/6
 
 ## Bilans całej operacji — ta sama punktacja przed/po
@@ -22,7 +22,7 @@ Wynik każdego buildu jest liczony bez projekcji przyszłych rolli i bez założ
 | STORMTROOPERLUKE | DAWCA | 121.96 | 112.06 | -9.89 |
 | GLREY | CEL | 167.45 | 179.80 | +12.35 |
 
-**ŁĄCZNA ZMIANA: +0.00 pkt.**
+**ŁĄCZNA ZMIANA: -43.47 pkt.**
 
 ## Docelowy zestaw — GLREY
 
