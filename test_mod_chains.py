@@ -1,6 +1,10 @@
 import unittest
 
-from mod_analyzer import apply_optimizer_replacements
+from mod_analyzer import (
+    apply_optimizer_replacements,
+    blocked_profile_donor_ids,
+    equipped_mod_ids_for_donors,
+)
 
 
 TARGET = "target-instance"
@@ -561,6 +565,35 @@ class DisplacedTargetStackRankTests(unittest.TestCase):
         self.assertNotEqual(
             result["plans"][0]["moves"][0]["replacement"]["id"],
             "rey-displaced-cross",
+        )
+
+
+class FailedDonorFallbackHelpersTests(unittest.TestCase):
+    def test_extracts_only_profiled_donors_with_failed_rebuilds(self):
+        result = {
+            "failed": [
+                ("GLREY", "dawca COMMANDERLUKESKYWALKER zablokowany: brak pełnego buildu"),
+                ("GLREY", "brak wykonalnego łańcucha dla Cross / Health"),
+            ]
+        }
+        self.assertEqual(
+            blocked_profile_donor_ids(result),
+            {"COMMANDERLUKESKYWALKER"},
+        )
+
+    def test_excludes_only_equipped_mods_of_failed_donor(self):
+        rows = [
+            make_mod("luke-mod-1", DONOR, True, "Circle"),
+            make_mod("luke-mod-2", DONOR, True, "Diamond"),
+            make_mod("rey-mod", TARGET, True, "Cross"),
+            make_mod("inventory-mod", equipped=False, slot="Cross"),
+        ]
+        aliases = {DONOR: "COMMANDERLUKESKYWALKER", TARGET: "GLREY"}
+        self.assertEqual(
+            equipped_mod_ids_for_donors(
+                rows, {"COMMANDERLUKESKYWALKER"}, aliases
+            ),
+            {"luke-mod-1", "luke-mod-2"},
         )
 
 
