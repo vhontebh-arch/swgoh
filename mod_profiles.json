@@ -5078,7 +5078,7 @@
         "Accuracy": 0
       }
     },
-    "REY": {
+    "GLREY": {
       "name": "Rey",
       "role": "attacker",
       "source_model": {
@@ -5981,7 +5981,7 @@
       "fetched_at_utc": "2026-11-13T19:29:00Z",
       "checked_at_utc": "2026-11-13T19:29:00Z"
     },
-    "REY": {
+    "GLREY": {
       "status": "refreshed",
       "checked_at_utc": "2026-11-18T12:05:07.380Z",
       "fetched_at_utc": "2026-11-18T12:05:07.380Z",
