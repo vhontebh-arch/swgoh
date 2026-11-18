@@ -1213,7 +1213,11 @@ jobs:
             git commit \
               -m "Update SWGOH data"
 
-            git push
+            # The workflow may have started just before another main-branch
+            # commit landed. Rebase the generated-data commit before pushing.
+            git fetch origin main
+            git rebase origin/main
+            git push origin HEAD:main
 
           fi
 
