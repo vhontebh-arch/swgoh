@@ -11,6 +11,7 @@ on:
     branches:
       - optimizer-v2
       - fix/stack-rank-donor-patch-eligibility
+      - experiment/glrey-feasible-donor-fallback
     paths:
       - "mod_analyzer.py"
       - "ship_analysis.py"
@@ -42,6 +43,12 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+
+      - name: Install regression-test dependency
+        run: python -m pip install requests
+
+      - name: Run mod chain regression tests
+        run: python -m unittest -v test_mod_chains.py
 
       - name: Request a fresh canonical SWGOH snapshot
         env:
