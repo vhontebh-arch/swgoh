@@ -101,6 +101,7 @@ jobs:
       - name: Test canonical snapshot verifier
         run: python -m unittest -v test_optimizer_data_sync.py
 
+      # Keep this experimental branch isolated from the stable optimizer-v2 analysis.
       - name: Generate mod analysis
         env:
           MOD_ANALYSIS_TARGETS: ${{ inputs.mod_analysis_targets }}
