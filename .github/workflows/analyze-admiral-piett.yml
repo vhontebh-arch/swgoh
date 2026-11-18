@@ -49,3 +49,5 @@ jobs:
 # Re-run against the refreshed C3PO inventory snapshot (2026-11-18 13:56Z).
 
 # Re-run after correcting displaced-target mods to inventory semantics (2026-11-18).
+
+# Re-run after fixing profile-score balance aggregation (2026-11-18).
