@@ -14,16 +14,16 @@ An equipped mod may move only from a character with a numerically greater or equ
 
 ## Snapshot and mapping
 
-- Input: data/stack_rank.tsv (313 character rows; original columns retained).
+- Input: data/stack_rank.tsv (315 character rows; original columns retained).
 - Mapping: data/character_base_id_mapping.json.
 - Generated output: character_ranking.json.
 - Personalized export: https://swgoh.spineless.net/stackrank?omicronGac=true&omicronTw=true&omicronTb=true&omicronRaids=true&omicronConquest=true&allyCode=972824625&showFullDetails=true
 
-All 313 names map to unique canonical baseIds. Stack Rank refresh remains manual because no supported public export endpoint has been established.
+All 315 names map to unique canonical baseIds. Stack Rank refresh remains manual because no supported public export endpoint has been established.
 
 ## Refresh
 
 ```bash
-python character_ranking.py --input data/stack_rank.tsv --output character_ranking.json --expected-count 313
+python character_ranking.py --input data/stack_rank.tsv --output character_ranking.json --expected-count 315
 python -m unittest discover -s tests -p "test_character_ranking.py" -v
 ```
