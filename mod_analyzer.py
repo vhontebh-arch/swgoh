@@ -2706,7 +2706,7 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
             "## Diagnostyka przeszukiwania wariantów łańcucha",
             "",
             "Limit kompletnych wariantów na głównego dawcę: **{}**.".format(CHAIN_ALTERNATIVE_CAP),
-            "Wyniki poniżej to ważony Rank bilans zmian danego dawcy i jego rekurencyjnych pod-dawców; wyższy wynik jest lepszy.",
+            "Wyniki poniżej to nieważony bilans zmian wyniku pełnego buildu dawcy i jego rekurencyjnych pod-dawców. Rank jest wyłącznie twardym ograniczeniem dopuszczalności transferów, nie wpływa na punktację ani wybór spośród legalnych łańcuchów.",
             "",
         ]
         for donor_id, scores in sorted(CHAIN_SEARCH_DIAGNOSTICS.items()):
