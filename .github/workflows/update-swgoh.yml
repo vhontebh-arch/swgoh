@@ -49,6 +49,12 @@ jobs:
 
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          # A concurrency-queued push run may carry an older event SHA.
+          # Always build from the latest canonical main after it acquires the
+          # publisher slot, otherwise it can rebase stale player data over a
+          # newer snapshot and conflict in swgoh_972824625.json.
+          ref: main
 
       - name: Sync canonical C3PO snapshot
         env:
