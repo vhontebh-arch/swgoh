@@ -6,6 +6,13 @@ from mod_analyzer import apply_optimizer_replacements
 TARGET = "target-instance"
 DONOR = "donor-instance"
 DONOR_B = "donor-b-instance"
+TEST_RANKING = [
+    {"base_id": "TARGET", "rank": 1},
+    {"base_id": "TARGET_B", "rank": 2},
+    {"base_id": "DONOR", "rank": 100},
+    {"base_id": "DONOR_A", "rank": 150},
+    {"base_id": "DONOR_B", "rank": 200},
+]
 
 
 def make_mod(mod_id, owner="", equipped=False, slot="Arrow", value=10, mod_set="Speed", speed_roll=None):
@@ -26,7 +33,7 @@ def run_plan(rows, selected, aliases=None, profiles=None):
     aliases = aliases or {TARGET: "TARGET"}
     return apply_optimizer_replacements(
         rows, {"TARGET": {"mods": [selected]}}, {"TARGET"},
-        aliases=aliases, profiles=profiles,
+        aliases=aliases, profiles=profiles, ranking=TEST_RANKING,
     )
 
 
@@ -349,6 +356,7 @@ class TransferChainTests(unittest.TestCase):
                 donor_a: "DONOR_A",
                 donor_b: "DONOR_B",
             },
+            ranking=TEST_RANKING,
         )
 
         self.assertTrue(result["safe"], result["failed"])
