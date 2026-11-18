@@ -1926,9 +1926,9 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
     all_profiled = bool(relevant_validation) and all(
         item.get("profileScoreAvailable") for item in relevant_validation
     )
-    donor_delta = round(sum(float(item.get("profileScoreDelta", 0.0) or 0.0) for item in rank_donor_moves), 2) if all_profiled else None
-    target_delta = round(sum(float(item.get("profileScoreDelta", 0.0) or 0.0) for item in rank_target_moves), 2) if all_profiled else None
-    account_delta = round(sum(float(item.get("profileScoreDelta", 0.0) or 0.0) for item in all_rank_moves), 2) if all_profiled else None
+    donor_delta = round(sum(float(item.get("gain", 0.0) or 0.0) for item in rank_donor_moves), 2) if all_profiled else None
+    target_delta = round(sum(float(item.get("gain", 0.0) or 0.0) for item in rank_target_moves), 2) if all_profiled else None
+    account_delta = round(sum(float(item.get("gain", 0.0) or 0.0) for item in all_rank_moves), 2) if all_profiled else None
     return {
         "safe": safe, "plans": plans, "validation": validation, "failed": failed,
         "targetDelta": target_delta, "donorDelta": donor_delta, "accountDelta": account_delta,
