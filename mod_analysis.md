@@ -6,9 +6,9 @@ W raportach przeznaczonych do ręcznego wykonania mod identyfikowany jest wyłą
 
 - Modów: **2197**
 - UPGRADE: **31**
-- SLICE: **1151**
+- SLICE: **1150**
 - SLICE_6E: **240**
-- CALIBRATE: **105**
+- CALIBRATE: **106**
 - EQUIP: **0**
 - REPLACE: **3**
 - PATCH: **3**
@@ -83,6 +83,7 @@ W raportach przeznaczonych do ręcznego wykonania mod identyfikowany jest wyłą
 | CALIBRATE | Square Offense % 8.5% | POSTAĆ: EMPERORPALPATINE | Speed | 6A | 15 | 100.0% | 59.2% | 35.5% | 0.0% | 75.0% | 59.2% | calibration |
 | CALIBRATE | Triangle Protection % 24% | POSTAĆ: SANASTARROS | Health | 6A | 15 | 100.0% | 70.3% | 35.2% | 0.0% | 61.1% | 70.3% | calibration |
 | CALIBRATE | Square Offense % 8.5% | POSTAĆ: GLREY | Offense | 6A | 15 | 100.0% | 76.7% | 34.8% | 0.0% | 80.0% | 76.7% | calibration |
+| CALIBRATE | Cross Protection % 24% | POSTAĆ: REYJEDITRAINING | Health | 6A | 15 | 100.0% | 61.2% | 34.1% | 0.0% | 83.3% | 61.2% | calibration |
 | CALIBRATE | Triangle Critical Damage % 42% | POSTAĆ: 50RT | Potency | 6A | 15 | 100.0% | 78.3% | 33.8% | 0.0% | 70.0% | 78.3% | calibration |
 | CALIBRATE | Triangle Health % 16% | POSTAĆ: LUKESTARKILLER | Potency | 6A | 15 | 100.0% | 65.1% | 33.8% | 0.0% | 83.3% | 65.1% | calibration |
 | CALIBRATE | Cross Tenacity % 35% | POSTAĆ: REY | Critical Damage | 6A | 15 | 100.0% | 63.0% | 33.2% | 0.0% | 83.3% | 63.0% | calibration |
@@ -94,7 +95,6 @@ W raportach przeznaczonych do ręcznego wykonania mod identyfikowany jest wyłą
 | CALIBRATE | Triangle Health % 16% | POSTAĆ: NINTHSISTER | Tenacity | 6A | 15 | 100.0% | 79.7% | 31.1% | 0.0% | 83.3% | 79.7% | calibration |
 | CALIBRATE | Arrow Speed 32 | POSTAĆ: SEVENTHSISTER | Health | 6A | 15 | 100.0% | 69.0% | 30.8% | 0.0% | 0.0% | 69.0% | calibration |
 | CALIBRATE | Square Offense % 8.5% | POSTAĆ: MERRIN | Health | 6A | 15 | 100.0% | 65.5% | 30.2% | 0.0% | 91.7% | 65.5% | calibration |
-| CALIBRATE | Circle Protection % 24% | POSTAĆ: GRANDMOFFTARKIN | Potency | 6A | 15 | 100.0% | 64.3% | 29.8% | 0.0% | 75.0% | 64.3% | calibration |
 
 ### JARJARBINKS — najlepszy wirtualny build 6/6
 
