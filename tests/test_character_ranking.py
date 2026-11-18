@@ -52,7 +52,7 @@ class StackRankImportTests(unittest.TestCase):
         expected={"the ronin":"THERONIN","third sister":"THIRDSISTER","taron malicos":"TARONMALICOS","dark trooper moff gideon":"MOFFGIDEONS3","jaxxon":"JAXXON"}
         for name,base_id in expected.items(): self.assertEqual(mapping[name]["base_id"],base_id)
 
-    def test_repository_snapshot_maps_all_315_characters(self):
+    def test_repository_snapshot_maps_all_315_characters(self):  # refreshed Stack Rank export
         root=Path(__file__).resolve().parents[1]
         data=load_stack_rank(root/"data"/"stack_rank.tsv",DEFAULT_MAPPING)
         self.assertEqual(len(data),315); self.assertEqual(len({x["base_id"] for x in data}),315)
