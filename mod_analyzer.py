@@ -65,6 +65,35 @@ SET_RULES = {
 def is_true(value):
     return str(value).strip().lower() in {"1", "true", "yes", "y"}
 
+
+def blocked_profile_donor_ids(chain_result):
+    """Return donors whose recursive full-build rebuild made the selected target chain infeasible."""
+    blocked = set()
+    for item in (chain_result or {}).get("failed", []):
+        reason = item[1] if isinstance(item, (tuple, list)) and len(item) > 1 else str(item)
+        text = str(reason or "")
+        if "dawca " not in text or " zablokowany" not in text:
+            continue
+        donor_id = text.split("dawca ", 1)[1].split(" zablokowany", 1)[0].strip()
+        if donor_id:
+            blocked.add(donor_id)
+    return blocked
+
+
+def equipped_mod_ids_for_donors(rows, donor_ids, aliases):
+    """Exclude only equipped mods owned by failed donors from the target-build candidate pool."""
+    donor_ids = set(donor_ids or ())
+    excluded = set()
+    for row in rows or []:
+        if not is_true(row.get("equipped")):
+            continue
+        owner_id = str(row.get("assignedTo", "") or "")
+        base_id = aliases.get(owner_id, owner_id)
+        mod_id = str(row.get("id", "") or "")
+        if base_id in donor_ids and mod_id:
+            excluded.add(mod_id)
+    return excluded
+
 def integer(value, default=0):
     try:
         return int(value)
@@ -2924,7 +2953,12 @@ def main(argv=None):
         return str(row.get("id", "") or "")
 
     ranking = load_ranking_json("character_ranking.json")
-    optimizer = optimize_target_build(rows, target_ids, profiles, aliases, names, protected_owners)
+    excluded_target_donor_ids = set()
+    excluded_target_mod_ids = set()
+    optimizer = optimize_target_build(
+        rows, target_ids, profiles, aliases, names, protected_owners,
+        excluded_mod_ids=excluded_target_mod_ids,
+    )
 
     # Resolve a provisional physical chain, fetch profiles only for owners
     # that actually appear in it, then re-run. Repeat if the improved ranking
@@ -2934,6 +2968,35 @@ def main(argv=None):
         chain_result = apply_optimizer_replacements(
             rows, optimizer, target_ids, profiles, aliases, names, protected_owners, gear_tiers, ranking
         )
+
+        # If a selected donor cannot be rebuilt while preserving its observed
+        # complete set combination, do not stop at a blocked target build.
+        # Remove that donor's equipped mods only from the target candidate pool
+        # and rerun the six-slot optimizer; this is feasibility filtering, not
+        # a protected-owner rule and does not alter the donor's roster state.
+        newly_blocked_donors = (
+            blocked_profile_donor_ids(chain_result) - excluded_target_donor_ids
+        )
+        if newly_blocked_donors:
+            new_exclusions = equipped_mod_ids_for_donors(
+                rows, newly_blocked_donors, aliases
+            ) - excluded_target_mod_ids
+            if new_exclusions:
+                excluded_target_donor_ids.update(newly_blocked_donors)
+                excluded_target_mod_ids.update(new_exclusions)
+                labels = ", ".join(
+                    display_name(owner_id) for owner_id in sorted(newly_blocked_donors)
+                )
+                print(
+                    "TARGET BUILD FALLBACK: {} — brak wykonalnej odbudowy; "
+                    "ponowne wyszukiwanie bez modów tego dawcy.".format(labels)
+                )
+                optimizer = optimize_target_build(
+                    rows, target_ids, profiles, aliases, names, protected_owners,
+                    excluded_mod_ids=excluded_target_mod_ids,
+                )
+                continue
+
         chain_donor_ids = set()
 
         # Inspect every selected source, not only successfully planned transfers.
@@ -2988,7 +3051,10 @@ def main(argv=None):
         for row in rows:
             fit = character_fit(row, targets, profiles, aliases)
             row.update(fit)
-        optimizer = optimize_target_build(rows, target_ids, profiles, aliases, names, protected_owners)
+        optimizer = optimize_target_build(
+            rows, target_ids, profiles, aliases, names, protected_owners,
+            excluded_mod_ids=excluded_target_mod_ids,
+        )
 
     # Mark the physical mods selected by the complete six-slot optimizer.
     # These values describe the full-build result, not a single-slot swap;
@@ -3189,6 +3255,18 @@ def main(argv=None):
         rows, optimizer, chain_result, profiles, aliases, names,
         target_ids, profile_fetch_status, display_name
     )
+    if excluded_target_donor_ids:
+        excluded_names = ", ".join(
+            display_name(owner_id) for owner_id in sorted(excluded_target_donor_ids)
+        )
+        lines.extend([
+            "",
+            "**Fallback wykonalności buildu:** z puli kandydatów celu wyłączono mody dawców, "
+            "których pełnego buildu nie dało się odbudować z zachowaniem obserwowanej kombinacji setów: "
+            + excluded_names + ". To nie jest stała ochrona tych postaci.",
+            "",
+        ])
+
     with open(OUTPUT_MD, "w", encoding="utf-8") as f:
         f.write(user_report if user_report.endswith("\n") else user_report + "\n")
 
