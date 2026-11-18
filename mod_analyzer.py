@@ -9,14 +9,14 @@ import csv
 import json
 import os
 
-from character_ranking import load_ranking_json, rank_weighted_donor_delta, rank_weighted_account_delta
+from character_ranking import load_ranking_json, rank_weighted_donor_delta, rank_weighted_account_delta, can_transfer_by_rank
 from update_mod_profiles import ensure_profiles, load_fresh_profiles
 
 INPUT_FILE = "mods.csv"
 OUTPUT_CSV = "mod_analysis.csv"
 OUTPUT_MD = "mod_analysis.md"
 PROFILE_FILE = "mod_profiles.json"
-ANALYZER_VERSION = "2026-11-16-rank-weighted-chain-selection-v2"
+ANALYZER_VERSION = "2026-11-18-rank-transfer-gate-v1"
 CHAIN_ALTERNATIVE_CAP = 5
 CHAIN_SEARCH_DIAGNOSTICS = {}
 
@@ -1117,6 +1117,9 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
     gear_tiers = gear_tiers or {}
     ranking = ranking or []
 
+    def transfer_allowed(source_owner, recipient_id):
+        return can_transfer_by_rank(source_owner, recipient_id, ranking, aliases)
+
     def recipient_gear(base_id):
         return integer(gear_tiers.get(aliases.get(base_id, base_id), -1), -1)
 
@@ -1209,6 +1212,7 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
             current = eq.get((target_owner, slot))
             if current and rid(current) != rid(selected):
                 recycled = dict(current)
+                recycled["_source_owner"] = owner(current)
                 recycled["equipped"] = "False"
                 recycled["assignedTo"] = ""
                 displaced_target_mods.append(recycled)
@@ -1269,6 +1273,9 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                 )
             else:
                 eligible = True
+            candidate_source = owner(row) or str(row.get("_source_owner", "") or "")
+            if candidate_source and not transfer_allowed(candidate_source, donor_id):
+                eligible = False
             if eligible:
                 candidate_rows.append(dict(row))
                 local_ids.add(mod_id)
@@ -1452,6 +1459,7 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
         candidate_inventory = list(inventory)
         if target_current and rid(target_current) not in selected_ids and rid(target_current) not in used_ids:
             recycled = dict(target_current)
+            recycled["_source_owner"] = owner(target_current)
             recycled["equipped"] = "False"
             recycled["assignedTo"] = ""
             candidate_inventory.append(recycled)
@@ -1468,7 +1476,10 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                 for r in candidate_inventory:
                     if rid(r) in forbidden or rid(r) in selected_ids:
                         continue
-                    if str(r.get("slot","")) == slot and gear_eligible_for_mod(hole_owner, r):
+                    source_owner = owner(r) or str(r.get("_source_owner", "") or "")
+                    if (str(r.get("slot","")) == slot
+                            and gear_eligible_for_mod(hole_owner, r)
+                            and (not source_owner or transfer_allowed(source_owner, hole_owner))):
                         candidates.append((0,r))
                 for (other_owner,other_slot),r in working_eq.items():
                     if other_slot != slot or other_owner == hole_owner or other_owner == target_owner or other_owner in seen:
@@ -1476,6 +1487,8 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                     if base(r) in protected_owners:
                         continue
                     if not gear_eligible_for_mod(hole_owner, r):
+                        continue
+                    if not transfer_allowed(other_owner, hole_owner):
                         continue
                     if rid(r) in forbidden or rid(r) in selected_ids:
                         continue
@@ -1551,6 +1564,12 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
         if not target_owner:
             failed.append((target_id, "brak identyfikatora postaci w roster.csv")); continue
         for mod in opt.get("mods", []):
+            source_owner = owner(mod)
+            if source_owner and not transfer_allowed(source_owner, target_id):
+                failed.append((target_id, "transfer zablokowany przez Stack Rank: {} nie może przekazać moda postaci {}".format(
+                    pname(source_owner), pname(target_owner)
+                )))
+                continue
             if not gear_eligible_for_mod(target_owner, mod):
                 failed.append((target_id, "mod 6★ zablokowany: odbiorca {} ma Gear {}, wymagane G12+".format(
                     pname(target_owner), recipient_gear(target_owner)
@@ -1687,6 +1706,9 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
         selected_source = owner(selected)
         target_owner = plan["target_owner"]
         slot = str(selected.get("slot", "") or "")
+        if selected_source and not transfer_allowed(selected_source, plan["target"]):
+            physical_errors.append("transfer MOD narusza Stack Rank: {} -> {}".format(pname(selected_source), pname(target_owner)))
+            continue
         if selected_source:
             if not take_mod(selected_id, selected_source, slot):
                 continue
@@ -1708,6 +1730,10 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
             if replacement_slot != move_slot:
                 physical_errors.append("PATCH {} używa slotu {}, wymagany {}".format(
                     replacement_id, replacement_slot, move_slot))
+                continue
+            replacement_source = owner(replacement) or str(replacement.get("_source_owner", "") or "")
+            if replacement_source and not transfer_allowed(replacement_source, move["owner"]):
+                physical_errors.append("transfer PATCH narusza Stack Rank: {} -> {}".format(pname(replacement_source), move["name"]))
                 continue
             if not take_mod(replacement_id):
                 continue
