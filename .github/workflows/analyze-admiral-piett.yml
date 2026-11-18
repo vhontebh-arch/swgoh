@@ -51,3 +51,5 @@ jobs:
 # Re-run after correcting displaced-target mods to inventory semantics (2026-11-18).
 
 # Re-run after fixing profile-score balance aggregation (2026-11-18).
+
+# Re-run Piett after clarifying hard Rank gate vs unweighted chain scoring (2026-11-18).
