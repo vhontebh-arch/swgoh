@@ -1,0 +1,45 @@
+name: Analyze Admiral Piett mods
+
+on:
+  push:
+    branches:
+      - optimizer-v2
+    paths:
+      - ".github/workflows/analyze-admiral-piett.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  analyze:
+    strategy:
+      fail-fast: false
+      matrix:
+        alternative_cap: [1, 2, 3, 5, 8]
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: optimizer-v2
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install runtime dependency
+        run: python -m pip install requests
+      - name: Compile optimizer
+        run: python -m py_compile mod_analyzer.py character_ranking.py
+      - name: Run Admiral Piett analysis
+        run: |
+          set -e
+          python mod_analyzer.py --target "ADMIRALPIETT" --chain-alternative-cap "${{ matrix.alternative_cap }}"
+          test -s mod_analysis.csv
+          test -s mod_analysis.md
+      - name: Upload analysis output
+        uses: actions/upload-artifact@v4
+        with:
+          name: admiral-piett-analysis-cap-${{ matrix.alternative_cap }}
+          path: |
+            mod_analysis.csv
+            mod_analysis.md
