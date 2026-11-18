@@ -2458,7 +2458,10 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
         for move in plan.get("moves", [])
     )
     donor_compromise = donor_compromise or unavailable_profile_losses
-    account_delta = chain_result.get("accountDelta")
+    # Keep the roster total sourced from account_balance_summary above.
+    # The duplicate accountDelta field on chain_result can omit affected owners;
+    # overriding the complete table sum would make the displayed total disagree
+    # with the per-character rows.
     if not chain_result.get("safe"):
         assessment = "BLOKADA — nie wykonuj przekładek"
     elif account_delta is None:
