@@ -2950,7 +2950,7 @@ def main(argv=None):
     for r in rows[:75]:
         mod = "{} {} {}".format(r["slot"], r["primaryStat"], r["primaryValue"])
         lines.append(
-            "| {} | {} | {} | {} | {}{} | {} | {:.1f}% | {:.1f}% | {:.1f}% | {:.1f}% | {:.1f}% | {:.1f}% | {} |".format(
+            "| {} | {} | {} | {} | {}{} | {} | {:.1f}% | {:.1f}% | {:.1f}% | {:.1f}% | {} |".format(
                 r["recommendedAction"], mod, r["source"], r["set"], r["dots"], r["tierName"],
                 r["level"], float(r["modQuality"]), float(r["modValue"]),
                 float(r.get("fitScore",0)), float(r["speedQuality"]),
