@@ -37,7 +37,7 @@ def validate_report(report: str, targets: list[str]) -> list[str]:
         "## Kolejność przekładania",
         "## Bilans całej operacji — ta sama punktacja przed/po",
         "## Wpływ na postacie-dawców",
-        "## Założenia projekcji",
+        "## Założenia oceny buildu",
     )
     for heading in required_sections:
         if heading not in report:
@@ -76,6 +76,18 @@ def validate_report(report: str, targets: list[str]) -> list[str]:
         errors.append("Brak klasyfikacji REKOMENDACJA/KOMPROMIS/BLOKADA.")
     if "Brak kompletnego buildu" not in report and "## Kontrola profili użytych w łańcuchu" not in report:
         errors.append("Brak kontroli profili uczestników łańcucha.")
+
+    # Reject stale language from the removed speculative projection model.
+    stale_projection_terms = (
+        "## Założenia projekcji",
+        "optymistyczna projekcja",
+        "projekcja do 15",
+        "projekcja secondary do 6E",
+        "brakujące rolle przypisane",
+        "Zmiana potencjału buildu",
+    )
+    if any(token.lower() in report.lower() for token in stale_projection_terms):
+        errors.append("Raport zawiera nieaktualne opisy projekcji, których optimizer już nie stosuje.")
 
     # Guard against accidentally publishing the former technical dashboard.
     forbidden = ("## Globalny optimizer 6-slotowy", "## Najważniejsi kandydaci",
