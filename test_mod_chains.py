@@ -20,6 +20,8 @@ def make_mod(mod_id, owner="", equipped=False, slot="Arrow", value=10, mod_set="
         "id": mod_id, "assignedTo": owner,
         "equipped": "True" if equipped else "False",
         "slot": slot, "set": mod_set, "modValue": str(value),
+        "primaryStat": {"Square":"Offense","Diamond":"Defense","Circle":"Health","Arrow":"Speed","Triangle":"Offense","Cross":"Potency"}.get(slot, "Speed"),
+        "primaryValue": {"Square":"8.5","Diamond":"20","Circle":"16","Arrow":"30","Triangle":"8.5","Cross":"30"}.get(slot, "30"),
         "dots": "5", "tier": "5", "level": "15",
     }
     if speed_roll is not None:
@@ -29,11 +31,29 @@ def make_mod(mod_id, owner="", equipped=False, slot="Arrow", value=10, mod_set="
     return row
 
 
+def default_profiles(aliases):
+    profile = {
+        "primary_preferences": {
+            "Square": {"Offense": 1.0}, "Diamond": {"Defense": 1.0},
+            "Circle": {"Health": 1.0}, "Arrow": {"Speed": 1.0},
+            "Triangle": {"Offense": 1.0}, "Cross": {"Potency": 1.0},
+        },
+        "secondary_preferences": {"Speed": 1.0},
+        "set_preferences": {name: 0.5 for name in (
+            "Speed", "Health", "Defense", "Offense", "Potency",
+            "Critical Damage", "Critical Chance", "Tenacity",
+        )},
+    }
+    return {base_id: dict(profile) for base_id in set(aliases.values())}
+
+
 def run_plan(rows, selected, aliases=None, profiles=None, ranking=None):
     aliases = aliases or {TARGET: "TARGET"}
+    complete_profiles = default_profiles(aliases)
+    complete_profiles.update(profiles or {})
     return apply_optimizer_replacements(
         rows, {"TARGET": {"mods": [selected]}}, {"TARGET"},
-        aliases=aliases, profiles=profiles, ranking=ranking or TEST_RANKING,
+        aliases=aliases, profiles=complete_profiles, ranking=ranking or TEST_RANKING,
     )
 
 
@@ -243,7 +263,7 @@ class TransferChainTests(unittest.TestCase):
         self.assertEqual(result["plans"][0]["moves"], [])
 
     def test_inventory_to_occupied_target_returns_displaced_mod(self):
-        selected = make_mod("inventory-mod")
+        selected = make_mod("inventory-mod", speed_roll=6)
         current = make_mod("target-current", TARGET, True, value=5)
         result = run_plan([selected, current], selected)
         self.assertTrue(result["safe"], result["failed"])
@@ -300,7 +320,7 @@ class TransferChainTests(unittest.TestCase):
         self.assertEqual(len(moves), 1)
         self.assertEqual(moves[0]["replacement"]["id"], "stronger-patch")
 
-    def test_profile_first_fallback_prefers_higher_fit_before_set_preservation(self):
+    def test_profiled_donor_fit_prefers_set_compatible_patch(self):
         selected = make_mod("selected-mod", DONOR, True, value=10, mod_set="Speed")
         other_set_pieces = [
             make_mod("donor-circle", DONOR, True, slot="Circle", value=10, mod_set="Speed"),
@@ -316,14 +336,13 @@ class TransferChainTests(unittest.TestCase):
         )
         self.assertTrue(result["safe"], result["failed"])
         move = result["plans"][0]["moves"][0]
-        # With no donor profiles available, the documented fallback is modValue.
-        # In v8 donor fit/value ranks ahead of set preservation, so the larger
-        # fallback gain wins and the set loss must remain visible in the audit.
+        # The donor has a profile, so its actual profile fit takes precedence
+        # over raw modValue; the Speed patch is the better fit for this donor.
         self.assertEqual(
-            move["replacement"]["id"], "higher-value-patch",
+            move["replacement"]["id"], "set-preserving-patch",
             "chosen move={!r}".format(move),
         )
-        self.assertEqual(move["set_delta"], -1)
+        self.assertEqual(move["set_delta"], 0)
 
     def test_inventory_patch_is_currently_preferred_to_another_donor(self):
         selected = make_mod("selected-mod", DONOR, True, value=20)
@@ -367,6 +386,7 @@ class TransferChainTests(unittest.TestCase):
                 donor_b: "DONOR_B",
             },
             ranking=TEST_RANKING,
+            profiles=default_profiles({TARGET: "TARGET", donor_a: "DONOR_A", donor_b: "DONOR_B"}),
         )
 
         self.assertTrue(result["safe"], result["failed"])
@@ -387,6 +407,7 @@ class TransferChainTests(unittest.TestCase):
             },
             {"TARGET", "TARGET_B"},
             aliases={TARGET: "TARGET", target_b: "TARGET_B"},
+            profiles=default_profiles({TARGET: "TARGET", target_b: "TARGET_B"}),
         )
         self.assertFalse(result["safe"])
         self.assertTrue(any("konflikt modów" in reason for _, reason in result["failed"]))
