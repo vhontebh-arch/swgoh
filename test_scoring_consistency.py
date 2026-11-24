@@ -113,7 +113,7 @@ class UnifiedScoringTests(unittest.TestCase):
         for mod in chosen:
             counts[mod["set"]] = counts.get(mod["set"], 0) + 1
         self.assertEqual(counts.get("Health"), 6)
-        self.assertEqual(result["TARGET"]["setComboMode"], "weighted")
+        self.assertEqual(result["TARGET"]["setComboMode"], "none")
 
     def test_donor_build_comparison_reports_full_profile_score_delta(self):
         before = [
