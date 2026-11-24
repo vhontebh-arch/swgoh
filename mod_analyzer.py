@@ -280,27 +280,6 @@ def quality(stat, value, count, values, dots):
 
 def roll_value(stat, value, count, values, dots):
     return quality(stat, value, count, values, dots) * STAT_VALUE.get(stat, 0.10)
-
-def projected_6e_quality(secs):
-    if not secs:
-        return 0.0
-    weighted = 0.0
-    total = 0
-    for stat, value, count, values in secs:
-        if count <= 0:
-            continue
-        r5 = R5.get(stat)
-        r6 = R6.get(stat)
-        if not r5 or not r6:
-            continue
-        projected_value = value * (r6[1] / r5[1])
-        low6, high6 = r6
-        per_roll = projected_value / count
-        q = max(0.0, min(1.0, (per_roll-low6)/(high6-low6)))
-        weighted += q * count
-        total += count
-    return 100.0 * weighted / total if total else 0.0
-
 def quality_metrics(secs, dots):
     total = sum(x[2] for x in secs)
     if not total:
@@ -308,12 +287,6 @@ def quality_metrics(secs, dots):
     quality_pct = 100.0 * sum(quality(*x, dots) * x[2] for x in secs) / total
     value_pct = 100.0 * sum(roll_value(*x, dots) * x[2] for x in secs) / total
     return quality_pct, value_pct
-
-def best_future_roll(sec_stats, dots):
-    if not sec_stats:
-        return 0.0
-    return max(STAT_VALUE.get(x[0], 0.10) for x in sec_stats)
-
 def investment(row):
     dots = integer(row.get("dots"))
     tier = integer(row.get("tier"))
@@ -330,7 +303,7 @@ def investment(row):
         return "calibration"
     return "none"
 
-def next_action(row, secs, current_quality, current_value, potential, fit_score=0.0):
+def next_action(row, secs, current_quality, current_value, fit_score=0.0):
     dots = integer(row.get("dots"))
     tier = integer(row.get("tier"))
     level = integer(row.get("level"))
@@ -346,20 +319,19 @@ def next_action(row, secs, current_quality, current_value, potential, fit_score=
         return ("KEEP", "zbyt słaby profil przed 15")
 
     if dots == 5 and tier < 5:
-        if speed_rolls >= 2 or fit_score >= 70 or (current_value >= 43 and potential >= 58):
+        if speed_rolls >= 2 or fit_score >= 70 or current_value >= 43:
             return ("SLICE", "wartość moda lub dopasowanie do postaci uzasadnia kolejny roll")
-        if current_value >= 35 and potential >= 52:
+        if current_value >= 35:
             return ("KEEP", "obserwuj przed wydaniem materiałów")
         return ("KEEP", "wartość secondary zbyt niska")
 
     if dots == 5 and tier == 5:
-        six_e = projected_6e_quality(secs)
-        if speed_rolls >= 2 or fit_score >= 72 or six_e >= 50 or (current_value >= 45 and len(secs) >= 3):
+        if speed_rolls >= 2 or fit_score >= 72 or (current_value >= 45 and len(secs) >= 3):
             return ("SLICE_6E", "5A ma wystarczającą wartość lub dopasowanie do postaci")
         return ("KEEP", "5A nie uzasadnia kosztu 6E")
 
     if dots == 6 and tier < 5:
-        if speed_rolls >= 3 or fit_score >= 72 or (current_value >= 52 and potential >= 65):
+        if speed_rolls >= 3 or fit_score >= 72 or current_value >= 52:
             return ("SLICE", "6-dot ma dobry profil do kolejnego rolla")
         return ("KEEP", "brak wystarczającej wartości do kolejnego slice")
 
@@ -376,19 +348,11 @@ def analyze(row):
     secs = [x for i in range(1, 5) if (x := rolls(row, i)) is not None]
     total = sum(x[2] for x in secs)
     current_quality, current_value = quality_metrics(secs, dots)
-    target_total = TOTAL.get((dots, tier), total)
-    remaining = max(0, target_total-total)
-
-    best_weight = best_future_roll(secs, dots)
-    future_value = (current_value / 100.0) * total + remaining * best_weight
-    potential_value = 100.0 * future_value / max(1, total + remaining)
-
     calibration_max = CAL_ATTEMPTS.get((dots, tier), 0)
     calibration_used = integer(row.get("rerolledCount"))
     calibration_remaining = max(0, calibration_max-calibration_used)
     calibration_next_cost = CAL_COST.get(calibration_used+1, 0) if calibration_remaining else 0
 
-    six_e_quality = projected_6e_quality(secs) if dots == 5 and tier == 5 else 0.0
     speed = next((x for x in secs if x[0] == "Speed"), None)
     speed_value = speed[1] if speed else 0.0
     speed_rolls = speed[2] if speed else 0
@@ -403,9 +367,6 @@ def analyze(row):
         "modQuality": round(current_quality, 1),
         "modValue": round(current_value, 1),
         "speedQuality": round(speed_quality, 1),
-        "potentialCeiling": round(potential_value, 1),
-        "potentialGain": round(max(0, potential_value-current_value), 1),
-        "projected6EQuality": round(six_e_quality, 1),
         "nextInvestment": investment(row),
         "calibrationAttemptsMax": calibration_max,
         "calibrationAttemptsUsed": calibration_used,
@@ -1932,9 +1893,9 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
     if safe and not all_profiled:
         safe = False
         failed.append(("bilans profili", "brak pełnego profilu dla co najmniej jednej postaci w łańcuchu; nie można potwierdzić rzeczywistego bilansu"))
-    elif safe and account_delta <= 0.01:
+    elif safe and (target_delta <= 0.01 or account_delta <= 0.01):
         safe = False
-        failed.append(("bilans profili", "łączny rzeczywisty bilans całego łańcucha nie jest dodatni ({:+.2f} pkt)".format(account_delta)))
+        failed.append(("bilans profili", "rzeczywisty bilans celu ({:+.2f}) i/lub całego łańcucha ({:+.2f}) nie jest dodatni".format(target_delta, account_delta)))
     return {
         "safe": safe, "plans": plans, "validation": validation, "failed": failed,
         "targetDelta": target_delta, "donorDelta": donor_delta, "accountDelta": account_delta,
@@ -2819,7 +2780,7 @@ def main(argv=None):
         secs = [x for i in range(1, 5) if (x := rolls(row, i)) is not None]
         action, reason = next_action(
             row, secs, float(row["modQuality"]), float(row["modValue"]),
-            float(row["potentialCeiling"]), float(row.get("fitScore", 0.0))
+            float(row.get("fitScore", 0.0))
         )
         row["recommendedAction"] = action
         row["reason"] = reason
@@ -2938,7 +2899,6 @@ def main(argv=None):
     rows.sort(key=lambda r: (
         order.get(r["recommendedAction"], 9),
         -float(r.get("fitScore", 0)),
-        -float(r["potentialCeiling"]),
         -float(r["modQuality"])
     ))
 
@@ -2975,7 +2935,7 @@ def main(argv=None):
         "Ranking i wybór buildu wykorzystują wyłącznie rzeczywiste statystyki modów z eksportu. Nie przewidujemy przyszłych rolli, podniesienia poziomu ani slice do 6E; rozwój moda jest osobnym działaniem poza optymalizacją.", "",
         "Bonus Speed Set używa bazowej szybkości 150, jeśli profil nie zawiera pola base_stats.Speed. Pozostałe bonusy procentowe są normalizowane względem maksymalnego rolla odpowiedniej statystyki.", "",
         "## Najważniejsi kandydaci", "",
-        "| Akcja | Mod | Źródło | Set | Tier | Lvl | Quality | Value | Fit | Speed | Potencjał | Inwestycja |",
+        "| Akcja | Mod | Źródło | Set | Tier | Lvl | Quality | Value | Fit | Speed | Inwestycja |",
         "|---|---|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---|"
     ]
 
@@ -2986,7 +2946,7 @@ def main(argv=None):
                 r["recommendedAction"], mod, r["source"], r["set"], r["dots"], r["tierName"],
                 r["level"], float(r["modQuality"]), float(r["modValue"]),
                 float(r.get("fitScore",0)), float(r["speedQuality"]),
-                float(r["potentialCeiling"]), r["nextInvestment"]
+                r["nextInvestment"]
             )
         )
 
