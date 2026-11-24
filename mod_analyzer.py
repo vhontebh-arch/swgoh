@@ -2496,7 +2496,13 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
         gain = float(opt.get("gain", 0.0) or 0.0)
         lines += [
             "",
-            "- **Zmiana potencjału buildu:** {:+.1f} pkt (optymistyczna projekcja do 15; brakujące rolle przypisane do najwyżej preferowanej secondary; dla 5A projekcja secondary do 6E; primary pozostaje bez zmian; bez slice i calibration).".format(gain),
+            "- **Zmiana rzeczywistego wyniku buildu:** {:+.1f} pkt — wyliczona wyłącznie z aktualnych statystyk sześciu wybranych modów.".format(gain),
+            "",
+            "## Założenia oceny buildu",
+            "",
+            "- Punktacja wykorzystuje wyłącznie rzeczywiste, aktualne statystyki modów.",
+            "- Nie doliczamy przyszłych rolli, podnoszenia poziomu, slice ani calibration.",
+            "- Wybór zestawu i modów opiera się na wyniku rzeczywistego buildu; częstotliwość kombinacji setów służy wyłącznie do rozstrzygania remisu.",
             "",
         ]
 
