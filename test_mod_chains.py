@@ -387,7 +387,7 @@ class TransferChainTests(unittest.TestCase):
                 donor_b: "DONOR_B",
             },
             ranking=TEST_RANKING,
-            profiles=default_profiles(aliases),
+            profiles=default_profiles({TARGET: "TARGET", donor_a: "DONOR_A", donor_b: "DONOR_B"}),
         )
 
         self.assertTrue(result["safe"], result["failed"])
