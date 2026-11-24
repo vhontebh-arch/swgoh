@@ -1393,7 +1393,19 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
     for donor_id, donor_selected in sorted(
         selected_by_donor.items(), key=lambda item: (-len(item[1]), item[0])
     ):
-        if not profiles.get(donor_id):
+        donor_owner = owner(donor_selected[0]) if donor_selected else ""
+        donor_current_mods = [
+            row for (equipped_owner, _slot), row in eq.items()
+            if equipped_owner == donor_owner
+        ]
+        donor_occupied_slots = {
+            str(row.get("slot", "") or "") for row in donor_current_mods
+        }
+        # Full-build reconstruction is only valid when the donor already has
+        # all six equipped slots. For incomplete donors, use the ordinary
+        # same-slot repair path; otherwise the optimizer invents a requirement
+        # to fill unrelated empty slots and rejects otherwise valid transfers.
+        if not profiles.get(donor_id) or len(donor_occupied_slots) != 6:
             continue
         moves, error = rebuild_profiled_donor(donor_id, donor_selected, set())
         if moves is None:
