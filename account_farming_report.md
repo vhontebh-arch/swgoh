@@ -7,7 +7,7 @@
 | ID | Przedmiot | Wymagane | Posiadane | Brakuje |
 |---|---|---:|---:|---:|
 | `172Salvage` | Mk 7 Kyrotech Shock Prod Prototype Salvage | 100 | 2 | **98** |
-| `170PrototypeSalvage` | Mk 12 ArmaTek Holo Lens Prototype Salvage | 50 | 0 | **50** |
+| `170PrototypeSalvage` | Mk 12 ArmaTek Holo Lens Prototype Salvage | 50 | 15 | **35** |
 
 ## Szczegóły
 
@@ -27,7 +27,7 @@ Gear: **G13 → G13** Relic: **R5 → R5**
 | ID | Przedmiot | Brakuje |
 |---|---|---:|
 | `172Salvage` | Mk 7 Kyrotech Shock Prod Prototype Salvage | **98** |
-| `170PrototypeSalvage` | Mk 12 ArmaTek Holo Lens Prototype Salvage | **50** |
+| `170PrototypeSalvage` | Mk 12 ArmaTek Holo Lens Prototype Salvage | **35** |
 
 ## Informacje techniczne
 
