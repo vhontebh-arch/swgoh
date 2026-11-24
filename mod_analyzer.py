@@ -2098,10 +2098,8 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
             set_score, set_pref, breakdown = set_bonus_score(chosen, profile)
             combo_score, combo_match = profile_set_combo_alignment_score(profile, chosen)
             total = base_score + set_score + combo_score
-            # An observed complete set combination is a categorical profile
-            # preference, not a small additive bonus. Compare its normalized
-            # frequency before raw mod quality so a high-scoring but unobserved
-            # set mix cannot defeat the dominant profile combination.
+            # Actual full-build score is the primary objective. Set-combination
+            # frequency is only a tie-break and can never justify a lower score.
             combo_preference = float(combo_match.get("preference", 0.0)) if combo_match else 0.0
             key = (total, combo_preference, set_pref, unchanged_count)
             if best is None or key > best["key"]:
@@ -2929,7 +2927,7 @@ def main(argv=None):
         "|---|---|",
         *["| {} | {} |".format(unit_id, status) for unit_id, status in sorted(profile_fetch_status.items())],
         "",
-        "Dla dawców bez lokalnego profilu po próbie pobrania używany jest fallback modValue; nie jest to ocena dopasowania do indywidualnego profilu.", "",
+        "Łańcuch z niekompletnym zestawem profili jest blokowany, ponieważ nie da się wtedy potwierdzić rzeczywistego bilansu całego konta.", "",
         "## Globalny optimizer 6-slotowy", "",
         "Ocena kompletnego buildu: 40 pkt za statystyki główne, 60 pkt za maksymalnie 24 rolle secondary oraz bonusy setów ważone profilem postaci. Zgodność z profilem ma pierwszeństwo przed zachowaniem aktualnie założonych modów. Set nieobecny w profilu zachowuje 10% bazowej wagi bonusu; set z preferencją 100% otrzymuje pełną wagę. Zachowanie modów na celu jest dopiero końcowym tie-breakiem.", "",
         "Ranking i wybór buildu wykorzystują wyłącznie rzeczywiste statystyki modów z eksportu. Nie przewidujemy przyszłych rolli, podniesienia poziomu ani slice do 6E; rozwój moda jest osobnym działaniem poza optymalizacją.", "",
@@ -3038,7 +3036,6 @@ def main(argv=None):
         "- **SetBonusDelta** — zmiana rzeczywistego bonusu zestawów 6 modów celu po założeniu proponowanego moda.",
         "- **FitAfterSet** — Fit moda powiększony o SetBonusDelta; pokazuje wpływ kompletu bez mieszania go z jakością secondary.",
         "- **AccountGain** — bilans całej operacji przeniesienia i PATCH-a dla źródła; dla źródeł bez profilu używany jest globalny ModValue.",
-        "- **Potential** — sufit wartości przy idealnych przyszłych rollach; nie jest prognozą RNG.",
         "- **Źródło MAGAZYN** — mod nie jest obecnie założony na żadnej postaci.",
         "- **Źródło POSTAĆ: [nazwa]** — mod jest obecnie założony na wskazanej postaci.",
         "- **EQUIP** — pusty slot celu; mod jest przydzielany tylko wtedy, gdy bilans całej operacji dla konta jest dodatni.",
@@ -3047,7 +3044,7 @@ def main(argv=None):
         "- **AccountGain** — zysk celu minus strata wartości źródłowej postaci; dzięki temu mod nie jest zabierany, jeśli operacja pogarsza cały roster. Dla postaci bez profilu strata jest liczona przez globalny ModValue.",
         "- **UPGRADE** — mod nie jest jeszcze na 15.",
         "- **SLICE** — kolejny tier ma uzasadnienie jakościowe lub profilowe.",
-        "- **SLICE_6E** — 5A jest oceniane również przez projekcję jakości po wzroście statystyk do 6E.",
+        "- **SLICE_6E** — 5A może zostać podniesione do 6E; decyzja opiera się wyłącznie na obecnych statystykach moda.",
         "- **CALIBRATE** — 6A jest na końcu slicing i może korzystać z calibration.",
         "",
         "Calibration pozostaje losowe: wybrany roll jest usuwany z wybranego secondary, "
