@@ -6,9 +6,9 @@
 
 - **Wykonalność fizyczna:** POTWIERDZONA
 - **Walidacja fizyczna całego łańcucha:** POTWIERDZONA
-- **Ocena:** BILANS NIEDODATNI — nie rekomenduję wykonania łańcucha
+- **Ocena:** REKOMENDACJA — dodatni bilans całego łańcucha, bez wykrytej straty u dawców
 - **Interpretacja:** bilans obejmuje cel i wszystkich dotkniętych dawców, liczony tą samą nieprojekcyjną punktacją pełnego buildu.
-- **Łączny bilans profilu rosteru:** -16.40 pkt
+- **Łączny bilans profilu rosteru:** +3.33 pkt
 - **Liczba modów docelowych:** 6/6
 
 ## Bilans całej operacji — ta sama punktacja przed/po
@@ -17,9 +17,9 @@ Wynik każdego buildu jest liczony bez projekcji przyszłych rolli i bez założ
 
 | Postać | Rola w łańcuchu | Wynik przed | Wynik po | Zmiana |
 |---|---|---:|---:|---:|
-| PADMEAMIDALA | CEL | 120.79 | 104.40 | -16.40 |
+| PADMEAMIDALA | CEL | 120.79 | 124.13 | +3.33 |
 
-**ŁĄCZNA ZMIANA: -16.40 pkt.**
+**ŁĄCZNA ZMIANA: +3.33 pkt.**
 
 ## Docelowy zestaw — PADMEAMIDALA
 
@@ -53,9 +53,9 @@ Wynik każdego buildu jest liczony bez projekcji przyszłych rolli i bez założ
   - Zmiana dopasowania do profilu: +1.2 pkt (7.6 → 8.8).
 #### Triangle
 - **Obecny mod:** Triangle / Health / Defense % 11.75% / secondary: Offense % 1.05%, Speed 11, Protection % 2.92%, Offense 59 / 5★ A lvl15
-- **Proponowany mod:** Triangle / Health / Critical Chance % 1.5% / secondary: Health 379, Protection % 2.17%, Speed 5, Tenacity % 2.06% / 5★ A lvl1
+- **Proponowany mod:** Triangle / Health / Defense % 11.75% / secondary: Speed 15, Offense 33, Health % 0.97%, Defense 4 / 5★ C lvl15
 - **Źródło:** MAGAZYN
-  - Zmiana dopasowania do profilu: -1.4 pkt (5.0 → 3.6).
+  - Zmiana dopasowania do profilu: +2.5 pkt (5.0 → 7.5).
 #### Circle
 - **Obecny mod:** Circle / Health / Health % 16% / secondary: Potency % 7.5%, Tenacity % 4.62%, Speed 10, Offense % 1.52% / 6★ E lvl15
 - **Proponowany mod:** Circle / Health / Protection % 17.5% / secondary: Speed 14, Critical Chance % 2.23%, Potency % 3.78%, Tenacity % 1.66% / 5★ A lvl11
@@ -63,19 +63,19 @@ Wynik każdego buildu jest liczony bez projekcji przyszłych rolli i bez założ
   - Zmiana dopasowania do profilu: +3.4 pkt (5.0 → 8.4).
 #### Cross
 - **Obecny mod:** Cross / Health / Health % 16% / secondary: Offense 76, Defense 23, Tenacity % 3.19%, Speed 9 / 6★ E lvl15
-- **Proponowany mod:** Cross / Health / Protection % 2.5% / secondary: Offense 38, Potency % 1.41%, Speed 5, Health 234 / 5★ A lvl1
+- **Proponowany mod:** Cross / Health / Potency % 30% / secondary: Speed 10, Protection % 10.78%, Health 1262, Tenacity % 3.76% / 6★ A lvl15
 - **Źródło:** MAGAZYN
-  - Zmiana dopasowania do profilu: -1.4 pkt (5.0 → 3.6).
+  - Zmiana dopasowania do profilu: +3.3 pkt (5.0 → 8.3).
 
-- **Zmiana potencjału buildu:** +17.1 pkt (optymistyczna projekcja do 15; brakujące rolle przypisane do najwyżej preferowanej secondary; dla 5A projekcja secondary do 6E; primary pozostaje bez zmian; bez slice i calibration).
+- **Zmiana potencjału buildu:** +3.3 pkt (optymistyczna projekcja do 15; brakujące rolle przypisane do najwyżej preferowanej secondary; dla 5A projekcja secondary do 6E; primary pozostaje bez zmian; bez slice i calibration).
 
 ## MOD — mody przenoszone na cel
 
 - **MAGAZYN → PADMEAMIDALA:** Diamond / Health / Defense % 11.75% / secondary: Protection 1160, Critical Chance % 1.2%, Health 294, Speed 8 / 5★ C lvl15
 - **MAGAZYN → PADMEAMIDALA:** Circle / Health / Protection % 17.5% / secondary: Speed 14, Critical Chance % 2.23%, Potency % 3.78%, Tenacity % 1.66% / 5★ A lvl11
 - **MAGAZYN → PADMEAMIDALA:** Arrow / Health / Speed 30 / secondary: Tenacity % 1.52%, Health 672, Critical Chance % 3.42%, Offense 24 / 5★ C lvl15
-- **MAGAZYN → PADMEAMIDALA:** Triangle / Health / Critical Chance % 1.5% / secondary: Health 379, Protection % 2.17%, Speed 5, Tenacity % 2.06% / 5★ A lvl1
-- **MAGAZYN → PADMEAMIDALA:** Cross / Health / Protection % 2.5% / secondary: Offense 38, Potency % 1.41%, Speed 5, Health 234 / 5★ A lvl1
+- **MAGAZYN → PADMEAMIDALA:** Triangle / Health / Defense % 11.75% / secondary: Speed 15, Offense 33, Health % 0.97%, Defense 4 / 5★ C lvl15
+- **MAGAZYN → PADMEAMIDALA:** Cross / Health / Potency % 30% / secondary: Speed 10, Protection % 10.78%, Health 1262, Tenacity % 3.76% / 6★ A lvl15
 
 ## PATCH — uzupełnienie dawców
 
@@ -85,22 +85,15 @@ Nie jest wymagany żaden PATCH.
 
 1. **Arrow — załóż na PADMEAMIDALA** mod z MAGAZYN: Arrow / Health / Speed 30 / secondary: Tenacity % 1.52%, Health 672, Critical Chance % 3.42%, Offense 24 / 5★ C lvl15
 2. **Diamond — załóż na PADMEAMIDALA** mod z MAGAZYN: Diamond / Health / Defense % 11.75% / secondary: Protection 1160, Critical Chance % 1.2%, Health 294, Speed 8 / 5★ C lvl15
-3. **Triangle — załóż na PADMEAMIDALA** mod z MAGAZYN: Triangle / Health / Critical Chance % 1.5% / secondary: Health 379, Protection % 2.17%, Speed 5, Tenacity % 2.06% / 5★ A lvl1
+3. **Triangle — załóż na PADMEAMIDALA** mod z MAGAZYN: Triangle / Health / Defense % 11.75% / secondary: Speed 15, Offense 33, Health % 0.97%, Defense 4 / 5★ C lvl15
 4. **Circle — załóż na PADMEAMIDALA** mod z MAGAZYN: Circle / Health / Protection % 17.5% / secondary: Speed 14, Critical Chance % 2.23%, Potency % 3.78%, Tenacity % 1.66% / 5★ A lvl11
-5. **Cross — załóż na PADMEAMIDALA** mod z MAGAZYN: Cross / Health / Protection % 2.5% / secondary: Offense 38, Potency % 1.41%, Speed 5, Health 234 / 5★ A lvl1
+5. **Cross — załóż na PADMEAMIDALA** mod z MAGAZYN: Cross / Health / Potency % 30% / secondary: Speed 10, Protection % 10.78%, Health 1262, Tenacity % 3.76% / 6★ A lvl15
 
 Zakładanie moda automatycznie przenosi poprzedni mod ze slotu do magazynu. Wszystkie powyższe kroki zostały sprawdzone na pełnym stanie slotów i magazynu.
 
 ## Kontrola profili użytych w łańcuchu
 
 - PADMEAMIDALA: profil dostępny, 2 źródła.
-
-## Założenia projekcji
-
-- Poziom 15 jest traktowany jako osiągalny bez ograniczenia materiałami.
-- Brakujące secondary są liczone jako wartość średnia rolla, a nie maksymalna; ich przyszły przydział do statystyk jest uśredniony według profilu zamiast przypisywany do najlepszego secondary.
-- Slice i calibration nie wpływają na ranking ani wynik buildu. Mogą pojawić się wyłącznie jako osobne sugestie inwestycyjne i można je pominąć.
-- Primary pozostaje dokładnie na wartości z eksportu; zależy od obecnej liczby gwiazdek, a podniesienie moda do poziomu 15 go nie zmienia. Nie zakładamy slice 5★ → 6★.
 
 ## Jak czytać opisy modów
 
