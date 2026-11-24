@@ -32,7 +32,7 @@ def valid_report():
         "## Wpływ na postacie-dawców",
         "- **Merrin — wynik pełnego buildu wg profilu:** 45.00 → 44.20 (-0.80 pkt).",
         "  - Σ modValue modów: 10 → 12 (+2) — surowy wskaźnik jakości modów, nie wynik profilu.",
-        "## Założenia projekcji",
+        "## Założenia oceny buildu",
         "## Kontrola profili użytych w łańcuchu",
         "- Vel: cached",
     ]
@@ -132,6 +132,14 @@ class UserReportValidationTests(unittest.TestCase):
         )
         errors = validate_report(report, ["VEL"])
         self.assertTrue(any("wyniku pełnego buildu dawcy" in e for e in errors))
+
+    def test_rejects_legacy_projection_language(self):
+        report = valid_report().replace(
+            "## Założenia oceny buildu",
+            "- **Zmiana potencjału buildu:** optymistyczna projekcja do 15",
+        )
+        errors = validate_report(report, ["VEL"])
+        self.assertTrue(any("nieaktualne opisy projekcji" in e for e in errors))
 
     def test_rejects_missing_current_mod_or_patch_section(self):
         report = valid_report().replace("- **Obecny mod:** Arrow / Health / primary / secondary / 5★ A lvl15\n", "")
