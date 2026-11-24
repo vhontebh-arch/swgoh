@@ -74,7 +74,7 @@ class UnifiedScoringTests(unittest.TestCase):
                 places=2,
             )
 
-    def test_dominant_profile_set_combo_outranks_higher_scoring_unobserved_mix(self):
+    def test_actual_build_score_outranks_unobserved_set_combo(self):
         slots = ("Square", "Diamond", "Circle", "Arrow", "Triangle", "Cross")
         primary = {
             "Square": ("Offense", 8.5), "Diamond": ("Defense", 20),
@@ -112,9 +112,8 @@ class UnifiedScoringTests(unittest.TestCase):
         counts = {}
         for mod in chosen:
             counts[mod["set"]] = counts.get(mod["set"], 0) + 1
-        self.assertEqual(counts.get("Critical Damage"), 4)
-        self.assertEqual(counts.get("Critical Chance"), 2)
-        self.assertEqual(result["TARGET"]["setComboMode"], "profile_priority")
+        self.assertEqual(counts.get("Health"), 6)
+        self.assertEqual(result["TARGET"]["setComboMode"], "weighted")
 
     def test_donor_build_comparison_reports_full_profile_score_delta(self):
         before = [
@@ -155,7 +154,7 @@ class UnifiedScoringTests(unittest.TestCase):
         self.assertLess(after_score, before_score)
 
 
-    def test_actual_scoring_can_prefer_a_finished_donor_mod_over_projected_potential(self):
+    def test_optimizer_uses_actual_mod_stats_without_projection(self):
         primary = {
             "Square": ("Offense", 8.5),
             "Diamond": ("Defense", 20),
@@ -195,22 +194,11 @@ class UnifiedScoringTests(unittest.TestCase):
             "secondary_preferences": {"Speed": 1.0, "Offense %": 0.4},
             "set_preferences": {"Health": 0.5},
         }
-        projected_result = optimize_target_build(
-            rows, {"TARGET"}, {"TARGET": profile}
+        result = optimize_target_build(rows, {"TARGET"}, {"TARGET": profile})
+        selected_arrow = next(
+            mod for mod in result["TARGET"]["mods"] if mod["slot"] == "Arrow"
         )
-        actual_result = optimize_target_build(
-            rows, {"TARGET"}, {"TARGET": profile}, projected=False
-        )
-        projected_arrow = next(
-            mod for mod in projected_result["TARGET"]["mods"]
-            if mod["slot"] == "Arrow"
-        )
-        actual_arrow = next(
-            mod for mod in actual_result["TARGET"]["mods"]
-            if mod["slot"] == "Arrow"
-        )
-        self.assertEqual(projected_arrow["id"], "arrow-projected")
-        self.assertEqual(actual_arrow["id"], "arrow-actual")
+        self.assertEqual(selected_arrow["id"], "arrow-actual")
 
 
 if __name__ == "__main__":
