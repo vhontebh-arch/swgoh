@@ -67,7 +67,13 @@ Wynik każdego buildu jest liczony bez projekcji przyszłych rolli i bez założ
 - **Źródło:** MAGAZYN
   - Zmiana dopasowania do profilu: +3.3 pkt (5.0 → 8.3).
 
-- **Zmiana potencjału buildu:** +3.3 pkt (optymistyczna projekcja do 15; brakujące rolle przypisane do najwyżej preferowanej secondary; dla 5A projekcja secondary do 6E; primary pozostaje bez zmian; bez slice i calibration).
+- **Zmiana rzeczywistego wyniku buildu:** +3.3 pkt — wyliczona wyłącznie z aktualnych statystyk sześciu wybranych modów.
+
+## Założenia oceny buildu
+
+- Punktacja wykorzystuje wyłącznie rzeczywiste, aktualne statystyki modów.
+- Nie doliczamy przyszłych rolli, podnoszenia poziomu, slice ani calibration.
+- Wybór zestawu i modów opiera się na wyniku rzeczywistego buildu; częstotliwość kombinacji setów służy wyłącznie do rozstrzygania remisu.
 
 ## MOD — mody przenoszone na cel
 
