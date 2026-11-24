@@ -6314,6 +6314,208 @@
         "Protection %": 0,
         "Speed %": 0
       }
+    },
+    "PADMEAMIDALA": {
+      "name": "Padmé Amidala",
+      "role": "support",
+      "source_model": {
+        "method": "live SWGOH.GG Best Mods pages; equal-weight average of configured slices",
+        "refreshed_at_utc": "2026-11-24T16:00:00+00:00",
+        "sources": [
+          {
+            "name": "Top 1000 Kyber GAC",
+            "url": "https://swgoh.gg/units/padme-amidala/best-mods/",
+            "units_fully_modded": 977,
+            "updated_label": "10m ago at read time",
+            "set_combinations_pct": {
+              "Triple Health": 56.09,
+              "Speed + Health": 29.06,
+              "Double Health + Defense": 2.76,
+              "Double Health + Potency": 1.63,
+              "Double Health + Tenacity": 1.53,
+              "Double Health": 1.53,
+              "Speed": 0.81,
+              "Speed + Tenacity": 0.71,
+              "Speed + Potency": 0.71
+            },
+            "primary_pct": {
+              "Arrow": {
+                "Speed": 90.14,
+                "Health": 8.39,
+                "Protection": 0.54,
+                "Offense": 0.54
+              },
+              "Triangle": {
+                "Health": 83.75,
+                "Protection": 4.56,
+                "Offense": 3.1,
+                "Critical Damage": 3.1
+              },
+              "Circle": {
+                "Health": 93.61,
+                "Protection": 6.38
+              },
+              "Cross": {
+                "Health": 75.18,
+                "Potency": 12.59,
+                "Protection": 4.56,
+                "Defense": 2.91
+              }
+            },
+            "secondary_focus": {
+              "Speed": {
+                "average": 16.6,
+                "focus_pct": 20.93
+              },
+              "Health": {
+                "average": 892.2,
+                "focus_pct": 9.23
+              },
+              "Potency": {
+                "average": 4.61,
+                "focus_pct": 7.52
+              },
+              "Critical Chance %": {
+                "average": 3.57,
+                "focus_pct": 7.47
+              }
+            }
+          },
+          {
+            "name": "Top 100 Guilds",
+            "url": "https://swgoh.gg/units/padme-amidala/best-mods/?s=GUILDTOP100",
+            "units_fully_modded": 4979,
+            "updated_label": "14m ago at read time",
+            "set_combinations_pct": {
+              "Triple Health": 61.92,
+              "Speed + Health": 21.71,
+              "Health": 2.9,
+              "Double Health + Tenacity": 2.16,
+              "Double Health + Defense": 1.98,
+              "Double Health + Potency": 1.88,
+              "Double Health + Crit Chance": 1.26,
+              "Speed + Potency": 0.74,
+              "Speed": 0.7
+            },
+            "primary_pct": {
+              "Arrow": {
+                "Speed": 89.19,
+                "Health": 9.37,
+                "Protection": 0.58,
+                "Critical Avoidance": 0.38
+              },
+              "Triangle": {
+                "Health": 79.66,
+                "Protection": 5.15,
+                "Critical Damage": 4.54,
+                "Offense": 3.73
+              },
+              "Circle": {
+                "Health": 90.62,
+                "Protection": 9.37
+              },
+              "Cross": {
+                "Health": 69.7,
+                "Potency": 14.46,
+                "Protection": 5.54,
+                "Defense": 3.79
+              }
+            },
+            "secondary_focus": {
+              "Speed": {
+                "average": 16.7,
+                "focus_pct": 21.03
+              },
+              "Health": {
+                "average": 909.8,
+                "focus_pct": 9.54
+              },
+              "Potency": {
+                "average": 4.77,
+                "focus_pct": 7.6
+              },
+              "Protection": {
+                "average": 1443.8,
+                "focus_pct": 7.59
+              }
+            }
+          }
+        ]
+      },
+      "set_combinations": {
+        "Triple Health": 59.01,
+        "Speed + Health": 25.38,
+        "Double Health + Defense": 2.37,
+        "Double Health + Potency": 1.75,
+        "Double Health + Tenacity": 1.85,
+        "Double Health": 0.77,
+        "Speed": 0.76,
+        "Speed + Tenacity": 0.35,
+        "Speed + Potency": 0.72,
+        "Health": 1.45,
+        "Double Health + Crit Chance": 0.63
+      },
+      "set_preferences": {
+        "Health": 1,
+        "Speed": 0.4301,
+        "Defense": 0.0402,
+        "Tenacity": 0.0314,
+        "Potency": 0.0297
+      },
+      "primary_preferences": {
+        "Arrow": {
+          "Speed": 0.8966,
+          "Health": 0.0888,
+          "Protection": 0.0056,
+          "Offense": 0.0027,
+          "Critical Avoidance": 0.0019
+        },
+        "Triangle": {
+          "Health": 0.817,
+          "Protection": 0.0486,
+          "Offense": 0.0342,
+          "Critical Damage": 0.0382
+        },
+        "Circle": {
+          "Health": 0.9212,
+          "Protection": 0.0788
+        },
+        "Cross": {
+          "Health": 0.7244,
+          "Potency": 0.1353,
+          "Protection": 0.0505,
+          "Defense": 0.0335
+        }
+      },
+      "secondary_focus_avg": {
+        "Speed": {
+          "average": 16.65,
+          "focus_pct": 20.98
+        },
+        "Health": {
+          "average": 901,
+          "focus_pct": 9.38
+        },
+        "Potency": {
+          "average": 4.69,
+          "focus_pct": 7.56
+        },
+        "Critical Chance %": {
+          "average": 3.57,
+          "focus_pct": 7.47
+        },
+        "Protection": {
+          "average": 1443.8,
+          "focus_pct": 7.59
+        }
+      },
+      "secondary_preferences": {
+        "Speed": 1,
+        "Health": 0.4471,
+        "Potency": 0.3603,
+        "Critical Chance %": 0.3561,
+        "Protection": 0.3618
+      }
     }
   },
   "profile_status": {
@@ -7745,6 +7947,26 @@
           "url": "https://swgoh.gg/units/c-3po/best-mods/?s=GUILDTOP100",
           "units_fully_modded": 4970,
           "updated_label": "49m ago at read time"
+        }
+      ]
+    },
+    "PADMEAMIDALA": {
+      "status": "refreshed",
+      "checked_at_utc": "2026-11-24T16:00:00Z",
+      "fetched_at_utc": "2026-11-24T16:00:00Z",
+      "source": "SWGOH.GG direct page read by ChatGPT; raw source slices retained; equal-weight 50/50 profile",
+      "sources": [
+        {
+          "name": "Top 1000 Kyber GAC",
+          "url": "https://swgoh.gg/units/padme-amidala/best-mods/",
+          "units_fully_modded": 977,
+          "updated_label": "10m ago at read time"
+        },
+        {
+          "name": "Top 100 Guilds",
+          "url": "https://swgoh.gg/units/padme-amidala/best-mods/?s=GUILDTOP100",
+          "units_fully_modded": 4979,
+          "updated_label": "14m ago at read time"
         }
       ]
     }
