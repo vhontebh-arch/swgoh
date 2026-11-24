@@ -20,6 +20,8 @@ def make_mod(mod_id, owner="", equipped=False, slot="Arrow", value=10, mod_set="
         "id": mod_id, "assignedTo": owner,
         "equipped": "True" if equipped else "False",
         "slot": slot, "set": mod_set, "modValue": str(value),
+        "primaryStat": {"Square":"Offense","Diamond":"Defense","Circle":"Health","Arrow":"Speed","Triangle":"Offense","Cross":"Potency"}.get(slot, "Speed"),
+        "primaryValue": {"Square":"8.5","Diamond":"20","Circle":"16","Arrow":"30","Triangle":"8.5","Cross":"30"}.get(slot, "30"),
         "dots": "5", "tier": "5", "level": "15",
     }
     if speed_roll is not None:
@@ -29,11 +31,29 @@ def make_mod(mod_id, owner="", equipped=False, slot="Arrow", value=10, mod_set="
     return row
 
 
+def default_profiles(aliases):
+    profile = {
+        "primary_preferences": {
+            "Square": {"Offense": 1.0}, "Diamond": {"Defense": 1.0},
+            "Circle": {"Health": 1.0}, "Arrow": {"Speed": 1.0},
+            "Triangle": {"Offense": 1.0}, "Cross": {"Potency": 1.0},
+        },
+        "secondary_preferences": {"Speed": 1.0},
+        "set_preferences": {name: 0.5 for name in (
+            "Speed", "Health", "Defense", "Offense", "Potency",
+            "Critical Damage", "Critical Chance", "Tenacity",
+        )},
+    }
+    return {base_id: dict(profile) for base_id in set(aliases.values())}
+
+
 def run_plan(rows, selected, aliases=None, profiles=None, ranking=None):
     aliases = aliases or {TARGET: "TARGET"}
+    complete_profiles = default_profiles(aliases)
+    complete_profiles.update(profiles or {})
     return apply_optimizer_replacements(
         rows, {"TARGET": {"mods": [selected]}}, {"TARGET"},
-        aliases=aliases, profiles=profiles, ranking=ranking or TEST_RANKING,
+        aliases=aliases, profiles=complete_profiles, ranking=ranking or TEST_RANKING,
     )
 
 
@@ -367,6 +387,7 @@ class TransferChainTests(unittest.TestCase):
                 donor_b: "DONOR_B",
             },
             ranking=TEST_RANKING,
+            profiles=default_profiles(aliases),
         )
 
         self.assertTrue(result["safe"], result["failed"])
@@ -387,6 +408,7 @@ class TransferChainTests(unittest.TestCase):
             },
             {"TARGET", "TARGET_B"},
             aliases={TARGET: "TARGET", target_b: "TARGET_B"},
+            profiles=default_profiles({TARGET: "TARGET", target_b: "TARGET_B"}),
         )
         self.assertFalse(result["safe"])
         self.assertTrue(any("konflikt modów" in reason for _, reason in result["failed"]))
