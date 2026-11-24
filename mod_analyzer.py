@@ -1312,7 +1312,6 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
                 candidate_rows, {donor_id}, profiles, aliases, names, set(),
                 required_set_combo=required_combo,
                 excluded_mod_ids=excluded_mod_ids,
-                projected=False,
                 ranking=ranking,
             )
             donor_build = donor_optimizer.get(donor_id, {}).get("mods", [])
@@ -1930,6 +1929,12 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
     donor_delta = round(sum(float(item.get("gain", 0.0) or 0.0) for item in rank_donor_moves), 2) if all_profiled else None
     target_delta = round(sum(float(item.get("gain", 0.0) or 0.0) for item in rank_target_moves), 2) if all_profiled else None
     account_delta = round(sum(float(item.get("gain", 0.0) or 0.0) for item in all_rank_moves), 2) if all_profiled else None
+    if safe and not all_profiled:
+        safe = False
+        failed.append(("bilans profili", "brak pełnego profilu dla co najmniej jednej postaci w łańcuchu; nie można potwierdzić rzeczywistego bilansu"))
+    elif safe and account_delta <= 0.01:
+        safe = False
+        failed.append(("bilans profili", "łączny rzeczywisty bilans całego łańcucha nie jest dodatni ({:+.2f} pkt)".format(account_delta)))
     return {
         "safe": safe, "plans": plans, "validation": validation, "failed": failed,
         "targetDelta": target_delta, "donorDelta": donor_delta, "accountDelta": account_delta,
@@ -1937,96 +1942,7 @@ def apply_optimizer_replacements(rows, optimizer, target_base_ids, profiles=None
 
 
 
-
-def project_mod_for_build(row, profile):
-    """
-    Optimistic, explicitly separate projection:
-    - complete the rolls available at the current tier up to level 15;
-    - for a 5-dot 5A mod, project existing rolls to 6-dot 6E values.
-    Missing rolls are assigned to the highest-priority secondary in the profile.
-    This is a potential ceiling, not a prediction of RNG outcomes.
-    """
-    projected = dict(row)
-    dots = integer(row.get("dots"))
-    tier = integer(row.get("tier"))
-    current_level = integer(row.get("level"))
-    entries = []
-
-    for index in range(1, 5):
-        data = rolls(row, index)
-        if data is None:
-            continue
-        stat, value, count, values = data
-        if count <= 0:
-            continue
-        if not values:
-            values = [value / count] * count
-        entries.append({"stat": stat, "values": list(values)})
-
-    current_rolls = sum(len(item["values"]) for item in entries)
-    max_rolls = TOTAL.get((dots, tier), current_rolls)
-    missing_rolls = max(0, max_rolls - current_rolls)
-
-    preferences = profile.get("secondary_preferences", {})
-    candidates = [
-        (float(weight), stat)
-        for stat, weight in preferences.items()
-        if stat in (R6 if dots >= 6 else R5) and float(weight) > 0
-    ]
-    candidates.sort(key=lambda item: (item[0], STAT_VALUE.get(item[1], 0.0)), reverse=True)
-
-    if missing_rolls and candidates:
-        best_stat = candidates[0][1]
-        existing = next((item for item in entries if item["stat"] == best_stat), None)
-        low, high = (R6 if dots >= 6 else R5)[best_stat]
-        assumed_roll = (low + high) / 2.0
-        if existing is None and len(entries) < 4:
-            existing = {"stat": best_stat, "values": []}
-            entries.append(existing)
-        if existing is not None:
-            existing["values"].extend([assumed_roll] * missing_rolls)
-
-    # A 5A -> 6E slice preserves roll count while increasing the value of
-    # each secondary roll according to the corresponding 6-dot roll range.
-    projected_dots = dots
-    if dots == 5 and tier == 5 and current_level >= 15:
-        projected_dots = 6
-        for item in entries:
-            old_range = R5.get(item["stat"])
-            new_range = R6.get(item["stat"])
-            if old_range and new_range and old_range[1]:
-                ratio = new_range[1] / old_range[1]
-                item["values"] = [value * ratio for value in item["values"]]
-
-    # Re-serialize projected secondaries in the same schema consumed by rolls().
-    for index in range(1, 5):
-        projected["secondary{}Stat".format(index)] = ""
-        projected["secondary{}Value".format(index)] = ""
-        projected["secondary{}Rolls".format(index)] = ""
-        projected["secondary{}RawRolls".format(index)] = ""
-    for index, item in enumerate(entries[:4], 1):
-        stat = item["stat"]
-        values = item["values"]
-        scale = 10000.0 if stat in {"Health", "Protection", "Offense", "Defense", "Speed"} else 100.0
-        projected["secondary{}Stat".format(index)] = stat
-        projected["secondary{}Value".format(index)] = str(sum(values))
-        projected["secondary{}Rolls".format(index)] = str(len(values))
-        projected["secondary{}RawRolls".format(index)] = "|".join(
-            str(int(round(value * scale))) for value in values
-        )
-
-    projected["dots"] = str(projected_dots)
-    projected["level"] = "15"
-    projected["projectionLevel"] = 15
-    projected["projectionDots"] = projected_dots
-    projected["projectionAssumedRolls"] = missing_rolls
-    projected["projectionType"] = (
-        "15 + 6E" if projected_dots == 6 else "15"
-    )
-    return projected
-
-
-def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, names=None, protected_owners=None, required_set_combo=None, excluded_mod_ids=None, projected=True, ranking=None):
+def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, names=None, protected_owners=None, required_set_combo=None, excluded_mod_ids=None, ranking=None):
     """Independently implemented full-build optimizer inspired by Grandivory."""
     profiles = profiles or {}
     aliases = aliases or {}
@@ -2114,14 +2030,10 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
             }
         return total, preference_tiebreak, breakdown
 
-    def build_score(mods, profile, projected=False):
-        scored_mods = [
-            project_mod_for_build(m, profile) if projected else m
-            for m in mods
-        ]
-        base_score = sum(mod_score(m, profile) for m in scored_mods)
-        set_score, set_pref, breakdown = set_bonus_score(scored_mods, profile)
-        combo_score, combo_match = profile_set_combo_alignment_score(profile, scored_mods)
+    def build_score(mods, profile):
+        base_score = sum(mod_score(m, profile) for m in mods)
+        set_score, set_pref, breakdown = set_bonus_score(mods, profile)
+        combo_score, combo_match = profile_set_combo_alignment_score(profile, mods)
         return {
             "total": base_score + set_score + combo_score, "base": base_score,
             "setBonus": set_score, "setPreference": set_pref,
@@ -2141,7 +2053,6 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
         current = [r for r in rows if is_true(r.get("equipped")) and base(r) == target_id]
         current_by_slot = {str(r.get("slot", "")): r for r in current}
         current_score = build_score(current, profile)
-        current_projected_score = build_score(current, profile, projected=projected)
 
         # For a fixed slot and set, only the highest-scoring candidate can win:
         # every such candidate has the same set-bonus effect. This is an exact
@@ -2178,8 +2089,7 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
                 name = str(row.get("set", "") or "")
                 unchanged = slot in current_by_slot and rid(current_by_slot[slot]) == rid(row)
                 key = (
-                    mod_score(project_mod_for_build(row, profile) if projected else row, profile), 1 if unchanged else 0,
-                    float(row.get("potentialCeiling", 0) or 0),
+                    mod_score(row, profile), 1 if unchanged else 0,
                     float(row.get("modValue", 0) or 0),
                 )
                 if name not in best_by_set or key > best_by_set[name][0]:
@@ -2207,9 +2117,8 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
                         index = set_names.index(name)
                         new_counts[index] = min(caps[name], new_counts[index] + 1)
                     new_counts = tuple(new_counts)
-                    projected_row = project_mod_for_build(row, profile) if projected else row
                     candidate = (
-                        score_so_far + mod_score(projected_row, profile),
+                        score_so_far + mod_score(row, profile),
                         unchanged_so_far + (1 if unchanged else 0),
                         chosen + [row],
                     )
@@ -2222,19 +2131,18 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
 
         best = None
         for _counts, (base_score, unchanged_count, chosen) in states.items():
-            projected_chosen = [project_mod_for_build(m, profile) if projected else m for m in chosen]
-            combo_key = canonical_set_combo_from_mods(projected_chosen)
+            combo_key = canonical_set_combo_from_mods(chosen)
             if required_set_combo and combo_key != required_set_combo:
                 continue
-            set_score, set_pref, breakdown = set_bonus_score(projected_chosen, profile)
-            combo_score, combo_match = profile_set_combo_alignment_score(profile, projected_chosen)
+            set_score, set_pref, breakdown = set_bonus_score(chosen, profile)
+            combo_score, combo_match = profile_set_combo_alignment_score(profile, chosen)
             total = base_score + set_score + combo_score
             # An observed complete set combination is a categorical profile
             # preference, not a small additive bonus. Compare its normalized
             # frequency before raw mod quality so a high-scoring but unobserved
             # set mix cannot defeat the dominant profile combination.
             combo_preference = float(combo_match.get("preference", 0.0)) if combo_match else 0.0
-            key = (combo_preference, total, set_pref, unchanged_count)
+            key = (total, combo_preference, set_pref, unchanged_count)
             if best is None or key > best["key"]:
                 best = {
                     "key": key, "totalScore": total, "baseScore": base_score,
@@ -2249,24 +2157,19 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
                     "unchangedCount": unchanged_count,
                     "mods": chosen,
                 }
-        if not best:
+        if not best or best["totalScore"] <= current_score["total"] + 0.01:
             continue
 
         for mod in best["mods"]:
-            projected_mod = project_mod_for_build(mod, profile) if projected else mod
             mod["optimizerTarget"] = target_id
             mod["optimizerScore"] = round(mod_score(mod, profile), 2)
-            mod["optimizerProjectedScore"] = round(mod_score(projected_mod, profile), 2)
-            mod["optimizerProjection"] = projected_mod.get("projectionType", "15")
-            mod["optimizerProjectionAssumedRolls"] = projected_mod.get("projectionAssumedRolls", 0)
             mod["optimizerTotalScore"] = round(best["totalScore"], 2)
             mod["optimizerBaseScore"] = round(best["baseScore"], 2)
             mod["optimizerSetBonusScore"] = round(best["setBonusScore"], 2)
             mod["optimizerSetPreferenceScore"] = round(best["setPreferenceScore"], 3)
             mod["optimizerSetComboAlignmentScore"] = round(best["setComboAlignmentScore"], 3)
             mod["optimizerCurrentScore"] = round(current_score["total"], 2)
-            mod["optimizerCurrentProjectedScore"] = round(current_projected_score["total"], 2)
-            mod["optimizerGain"] = round(best["totalScore"] - current_projected_score["total"], 2)
+            mod["optimizerGain"] = round(best["totalScore"] - current_score["total"], 2)
             mod["optimizerSource"] = source_label(mod, aliases, names)
 
         results[target_id] = {
@@ -2280,10 +2183,9 @@ def optimize_target_build(rows, target_base_ids, profiles=None, aliases=None, na
             "setComboMode": best["setComboMode"],
             "setBreakdown": best["setBreakdown"], "unchangedCount": best["unchangedCount"],
             "currentScore": current_score["total"],
-            "currentProjectedScore": current_projected_score["total"],
             "currentBaseScore": current_score["base"],
             "currentSetBonusScore": current_score["setBonus"],
-            "gain": best["totalScore"] - current_projected_score["total"],
+            "gain": best["totalScore"] - current_score["total"],
         }
     return results
 
@@ -2835,13 +2737,6 @@ def render_user_report(rows, optimizer, chain_result, profiles, aliases, names,
         lines.append("")
 
     lines += [
-        "## Założenia projekcji",
-        "",
-        "- Poziom 15 jest traktowany jako osiągalny bez ograniczenia materiałami.",
-        "- Brakujące secondary są liczone jako wartość średnia rolla, a nie maksymalna; ich przyszły przydział do statystyk jest uśredniony według profilu zamiast przypisywany do najlepszego secondary.",
-        "- Slice i calibration nie wpływają na ranking ani wynik buildu. Mogą pojawić się wyłącznie jako osobne sugestie inwestycyjne i można je pominąć.",
-        "- Primary pozostaje dokładnie na wartości z eksportu; zależy od obecnej liczby gwiazdek, a podniesienie moda do poziomu 15 go nie zmienia. Nie zakładamy slice 5★ → 6★.",
-        "",
         "## Jak czytać opisy modów",
         "",
         "Każdy opis zawiera slot, set, primary, wszystkie dostępne secondary oraz gwiazdki, tier i poziom. "
@@ -3077,10 +2972,10 @@ def main(argv=None):
         "Dla dawców bez lokalnego profilu po próbie pobrania używany jest fallback modValue; nie jest to ocena dopasowania do indywidualnego profilu.", "",
         "## Globalny optimizer 6-slotowy", "",
         "Ocena kompletnego buildu: 40 pkt za statystyki główne, 60 pkt za maksymalnie 24 rolle secondary oraz bonusy setów ważone profilem postaci. Zgodność z profilem ma pierwszeństwo przed zachowaniem aktualnie założonych modów. Set nieobecny w profilu zachowuje 10% bazowej wagi bonusu; set z preferencją 100% otrzymuje pełną wagę. Zachowanie modów na celu jest dopiero końcowym tie-breakiem.", "",
-        "Ranking kandydujących buildów używa oddzielnej projekcji: brakujące rolle do limitu aktualnego tieru są optymistycznie przypisywane do najwyżej preferowanej statystyki profilu; mod 5A na poziomie 15 jest dodatkowo przeliczany do 6E. To górna granica potencjału, nie prognoza RNG ani rzeczywiste statystyki moda. Primary pozostaje na wartości z eksportu, ponieważ nie mamy w danych tabeli jego przyrostu dla każdego poziomu. Raport pokazuje osobno wynik aktualny i wynik po projekcji.", "",
+        "Ranking i wybór buildu wykorzystują wyłącznie rzeczywiste statystyki modów z eksportu. Nie przewidujemy przyszłych rolli, podniesienia poziomu ani slice do 6E; rozwój moda jest osobnym działaniem poza optymalizacją.", "",
         "Bonus Speed Set używa bazowej szybkości 150, jeśli profil nie zawiera pola base_stats.Speed. Pozostałe bonusy procentowe są normalizowane względem maksymalnego rolla odpowiedniej statystyki.", "",
         "## Najważniejsi kandydaci", "",
-        "| Akcja | Mod | Źródło | Set | Tier | Lvl | Quality | Value | Fit | 6E proj. | Speed | Potencjał | Inwestycja |",
+        "| Akcja | Mod | Źródło | Set | Tier | Lvl | Quality | Value | Fit | Speed | Potencjał | Inwestycja |",
         "|---|---|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---|"
     ]
 
@@ -3090,18 +2985,17 @@ def main(argv=None):
             "| {} | {} | {} | {} | {}{} | {} | {:.1f}% | {:.1f}% | {:.1f}% | {:.1f}% | {:.1f}% | {:.1f}% | {} |".format(
                 r["recommendedAction"], mod, r["source"], r["set"], r["dots"], r["tierName"],
                 r["level"], float(r["modQuality"]), float(r["modValue"]),
-                float(r.get("fitScore",0)), float(r["projected6EQuality"]),
-                float(r["speedQuality"]), float(r["potentialCeiling"]), r["nextInvestment"]
+                float(r.get("fitScore",0)), float(r["speedQuality"]),
+                float(r["potentialCeiling"]), r["nextInvestment"]
             )
         )
 
     for target_id, opt in optimizer.items():
         lines += [
             "", "### {} — najlepszy wirtualny build 6/6".format(target_id), "",
-            "- Wynik buildu po projekcji: **{:.1f}** (lvl 15; 5A → 6E)".format(opt["totalScore"]),
-            "- Aktualny build bez projekcji: **{:.1f}**".format(opt["currentScore"]),
-            "- Aktualny build po tej samej projekcji: **{:.1f}**".format(opt["currentProjectedScore"]),
-            "- Zmiana potencjału względem projekcji obecnego buildu: **{:+.1f}**".format(opt["gain"]),
+            "- Wynik najlepszego buildu z rzeczywistych statystyk: **{:.1f}**".format(opt["totalScore"]),
+            "- Wynik aktualnego buildu: **{:.1f}**".format(opt["currentScore"]),
+            "- Rzeczywista zmiana wyniku: **{:+.1f}**".format(opt["gain"]),
             "- Bonus setów w ocenie: **{:.2f}**".format(opt["setBonusScore"]),
             "| Slot | Mod — parametry wyszukiwalne | Źródło | Fit |",
             "|---|---|---|---:|"
@@ -3113,7 +3007,7 @@ def main(argv=None):
     lines += ["", "## BEZPIECZNY ŁAŃCUCH — walidacja globalna", ""]
     if chain_result.get("safe"):
         lines.append("**STATUS: OK — transfery są fizycznie wykonalne i nie dublują modów.**")
-        lines.append("Bilans pokazuje sumę modValue wyposażonych modów oraz pełne sety przed i po transferze. modValue jest wskaźnikiem jakości samych modów, a nie indywidualnym wynikiem buildu dawcy. Utrata wartości lub setu u dawcy nie blokuje ruchu; to jawna informacja do ręcznej decyzji.")
+        lines.append("Bilans pokazuje wynik pełnego buildu wg profilu dla celu i wszystkich dawców. Łańcuch jest zatwierdzany wyłącznie wtedy, gdy każdy profil jest dostępny, a łączna rzeczywista zmiana wyniku całego konta jest dodatnia.")
         lines.append("Wariant łańcucha wybierany jest na najkrótszym wykonalnym poziomie według fit profilu dawcy, następnie zmiany pełnych setów i sumy modValue. Istniejące sety nie są twardą ochroną. Każda zmiana liczby modów w secie i liczby pełnych grup jest wyszczególniona niżej dla każdej postaci w łańcuchu. Dla dawców bez własnego profilu fit korzysta z ogólnego modValue.")
     else:
         lines.append("**STATUS: BLOKADA — nie wygenerowano bezpiecznej listy ruchów.**")
