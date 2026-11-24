@@ -362,8 +362,6 @@ def analyze(row):
     out.update({
         "tierName": TIER.get(tier, "?"),
         "secondaryRollsTotal": total,
-        "secondaryRollsMaxAtTier": target_total,
-        "secondaryRollsRemainingAtTier": remaining,
         "modQuality": round(current_quality, 1),
         "modValue": round(current_value, 1),
         "speedQuality": round(speed_quality, 1),
