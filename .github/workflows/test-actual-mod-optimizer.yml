@@ -1,0 +1,29 @@
+name: Test actual-stat mod optimizer
+
+on:
+  pull_request:
+    branches:
+      - optimizer-v2
+  push:
+    branches:
+      - fix/actual-mod-score-no-projection
+    paths:
+      - "mod_analyzer.py"
+      - "tests/test_actual_mod_optimizer.py"
+      - ".github/workflows/test-actual-mod-optimizer.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run actual-stat regression tests
+        run: python -m unittest -v tests.test_actual_mod_optimizer
