@@ -8,11 +8,11 @@ W raportach przeznaczonych do ręcznego wykonania mod identyfikowany jest wyłą
 - UPGRADE: **22**
 - SLICE: **1150**
 - SLICE_6E: **235**
-- CALIBRATE: **106**
+- CALIBRATE: **107**
 - EQUIP: **0**
 - REPLACE: **3**
 - PATCH: **3**
-- KEEP: **665**
+- KEEP: **664**
 
 ## Globalny optimizer 6-slotowy
 
@@ -39,6 +39,7 @@ W raportach przeznaczonych do ręcznego wykonania mod identyfikowany jest wyłą
 | CALIBRATE | Arrow Protection % 24% | POSTAĆ: STORMTROOPERLUKE | Speed | 6A | 15 | 100.0% | 68.2% | 50.7% | 0.0% | 80.0% | 68.2% | calibration |
 | CALIBRATE | Cross Potency % 30% | POSTAĆ: JARJARBINKS | Potency | 6A | 15 | 100.0% | 73.2% | 50.1% | 0.0% | 80.0% | 73.2% | calibration |
 | CALIBRATE | Diamond Defense % 20% | POSTAĆ: STORMTROOPERLUKE | Speed | 6A | 15 | 100.0% | 64.3% | 48.3% | 0.0% | 80.0% | 64.3% | calibration |
+| CALIBRATE | Cross Offense % 8.5% | POSTAĆ: ADMIRALPIETT | Speed | 6A | 15 | 100.0% | 57.0% | 48.3% | 0.0% | 75.0% | 57.0% | calibration |
 | CALIBRATE | Square Offense % 8.5% | POSTAĆ: GLREY | Offense | 6A | 15 | 100.0% | 76.7% | 47.9% | 0.0% | 80.0% | 76.7% | calibration |
 | CALIBRATE | Diamond Defense % 20% | POSTAĆ: GLREY | Offense | 6A | 15 | 100.0% | 74.3% | 47.9% | 0.0% | 93.3% | 74.3% | calibration |
 | CALIBRATE | Diamond Defense % 20% | POSTAĆ: JARJARBINKS | Potency | 6A | 15 | 100.0% | 68.2% | 47.9% | 0.0% | 75.0% | 68.2% | calibration |
@@ -94,7 +95,6 @@ W raportach przeznaczonych do ręcznego wykonania mod identyfikowany jest wyłą
 | CALIBRATE | Cross Tenacity % 35% | POSTAĆ: REY | Critical Damage | 6A | 15 | 100.0% | 63.0% | 33.2% | 0.0% | 83.3% | 63.0% | calibration |
 | CALIBRATE | Triangle Health % 16% | POSTAĆ: OPERATIVE | Speed | 6A | 15 | 100.0% | 62.8% | 32.7% | 0.0% | 66.7% | 62.8% | calibration |
 | CALIBRATE | Triangle Critical Damage % 42% | POSTAĆ: VADER | Critical Damage | 6A | 15 | 100.0% | 82.0% | 32.6% | 0.0% | 76.7% | 82.0% | calibration |
-| CALIBRATE | Circle Health % 16% | POSTAĆ: HERMITYODA | Speed | 6A | 15 | 100.0% | 78.3% | 31.5% | 0.0% | 91.7% | 78.3% | calibration |
 
 ### JARJARBINKS — najlepszy wirtualny build 6/6
 
